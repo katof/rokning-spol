@@ -43,8 +43,15 @@
     .tbx-bar { display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 16px; background: #2c3f9e; color: #fff; border-radius: 14px 14px 0 0;
       cursor: grab; user-select: none; font-weight: 700; font-size: clamp(16px, 1.3vw, 22px); }
     .tbx-bar span { flex: 1; }
-    .tbx-x { width: 2em; height: 2em; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .18); color: #fff; font: inherit; font-size: 1em; cursor: pointer; }
+    /* the games style every button as a wide pill, so the round buttons here reset padding and size */
+    .tbx-x { flex: none; display: grid; place-items: center; width: 2em; height: 2em; min-width: 0; padding: 0; border: 0; border-radius: 50%;
+      background: rgba(255, 255, 255, .18); color: #fff; font: inherit; font-size: 1em; line-height: 1; cursor: pointer; }
     .tbx-x:hover { background: rgba(255, 255, 255, .35); }
+    .tbx-win.mini .tbx-body { padding: 8px 12px; gap: 6px; }
+    .tbx-win.mini .tbx-clock { width: auto; aspect-ratio: auto; }
+    .tbx-win.mini .tbx-clock svg { display: none; }
+    .tbx-win.mini .tbx-time { position: static; font-size: clamp(26px, 2.4vw, 40px); }
+    .tbx-win.mini button.tbx-act { font-size: clamp(13px, 1vw, 16px); padding: .2em .7em; }
     .tbx-body { padding: 14px; display: grid; gap: 12px; justify-items: center; }
     .tbx-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
     .tbx-win button.tbx-act, .tbx-pen button { font: inherit; font-size: clamp(16px, 1.3vw, 22px); font-weight: 700; padding: .3em .9em; border-radius: 999px;
@@ -60,15 +67,18 @@
     @keyframes tbx-shake { 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
     .tbx-area { position: relative; width: clamp(360px, 42vw, 760px); height: clamp(220px, 32vh, 420px); background: #f4f8ec;
       border: 2px dashed #b9cf95; border-radius: 14px; overflow: hidden; }
-    .tbx-chip { position: absolute; width: clamp(44px, 3.6vw, 64px); aspect-ratio: 1; border-radius: 50%; cursor: grab; touch-action: none;
+    .tbx-chip { position: absolute; width: clamp(44px, 3.6vw, 64px); aspect-ratio: 1; border-radius: 50%; cursor: grab; touch-action: none; user-select: none;
       box-shadow: inset 0 -5px 0 rgba(0, 0, 0, .18), 0 3px 6px rgba(0, 0, 0, .2); }
+    .tbx-chip.dragging { cursor: grabbing; box-shadow: inset 0 -5px 0 rgba(0, 0, 0, .18), 0 8px 14px rgba(0, 0, 0, .3); }
+    .tbx-act .dot { display: inline-block; width: .8em; height: .8em; border-radius: 50%; margin-right: .35em; vertical-align: -.05em; }
     .tbx-red { background: #e23b3b; }
     .tbx-blue { background: #1fb4ea; }
     .tbx-count { font-size: clamp(18px, 1.6vw, 28px); font-weight: 700; min-height: 1.3em; }
     .tbx-frames { display: grid; gap: 14px; }
     .tbx-frame { display: grid; grid-template-columns: repeat(5, clamp(56px, 5vw, 86px)); grid-auto-rows: clamp(56px, 5vw, 86px);
       border: 4px solid #24303f; background: #24303f; gap: 4px; }
-    .tbx-cell { background: #fff; border: 0; padding: 0; cursor: pointer; display: grid; place-items: center; }
+    .tbx-cell { background: #fff; border: 0; border-radius: 0; padding: 0; cursor: pointer; display: grid; place-items: center; }
+    .tbx-cell:hover { background: #f4f8ec; }
     .tbx-cell::after { content: ""; width: 72%; aspect-ratio: 1; border-radius: 50%; }
     .tbx-cell.red::after { background: #e23b3b; }
     .tbx-cell.blue::after { background: #1fb4ea; }
@@ -78,14 +88,13 @@
     .tbx-ruler svg { display: block; width: clamp(520px, 62vw, 1150px); height: auto; cursor: grab; }
     .tbx-turn { position: absolute; right: -26px; top: 50%; width: 44px; height: 44px; margin-top: -22px; border-radius: 50%; border: 3px solid #2c3f9e;
       background: #fff; color: #2c3f9e; font-size: 22px; display: grid; place-items: center; cursor: grab; touch-action: none; }
-    .tbx-rx { position: absolute; left: -16px; top: -16px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: #2c3f9e;
-      color: #fff; font-size: 20px; cursor: pointer; }
+    .tbx-rx { position: absolute; left: -16px; top: -16px; display: grid; place-items: center; width: 36px; height: 36px; min-width: 0; padding: 0;
+      border-radius: 50%; border: 0; background: #2c3f9e; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; }
+    .tbx-rx:hover { background: #3b52c4; }
     .tbx-clock { position: relative; width: clamp(200px, 18vw, 320px); aspect-ratio: 1; }
     .tbx-clock svg { width: 100%; height: 100%; transform: rotate(-90deg); }
     .tbx-time { position: absolute; inset: 0; display: grid; place-items: center; font-size: clamp(40px, 4.4vw, 76px); font-weight: 700;
       font-variant-numeric: tabular-nums; }
-    .tbx-clock.over .tbx-time { color: #d23a2f; animation: tbx-blink .6s 6; }
-    @keyframes tbx-blink { 50% { opacity: .2; } }
     .tbx-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 900; pointer-events: none; touch-action: none; }
     .tbx-canvas.on { pointer-events: auto; cursor: crosshair; }
     .tbx-pen { position: fixed; z-index: 2500; left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
@@ -94,7 +103,7 @@
     .tbx-pen .sw { width: 2.2em; height: 2.2em; padding: 0; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 0 0 2px #b8c0c8; }
     .tbx-pen .sw[aria-pressed="true"] { box-shadow: 0 0 0 4px #2c3f9e; }
     .tbx-pen button[aria-pressed="true"]:not(.sw) { background: #7fae3a; color: #fff; }
-    @media (prefers-reduced-motion: reduce) { .tbx-die.rolling, .tbx-clock.over .tbx-time { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .tbx-die.rolling { animation: none; } }
   ` }, document.head);
 
   // ---------- floating windows ----------
@@ -120,11 +129,21 @@
     });
   }
 
-  function win(id, title, build) {
+  // opts.mini adds a button that shrinks the window to its essentials.
+  function win(id, title, build, opts = {}) {
     if (open[id]) { front(open[id]); return; }
     const w = h("div", { class: "tbx-win", role: "dialog", "aria-label": title }, document.body);
     const bar = h("div", { class: "tbx-bar" }, w);
     h("span", { text: title }, bar);
+    if (opts.mini) {
+      const m = h("button", { class: "tbx-x", type: "button", "aria-label": "Ger lítið", title: "Ger lítið", text: "–" }, bar);
+      m.addEventListener("click", () => {
+        const small = w.classList.toggle("mini");
+        m.textContent = small ? "▢" : "–";
+        m.title = small ? "Ger stórt" : "Ger lítið";
+        m.setAttribute("aria-label", m.title);
+      });
+    }
     const x = h("button", { class: "tbx-x", type: "button", "aria-label": "Lat aftur", title: "Lat aftur", text: "✕" }, bar);
     const body = h("div", { class: "tbx-body" }, w);
     const cleanup = build(body) || (() => {});
@@ -174,7 +193,7 @@
         if (++t > 9) { clearInterval(timer); dies.forEach(d => d.classList.remove("rolling")); }
       }, 70);
     }
-    act(ctl, "Kasta", roll);
+    act(ctl, "Ringla", roll);
     const one = act(ctl, "1 terningur", () => { count = 1; one.setAttribute("aria-pressed", "true"); two.setAttribute("aria-pressed", "false"); layout(); });
     const two = act(ctl, "2 terningar", () => { count = 2; two.setAttribute("aria-pressed", "true"); one.setAttribute("aria-pressed", "false"); layout(); });
     one.setAttribute("aria-pressed", "true");
@@ -182,38 +201,45 @@
     return () => clearInterval(timer);
   }
 
-  // ---------- Brikkar ----------
+  // ---------- Prikkar ----------
   function counters(body) {
     const area = h("div", { class: "tbx-area" }, body);
     const count = h("div", { class: "tbx-count", "aria-live": "polite" }, body);
     const ctl = h("div", { class: "tbx-row" }, body);
-    let showCount = false;
+    let showCount = false, chipZ = 1;
     function update() {
       const r = area.querySelectorAll(".tbx-red").length, b = area.querySelectorAll(".tbx-blue").length;
-      count.textContent = showCount ? `${r} reyðar og ${b} bláar` : "";
+      count.textContent = showCount ? `${r} ${r === 1 ? "reyður" : "reyðir"} og ${b} ${b === 1 ? "bláur" : "bláir"}` : "";
     }
     function add(cls) {
       const c = h("div", { class: `tbx-chip ${cls}` }, area);
       const W = area.clientWidth, H = area.clientHeight, size = c.offsetWidth;
       c.style.left = Math.random() * (W - size) + "px";
       c.style.top = Math.random() * (H - size) + "px";
+      c.style.zIndex = ++chipZ;
       c.addEventListener("pointerdown", ev => {
         ev.preventDefault(); ev.stopPropagation();
+        // raise it with z-index; moving the element in the page would drop the mouse capture
+        c.style.zIndex = ++chipZ;
+        c.classList.add("dragging");
         c.setPointerCapture(ev.pointerId);
         const ar = area.getBoundingClientRect(), cr = c.getBoundingClientRect(), dx = ev.clientX - cr.left, dy = ev.clientY - cr.top;
-        area.appendChild(c);
         const move = e => {
           c.style.left = Math.min(Math.max(e.clientX - ar.left - dx, 0), ar.width - cr.width) + "px";
           c.style.top = Math.min(Math.max(e.clientY - ar.top - dy, 0), ar.height - cr.height) + "px";
         };
-        const up = () => { c.removeEventListener("pointermove", move); c.removeEventListener("pointerup", up); };
+        const up = () => {
+          c.classList.remove("dragging");
+          c.removeEventListener("pointermove", move); c.removeEventListener("pointerup", up); c.removeEventListener("pointercancel", up);
+        };
         c.addEventListener("pointermove", move);
         c.addEventListener("pointerup", up);
+        c.addEventListener("pointercancel", up);
       });
       update();
     }
-    act(ctl, "+ reyð", () => add("tbx-red"));
-    act(ctl, "+ blá", () => add("tbx-blue"));
+    act(ctl, "Reytt", () => add("tbx-red")).insertAdjacentHTML("afterbegin", '<span class="dot" style="background:#e23b3b"></span>');
+    act(ctl, "Blátt", () => add("tbx-blue")).insertAdjacentHTML("afterbegin", '<span class="dot" style="background:#1fb4ea"></span>');
     const shown = act(ctl, "Vís tal", () => { showCount = !showCount; shown.setAttribute("aria-pressed", String(showCount)); update(); });
     shown.setAttribute("aria-pressed", "false");
     act(ctl, "Tøm", () => { area.replaceChildren(); update(); });
@@ -332,53 +358,35 @@
     open.ruler = r;
   }
 
-  // ---------- Tíðarmátari ----------
-  function timer(body) {
+  // ---------- Stoppur ----------
+  // A stopwatch counting up; the ring goes round once a minute.
+  function stopwatch(body) {
     const clock = h("div", { class: "tbx-clock" }, body);
     const svg = s("svg", { viewBox: "0 0 120 120" }, clock);
     s("circle", { cx: 60, cy: 60, r: 52, fill: "none", stroke: "#e3e9d8", "stroke-width": 12 }, svg);
-    const ring = s("circle", { cx: 60, cy: 60, r: 52, fill: "none", stroke: "#7fae3a", "stroke-width": 12, "stroke-linecap": "round", "stroke-dasharray": 326.7, "stroke-dashoffset": 0 }, svg);
+    const ring = s("circle", { cx: 60, cy: 60, r: 52, fill: "none", stroke: "#7fae3a", "stroke-width": 12, "stroke-linecap": "round", "stroke-dasharray": 326.7, "stroke-dashoffset": 326.7 }, svg);
     const time = h("div", { class: "tbx-time", "aria-live": "off" }, clock);
-    const msg = h("div", { class: "tbx-count", "aria-live": "assertive" }, body);
-    const presets = h("div", { class: "tbx-row" }, body);
     const ctl = h("div", { class: "tbx-row" }, body);
-    let total = 120, left = 120, end = 0, tick = 0;
+    let past = 0, since = 0, tick = 0;  // past: seconds counted before the last start
+    const now = () => past + (tick ? (Date.now() - since) / 1000 : 0);
     function draw() {
-      const shown = Math.ceil(left);
-      time.textContent = `${Math.floor(shown / 60)}:${String(shown % 60).padStart(2, "0")}`;
-      ring.setAttribute("stroke-dashoffset", 326.7 * (1 - left / total));
+      const t = now(), whole = Math.floor(t);
+      time.textContent = `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")},${Math.floor(t * 10) % 10}`;
+      ring.setAttribute("stroke-dashoffset", 326.7 * (1 - (t % 60) / 60));
     }
-    function beep() {
-      try {
-        const ac = new (window.AudioContext || window.webkitAudioContext)();
-        [0, .35, .7].forEach(t => {
-          const o = ac.createOscillator(), g = ac.createGain();
-          o.frequency.value = 880; o.connect(g); g.connect(ac.destination);
-          g.gain.setValueAtTime(.25, ac.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + t + .3);
-          o.start(ac.currentTime + t); o.stop(ac.currentTime + t + .3);
-        });
-      } catch (e) {}
-    }
-    function stop() { clearInterval(tick); tick = 0; go.textContent = "Byrja"; }
-    function set(sec) { stop(); total = left = sec; clock.classList.remove("over"); msg.textContent = ""; draw(); }
+    function stop() { past = now(); clearInterval(tick); tick = 0; go.textContent = "Byrja"; }
     const go = act(ctl, "Byrja", () => {
-      if (tick) { left = Math.max(0, (end - Date.now()) / 1000); stop(); return; }
-      if (left <= 0) set(total);
-      end = Date.now() + left * 1000;
+      if (tick) { stop(); draw(); return; }
+      since = Date.now();
+      tick = setInterval(draw, 100);
       go.textContent = "Steðga";
-      tick = setInterval(() => {
-        left = Math.max(0, (end - Date.now()) / 1000);
-        draw();
-        if (left <= 0) { stop(); clock.classList.add("over"); msg.textContent = "Tíðin er úti!"; beep(); }
-      }, 200);
     });
-    act(ctl, "Byrja aftur", () => set(total));
-    [[30, "½ min"], [60, "1 min"], [120, "2 min"], [180, "3 min"], [300, "5 min"]].forEach(([sec, label]) => act(presets, label, () => set(sec)));
+    act(ctl, "Byrja aftur", () => { stop(); past = 0; draw(); });
     draw();
-    return stop;
+    return () => { clearInterval(tick); tick = 0; };
   }
 
-  // ---------- Penni ----------
+  // ---------- Pennur ----------
   let canvas, ctx, penBar, penColor = "#2c3f9e", erasing = false;
 
   function pen() {
@@ -416,13 +424,13 @@
     }
     if (penBar) return;
     canvas.classList.add("on");
-    penBar = h("div", { class: "tbx-pen", role: "toolbar", "aria-label": "Penni" }, document.body);
+    penBar = h("div", { class: "tbx-pen", role: "toolbar", "aria-label": "Pennur" }, document.body);
     const swatches = [["#2c3f9e", "Blátt"], ["#d23a2f", "Reytt"], ["#3c9a3c", "Grønt"], ["#24303f", "Svart"]].map(([c, name]) => {
       const b = h("button", { class: "sw", type: "button", "aria-label": name, title: name, style: `background:${c}` }, penBar);
       b.addEventListener("click", () => { penColor = c; erasing = false; mark(); });
       return [b, c];
     });
-    const rub = h("button", { type: "button", text: "Gummi" }, penBar);
+    const rub = h("button", { type: "button", text: "Viskileður" }, penBar);
     rub.addEventListener("click", () => { erasing = !erasing; mark(); });
     const clear = h("button", { type: "button", text: "Strika alt" }, penBar);
     clear.addEventListener("click", () => { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.restore(); });
@@ -438,13 +446,13 @@
 
   // ---------- the toolbox button and tray ----------
   const TOOLS = [
-    { icon: "✏️", name: "Penni", run: pen },
+    { icon: "✏️", name: "Pennur", run: pen },
     { icon: "🎲", name: "Terningur", run: () => win("dice", "Terningur", dice) },
-    { icon: "🔴", name: "Brikkar", run: () => win("counters", "Brikkar", counters) },
+    { icon: "🔴", name: "Prikkar", run: () => win("counters", "Prikkar", counters) },
     { icon: "🔟", name: "Tíggjaraplata", run: () => win("ten", "Tíggjaraplata", tenFrame) },
     { icon: "🐸", name: "Tallinja", run: () => win("line", "Tallinja", numberLine) },
     { icon: "📏", name: "Linjal", run: ruler },
-    { icon: "⏱️", name: "Tíðarmátari", run: () => win("timer", "Tíðarmátari", timer) },
+    { icon: "⏱️", name: "Stoppur", run: () => win("stopwatch", "Stoppur", stopwatch, { mini: true }) },
   ];
 
   const tools = document.querySelector("header .tools");
