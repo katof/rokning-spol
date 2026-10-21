@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fo">
+<head>
+<meta charset="UTF-8">
+<title>Hoppandi tøl</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1e293b; --muted: #64748b; --brand: #667eea; --brand2: #764ba2;
+    --water: #bae6fd; --water2: #7dd3fc; --pad: #4ade80; --pad-dark: #16a34a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background: transparent;
+    font-family: 'Inter', Arial, sans-serif; color: var(--ink);
+    display: flex; flex-direction: column; align-items: center; padding: 18px 16px 30px;
+  }
+  button { font-family: inherit; }
+  button:focus-visible, .ans:focus-visible { outline: 4px solid #1e40af; outline-offset: 3px; }
+
+  /* ---------- avatar ---------- */
+  .hero { display: flex; justify-content: center; max-width: 900px; }
+  .avatar-wrap { position: relative; width: 150px; }
+  .bubble {
+    position: absolute; left: calc(100% + 10px); bottom: 55%;
+    background: #fff; padding: .7em 1em; border-radius: 18px; min-width: 180px; max-width: 260px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.25); font-weight: 700; font-size: 1.05rem; text-align: center;
+  }
+  .bubble::before {
+    content: ""; position: absolute; left: -10px; bottom: 18px;
+    border: 10px solid transparent; border-right-color: #fff; border-left: 0;
+  }
+  .avatar { transition: transform .35s; filter: drop-shadow(0 8px 20px rgba(0,0,0,.2)); }
+  .avatar.happy { animation: celebrate .6s ease-out; }
+  .avatar.sad { transform: rotate(-4deg) scale(.96); }
+  @keyframes celebrate {
+    0% { transform: translateY(0) rotate(0); }
+    40% { transform: translateY(-18px) rotate(-6deg) scale(1.06); }
+    70% { transform: translateY(-8px) rotate(6deg); }
+    100% { transform: translateY(0); }
+  }
+
+  /* ---------- card ---------- */
+  .game {
+    width: 100%; max-width: 760px; margin: 18px auto 30px; padding: 26px 24px 30px;
+    background: rgba(255,255,255,.96); border-radius: 28px; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    position: relative; user-select: none;
+  }
+  .game:fullscreen { max-width: none; width: 100vw; min-height: 100vh; margin: 0; border-radius: 0;
+    display: flex; flex-direction: column; justify-content: center; overflow: auto; }
+  .fs-btn {
+    position: absolute; top: 14px; right: 14px; width: 42px; height: 42px; border-radius: 999px;
+    border: 2px solid rgba(102,126,234,.25); background: #fff; color: var(--brand);
+    font-size: 1.15rem; font-weight: 900; cursor: pointer; z-index: 5;
+  }
+  .title {
+    text-align: center; font-size: 2.6rem; font-weight: 900; margin: 0;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .emo { -webkit-text-fill-color: initial; }
+  .subtitle { text-align: center; color: var(--muted); font-weight: 600; margin: .2em 0 1.2em; }
+
+  /* ---------- controls ---------- */
+  .controls { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .group { display: flex; align-items: center; gap: 8px; background: rgba(102,126,234,.08);
+    padding: 8px 12px; border-radius: 14px; flex-wrap: wrap; justify-content: center; }
+  .group-label { font-weight: 800; }
+  .pill {
+    border: 2px solid var(--brand); background: #fff; color: var(--brand); font-weight: 800;
+    font-size: 1rem; padding: .35em .85em; border-radius: 999px; cursor: pointer; transition: all .15s;
+  }
+  .pill[aria-pressed="true"] { background: linear-gradient(135deg, var(--brand), var(--brand2)); color: #fff; border-color: transparent;
+    box-shadow: 0 4px 12px rgba(102,126,234,.4); }
+  .start {
+    font-size: 1.2rem; padding: .65em 2em; border: none; border-radius: 999px; cursor: pointer; font-weight: 900; color: #fff;
+    background: linear-gradient(135deg, var(--brand), var(--brand2)); box-shadow: 0 6px 20px rgba(102,126,234,.4); transition: transform .15s;
+  }
+  .start:hover { transform: translateY(-2px); }
+  .best { text-align: center; color: var(--muted); font-weight: 600; margin-top: 10px; min-height: 1.3em; }
+
+  /* ---------- play area ---------- */
+  .play[hidden] { display: none; }
+  .hud { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 18px 0 6px; flex-wrap: wrap; }
+  .progress { flex: 1; min-width: 160px; height: 14px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress > div { height: 100%; width: 0; background: linear-gradient(90deg, #22c55e, #16a34a); transition: width .4s; }
+  .stars { font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
+  .streak { font-weight: 800; color: #ea580c; min-width: 4.5em; text-align: right; white-space: nowrap; }
+  .streak.pop { animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
+
+  .math {
+    border: 4px solid var(--brand); border-radius: 20px; text-align: center;
+    font-size: 3rem; font-weight: 900; color: var(--brand); margin: 14px auto; padding: .35em .6em;
+    background: linear-gradient(135deg, rgba(102,126,234,.05), rgba(118,75,162,.06));
+  }
+  .math.pop { animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
+  .math .q { display: inline-block; min-width: 1.4em; border-bottom: 5px dashed currentColor; }
+  .math .q.filled { border-bottom-color: transparent; color: #16a34a; animation: pop .4s; }
+  @keyframes pop { 0% { transform: scale(.7); } 100% { transform: scale(1); } }
+
+  /* ---------- pond / number line ---------- */
+  .pond {
+    position: relative; height: 128px; margin: 8px 0 4px; border-radius: 18px; overflow: hidden;
+    background: linear-gradient(180deg, var(--water), var(--water2));
+  }
+  .pond::after { /* little ripples */
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
+    background: repeating-radial-gradient(ellipse at 20% 120%, transparent 0 18px, #fff 19px 20px, transparent 21px 40px);
+  }
+  .track { position: absolute; left: 22px; right: 22px; bottom: 26px; height: 0; }
+  .pad {
+    position: absolute; bottom: -8px; transform: translateX(-50%);
+    width: var(--pw); height: calc(var(--pw) * .5); max-width: 34px; max-height: 17px; min-width: 8px; min-height: 5px;
+    background: radial-gradient(ellipse at 40% 40%, var(--pad), var(--pad-dark)); border-radius: 50%;
+    transition: background .2s, transform .2s;
+  }
+  .pad.visited { background: radial-gradient(ellipse at 40% 40%, #fde047, #eab308); }
+  .pad.goal { background: radial-gradient(ellipse at 40% 40%, #fb7185, #e11d48); transform: translateX(-50%) scale(1.35); }
+  .tick { position: absolute; bottom: -27px; transform: translateX(-50%); font-size: .8rem; font-weight: 800; color: #0c4a6e; }
+  .tick.big { font-size: .95rem; }
+  .frog { position: absolute; bottom: 2px; font-size: 2rem; line-height: 1; transform: translateX(-50%); z-index: 2; will-change: left, transform; }
+  .hop-label {
+    position: absolute; bottom: 72px; transform: translateX(-50%); font-weight: 900; font-size: .95rem; color: #fff;
+    background: #0369a1; padding: 1px 7px; border-radius: 999px; animation: floatUp .9s ease-out forwards; pointer-events: none;
+  }
+  @keyframes floatUp { 0% { opacity: 0; transform: translate(-50%, 8px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -22px); } }
+  .arc { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .hint { text-align: center; min-height: 1.6em; font-weight: 700; color: #0369a1; margin: 8px 0 0; font-size: 1.1rem; }
+
+  /* ---------- answers: the jumping numbers ---------- */
+  .answers { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 22px 0 8px; min-height: 120px; align-items: flex-end; }
+  .ans {
+    position: relative; min-width: 104px; padding: .35em .6em .25em; border: 4px solid #fff; border-radius: 20px;
+    font-size: 2.3rem; font-weight: 900; color: #fff; text-align: center; cursor: pointer;
+    box-shadow: 0 8px 22px rgba(0,0,0,.2); display: flex; flex-direction: column; align-items: center; gap: 2px;
+    animation: hopIdle 1.6s cubic-bezier(.3,0,.5,1) infinite; animation-delay: var(--d, 0s);
+  }
+  .ans .face { font-size: 1.1rem; }
+  .ans .key { position: absolute; top: 4px; left: 8px; font-size: .75rem; opacity: .7; }
+  .ans::after { /* shadow on the ground */
+    content: ""; position: absolute; left: 15%; right: 15%; bottom: -16px; height: 8px; border-radius: 50%;
+    background: rgba(0,0,0,.15); animation: shadowIdle 1.6s cubic-bezier(.3,0,.5,1) infinite; animation-delay: var(--d, 0s);
+  }
+  .ans:hover { filter: brightness(1.08); }
+  /* a real hop: squash, stretch, fly, land */
+  @keyframes hopIdle {
+    0%, 55%, 100% { transform: translateY(0) scale(1, 1); }
+    62% { transform: translateY(0) scale(1.12, .86); }
+    75% { transform: translateY(-26px) scale(.92, 1.1); }
+    88% { transform: translateY(0) scale(1.1, .9); }
+    94% { transform: translateY(0) scale(.97, 1.03); }
+  }
+  @keyframes shadowIdle { 0%, 62%, 88%, 100% { transform: scale(1); opacity: 1; } 75% { transform: scale(.6); opacity: .5; } }
+
+  .ans.win { animation: hopWin .9s cubic-bezier(.3,0,.4,1) forwards; z-index: 3; }
+  .ans.win::after { animation: none; opacity: 0; }
+  @keyframes hopWin {
+    0% { transform: translateY(0) scale(1); }
+    15% { transform: translateY(0) scale(1.2, .8); }
+    45% { transform: translateY(-90px) scale(1.15) rotate(360deg); }
+    75% { transform: translateY(0) scale(1.2, .85) rotate(360deg); }
+    100% { transform: translateY(0) scale(1.1) rotate(360deg); }
+  }
+  .ans.miss { animation: splash .6s ease-in forwards; pointer-events: none; }
+  .ans.miss::after { animation: none; }
+  @keyframes splash {
+    0% { transform: translateY(0) rotate(0); }
+    30% { transform: translateY(-20px) rotate(-12deg); }
+    100% { transform: translateY(60px) scale(.5) rotate(25deg); opacity: 0; }
+  }
+  .ans.calm { animation: none; }
+  .ans.calm::after { animation: none; }
+  .ans.glow { box-shadow: 0 0 0 6px #fde047, 0 8px 22px rgba(0,0,0,.2); }
+
+  .p0 { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  .p1 { background: linear-gradient(135deg, #ec4899, #be185d); }
+  .p2 { background: linear-gradient(135deg, #22c55e, #15803d); }
+  .p3 { background: linear-gradient(135deg, #f97316, #c2410c); }
+
+  .confetti { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 50; font-size: 1.4rem; }
+
+  /* ---------- end screen ---------- */
+  .end { text-align: center; }
+  .end[hidden] { display: none; }
+  .end h2 { font-size: 2.2rem; margin: .4em 0 .1em; background: linear-gradient(135deg, var(--brand), var(--brand2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .end .bigstars { font-size: 2.6rem; letter-spacing: 4px; }
+  .end .bigstars span { display: inline-block; animation: pop .5s cubic-bezier(.34,1.56,.64,1) both; }
+  .review { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0; }
+  .review span { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; padding: .25em .6em; font-weight: 800; }
+  .end .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+
+  @media (max-width: 640px) {
+    .game { padding: 22px 14px 26px; }
+    .title { font-size: 2rem; }
+    .math { font-size: 2.3rem; }
+    .ans { min-width: 76px; font-size: 1.8rem; }
+    .answers { gap: 12px; }
+    .avatar-wrap { width: 110px; }
+    .bubble { min-width: 140px; font-size: .92rem; }
+    .tick { font-size: .65rem; }
+    .frog { font-size: 1.6rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ans, .ans::after { animation-duration: 3.2s; }
+  }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="avatar-wrap">
+      <div class="bubble" id="bubble" aria-live="polite">Hey! Eru vit klár? 🎉</div>
+      <div id="avatar" class="avatar"><svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="100%" aria-hidden="true"><g><path d="M429.639,404.189c8.939-4.113,15.15-13.143,15.15-23.627c0-12.37-8.642-22.715-20.215-25.346 c6.208-4.752,10.215-12.234,10.215-20.654c0-14.359-11.641-26-26-26c-0.235,0-0.468,0.011-0.701,0.018 c6.483-4.729,10.701-12.379,10.701-21.018c0-14.359-11.641-26-26-26s-26,11.641-26,26s11.641,26,26,26 c0.234,0,0.467-0.012,0.701-0.018c-6.484,4.728-10.701,12.378-10.701,21.018c0,12.369,8.641,22.714,20.214,25.346 c-6.207,4.751-10.214,12.232-10.214,20.654c0,10.616,6.366,19.74,15.487,23.779c-9.978,4.325-17.229,14.427-18.194,26.471 c-0.119,1.48,0.979,2.75,2.355,2.75h53.41c1.378,0,2.475-1.27,2.354-2.75C447.226,418.621,439.807,408.423,429.639,404.189z" fill="#5B412C"></path><path d="M119.212,261.563c-14.359,0-26,11.641-26,26c0,8.639,4.218,16.289,10.701,21.018 c-0.233-0.007-0.466-0.018-0.701-0.018c-14.359,0-26,11.641-26,26c0,8.42,4.007,15.902,10.215,20.654 c-11.573,2.631-20.215,12.976-20.215,25.346c0,10.484,6.21,19.514,15.15,23.627c-10.168,4.233-17.587,14.432-18.565,26.623 c-0.118,1.480,0.979,2.75,2.356,2.75h53.41c1.378,0,2.475-1.27,2.355-2.75c-0.966-12.044-8.217-22.146-18.194-26.471 c9.121-4.039,15.487-13.163,15.487-23.779c0-8.422-4.007-15.903-10.214-20.654c11.573-2.632,20.214-12.977,20.214-25.346 c0-8.64-4.217-16.290-10.701-21.018c0.234,0.006,0.467,0.018,0.701,0.018c14.359,0,26-11.641,26-26S133.572,261.563,119.212,261.563z " fill="#5B412C"></path><circle cx="116.731" cy="235.501" fill="#FFBF94" r="36.537"></circle><path d="M116.732,257.858c-17.753,0-32.542-12.662-35.844-29.447c-0.451,2.294-0.693,4.663-0.693,7.09 c0,20.178,16.358,36.536,36.537,36.536s36.536-16.358,36.536-36.536c0-2.427-0.242-4.796-0.693-7.09 C149.274,245.196,134.484,257.858,116.732,257.858z" fill="#ED9572"></path><circle cx="395.27" cy="235.501" fill="#FFBF94" r="36.537"></circle><path d="M395.27,257.858c-17.752,0-32.542-12.662-35.843-29.447c-0.451,2.294-0.693,4.663-0.693,7.09 c0,20.178,16.357,36.536,36.536,36.536s36.537-16.358,36.537-36.536c0-2.427-0.242-4.796-0.693-7.09 C427.812,245.196,413.021,257.858,395.27,257.858z" fill="#ED9572"></path><circle cx="256.001" cy="164.063" fill="#5B412C" r="150.5"></circle><path d="M368.882,451.68c0,62.344-225.762,62.344-225.762,0c0-62.342,50.538-112.881,112.881-112.881 C318.344,338.799,368.882,389.338,368.882,451.68z" fill="#D1375F"></path><path d="M256,338.799c-55.722,0-102.008,40.376-111.212,93.467c19.419,50.416,203.005,50.416,222.424,0 C358.009,379.175,311.723,338.799,256,338.799z" fill="#EF5B7B"></path><circle cx="256.001" cy="354.926" fill="#FFBF94" r="44.716"></circle><path d="M256,310.209c-19.94,0-36.826,13.057-42.592,31.084c5.766,18.027,22.651,31.083,42.592,31.083 c19.941,0,36.827-13.056,42.592-31.083C292.827,323.266,275.941,310.209,256,310.209z" fill="#ED9572"></path><path d="M383.997,180.969c-2.857-68.226-55.772-122.666-127.966-122.696v-0.001c-0.01,0-0.02,0-0.03,0 c-0.01,0-0.02,0-0.03,0v0.001c-72.193,0.03-125.108,54.471-127.966,122.696h-0.124v78.526h0.124 c2.857,68.224,60.131,100.864,127.966,100.884l0,0c0.011,0,0.021,0,0.03,0c0.011,0,0.021,0,0.03,0l0,0 c67.835-0.02,125.109-32.66,127.966-100.884h0.124v-78.526H383.997z" fill="#FFBF94"></path><path d="M143.12,451.68c0,17.054,16.9,29.436,41.444,37.159V364.302C159.272,385.002,143.12,416.448,143.12,451.68z" fill="#E89C21"></path><path d="M368.882,451.68c0-31.801-13.157-60.522-34.318-81.038v115.745 C355.194,478.597,368.882,467.029,368.882,451.68z" fill="#E89C21"></path><path d="M144.789,432.266c4.819,12.511,19.754,21.914,39.775,28.215v-96.183 C164.026,381.108,149.514,405.005,144.789,432.266z" fill="#FFC866"></path><path d="M367.213,432.266c-4.159-23.99-15.897-45.376-32.649-61.62v87.376 C350.968,451.824,362.985,443.242,367.213,432.266z" fill="#FFC866"></path><circle cx="174.203" cy="269.855" fill="#F97A7A" r="30.538"></circle><circle cx="337.799" cy="269.855" fill="#F97A7A" r="30.538"></circle><circle cx="208.045" cy="216.414" fill="#493E2F" r="17.45"></circle><circle cx="304.145" cy="216.414" fill="#493E2F" r="17.45"></circle><path d="M256.545,293.734c-9.077,0-18.154-3.455-25.064-10.365c-2.343-2.344-2.343-6.143,0-8.486 c2.343-2.342,6.143-2.342,8.485,0c9.144,9.145,24.018,9.143,33.16,0c2.343-2.342,6.143-2.342,8.485,0 c2.343,2.344,2.343,6.143,0,8.486C274.7,290.279,265.623,293.734,256.545,293.734z" fill="#F97A7A"></path><path d="M128.307,183.563c-6.588,0-11.832-6.066-11.264-13.149C123.215,93.44,183.072,33.041,256,33.041 c72.929,0,132.786,60.399,138.958,137.372c0.568,7.083-4.676,13.149-11.265,13.149H128.307z" fill="#7C4E2E"></path></g></svg></div>
+    </div>
+  </div>
+
+  <main class="game" id="game">
+    <button class="fs-btn" id="fsBtn" type="button" aria-label="Fullur skermur" title="Fullur skermur">⛶</button>
+    <h1 class="title">Hoppandi tøl <span class="emo">🐸</span></h1>
+    <p class="subtitle">Rokna og vel rætta talið – froskurin hjálpir tær!</p>
+
+    <div class="controls" id="controls">
+      <div class="group" role="group" aria-label="Tal upp til">
+        <span class="group-label">Upp til:</span>
+        <button type="button" class="pill" data-max="10" aria-pressed="false">10</button>
+        <button type="button" class="pill" data-max="20" aria-pressed="true">20</button>
+        <button type="button" class="pill" data-max="30" aria-pressed="false">30</button>
+      </div>
+      <div class="group" role="group" aria-label="Rokniháttur">
+        <span class="group-label">Rokna:</span>
+        <button type="button" class="pill" data-op="+" aria-pressed="true">+</button>
+        <button type="button" class="pill" data-op="-" aria-pressed="false">−</button>
+        <button type="button" class="pill" data-op="×" aria-pressed="false">×</button>
+        <button type="button" class="pill" data-op="mix" aria-pressed="false">🎲</button>
+      </div>
+      <button type="button" class="start" id="startBtn">Byrja! 🚀</button>
+    </div>
+    <div class="best" id="best"></div>
+
+    <section class="play" id="play" hidden>
+      <div class="hud">
+        <div class="stars" id="stars">⭐ 0</div>
+        <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+        <div class="streak" id="streak"></div>
+      </div>
+
+      <div class="math" id="math"></div>
+
+      <div class="pond" id="pond" aria-hidden="true">
+        <svg class="arc" id="arcs"></svg>
+        <div class="track" id="track"></div>
+      </div>
+      <p class="hint" id="hint" aria-live="polite"></p>
+
+      <div class="answers" id="answers"></div>
+    </section>
+
+    <section class="end" id="end" hidden>
+      <h2 id="endTitle"></h2>
+      <div class="bigstars" id="endStars"></div>
+      <p id="endText"></p>
+      <div id="reviewWrap" hidden>
+        <p><b>Hesi skulu vit øva meira:</b></p>
+        <div class="review" id="review"></div>
+      </div>
+      <div class="row">
+        <button type="button" class="start" id="againBtn">Spæl aftur 🔁</button>
+        <button type="button" class="start" id="practiceBtn" hidden>Øv feilirnar 🎯</button>
+      </div>
+    </section>
+  </main>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ===== sound ===== */
+  const Sound = (() => {
+    let ctx;
+    const ac = () => (ctx ||= new (window.AudioContext || window.webkitAudioContext)());
+    function tone(freq, to, dur, type = "sine", gain = .22, delay = 0) {
+      try {
+        const c = ac(), t = c.currentTime + delay, o = c.createOscillator(), g = c.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t);
+        if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(gain, t + .015);
+        g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+        o.connect(g).connect(c.destination);
+        o.start(t); o.stop(t + dur + .02);
+      } catch (e) {}
+    }
+    return {
+      hop: (i = 0) => tone(300 + i * 25, 600 + i * 25, .12, "sine", .12),
+      boing: () => tone(420, 880, .25, "sine", .25),
+      splash: () => tone(180, 70, .3, "triangle", .25),
+      win: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0, .3, "sine", .2, i * .11)),
+    };
+  })();
+
+  /* ===== helpers ===== */
+  const $ = id => document.getElementById(id);
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--) { const j = rnd(0, i); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  };
+
+  /* ===== avatar ===== */
+  const avatar = $("avatar"), bubble = $("bubble");
+  const happy = ["Rætt! 🎉", "Flott! 🌟", "Tú dugir! 💪", "Frálíkt! ⭐", "Væl gjørt! 🚀", "Super! 🐸"];
+  const say = t => { bubble.textContent = t; };
+  function mood(kind, text) {
+    avatar.classList.remove("happy", "sad");
+    void avatar.offsetWidth;
+    avatar.classList.add(kind);
+    if (text) say(text);
+    setTimeout(() => avatar.classList.remove(kind), 800);
+  }
+
+  /* ===== settings ===== */
+  let maxVal = 20, op = "+";
+  document.querySelectorAll("[data-max]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-max]").forEach(x => x.setAttribute("aria-pressed", x === b));
+    maxVal = +b.dataset.max; showBest();
+  }));
+  document.querySelectorAll("[data-op]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-op]").forEach(x => x.setAttribute("aria-pressed", x === b));
+    op = b.dataset.op; showBest();
+  }));
+  const bestKey = () => `hoptol-best-${op}-${maxVal}`;
+  function showBest() {
+    const b = store.get(bestKey());
+    $("best").textContent = b ? `Títt besta: ${b} ⭐ av 10` : "";
+  }
+
+  /* ===== tasks ===== */
+  // Small numbers more often at the start, bigger ones as the child gets them right.
+  function makeTask(kind, level) {
+    const top = Math.max(5, Math.round(maxVal * (0.5 + 0.5 * level)));
+    let a, b, ans;
+    if (kind === "+") {
+      ans = rnd(2, top); a = rnd(1, ans - 1); b = ans - a;
+    } else if (kind === "-") {
+      a = rnd(2, top); b = rnd(1, a - 1); ans = a - b;
+    } else {
+      const pairs = [];
+      for (let i = 1; i <= 10; i++) for (let j = 1; j <= 10; j++) if (i * j <= top && i * j >= 2) pairs.push([i, j]);
+      [a, b] = pick(pairs); ans = a * b;
+    }
+    return { op: kind, a, b, ans };
+  }
+
+  // Distractors are the mistakes children really make: off by one, the wrong operation, a ten off.
+  function choices(t) {
+    const set = new Set([t.ans]);
+    const near = [t.ans + 1, t.ans - 1, t.ans + 2, t.ans - 2];
+    if (t.op === "+") near.push(Math.abs(t.a - t.b), t.ans + 10, t.ans - 10);
+    if (t.op === "-") near.push(t.a + t.b, t.ans + 10);
+    if (t.op === "×") near.push(t.a + t.b, t.ans + t.a, t.ans - t.a, t.ans + t.b, t.ans - t.b);
+    for (const n of shuffle(near)) { if (set.size >= 4) break; if (n >= 0 && n <= maxVal + 10) set.add(n); }
+    while (set.size < 4) set.add(rnd(0, maxVal));
+    return shuffle([...set]);
+  }
+
+  /* ===== pond (number line) ===== */
+  const pond = $("pond"), track = $("track"), arcs = $("arcs");
+  let lineMax = 20, frog;
+  const pct = n => (n / lineMax) * 100;
+
+  function buildPond(t) {
+    lineMax = Math.max(10, Math.ceil(Math.max(t.a, t.ans, t.op === "×" ? 0 : t.b) / 5) * 5);
+    track.innerHTML = ""; arcs.innerHTML = "";
+    track.style.setProperty("--pw", `calc(${100 / (lineMax + 1)}% - 3px)`);
+    const step = lineMax > 20 ? 5 : lineMax > 10 ? 2 : 1;
+    for (let n = 0; n <= lineMax; n++) {
+      const p = document.createElement("div");
+      p.className = "pad"; p.dataset.n = n; p.style.left = pct(n) + "%";
+      track.appendChild(p);
+      if (n % step === 0 || n === lineMax) {
+        const l = document.createElement("div");
+        l.className = "tick" + (n % 10 === 0 ? " big" : ""); l.textContent = n; l.style.left = pct(n) + "%";
+        track.appendChild(l);
+      }
+    }
+    frog = document.createElement("div");
+    frog.className = "frog"; frog.textContent = "🐸";
+    track.appendChild(frog);
+    placeFrog(start(t));
+  }
+  const start = t => t.op === "×" ? 0 : t.a;
+  const padEl = n => track.querySelector(`.pad[data-n="${n}"]`);
+  function placeFrog(n) { frog.style.left = pct(n) + "%"; padEl(n)?.classList.add("visited"); }
+
+  // Ones for small hops, tens first for big ones ("count on" in chunks), groups for ×.
+  function hopPlan(t) {
+    if (t.op === "×") return Array(t.b).fill(t.a);
+    const sign = t.op === "+" ? 1 : -1;
+    const tens = t.b >= 10 ? Math.floor(t.b / 10) : 0;
+    return [...Array(tens).fill(10), ...Array(t.b - tens * 10).fill(1)].map(s => s * sign);
+  }
+
+  function drawArc(from, to) {
+    const w = track.offsetWidth, x0 = track.offsetLeft;
+    const y = pond.offsetHeight - 26;
+    const xa = x0 + w * pct(from) / 100, xb = x0 + w * pct(to) / 100;
+    const h = Math.min(60, 18 + Math.abs(xb - xa) * .5);
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", `M${xa},${y - 10} Q${(xa + xb) / 2},${y - 10 - h * 2} ${xb},${y - 10}`);
+    path.setAttribute("fill", "none"); path.setAttribute("stroke", "#0369a1");
+    path.setAttribute("stroke-width", "3"); path.setAttribute("stroke-dasharray", "6 5"); path.setAttribute("stroke-linecap", "round");
+    arcs.appendChild(path);
+  }
+
+  async function hopFrog(t, speed = 1) {
+    let pos = start(t), total = 0;
+    const plan = hopPlan(t);
+    const dur = Math.max(180, Math.min(420, 2600 / plan.length)) / speed;
+    for (let i = 0; i < plan.length; i++) {
+      const s = plan[i], to = pos + s, from = pos;
+      total += Math.abs(s);
+      drawArc(from, to);
+      Sound.hop(i);
+      const h = 30 + Math.min(40, Math.abs(s) * 4);
+      await frog.animate([
+        { left: pct(from) + "%", transform: "translateX(-50%) translateY(0) scale(1.1,.85)" },
+        { left: pct((from + to) / 2) + "%", transform: `translateX(-50%) translateY(-${h}px) scale(.9,1.1)`, offset: .5 },
+        { left: pct(to) + "%", transform: "translateX(-50%) translateY(0) scale(1.1,.9)" },
+      ], { duration: dur, easing: "ease-in-out" }).finished;
+      pos = to; placeFrog(pos);
+      const lab = document.createElement("div");
+      lab.className = "hop-label"; lab.style.left = pct(pos) + "%";
+      lab.textContent = t.op === "×" ? `${i + 1}×${t.a}` : (s > 0 ? "+" : "−") + Math.abs(s);
+      track.appendChild(lab); setTimeout(() => lab.remove(), 900);
+      if (t.op !== "×") $("hint").textContent = `${t.op === "+" ? "Telja fram" : "Telja aftur"}: ${total}… ${pos}`;
+      else $("hint").textContent = `${i + 1} hopp á ${t.a} = ${pos}`;
+    }
+    padEl(t.ans)?.classList.add("goal");
+    return pos;
+  }
+
+  /* ===== game state ===== */
+  const ROUNDS = 10;
+  let queue, round, stars, streak, level, task, locked, missed, firstTry, practice;
+  const opSym = o => o === "-" ? "−" : o;
+
+  function begin(tasks) {
+    practice = !!tasks;
+    queue = tasks ? shuffle(tasks.slice()) : null;
+    round = 0; stars = 0; streak = 0; level = 0; missed = [];
+    $("controls").hidden = false;
+    $("play").hidden = false; $("end").hidden = true;
+    say(practice ? "Vit øva tey torføru! 🎯" : "Kom og rokna! 🐸");
+    next();
+  }
+
+  function next() {
+    const total = practice ? queue.length : ROUNDS;
+    if (round >= total) return finish();
+    task = practice ? queue[round] : makeTask(op === "mix" ? pick(["+", "-", "×"]) : op, level);
+    round++; locked = false; firstTry = true;
+    $("bar").style.width = ((round - 1) / total * 100) + "%";
+    $("stars").textContent = `⭐ ${stars}`;
+    const m = $("math");
+    m.innerHTML = `${task.a} ${opSym(task.op)} ${task.b} = <span class="q" id="q">?</span>`;
+    m.classList.remove("pop"); void m.offsetWidth; m.classList.add("pop");
+    $("hint").textContent = "";
+    buildPond(task);
+
+    const box = $("answers"); box.innerHTML = "";
+    choices(task).forEach((n, i) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = `ans p${i}`;
+      b.style.setProperty("--d", (i * .18) + "s");
+      b.dataset.n = n;
+      b.setAttribute("aria-label", String(n));
+      b.innerHTML = `<span class="key">${i + 1}</span><span>${n}</span><span class="face">${["😄", "😎", "🤓", "🤩"][i]}</span>`;
+      b.addEventListener("click", () => answer(b, n));
+      box.appendChild(b);
+    });
+  }
+
+  async function answer(btn, n) {
+    if (locked) return;
+    locked = true;
+    const all = [...document.querySelectorAll(".ans")];
+    if (n === task.ans) {
+      all.forEach(b => b !== btn && b.classList.add("calm"));
+      btn.classList.add("win");
+      Sound.boing();
+      const q = $("q"); q.textContent = n; q.classList.add("filled");
+      if (firstTry) {
+        stars++; streak++; level = Math.min(1, level + .12);
+        mood("happy", streak >= 3 ? `${streak} á rað! 🔥` : pick(happy));
+      } else {
+        streak = 0;
+        mood("happy", "Ja! Nú hevur tú tað! 👍");
+      }
+      $("stars").textContent = `⭐ ${stars}`;
+      const s = $("streak"); s.textContent = streak >= 2 ? `🔥 ${streak}` : "";
+      s.classList.remove("pop"); void s.offsetWidth; s.classList.add("pop");
+      confetti(btn, firstTry ? 14 : 6);
+      // let the frog prove it, fast
+      await hopFrog(task, 2.2);
+      await wait(500);
+      next();
+    } else {
+      if (firstTry) missed.push({ op: task.op, a: task.a, b: task.b, ans: task.ans });
+      firstTry = false; streak = 0; level = Math.max(0, level - .15);
+      $("streak").textContent = "";
+      btn.classList.add("miss");
+      Sound.splash();
+      mood("sad", n > task.ans ? "Ov stórt! Hygg at froskinum 👀" : "Ov lítið! Hygg at froskinum 👀");
+      all.forEach(b => b !== btn && !b.classList.contains("miss") && b.classList.add("calm"));
+      await wait(400);
+      await hopFrog(task, 1);
+      $("hint").textContent = `Froskurin endaði á ${task.ans}. Vel nú rætta talið!`;
+      all.forEach(b => b.classList.remove("calm"));
+      locked = false;
+    }
+  }
+
+  function finish() {
+    $("bar").style.width = "100%";
+    $("play").hidden = true; $("end").hidden = false;
+    const total = practice ? queue.length : ROUNDS;
+    const ratio = stars / total;
+    let title;
+    if (ratio === 1) { title = "Fullkomið! 🏆"; say("Tú ert ein stjørna! ⭐⭐⭐"); Sound.win(); }
+    else if (ratio >= .8) { title = "Sera flott! 🌟"; say("Næstan alt rætt! ⭐⭐"); Sound.win(); }
+    else if (ratio >= .5) { title = "Væl gjørt! 💪"; say("Tú verður betri og betri! 💪"); }
+    else { title = "Gott roynt! 🎯"; say("Øvingin ger meistaran! 🎯"); }
+    mood("happy");
+    $("endTitle").innerHTML = title.replace(/ (\S+)$/, ' <span class="emo">$1</span>');
+    const shown = Math.round(ratio * 5);
+    $("endStars").innerHTML = Array.from({ length: 5 }, (_, i) =>
+      `<span style="animation-delay:${i * .12}s;opacity:${i < shown ? 1 : .25}">⭐</span>`).join("");
+    let text = `Tú fekst ${stars} av ${total} rætt í fyrstu roynd.`;
+    if (!practice) {
+      const prev = store.get(bestKey()) || 0;
+      if (stars > prev) { store.set(bestKey(), stars); if (prev) text += " Nýtt met! 🎉"; }
+      showBest();
+    }
+    $("endText").textContent = text;
+    const rw = $("review");
+    rw.innerHTML = missed.map(t => `<span>${t.a} ${opSym(t.op)} ${t.b} = ${t.ans}</span>`).join("");
+    $("reviewWrap").hidden = !missed.length;
+    $("practiceBtn").hidden = !missed.length;
+    if (ratio >= .8) for (let i = 0; i < 4; i++) setTimeout(() => confetti($("endStars"), 16), i * 250);
+  }
+
+  function confetti(el, count) {
+    const r = el.getBoundingClientRect();
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement("div");
+      c.className = "confetti"; c.textContent = pick(["⭐", "✨", "🎉", "💚", "🟣", "🔵"]);
+      c.style.left = r.left + r.width / 2 + "px"; c.style.top = r.top + r.height / 2 + "px";
+      document.body.appendChild(c);
+      const ang = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 120;
+      c.animate([
+        { transform: "translate(-50%,-50%) scale(.4)", opacity: 1 },
+        { transform: `translate(calc(-50% + ${Math.cos(ang) * dist}px), calc(-50% + ${Math.sin(ang) * dist - 40}px)) scale(1) rotate(${rnd(-180, 180)}deg)`, opacity: 0 },
+      ], { duration: 900 + Math.random() * 400, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = () => c.remove();
+    }
+  }
+
+  /* ===== wiring ===== */
+  $("startBtn").addEventListener("click", () => begin());
+  $("againBtn").addEventListener("click", () => begin());
+  $("practiceBtn").addEventListener("click", () => begin(missed.slice()));
+  document.addEventListener("keydown", e => {
+    if ($("play").hidden) return;
+    const k = +e.key;
+    if (k >= 1 && k <= 4) document.querySelectorAll(".ans")[k - 1]?.click();
+  });
+  $("fsBtn").addEventListener("click", () => {
+    if (!document.fullscreenElement) $("game").requestFullscreen?.();
+    else document.exitFullscreen?.();
+  });
+  showBest();
+})();
+</script>
+</body>
+</html>
