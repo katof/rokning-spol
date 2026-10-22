@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="fo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jatsi</title>
+
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Bungee&family=Patrick+Hand&family=Nunito:wght@500;700;800;900&display=swap");
+
+    :root {
+      --paper: #fffdf5;
+      --page: #f6f3eb;
+      --brown: #725349;
+      --brown-dark: #513228;
+      --brown-soft: #9c8279;
+      --yellow: #f3bd2e;
+      --red: #e05a47;
+      --green: #5fb376;
+      --blue: #4d9bea;
+      --pink: #d869a8;
+      --shadow: 0 9px 0 rgba(81, 50, 40, 0.13), 0 18px 38px rgba(81, 50, 40, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      color: var(--brown-dark);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(234, 161, 77, 0.19), transparent 27rem),
+        radial-gradient(circle at 94% 12%, rgba(95, 179, 118, 0.13), transparent 25rem),
+        var(--page);
+      font-family: "Nunito", sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+    [hidden] { display: none !important; }
+    .bungee { font-family: "Bungee", sans-serif; font-weight: 400; }
+
+    .game-shell { width: min(1500px, 100%); margin: 0 auto; padding: clamp(12px, 2vw, 28px); }
+
+    .game-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .brand { margin: 0; color: var(--brown); font-size: clamp(2rem, 5vw, 4.6rem); line-height: 1; letter-spacing: .02em; text-shadow: 0 5px 0 rgba(114, 83, 73, .12); }
+    .header-actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .game-grid { display: grid; grid-template-columns: minmax(420px, 1.08fr) minmax(520px, .92fr); gap: clamp(18px, 2.4vw, 34px); align-items: start; }
+    .play-panel { min-width: 0; }
+
+    .player-banner {
+      position: relative; z-index: 2; width: fit-content; max-width: 100%; margin: 0 auto -19px; padding: 11px 25px;
+      color: #fff; background: var(--brown); border: 3px solid var(--brown-dark); border-radius: 999px;
+      box-shadow: 0 5px 0 rgba(81, 50, 40, .22); text-align: center; font-size: clamp(.92rem, 1.4vw, 1.16rem); letter-spacing: .03em;
+    }
+    .player-banner.pop { animation: bannerPop .5s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes bannerPop { 0% { transform: scale(.7); } 100% { transform: scale(1); } }
+
+    .dice-stage {
+      position: relative; height: clamp(300px, 34vw, 420px); overflow: hidden; display: grid; place-items: center;
+      background: radial-gradient(circle at 50% 42%, rgba(255,255,255,.18), transparent 60%), #3f7d5a;
+      border: 4px solid var(--brown); border-radius: 32px; box-shadow: var(--shadow), inset 0 0 0 7px rgba(255,255,255,.15), inset 0 0 60px rgba(0,0,0,.25);
+    }
+
+    .dice-row { display: flex; gap: clamp(10px, 2vw, 22px); justify-content: center; flex-wrap: wrap; padding: 60px 16px 70px; }
+    .die {
+      --s: clamp(64px, 9vw, 104px);
+      position: relative; width: var(--s); height: var(--s); padding: calc(var(--s) * .14); border: none; border-radius: 22%;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.35), transparent 60%), var(--die-color);
+      box-shadow: inset 0 -6px 0 rgba(0,0,0,.18), 0 8px 0 rgba(0,0,0,.25), 0 14px 22px rgba(0,0,0,.25);
+      display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); cursor: pointer; transition: transform .2s ease;
+    }
+    .die:disabled { cursor: default; }
+    .die .pip { width: 72%; height: 72%; margin: auto; border-radius: 50%; background: #fffdf5; box-shadow: inset 0 2px 2px rgba(0,0,0,.2); }
+    .die.held { transform: translateY(-14px); outline: 5px solid var(--yellow); outline-offset: 4px; }
+    .die.held::after {
+      content: "HILDIN"; position: absolute; left: 50%; bottom: -36px; transform: translateX(-50%); padding: 2px 8px; border-radius: 999px;
+      background: var(--yellow); color: var(--brown-dark); font-family: "Bungee", sans-serif; font-size: .62rem;
+    }
+    .die.blank .pip { visibility: hidden !important; }
+    .die.rolling { animation: tumble .28s linear infinite; }
+    @keyframes tumble { 0% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-22px) rotate(90deg); } 50% { transform: translateY(0) rotate(180deg); }
+      75% { transform: translateY(-12px) rotate(270deg); } 100% { transform: translateY(0) rotate(360deg); } }
+    .die.landed { animation: land .3s ease-out; }
+    @keyframes land { 0% { transform: scale(1.15, .85); } 100% { transform: scale(1); } }
+
+    .roll-count {
+      position: absolute; z-index: 3; top: 28px; right: 22px; display: flex; gap: 6px; padding: 8px 12px; border-radius: 999px;
+      background: var(--brown-dark); box-shadow: 0 4px 0 rgba(81,50,40,.18); pointer-events: none;
+    }
+    .roll-count span { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,.25); transition: background .2s; }
+    .roll-count span.used { background: var(--yellow); }
+
+    .stage-message {
+      position: absolute; z-index: 3; left: 50%; bottom: 18px; transform: translateX(-50%); width: min(90%, 560px); padding: 8px 18px;
+      border-radius: 999px; color: var(--brown); background: rgba(255,253,245,.92); border: 2px solid rgba(114,83,73,.22);
+      backdrop-filter: blur(5px); text-align: center; font-weight: 900; pointer-events: none;
+    }
+
+    .big-word {
+      position: absolute; z-index: 4; left: 50%; top: 40%; transform: translate(-50%, -50%) scale(0); pointer-events: none;
+      font-family: "Bungee", sans-serif; font-size: clamp(2.4rem, 7vw, 5rem); color: var(--yellow);
+      -webkit-text-stroke: 3px var(--brown-dark); text-shadow: 0 6px 0 var(--brown-dark); white-space: nowrap;
+    }
+    .big-word.show { animation: bigWord 1.6s cubic-bezier(.34,1.56,.64,1) forwards; }
+    @keyframes bigWord { 0% { transform: translate(-50%,-50%) scale(0) rotate(-8deg); } 20% { transform: translate(-50%,-50%) scale(1.1) rotate(3deg); }
+      30%, 80% { transform: translate(-50%,-50%) scale(1); opacity: 1; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 0; } }
+
+
+    .controls { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; margin-top: 22px; }
+
+    .btn {
+      min-height: 49px; padding: 10px 20px; border: 3px solid var(--brown-dark); border-radius: 999px; color: #fff; background: var(--brown);
+      box-shadow: 0 5px 0 rgba(81,50,40,.24); cursor: pointer; font-family: "Bungee", sans-serif; font-size: clamp(.82rem, 1.2vw, 1rem);
+      transition: transform .14s ease, box-shadow .14s ease, opacity .14s ease;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 7px 0 rgba(81,50,40,.24); }
+    .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(81,50,40,.24); }
+    .btn:disabled { opacity: .42; cursor: not-allowed; box-shadow: none; }
+    .btn-yellow { color: var(--brown-dark); background: var(--yellow); }
+    .btn-small { min-height: 42px; padding: 8px 16px; font-size: .72rem; }
+    .btn-ghost { color: var(--brown); background: #fffdf5; }
+
+
+    .help-line { margin: 12px 4px 0; color: var(--brown-soft); font-weight: 800; font-size: .92rem; text-align: center; }
+    kbd { font-family: inherit; background: #fff; border: 2px solid rgba(114,83,73,.3); border-radius: 6px; padding: 0 6px; }
+
+    /* Stigablaðið */
+    .score-pad {
+      position: relative; min-width: 0; padding: 38px clamp(10px, 1.8vw, 22px) 24px; overflow: hidden;
+      background:
+        linear-gradient(90deg, transparent 0 42px, rgba(224,90,71,.22) 42px 44px, transparent 44px),
+        repeating-linear-gradient(180deg, transparent 0 35px, rgba(77,155,234,.11) 35px 36px),
+        var(--paper);
+      border: 2px solid rgba(114,83,73,.25); border-radius: 8px 8px 20px 20px; box-shadow: var(--shadow); transform: rotate(.2deg);
+    }
+    .score-pad::before {
+      content: ""; position: absolute; top: 10px; left: 24px; right: 24px; height: 16px;
+      background: radial-gradient(circle, var(--page) 0 4px, var(--brown) 4.5px 6px, transparent 6.5px) 0 0 / 34px 16px repeat-x; opacity: .7;
+    }
+    .pad-title { display: flex; justify-content: space-between; align-items: end; gap: 14px; margin: 0 7px 12px 31px; }
+    .pad-title h2 { margin: 0; color: var(--brown); font-size: clamp(1.25rem, 2.5vw, 2rem); }
+    .pad-note { margin: 0; color: var(--brown-soft); font-family: "Patrick Hand", cursive; font-size: 1.08rem; text-align: right; }
+
+    .math-box {
+      margin: 0 7px 12px 31px; padding: 8px 14px; min-height: 44px; border-radius: 14px; background: rgba(77,155,234,.1);
+      border: 2px dashed rgba(77,155,234,.45); font-family: "Patrick Hand", cursive; font-size: 1.35rem; color: var(--brown-dark);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .math-box b { font-family: "Nunito", sans-serif; font-size: .95rem; color: var(--blue); }
+
+    .score-scroll { overflow-x: auto; padding: 2px 2px 10px 31px; }
+    .score-table { width: 100%; min-width: 470px; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: clamp(.74rem, 1vw, .93rem); }
+    .score-table th, .score-table td { height: 36px; padding: 3px 5px; border-right: 1px solid rgba(114,83,73,.22); border-bottom: 1px solid rgba(114,83,73,.22); text-align: center; }
+    .score-table thead th { height: 48px; overflow: hidden; color: #fff; background: var(--brown); text-overflow: ellipsis; white-space: nowrap; font-weight: 900; }
+    .score-table thead th:first-child { border-radius: 12px 0 0; }
+    .score-table thead th:last-child { border-radius: 0 12px 0 0; }
+    .score-table th:first-child { width: 36%; text-align: left; }
+    .score-table tbody th { color: var(--brown-dark); background: rgba(255,255,255,.28); font-weight: 900; }
+    .score-table tbody th small { display: block; font-weight: 700; color: var(--brown-soft); font-size: .72rem; line-height: 1.1; }
+    .score-table .active-head { color: var(--brown-dark); background: var(--yellow); }
+    .score-table .section-row th { height: 30px; padding-top: 7px; color: var(--brown); background: rgba(114,83,73,.09); font-family: "Bungee", sans-serif; font-size: .66rem; letter-spacing: .04em; text-align: left; }
+    .score-table .total-row th, .score-table .total-row td { background: rgba(243,189,46,.16); font-weight: 900; }
+    .score-table .grand-total th, .score-table .grand-total td { color: #fff; background: var(--brown); font-size: 1rem; }
+    .bonus-hint { display: block; font-size: .68rem; font-weight: 800; color: var(--brown-soft); }
+
+    .score-choice {
+      width: 100%; min-height: 28px; padding: 1px 3px; border: 2px dashed transparent; border-radius: 9px; color: var(--brown-dark);
+      background: transparent; font-family: "Patrick Hand", cursive; font-size: 1.2rem; cursor: default;
+    }
+    .score-choice.available { color: rgba(81,50,40,.55); background: rgba(243,189,46,.18); border-color: rgba(114,83,73,.32); cursor: pointer; }
+    .score-choice.available.good { color: var(--brown-dark); background: rgba(95,179,118,.25); border-color: var(--green); animation: scorePulse 1.5s ease-in-out infinite; }
+    .score-choice.available:hover, .score-choice.available:focus-visible { color: var(--brown-dark); background: rgba(243,189,46,.48); outline: none; }
+    .score-choice.written { color: var(--brown-dark); font-size: 1.34rem; font-weight: 700; }
+    .score-choice.zero { color: var(--red); }
+    .score-choice.just { animation: justWritten .7s ease-out; }
+    @keyframes scorePulse { 50% { background: rgba(95,179,118,.45); } }
+    @keyframes justWritten { 0% { transform: scale(1.8); color: var(--green); } 100% { transform: scale(1); } }
+
+    /* Byrjan og endi */
+    .overlay { position: fixed; z-index: 50; inset: 0; display: grid; place-items: center; padding: 18px; background: rgba(81,50,40,.62); backdrop-filter: blur(8px); }
+    .setup-card {
+      width: min(620px, 100%); max-height: calc(100vh - 36px); overflow-y: auto; padding: clamp(24px, 5vw, 48px); background: var(--paper);
+      border: 4px solid var(--brown); border-radius: 30px; box-shadow: 0 12px 0 rgba(81,50,40,.24), 0 30px 70px rgba(0,0,0,.24); text-align: center;
+    }
+    .setup-card h1 { margin: 0; color: var(--brown); font-size: clamp(2.7rem, 10vw, 6rem); line-height: 1; }
+    .setup-card h2 { margin: 23px 0 10px; font-size: 1rem; }
+    .setup-card p { margin: 8px auto 20px; max-width: 46ch; color: var(--brown-soft); font-weight: 700; }
+    .player-count { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 22px; }
+    .count-btn {
+      aspect-ratio: 1.3; border: 3px solid var(--brown); border-radius: 18px; color: var(--brown); background: #fff; cursor: pointer;
+      font-family: "Bungee", sans-serif; font-size: 1.35rem; box-shadow: 0 4px 0 rgba(81,50,40,.17);
+    }
+    .count-btn.active { color: var(--brown-dark); background: var(--yellow); transform: translateY(3px); box-shadow: 0 1px 0 rgba(81,50,40,.17); }
+    .name-fields { display: grid; gap: 10px; margin-bottom: 22px; }
+    .name-field {
+      width: 100%; min-height: 50px; padding: 10px 17px; border: 3px solid rgba(114,83,73,.35); border-radius: 15px; color: var(--brown-dark);
+      background: #fff; outline: none; font-weight: 900;
+    }
+    .name-field:focus { border-color: var(--yellow); box-shadow: 0 0 0 4px rgba(243,189,46,.22); }
+    .setup-error { min-height: 1.4em; margin: -8px 0 11px !important; color: var(--red) !important; }
+    .start-btn { width: 100%; }
+    .row-btns { display: flex; gap: 10px; margin-top: 10px; }
+    .row-btns .btn { flex: 1; }
+
+    .rules { text-align: left; }
+    .rules h2 { margin: 18px 0 6px !important; color: var(--brown); }
+    .rules ul { margin: 0; padding-left: 1.2em; color: var(--brown-dark); font-weight: 700; line-height: 1.5; }
+    .rules p { margin: 6px 0 !important; max-width: none !important; }
+
+    .winner-list { display: grid; gap: 8px; margin: 20px 0 25px; }
+    .winner-row { display: flex; justify-content: space-between; padding: 10px 15px; border-radius: 13px; background: rgba(114,83,73,.08); font-weight: 900; }
+    .winner-row:first-child { background: rgba(243,189,46,.35); }
+
+    canvas#confetti { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+
+    @media (max-width: 1030px) {
+      .game-grid { grid-template-columns: 1fr; }
+      .play-panel, .score-pad { max-width: 850px; width: 100%; margin: 0 auto; }
+    }
+    @media (max-width: 600px) {
+      .game-shell { padding: 10px; }
+      .brand { font-size: 2.25rem; }
+      .roll-count { top: 25px; right: 13px; }
+      .player-banner { font-size: .78rem; padding: 9px 15px; }
+      .controls { grid-template-columns: 1fr 1fr; }
+      .controls .btn-yellow { grid-column: 1 / -1; }
+      .score-pad { padding-inline: 5px; }
+      .pad-title, .math-box { margin-left: 21px; }
+      .score-scroll { padding-left: 18px; }
+      .stage-message { bottom: 12px; font-size: .78rem; }
+      .dice-stage { height: auto; min-height: 300px; }
+      .help-line { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay" id="setupOverlay">
+    <section class="setup-card" aria-labelledby="setupTitle">
+      <h1 class="bungee" id="setupTitle">Jatsi</h1>
+      <p>Ringla fimm terningar, legg saman og fá so nógv stig sum gjørligt!</p>
+
+      <h2 class="bungee">Hvussu nógvir leikarar eru við?</h2>
+      <div class="player-count" id="playerCount" aria-label="Tal á leikarum">
+        <button class="count-btn" type="button" data-count="1">1</button>
+        <button class="count-btn active" type="button" data-count="2">2</button>
+        <button class="count-btn" type="button" data-count="3">3</button>
+        <button class="count-btn" type="button" data-count="4">4</button>
+      </div>
+
+      <div class="name-fields" id="nameFields"></div>
+      <p class="setup-error" id="setupError" role="alert"></p>
+      <button class="btn btn-yellow start-btn" id="startButton" type="button">Byrja spælið</button>
+      <div class="row-btns">
+        <button class="btn btn-ghost btn-small" id="rulesOpen1" type="button">Reglurnar</button>
+        <button class="btn btn-ghost btn-small" id="resumeButton" type="button" hidden>Halt fram við spælinum</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="overlay" id="rulesOverlay" hidden>
+    <section class="setup-card rules" aria-labelledby="rulesTitle">
+      <h1 class="bungee" id="rulesTitle" style="font-size:2.4rem;text-align:center">Reglurnar</h1>
+      <h2 class="bungee">Soleiðis spælir tú</h2>
+      <ul>
+        <li>Tú mást ringla í mesta lagi <b>3 ferðir</b> í hvørjum umfari.</li>
+        <li>Trýst á terningar fyri at <b>halda</b> teimum. Tá verða bara hinir ringlaðir.</li>
+        <li>At enda velur tú <b>ein teig</b> á stigablaðnum. Stigini verða tá skrivað í teigin.</li>
+        <li>Passar eingin teigur, mást tú strika ein – tá fært tú <b>0</b>.</li>
+      </ul>
+      <h2 class="bungee">Ovara deild</h2>
+      <p>Legg saman allar terningarnar við sama tali. Tríggir fýrarar = 4 + 4 + 4 = <b>12</b>.</p>
+      <p>Fært tú <b>minst 63 stig</b> í ovaru deild, fært tú <b>50 stig í bónus</b>. Tað svarar til tríggjar terningar av hvørjum tali.</p>
+      <h2 class="bungee">Niðara deild</h2>
+      <ul>
+        <li><b>Eitt par:</b> tveir eins. <b>Tvey pør:</b> tvey ymisk pør.</li>
+        <li><b>Tríggir eins / Fýra eins:</b> tríggir ella fýra eins.</li>
+        <li><b>Lítið rað:</b> 1-2-3-4-5 = 15. <b>Stórt rað:</b> 2-3-4-5-6 = 20.</li>
+        <li><b>Fult hús:</b> tríggir eins + eitt par. Eyguni á øllum fimm terningunum verða løgd saman.</li>
+        <li><b>Kjansur:</b> legg eyguni á øllum fimm terningunum saman – altíð loyvt.</li>
+        <li><b>Jatsi:</b> fimm eins = <b>50</b>!</li>
+      </ul>
+      <button class="btn btn-yellow start-btn" id="rulesClose" type="button" style="margin-top:22px">Skilt!</button>
+    </section>
+  </div>
+
+  <div class="overlay" id="winnerOverlay" hidden>
+    <section class="setup-card" aria-labelledby="winnerTitle">
+      <h1 class="bungee" id="winnerTitle" style="font-size:clamp(2rem,7vw,3.6rem)">Vit hava ein vinnara!</h1>
+      <p id="winnerText"></p>
+      <div class="winner-list" id="winnerList"></div>
+      <button class="btn btn-yellow start-btn" id="playAgainButton" type="button">Spæl umaftur</button>
+    </section>
+  </div>
+
+  <main class="game-shell" id="gameShell">
+    <header class="game-header">
+      <h1 class="brand bungee">Jatsi</h1>
+      <div class="header-actions">
+        <button class="btn btn-small btn-ghost" id="soundButton" type="button" aria-label="Ljóð á/av">🔊</button>
+        <button class="btn btn-small btn-ghost" id="rulesOpen2" type="button">Reglurnar</button>
+        <button class="btn btn-small btn-ghost" id="newGameButton" type="button">Nýtt spæl</button>
+      </div>
+    </header>
+
+    <div class="game-grid">
+      <section class="play-panel" aria-label="Terningar">
+        <div class="player-banner bungee" id="playerBanner" aria-live="polite">Nú eigur tú at ringla</div>
+        <div class="dice-stage" id="diceStage">
+          <div class="dice-row" id="diceRow" aria-label="Fimm terningar – trýst á ein terning fyri at halda honum"></div>
+          <div class="roll-count" id="rollCount" title="Ringlingar"><span></span><span></span><span></span></div>
+          <div class="big-word" id="bigWord"></div>
+          <div class="stage-message" id="stageMessage" aria-live="polite">Trýst á Ringla fyri at byrja.</div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-yellow" id="rollButton" type="button">Ringla</button>
+          <button class="btn btn-ghost" id="releaseButton" type="button" disabled>Loys allar</button>
+          <button class="btn btn-ghost" id="undoButton" type="button" disabled title="Angra seinastu skráseting">↩ Angra</button>
+        </div>
+        <p class="help-line"><kbd>Mellumrúm</kbd> ringlar · <kbd>1</kbd>–<kbd>5</kbd> heldur terningar</p>
+      </section>
+
+      <aside class="score-pad" aria-labelledby="scoreTitle">
+        <div class="pad-title">
+          <h2 class="bungee" id="scoreTitle">Stig</h2>
+          <p class="pad-note">Grønir teigar geva stig. Peika á ein teig fyri at síggja rokningina.</p>
+        </div>
+        <div class="math-box" id="mathBox"><b>Rokningin:</b> <span id="mathText">–</span></div>
+        <div class="score-scroll">
+          <table class="score-table" id="scoreTable"></table>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <canvas id="confetti"></canvas>
+
+  <script>
+    const CATEGORIES = [
+      { key: "ones", label: "Eittarar", hint: "Legg allar eittararnar saman", section: "upper" },
+      { key: "twos", label: "Tveyarar", hint: "Legg allar tveyararnar saman", section: "upper" },
+      { key: "threes", label: "Tríarar", hint: "Legg allar tríararnar saman", section: "upper" },
+      { key: "fours", label: "Fýrarar", hint: "Legg allar fýrararnar saman", section: "upper" },
+      { key: "fives", label: "Fimmarar", hint: "Legg allar fimmararnar saman", section: "upper" },
+      { key: "sixes", label: "Seksarar", hint: "Legg allar seksararnar saman", section: "upper" },
+      { key: "pair", label: "Eitt par", hint: "Tveir eins", section: "lower" },
+      { key: "twoPairs", label: "Tvey pør", hint: "Tvey ymisk pør", section: "lower" },
+      { key: "threeKind", label: "Tríggir eins", hint: "Tríggir eins", section: "lower" },
+      { key: "fourKind", label: "Fýra eins", hint: "Fýra eins", section: "lower" },
+      { key: "smallStraight", label: "Lítið rað", hint: "1-2-3-4-5", section: "lower" },
+      { key: "largeStraight", label: "Stórt rað", hint: "2-3-4-5-6", section: "lower" },
+      { key: "fullHouse", label: "Fult hús", hint: "Tríggir eins + eitt par", section: "lower" },
+      { key: "chance", label: "Kjansur", hint: "Legg øll eyguni saman", section: "lower" },
+      { key: "yatzy", label: "Jatsi", hint: "Fimm eins = 50", section: "lower" }
+    ];
+    const UPPER = ["ones", "twos", "threes", "fours", "fives", "sixes"];
+    const FACE_COLORS = ["#eaa14d", "#e05a47", "#4d9bea", "#5fb376", "#d869a8"];
+    const SAVE_KEY = "jatsi/spael";
+
+    const $ = id => document.getElementById(id);
+    const setupOverlay = $("setupOverlay"), winnerOverlay = $("winnerOverlay"), rulesOverlay = $("rulesOverlay");
+    const nameFields = $("nameFields"), setupError = $("setupError"), playerBanner = $("playerBanner");
+    const stageMessage = $("stageMessage"), scoreTable = $("scoreTable");
+    const rollButton = $("rollButton"), releaseButton = $("releaseButton"), undoButton = $("undoButton");
+    const diceRow = $("diceRow");
+
+    let selectedPlayerCount = 2;
+    let players = [];
+    let activePlayer = 0;
+    let rollCount = 0;
+    let diceValues = [1, 2, 3, 4, 5];
+    let held = [false, false, false, false, false];
+    let isRolling = false;
+    let hasStarted = false;
+    let lastMove = null;
+    let soundOn = true;
+
+
+    /* ---------- Sound ---------- */
+    let audio;
+    function tone(freq, dur, type = "sine", gain = .15, when = 0) {
+      if (!soundOn) return;
+      try {
+        audio ||= new (window.AudioContext || window.webkitAudioContext)();
+        const t = audio.currentTime + when, o = audio.createOscillator(), g = audio.createGain();
+        o.type = type; o.frequency.setValueAtTime(freq, t);
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+        o.connect(g).connect(audio.destination); o.start(t); o.stop(t + dur + .02);
+      } catch {}
+    }
+    const sfx = {
+      rattle() { for (let i = 0; i < 7; i++) tone(180 + Math.random() * 260, .05, "square", .04, i * .06); },
+      write() { tone(660, .12, "triangle", .12); tone(990, .15, "triangle", .1, .08); },
+      zero() { tone(220, .25, "triangle", .12); },
+      hold() { tone(520, .06, "sine", .08); },
+      fanfare() { [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, .22, "triangle", .14, i * .11)); }
+    };
+
+    /* ---------- Save the game so a page reload doesn't lose it ---------- */
+    function saveGame() {
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify({ players, activePlayer })); } catch {}
+    }
+    function loadGame() {
+      try { return JSON.parse(localStorage.getItem(SAVE_KEY)); } catch { return null; }
+    }
+    function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch {} }
+
+    function emptyScore() { return Object.fromEntries(CATEGORIES.map(c => [c.key, null])); }
+
+    function makeNameFields() {
+      const previous = [...nameFields.querySelectorAll("input")].map(input => input.value);
+      nameFields.innerHTML = "";
+      for (let i = 0; i < selectedPlayerCount; i++) {
+        const input = document.createElement("input");
+        input.className = "name-field";
+        input.type = "text"; input.maxLength = 18; input.autocomplete = "off";
+        input.placeholder = `Navn á leikara ${i + 1}`;
+        input.setAttribute("aria-label", `Navn á leikara ${i + 1}`);
+        input.value = previous[i] || "";
+        input.addEventListener("keydown", e => { if (e.key === "Enter") startGame(); });
+        nameFields.appendChild(input);
+      }
+    }
+
+    function startGame() {
+      const names = [...nameFields.querySelectorAll("input")].map(input => input.value.trim());
+      if (names.some(name => !name)) { setupError.textContent = "Skriva navn á allar leikararnar."; return; }
+      if (new Set(names.map(n => n.toLowerCase())).size !== names.length) { setupError.textContent = "Tveir leikarar kunnu ikki eita tað sama."; return; }
+      players = names.map(name => ({ name, scores: emptyScore() }));
+      beginPlay(0);
+    }
+
+    function beginPlay(startPlayer) {
+      activePlayer = startPlayer;
+      hasStarted = true;
+      lastMove = null;
+      setupError.textContent = "";
+      setupOverlay.hidden = true;
+      winnerOverlay.hidden = true;
+      saveGame();
+      resetDiceForTurn();
+      renderEverything(true);
+    }
+
+    function resetDiceForTurn() {
+      rollCount = 0;
+      held = held.map(() => false);
+      isRolling = false;
+      stageMessage.textContent = "Trýst á Ringla fyri at byrja.";
+    }
+
+    /* ---------- Scoring ---------- */
+    function scoreDice(values) {
+      const counts = Array(7).fill(0);
+      values.forEach(v => counts[v]++);
+      const sum = values.reduce((t, v) => t + v, 0);
+      const highest = n => { for (let v = 6; v >= 1; v--) if (counts[v] >= n) return v; return 0; };
+      const pairs = [6, 5, 4, 3, 2, 1].filter(v => counts[v] >= 2);
+      const sortedCounts = counts.filter(Boolean).sort((a, b) => a - b).join("");
+      const unique = [...new Set(values)].sort((a, b) => a - b).join("");
+      return {
+        ones: counts[1], twos: counts[2] * 2, threes: counts[3] * 3, fours: counts[4] * 4, fives: counts[5] * 5, sixes: counts[6] * 6,
+        pair: pairs.length ? pairs[0] * 2 : 0,
+        twoPairs: pairs.length >= 2 ? (pairs[0] + pairs[1]) * 2 : 0,
+        threeKind: highest(3) * 3,
+        fourKind: highest(4) * 4,
+        smallStraight: unique === "12345" ? 15 : 0,
+        largeStraight: unique === "23456" ? 20 : 0,
+        fullHouse: sortedCounts === "23" ? sum : 0,
+        chance: sum,
+        yatzy: counts.some(c => c === 5) ? 50 : 0
+      };
+    }
+
+    // Shows the sum the child can check, e.g. "4 + 4 + 4 = 12"
+    function explain(key, values) {
+      const counts = Array(7).fill(0); values.forEach(v => counts[v]++);
+      const s = scoreDice(values)[key];
+      const plus = arr => arr.length ? `${arr.join(" + ")} = ${arr.reduce((a, b) => a + b, 0)}` : "";
+      const rep = (v, n) => Array(n).fill(v);
+      const upperIdx = UPPER.indexOf(key);
+      if (upperIdx >= 0) {
+        const v = upperIdx + 1;
+        return counts[v] ? plus(rep(v, counts[v])) + (counts[v] > 1 ? `  (${counts[v]} × ${v})` : "") : `Eingin ${v} – 0 stig`;
+      }
+      if (!s) return "Passar ikki – 0 stig";
+      const pairs = [6, 5, 4, 3, 2, 1].filter(v => counts[v] >= 2);
+      const highest = n => [6, 5, 4, 3, 2, 1].find(v => counts[v] >= n);
+      switch (key) {
+        case "pair": return plus(rep(pairs[0], 2));
+        case "twoPairs": return plus([...rep(pairs[0], 2), ...rep(pairs[1], 2)]);
+        case "threeKind": return plus(rep(highest(3), 3));
+        case "fourKind": return plus(rep(highest(4), 4));
+        case "smallStraight": return "1 + 2 + 3 + 4 + 5 = 15";
+        case "largeStraight": return "2 + 3 + 4 + 5 + 6 = 20";
+        case "yatzy": return "Fimm eins = 50 stig!";
+        default: return plus([...values].sort((a, b) => a - b));
+      }
+    }
+
+    const upperTotal = p => UPPER.reduce((t, k) => t + (p.scores[k] ?? 0), 0);
+    const bonus = p => upperTotal(p) >= 63 ? 50 : 0;
+    const grandTotal = p => Object.values(p.scores).reduce((t, v) => t + (v ?? 0), 0) + bonus(p);
+    const allUpperWritten = p => UPPER.every(k => p.scores[k] !== null);
+
+    function bonusCell(p) {
+      if (bonus(p)) return "50 🎉";
+      if (allUpperWritten(p)) return "0";
+      return `–<span class="bonus-hint">mangla ${63 - upperTotal(p)}</span>`;
+    }
+
+    function renderScoreTable() {
+      if (!players.length) return;
+      const suggestions = scoreDice(diceValues);
+      let html = "<thead><tr><th>Jatsi-blað</th>";
+      players.forEach((p, i) => { html += `<th class="${i === activePlayer ? "active-head" : ""}" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</th>`; });
+      html += "</tr></thead><tbody>";
+      html += `<tr class="section-row"><th colspan="${players.length + 1}">Ovara deild</th></tr>`;
+
+      CATEGORIES.forEach((category, ci) => {
+        if (ci === 6) {
+          html += `<tr class="total-row"><th>Ovara deild til samans</th>${players.map(p => `<td>${upperTotal(p)}</td>`).join("")}</tr>`;
+          html += `<tr class="total-row"><th>Bónus <small>63 ella meira = 50</small></th>${players.map(p => `<td>${bonusCell(p)}</td>`).join("")}</tr>`;
+          html += `<tr class="section-row"><th colspan="${players.length + 1}">Niðara deild</th></tr>`;
+        }
+        html += `<tr><th>${category.label}<small>${category.hint}</small></th>`;
+        players.forEach((p, pi) => {
+          const written = p.scores[category.key];
+          const available = pi === activePlayer && written === null && rollCount > 0 && !isRolling;
+          let value = written ?? "";
+          let classes = "score-choice";
+          if (written !== null) classes += ` written${written === 0 ? " zero" : ""}`;
+          if (lastMove && lastMove.player === pi && lastMove.key === category.key && lastMove.fresh) classes += " just";
+          if (available) { value = suggestions[category.key]; classes += " available" + (value > 0 ? " good" : ""); }
+          html += `<td><button type="button" class="${classes}" data-category="${category.key}" ${available ? "" : "disabled"} aria-label="${category.label}: ${value === "" ? "tómt" : value}">${value}</button></td>`;
+        });
+        html += "</tr>";
+      });
+
+      html += `<tr class="grand-total"><th>Stig til samans</th>${players.map(p => `<td>${grandTotal(p)}</td>`).join("")}</tr></tbody>`;
+      scoreTable.innerHTML = html;
+      if (lastMove) lastMove.fresh = false;
+
+      scoreTable.querySelectorAll(".score-choice.available").forEach(button => {
+        const key = button.dataset.category;
+        button.addEventListener("click", () => chooseCategory(key));
+        const show = () => $("mathText").textContent = `${CATEGORIES.find(c => c.key === key).label}: ${explain(key, diceValues)}`;
+        button.addEventListener("mouseenter", show);
+        button.addEventListener("focus", show);
+      });
+      if (rollCount === 0 || isRolling) $("mathText").textContent = "–";
+    }
+
+    function chooseCategory(key) {
+      if (!hasStarted || rollCount === 0 || isRolling) return;
+      const player = players[activePlayer];
+      if (player.scores[key] !== null) return;
+      const score = scoreDice(diceValues)[key];
+      const label = CATEGORIES.find(c => c.key === key).label;
+      if (score === 0 && !confirm(`${label} gevur 0 stig. Vilt tú strika ${label}?`)) return;
+
+      const hadBonus = bonus(player);
+      player.scores[key] = score;
+      lastMove = { player: activePlayer, key, dice: [...diceValues], rollCount, held: [...held], fresh: true };
+      score ? sfx.write() : sfx.zero();
+      if (key === "yatzy" && score) { bigWord("JATSI!"); confetti(200); sfx.fanfare(); }
+      else if (!hadBonus && bonus(player)) { bigWord("BÓNUS +50"); confetti(120); sfx.fanfare(); }
+      saveGame();
+
+      if (players.every(p => CATEGORIES.every(c => p.scores[c.key] !== null))) {
+        renderEverything();
+        setTimeout(showWinner, 600);
+        return;
+      }
+      activePlayer = (activePlayer + 1) % players.length;
+      resetDiceForTurn();
+      if (players.length > 1) stageMessage.textContent = `${player.name} skrivaði ${score} í ${label}. Nú eigur ${players[activePlayer].name} at ringla!`;
+      renderEverything(true);
+    }
+
+    // A misclick can be undone until the next player rolls
+    function undo() {
+      if (!lastMove || rollCount > 0 || isRolling) return;
+      const m = lastMove; lastMove = null;
+      players[m.player].scores[m.key] = null;
+      activePlayer = m.player;
+      diceValues = [...m.dice]; rollCount = m.rollCount; held = [...m.held];
+      winnerOverlay.hidden = true;
+      stageMessage.textContent = "Angrað – vel ein annan teig.";
+      saveGame();
+      renderEverything(true);
+    }
+
+    // Which of the 9 grid cells have a pip, for each value
+    const PIPS = { 1: [4], 2: [2, 6], 3: [2, 4, 6], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+    let dieEls = [];
+    function buildDice() {
+      diceRow.innerHTML = "";
+      dieEls = FACE_COLORS.map((color, index) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "die blank";
+        b.style.setProperty("--die-color", color);
+        b.innerHTML = Array.from({ length: 9 }, () => '<span class="pip"></span>').join("");
+        b.addEventListener("click", () => {
+          if (hasStarted && rollCount === 0 && !isRolling) rollDice(); else toggleHeld(index);
+        });
+        diceRow.appendChild(b);
+        return b;
+      });
+    }
+    function showFace(index, value) {
+      dieEls[index].querySelectorAll(".pip").forEach((pip, cell) => pip.style.visibility = PIPS[value].includes(cell) ? "visible" : "hidden");
+    }
+    function renderDice() {
+      dieEls.forEach((el, index) => {
+        el.classList.toggle("held", held[index]);
+        el.classList.toggle("blank", rollCount === 0 && !isRolling);
+        if (!el.classList.contains("rolling")) showFace(index, diceValues[index]);
+        el.disabled = !hasStarted || isRolling || (rollCount >= 3);
+        el.setAttribute("aria-label", rollCount ? `Terningur ${index + 1} vísir ${diceValues[index]}${held[index] ? ", hildin" : ""}` : `Terningur ${index + 1}`);
+      });
+    }
+
+    function renderEverything(newTurn = false) {
+      if (!players.length) return;
+      playerBanner.textContent = players.length === 1 ? "Nú ringlar tú" : `Nú eigur ${players[activePlayer].name} at ringla`;
+      if (newTurn) { playerBanner.classList.remove("pop"); void playerBanner.offsetWidth; playerBanner.classList.add("pop"); }
+      $("rollCount").querySelectorAll("span").forEach((s, i) => s.classList.toggle("used", i < rollCount));
+      rollButton.disabled = isRolling || rollCount >= 3;
+      rollButton.textContent = isRolling ? "Ringlar…" : rollCount === 0 ? "Ringla" : rollCount < 3 ? `Ringla umaftur (${3 - rollCount} eftir)` : "Vel ein teig";
+      releaseButton.disabled = isRolling || rollCount === 0 || !held.some(Boolean) || rollCount >= 3;
+      undoButton.disabled = !lastMove || rollCount > 0 || isRolling;
+      renderDice();
+      renderScoreTable();
+    }
+
+    function toggleHeld(index) {
+      if (rollCount === 0 || isRolling || rollCount >= 3) return;
+      held[index] = !held[index];
+      sfx.hold();
+      stageMessage.textContent = held[index] ? `Terningur ${index + 1} er hildin.` : `Terningur ${index + 1} er loystur.`;
+      renderEverything();
+    }
+
+    function releaseAll() {
+      held = held.map(() => false);
+      stageMessage.textContent = "Allir terningarnir eru leysir.";
+      renderEverything();
+    }
+
+    function rollDice() {
+      if (!hasStarted || isRolling || rollCount >= 3) return;
+      const rolling = held.map((h, i) => h ? -1 : i).filter(i => i >= 0);
+      if (!rolling.length) { stageMessage.textContent = "Loys í minsta lagi ein terning fyri at ringla umaftur."; return; }
+
+      rollCount++;
+      isRolling = true;
+      lastMove = null;
+      stageMessage.textContent = "Ringlar…";
+      sfx.rattle();
+      rolling.forEach(i => { diceValues[i] = Math.floor(Math.random() * 6) + 1; });
+
+      renderEverything();
+      let remaining = rolling.length;
+      rolling.forEach((index, order) => {
+        const el = dieEls[index];
+        el.classList.remove("blank", "landed");
+        el.classList.add("rolling");
+        const flicker = setInterval(() => showFace(index, 1 + Math.floor(Math.random() * 6)), 70);
+        setTimeout(() => {
+          clearInterval(flicker);
+          el.classList.remove("rolling"); void el.offsetWidth; el.classList.add("landed");
+          showFace(index, diceValues[index]);
+          if (--remaining === 0) finishRoll();
+        }, 550 + order * 120);
+      });
+    }
+
+    function finishRoll() {
+      isRolling = false;
+      const s = scoreDice(diceValues);
+      const p = players[activePlayer];
+      if (s.yatzy && p.scores.yatzy === null) { bigWord("JATSI!"); sfx.fanfare(); }
+      else if (s.largeStraight && p.scores.largeStraight === null) bigWord("Stórt rað!");
+      else if (s.smallStraight && p.scores.smallStraight === null) bigWord("Lítið rað!");
+      else if (s.fullHouse && p.scores.fullHouse === null) bigWord("Fult hús!");
+      stageMessage.textContent = rollCount < 3
+        ? "Trýst á terningar, sum tú vilt halda – ella vel ein teig."
+        : "Tú hevur ringlað tríggjar ferðir. Vel ein teig á stigablaðnum.";
+      renderEverything();
+    }
+
+    function bigWord(text) {
+      const el = $("bigWord");
+      el.textContent = text; el.classList.remove("show"); void el.offsetWidth; el.classList.add("show");
+    }
+
+    function showWinner() {
+      clearSave();
+      const ranking = [...players].sort((a, b) => grandTotal(b) - grandTotal(a));
+      const best = grandTotal(ranking[0]);
+      const winners = ranking.filter(p => grandTotal(p) === best);
+      if (players.length === 1) {
+        $("winnerTitle").textContent = "Liðugt!";
+        $("winnerText").textContent = `Tú fekst ${best} stig. Kanst tú fáa fleiri stig næstu ferð?`;
+      } else {
+        $("winnerTitle").textContent = winners.length > 1 ? "Javnleikur!" : `${winners[0].name} vann!`;
+        $("winnerText").textContent = winners.length > 1 ? `${winners.map(p => p.name).join(" og ")} fingu ${best} stig.` : `${winners[0].name} fekk ${best} stig.`;
+      }
+      $("winnerList").innerHTML = ranking.map((p, i) => `<div class="winner-row"><span>${["🥇","🥈","🥉"][i] || (i + 1) + "."} ${escapeHtml(p.name)}</span><span>${grandTotal(p)} stig</span></div>`).join("");
+      winnerOverlay.hidden = false;
+      sfx.fanfare(); confetti(220);
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" })[c]);
+    }
+
+    /* ---------- Confetti ---------- */
+    const cv = $("confetti"), cx = cv.getContext("2d");
+    let parts = [], raf = null;
+    function confetti(n) {
+      cv.width = innerWidth; cv.height = innerHeight;
+      for (let i = 0; i < n; i++) parts.push({ x: innerWidth / 2, y: innerHeight * .35, vx: (Math.random() - .5) * 18, vy: -Math.random() * 16 - 4,
+        s: 5 + Math.random() * 6, c: FACE_COLORS[i % 5], life: 140 });
+      if (!raf) loop();
+    }
+    function loop() {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      parts = parts.filter(p => p.life-- > 0);
+      parts.forEach(p => { p.vy += .4; p.x += p.vx; p.y += p.vy; cx.fillStyle = p.c; cx.fillRect(p.x, p.y, p.s, p.s * 1.5); });
+      raf = parts.length ? requestAnimationFrame(loop) : (cx.clearRect(0, 0, cv.width, cv.height), null);
+    }
+
+    /* ---------- Controls ---------- */
+    $("playerCount").addEventListener("click", event => {
+      const button = event.target.closest(".count-btn");
+      if (!button) return;
+      selectedPlayerCount = Number(button.dataset.count);
+      document.querySelectorAll(".count-btn").forEach(b => b.classList.toggle("active", b === button));
+      makeNameFields();
+    });
+    $("startButton").addEventListener("click", startGame);
+    $("playAgainButton").addEventListener("click", () => { winnerOverlay.hidden = true; setupOverlay.hidden = false; $("resumeButton").hidden = true; });
+    $("newGameButton").addEventListener("click", () => {
+      if (!hasStarted || confirm("Vilt tú enda spælið og byrja av nýggjum?")) { setupOverlay.hidden = false; $("resumeButton").hidden = true; }
+    });
+    $("resumeButton").addEventListener("click", () => beginPlay(activePlayer));
+    const openRules = () => rulesOverlay.hidden = false;
+    $("rulesOpen1").addEventListener("click", openRules);
+    $("rulesOpen2").addEventListener("click", openRules);
+    $("rulesClose").addEventListener("click", () => rulesOverlay.hidden = true);
+    $("soundButton").addEventListener("click", () => { soundOn = !soundOn; $("soundButton").textContent = soundOn ? "🔊" : "🔇"; });
+    rollButton.addEventListener("click", rollDice);
+    releaseButton.addEventListener("click", releaseAll);
+    undoButton.addEventListener("click", undo);
+
+    addEventListener("keydown", e => {
+      if (!hasStarted || !setupOverlay.hidden || !winnerOverlay.hidden || !rulesOverlay.hidden) return;
+      if (e.target.matches("input")) return;
+      if (e.key === " " || e.key === "Enter") { if (e.target.matches("button")) return; e.preventDefault(); rollDice(); }
+      else if (/^[1-5]$/.test(e.key)) toggleHeld(+e.key - 1);
+    });
+
+    makeNameFields();
+
+    // Offer to continue a game that was interrupted (e.g. the page was reloaded)
+    const saved = loadGame();
+    if (saved?.players?.length && !saved.players.every(p => CATEGORIES.every(c => p.scores[c.key] !== null))) {
+      players = saved.players;
+      activePlayer = saved.activePlayer || 0;
+      $("resumeButton").hidden = false;
+      $("resumeButton").textContent = `Halt fram (${players.map(p => p.name).join(", ")})`;
+    }
+
+    buildDice();
+    renderDice();
+  </script>
+</body>
+</html>
