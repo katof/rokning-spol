@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Felags prát – Rokning 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap">
+<style>
+  /* Layout: classroom screen — one landscape slide per chapter, same header and green footer as the Rokning games */
+  :root {
+    color-scheme: light;
+    --paper: #fffdf8;
+    --ink: #24303f;
+    --pencil: #2c3f9e;
+    --chapter: #ec6a26;
+    --leaf: #7fae3a;
+    --wrong: #d23a2f;
+    --blue: #1fb4ea;
+    --red: #e23b3b;
+    --font: "Andika", "Gill Sans", "Trebuchet MS", system-ui, sans-serif;
+  }
+  html, body { height: 100%; background: var(--paper); color: var(--ink); }
+  body { margin: 0; font-family: var(--font); overflow: hidden; }
+  .page {
+    height: 100%; box-sizing: border-box;
+    padding-block: 1.2vh 1vh;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 1vh;
+  }
+  header { display: flex; align-items: center; gap: clamp(12px, 1.5vw, 28px); flex-wrap: wrap; }
+  .num {
+    width: clamp(48px, 5vw, 84px); aspect-ratio: 1; border-radius: 50%; flex: none;
+    background: var(--chapter); color: var(--ink);
+    display: grid; place-items: center; font-size: clamp(28px, 3.2vw, 54px); font-weight: 700;
+  }
+  .num.light { color: #fff; }
+  h1 { margin: 0; font-size: clamp(28px, 3.4vw, 58px); letter-spacing: .02em; }
+  .book { flex: none; padding: .15em .7em; border-radius: 999px; background: #eef2f6; color: var(--ink);
+    font-size: clamp(14px, 1.4vw, 24px); font-weight: 700; letter-spacing: .03em; white-space: nowrap; }
+  .task { margin: 0; font-size: clamp(18px, 2.2vw, 38px); line-height: 1.25; flex: 1 1 320px; min-width: 0; }
+  .tools { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-left: auto; }
+  button {
+    font: inherit; font-size: clamp(16px, 1.5vw, 26px); font-weight: 700; cursor: pointer;
+    border: 3px solid var(--leaf); background: #fff; color: var(--ink);
+    padding: .3em .9em; border-radius: 999px;
+  }
+  button:hover { background: #f1f7e4; }
+  button.main { background: var(--leaf); color: #fff; }
+  button.main:hover { background: #6c9a2c; }
+  button:focus-visible { outline: 3px solid var(--pencil); outline-offset: 2px; }
+  a.home { display: grid; place-items: center; padding: .3em .45em; align-self: stretch; border: 3px solid var(--leaf);
+    border-radius: 999px; background: #fff; color: var(--ink); font-size: clamp(16px, 1.5vw, 26px); }
+  a.home:hover { background: #f1f7e4; }
+  a.home svg { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .stage { position: relative; min-height: 0; }
+  svg#board { width: 100%; height: 100%; display: block; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  svg text { font-family: var(--font); }
+  .pick { cursor: pointer; }
+  .pick:hover .hl { stroke: var(--pencil); stroke-width: 6; }
+  footer { display: flex; align-items: center; gap: 12px; border-top: 3px solid var(--leaf); padding-top: .5vh; font-size: clamp(13px, 1.1vw, 20px); }
+  footer .pg { width: 2em; height: 2em; border-radius: 50%; border: 3px solid var(--leaf); display: grid; place-items: center; font-weight: 700; flex: none; }
+  footer .nav { display: flex; gap: 6px; margin-left: auto; }
+  footer .nav button { font-size: clamp(13px, 1.1vw, 20px); padding: .1em .7em; }
+  footer .nav button.on { background: var(--leaf); color: #fff; }
+  footer .tab { background: #dbe9b8; padding: 2px 12px; white-space: nowrap; }
+  @media (max-width: 1100px) { #foot { display: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="num" id="num">1</div>
+    <h1 id="title">Vit skilja</h1>
+    <span class="book" id="book">Rokning 1A</span>
+    <p class="task" id="task"></p>
+    <div class="tools">
+      <button id="prev" type="button" aria-label="Fyrri kapittul" title="Fyrri kapittul">◀</button>
+      <button id="next" type="button" aria-label="Næsti kapittul" title="Næsti kapittul">▶</button>
+      <button id="show" class="main" type="button">Vís svarið</button>
+      <a id="home" class="home" href="https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/Rokning_sp%C3%B8l/0_Sp%C3%B8l_til_Rokning_1a_og_1b.html" aria-label="Heim til spølini" title="Heim til spølini"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-6h4v6h5V10"/></svg></a>
+      <button id="again" type="button">Nýggj uppgáva</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <svg id="board" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" aria-live="polite"></svg>
+  </div>
+
+  <footer>
+    <span class="pg" id="pg">1</span>
+    <span id="foot">Felags prát: tosið saman um svarið, áðrenn tit vísa tað.</span>
+    <span class="nav" id="nav"></span>
+    <span class="tab" id="tab">1 • Vit skilja</span>
+  </footer>
+</div>
+
+<script>
+// One warm-up activity per chapter of Rokning 1. The teacher shows it on the board, the class talks, then "Vís svarið".
+const CHAPTERS = [
+  { n: 1,  book: "1A", color: "#ec6a26", light: true,  title: "Vit skilja",          task: "Hvat hoyrir ikki til?" },
+  { n: 2,  book: "1A", color: "#afcf5f", title: "Vit telja",                         task: "Hvussu nógvir seyðir eru tað?" },
+  { n: 3,  book: "1A", color: "#44bdc3", title: "Skap og mynstur",                   task: "Hvat kemur so í mynstrinum?" },
+  { n: 4,  book: "1A", color: "#2e9e4f", light: true,  title: "Tølini 1−3",        task: "Hygg væl! Hvussu nógvar prikkar sóu tit?" },
+  { n: 5,  book: "1A", color: "#a9739f", light: true,  title: "Tølini 4−6",        task: "Hygg væl! Hvussu nógvar prikkar sóu tit?" },
+  { n: 6,  book: "1B", color: "#fff066", title: "Tølini 7−10",                       task: "Hvussu nógvir mangla, so tað verða 10?" },
+  { n: 7,  book: "1B", color: "#1a9ad7", light: true,  title: "At máta",           task: "" },
+  { n: 8,  book: "1B", color: "#f7941d", title: "Pluss og minus",                    task: "" },
+  { n: 9,  book: "1B", color: "#f06fa8", title: "Tølini frá 0 til 20",               task: "Hvat tal manglar á tallinjuni?" },
+  { n: 10, book: "1B", color: "#f06fa8", title: "Skap og myndir",                    task: "Hvat eitur skapið?" },
+];
+
+const board = document.getElementById("board");
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent = board) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  parent.appendChild(e);
+  return e;
+}
+function text(str, x, y, size, attrs = {}, parent) {
+  const t = el("text", { x, y, "font-size": size, "text-anchor": "middle", "dominant-baseline": "central", fill: "var(--ink)", ...attrs }, parent);
+  t.textContent = str;
+  return t;
+}
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+let ch = 0, reveal = null, timers = [];
+function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+// The answer band grows with the text, and the text shrinks if it would not fit the slide
+function answerBox(str, y = 820) {
+  const g = el("g");
+  const r = el("rect", { y: y - 50, height: 100, rx: 50, fill: "#f1f7e4", stroke: "var(--leaf)", "stroke-width": 5 }, g);
+  const t = text(str, 800, y, 52, { "font-weight": 700 }, g);
+  let w = t.getComputedTextLength();
+  if (w > 1440) { t.setAttribute("font-size", 52 * 1440 / w); w = 1440; }
+  r.setAttribute("x", 800 - w / 2 - 50); r.setAttribute("width", w + 100);
+}
+
+/* ---------- 1 Vit skilja: odd one out ---------- */
+const SETS = [
+  { items: ["🐶", "🐱", "🐰", "🐮"], odd: "🚗", why: "Hini eru dýr." },
+  { items: ["🍎", "🍌", "🍐", "🍓"], odd: "🧦", why: "Hini eru ávøkstur." },
+  { items: ["🚗", "🚌", "🚲", "🚜"], odd: "🐟", why: "Hini eru akfør." },
+  { items: ["🧦", "🧢", "👕", "🧤"], odd: "🍌", why: "Hini eru klæði." },
+  { items: ["🐟", "🐙", "🦀", "🐳"], odd: "🐄", why: "Hini liva í sjónum." },
+  { items: ["✏️", "📏", "📕", "✂️"], odd: "🥕", why: "Hini brúka vit í skúlanum." },
+];
+function vitSkilja() {
+  const s = pick(SETS), items = shuffle([...shuffle(s.items).slice(0, 3), s.odd]);
+  items.forEach((e, i) => {
+    const x = 260 + i * 360, g = el("g", { class: "pick" });
+    el("rect", { class: "hl", x: x - 150, y: 230, width: 300, height: 300, rx: 40, fill: "#fff", stroke: "#b8c0c8", "stroke-width": 4 }, g);
+    text(e, x, 385, 190, {}, g);
+    g.addEventListener("click", () => mark(g, e === s.odd));
+    g.dataset.odd = e === s.odd;
+  });
+  reveal = () => { board.querySelectorAll(".pick").forEach(g => g.dataset.odd === "true" && mark(g, true)); answerBox(`${s.odd} hoyrir ikki til. ${s.why}`, 690); };
+}
+function mark(g, ok) {
+  const r = g.querySelector("rect");
+  r.setAttribute("stroke", ok ? "var(--leaf)" : "var(--wrong)"); r.setAttribute("stroke-width", 9);
+  r.setAttribute("fill", ok ? "#f3f8e8" : "#fdf0ee");
+}
+
+/* ---------- 2 Vit telja: count the sheep ---------- */
+function vitTelja() {
+  const n = rnd(3, 10), spots = shuffle(Array.from({ length: 15 }, (_, i) => i)).slice(0, n);
+  spots.forEach(i => text("🐑", 260 + (i % 5) * 270 + rnd(-30, 30), 210 + Math.floor(i / 5) * 200 + rnd(-20, 20), 140));
+  reveal = () => {
+    // number each sheep so the class can count along
+    let k = 0;
+    board.querySelectorAll("text").forEach(t => { const x = +t.getAttribute("x"), y = +t.getAttribute("y"); k++;
+      el("circle", { cx: x + 60, cy: y - 60, r: 30, fill: "var(--chapter)", stroke: "var(--ink)", "stroke-width": 3 }); text(k, x + 60, y - 58, 36, { "font-weight": 700 }); });
+    answerBox(`Tað eru ${n} seyðir.`, 830);
+  };
+}
+
+/* ---------- 3 Skap og mynstur: what comes next ---------- */
+const SHAPES = {
+  c: (x, y, col, g) => el("circle", { cx: x, cy: y, r: 62, fill: col, stroke: "var(--ink)", "stroke-width": 4 }, g),
+  t: (x, y, col, g) => el("path", { d: `M${x} ${y - 66} L${x + 70} ${y + 56} L${x - 70} ${y + 56}Z`, fill: col, stroke: "var(--ink)", "stroke-width": 4, "stroke-linejoin": "round" }, g),
+  s: (x, y, col, g) => el("rect", { x: x - 58, y: y - 58, width: 116, height: 116, fill: col, stroke: "var(--ink)", "stroke-width": 4 }, g),
+};
+const COLS = ["#e23b3b", "#1fb4ea", "#ffd400", "#7fae3a"];
+function mynstur() {
+  const unit = pick([["c", "t"], ["s", "c", "c"], ["t", "s", "c"], ["c", "c", "s"], ["t", "t", "s", "s"]]);
+  const cols = shuffle([...COLS]);
+  const seq = Array.from({ length: 8 }, (_, i) => unit[i % unit.length]);
+  const colOf = k => cols[Object.keys(SHAPES).indexOf(k)];
+  seq.slice(0, 7).forEach((k, i) => SHAPES[k](130 + i * 190, 400, colOf(k)));
+  const qx = 130 + 7 * 190;
+  el("rect", { x: qx - 75, y: 325, width: 150, height: 150, rx: 20, fill: "#fff", stroke: "var(--pencil)", "stroke-width": 5, "stroke-dasharray": "14 10" });
+  const q = text("?", qx, 400, 110, { "font-weight": 700, fill: "var(--pencil)" });
+  reveal = () => { q.remove(); SHAPES[seq[7]](qx, 400, colOf(seq[7])); answerBox("Mynstrið endurtekur seg.", 700); };
+}
+
+/* ---------- 4 and 5: quick look at dots ---------- */
+const DICE = { 1: [[0, 0]], 2: [[-1, -1], [1, 1]], 3: [[-1, -1], [0, 0], [1, 1]], 4: [[-1, -1], [1, -1], [-1, 1], [1, 1]], 5: [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]], 6: [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]] };
+function quickLook(min, max) {
+  return () => {
+    const n = rnd(min, max), asDice = Math.random() < .5;
+    const g = el("g", { opacity: 0 });
+    el("rect", { x: 500, y: 150, width: 600, height: 500, rx: 50, fill: "#fff", stroke: "#b8c0c8", "stroke-width": 5 }, g);
+    const pts = asDice ? DICE[n].map(([a, b]) => [800 + a * 150, 400 + b * 150]) : scatter(n);
+    pts.forEach(([x, y]) => el("circle", { cx: x, cy: y, r: 55, fill: "var(--red)", stroke: "var(--ink)", "stroke-width": 4 }, g));
+    const btn = el("g", { class: "pick" });
+    el("rect", { class: "hl", x: 620, y: 330, width: 360, height: 140, rx: 70, fill: "var(--leaf)", stroke: "var(--ink)", "stroke-width": 4 }, btn);
+    text("👀 Hygg!", 800, 400, 64, { fill: "#fff", "font-weight": 700 }, btn);
+    btn.addEventListener("click", () => {
+      btn.remove(); g.setAttribute("opacity", 1);
+      timers.push(setTimeout(() => { g.setAttribute("opacity", 0); text("Hvussu nógvar sóu tit?", 800, 400, 64, { "font-weight": 700, id: "ask" }); }, 1500));
+    });
+    reveal = () => { clearTimers(); board.querySelector("#ask")?.remove(); btn.remove(); g.setAttribute("opacity", 1); answerBox(n === 1 ? 'Tað var 1 prikkur.' : `Tað vóru ${n} prikkar.`, 760); };
+  };
+}
+function scatter(n) {
+  const out = [];
+  while (out.length < n) { const p = [rnd(590, 1010), rnd(230, 570)]; if (out.every(q => Math.hypot(p[0] - q[0], p[1] - q[1]) > 130)) out.push(p); }
+  return out;
+}
+
+/* ---------- 6 Tølini 7−10: how many to make 10 ---------- */
+function tilTiggju() {
+  const n = rnd(3, 9), cells = [];
+  for (let i = 0; i < 10; i++) {
+    const x = 400 + (i % 5) * 160, y = 250 + Math.floor(i / 5) * 160;
+    el("rect", { x, y, width: 160, height: 160, fill: "#fff", stroke: "var(--ink)", "stroke-width": 5 });
+    if (i < n) el("circle", { cx: x + 80, cy: y + 80, r: 56, fill: "var(--blue)", stroke: "rgba(0,0,0,.2)", "stroke-width": 3 });
+    cells.push([x + 80, y + 80]);
+  }
+  text(`${n} + ? = 10`, 800, 680, 80, { "font-weight": 700 });
+  reveal = () => {
+    cells.slice(n).forEach(([x, y]) => el("circle", { cx: x, cy: y, r: 56, fill: "var(--red)", stroke: "rgba(0,0,0,.2)", "stroke-width": 3 }));
+    answerBox(`${n} + ${10 - n} = 10`, 800);
+  };
+}
+
+/* ---------- 7 At máta: longest / shortest snake ---------- */
+function maata() {
+  const longest = Math.random() < .5;
+  setTask(longest ? "Hvør ormur er longst?" : "Hvør ormur er stytst?");
+  const lens = shuffle([520, 760, 1040].map(l => l + rnd(-40, 40)));
+  const cols = shuffle(["#7fae3a", "#e23b3b", "#1fb4ea"]);
+  const goal = longest ? Math.max(...lens) : Math.min(...lens);
+  lens.forEach((len, i) => {
+    const y = 210 + i * 210, g = el("g", { class: "pick" });
+    el("rect", { class: "hl", x: 200, y: y - 45, width: len, height: 90, rx: 45, fill: cols[i], stroke: "var(--ink)", "stroke-width": 4 }, g);
+    el("circle", { cx: 200 + len - 40, cy: y - 12, r: 12, fill: "#fff", stroke: "var(--ink)", "stroke-width": 3 }, g);
+    el("circle", { cx: 200 + len - 38, cy: y - 12, r: 5, fill: "var(--ink)" }, g);
+    g.dataset.ok = len === goal;
+    g.addEventListener("click", () => { const r = g.querySelector("rect"); r.setAttribute("stroke", len === goal ? "var(--leaf)" : "var(--wrong)"); r.setAttribute("stroke-width", 10); });
+  });
+  el("line", { x1: 200, y1: 120, x2: 200, y2: 780, stroke: "var(--ink)", "stroke-width": 4, "stroke-dasharray": "12 10" });
+  text("Allir byrja her", 200, 95, 30);
+  reveal = () => {
+    board.querySelectorAll(".pick").forEach(g => { if (g.dataset.ok === "true") { const r = g.querySelector("rect"); r.setAttribute("stroke", "var(--leaf)"); r.setAttribute("stroke-width", 12); } });
+    answerBox(longest ? "Langi ormurin er longstur." : "Stutti ormurin er minst.", 840);
+  };
+}
+
+/* ---------- 8 Pluss og minus: a little story ---------- */
+function plusMinus() {
+  const plus = Math.random() < .5, a = rnd(2, 6), b = rnd(1, plus ? 4 : a - 1);
+  setTask(plus ? `Á garðinum sita ${a} fuglar. ${b} ${b === 1 ? "fuglur kemur" : "fuglar koma"} afturat. Hvussu nógvir eru teir nú?`
+               : `Á garðinum sita ${a} fuglar. ${b} ${b === 1 ? "fuglur flýgur" : "fuglar flúgva"} burtur. Hvussu nógvir eru eftir?`);
+  el("rect", { x: 150, y: 560, width: 1300, height: 40, fill: "#a0703a", stroke: "var(--ink)", "stroke-width": 4 });
+  for (let i = 0; i < 9; i++) el("rect", { x: 190 + i * 150, y: 600, width: 30, height: 200, fill: "#a0703a", stroke: "var(--ink)", "stroke-width": 4 });
+  const bird = (x, y, flyAway) => text(flyAway ? "🕊️" : "🐦", x, y, 110, flyAway ? { opacity: .9 } : {});
+  for (let i = 0; i < a; i++) bird(260 + i * 150, 500, false);
+  if (plus) for (let i = 0; i < b; i++) bird(260 + (a + i) * 150, 230, true);
+  else for (let i = 0; i < b; i++) { const t = board.querySelectorAll("text")[a - 1 - i]; t.setAttribute("opacity", .35); bird(+t.getAttribute("x") + 40, 200, true); }
+  reveal = () => answerBox(plus ? `${a} + ${b} = ${a + b}` : `${a} − ${b} = ${a - b}`, 120);
+}
+
+/* ---------- 9 Tølini 0–20: missing number on the number line ---------- */
+function tallinja() {
+  const hidden = rnd(1, 19);
+  el("line", { x1: 60, y1: 450, x2: 1540, y2: 450, stroke: "var(--ink)", "stroke-width": 6 });
+  const X = v => 90 + v * 71;
+  let q;
+  for (let v = 0; v <= 20; v++) {
+    el("line", { x1: X(v), y1: 420, x2: X(v), y2: 480, stroke: "var(--ink)", "stroke-width": v % 5 === 0 ? 6 : 3 });
+    if (v === hidden) {
+      el("rect", { x: X(v) - 34, y: 500, width: 68, height: 80, rx: 12, fill: "#fff", stroke: "var(--pencil)", "stroke-width": 5, "stroke-dasharray": "10 7" });
+      q = text("?", X(v), 541, 54, { "font-weight": 700, fill: "var(--pencil)" });
+    } else text(v, X(v), 541, v === 10 || v === 20 || v === 0 ? 50 : 42, { "font-weight": v % 5 === 0 ? 700 : 400 });
+  }
+  text(`Hvat tal er millum ${hidden - 1} og ${hidden + 1}?`, 800, 260, 64);
+  reveal = () => { q.textContent = hidden; q.setAttribute("fill", "var(--leaf)"); answerBox(`${hidden - 1}, ${hidden}, ${hidden + 1}`, 720); };
+}
+
+/* ---------- 10 Skap og myndir: name the shape ---------- */
+const NAMES = { sirkul: "sirkul", tri: "tríkantur", kvad: "kvadrat", rekt: "rektangul" };
+function skap() {
+  const kind = pick(Object.keys(NAMES)), col = pick(COLS), rot = rnd(-25, 25);
+  const g = el("g", { transform: `rotate(${kind === "sirkul" ? 0 : rot} 520 420)` });
+  if (kind === "sirkul") el("circle", { cx: 520, cy: 420, r: 220, fill: col, stroke: "var(--ink)", "stroke-width": 8 }, g);
+  if (kind === "tri") el("path", { d: "M520 180 L770 620 L270 620Z", fill: col, stroke: "var(--ink)", "stroke-width": 8, "stroke-linejoin": "round" }, g);
+  if (kind === "kvad") el("rect", { x: 320, y: 220, width: 400, height: 400, fill: col, stroke: "var(--ink)", "stroke-width": 8 }, g);
+  if (kind === "rekt") el("rect", { x: 220, y: 290, width: 600, height: 260, fill: col, stroke: "var(--ink)", "stroke-width": 8 }, g);
+  Object.entries(NAMES).forEach(([k, name], i) => {
+    const b = el("g", { class: "pick" }); b.dataset.ok = k === kind;
+    el("rect", { class: "hl", x: 1000, y: 160 + i * 160, width: 460, height: 120, rx: 60, fill: "#fff", stroke: "var(--leaf)", "stroke-width": 5 }, b);
+    text(name, 1230, 220 + i * 160, 56, { "font-weight": 700 }, b);
+    b.addEventListener("click", () => mark(b, k === kind));
+  });
+  reveal = () => { board.querySelectorAll(".pick").forEach(b => b.dataset.ok === "true" && mark(b, true)); answerBox(`Hetta er ein ${NAMES[kind]}.`, 820); };
+}
+
+const ACTIVITIES = [vitSkilja, vitTelja, mynstur, quickLook(1, 3), quickLook(4, 6), tilTiggju, maata, plusMinus, tallinja, skap];
+
+function setTask(t) { document.getElementById("task").textContent = t; }
+function render() {
+  clearTimers();
+  const c = CHAPTERS[ch];
+  document.documentElement.style.setProperty("--chapter", c.color);
+  const num = document.getElementById("num"); num.textContent = c.n; num.classList.toggle("light", !!c.light);
+  document.getElementById("title").textContent = c.title;
+  document.getElementById("book").textContent = "Rokning " + c.book;
+  document.getElementById("pg").textContent = c.n;
+  document.getElementById("tab").textContent = `${c.n} • ${c.title}`;
+  document.title = `Felags prát ${c.n} – ${c.title}`;
+  setTask(c.task);
+  board.innerHTML = "";
+  el("rect", { width: 1600, height: 900, fill: "#fffdf8" });
+  ACTIVITIES[ch]();
+  document.getElementById("show").disabled = false;
+  [...document.getElementById("nav").children].forEach((b, i) => b.classList.toggle("on", i === ch));
+  try { localStorage.setItem("rokning-spol/felags-prat", ch); } catch (e) {}
+  try { history.replaceState(null, "", "?k=" + c.n); } catch (e) {}
+}
+const nav = document.getElementById("nav");
+CHAPTERS.forEach((c, i) => { const b = document.createElement("button"); b.type = "button"; b.textContent = c.n; b.title = c.title; b.onclick = () => { ch = i; render(); }; nav.appendChild(b); });
+document.getElementById("prev").onclick = () => { ch = (ch + CHAPTERS.length - 1) % CHAPTERS.length; render(); };
+document.getElementById("next").onclick = () => { ch = (ch + 1) % CHAPTERS.length; render(); };
+document.getElementById("again").onclick = render;
+document.getElementById("show").onclick = () => { if (reveal) { reveal(); reveal = null; document.getElementById("show").disabled = true; } };
+addEventListener("keydown", e => {
+  if (e.target.closest("input, textarea")) return;
+  if (e.key === "ArrowRight") document.getElementById("next").click();
+  if (e.key === "ArrowLeft") document.getElementById("prev").click();
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); document.getElementById("show").click(); }
+});
+
+// Start at ?k=N (chapter number), else where the teacher was last time
+const fromUrl = +new URLSearchParams(location.search).get("k");
+let saved = 0; try { saved = +localStorage.getItem("rokning-spol/felags-prat") || 0; } catch (e) {}
+ch = fromUrl >= 1 && fromUrl <= 10 ? fromUrl - 1 : Math.min(saved, CHAPTERS.length - 1);
+render();
+
+// Opened inside the start page, "home" asks that page to close this page, so the address bar keeps showing Snar.
+let embedded = false;
+window.addEventListener("message", ev => { if (ev.data === "rokning-spol:hello") embedded = true; });
+document.getElementById("home").addEventListener("click", ev => {
+  if (!embedded) return;
+  ev.preventDefault();
+  parent.postMessage("rokning-spol:home", "*");
+});
+</script>
+<script src="toolbox.js"></script>
+</body>
+</html>

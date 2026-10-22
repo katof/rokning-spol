@@ -154,12 +154,13 @@
 </div>
 
 <script>
-// Progress is kept in this browser only, so the class can leave mid-game and carry on later.
+// A short game: it starts fresh every time, so the next class never lands in a half-played round.
 const SAVE_KEY = "rokning-spol/kapittul-1";
+try { localStorage.removeItem(SAVE_KEY); } catch (e) {}   // drop anything saved by the older version
 const store = {
-  get() { try { return JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (e) { return null; } },
-  set(v) { try { localStorage.setItem(SAVE_KEY, JSON.stringify(v)); } catch (e) {} },
-  clear() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} },
+  get() { return null; },
+  set(v) {},
+  clear() {},
 };
 
 const NS = "http://www.w3.org/2000/svg";
