@@ -145,9 +145,19 @@ function el(tag, attrs, parent) {
 }
 
 function say(a, b) {
-  document.getElementById("say1").textContent = a;
-  document.getElementById("say2").textContent = b;
+  const t1 = document.getElementById("say1"), t2 = document.getElementById("say2");
+  t1.textContent = a;
+  t2.textContent = b;
+  // Size the bubble to the longer line; its right edge stays put, so it grows to the left.
+  let w = 0;
+  try { w = Math.max(t1.getComputedTextLength(), t2.getComputedTextLength()); } catch (e) {}
+  const width = Math.max(270, Math.ceil(w) + 56), x = 1570 - width, cx = x + width / 2;
+  const r = document.querySelector(".bubble rect");
+  r.setAttribute("x", x); r.setAttribute("width", width);
+  t1.setAttribute("x", cx); t2.setAttribute("x", cx);
 }
+// Measure again once the web font is in, in case the first line was measured with a fallback font.
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => say(document.getElementById("say1").textContent, document.getElementById("say2").textContent));
 
 // The six rows from page 95. Each pattern has a number of states; the row shows
 // three steps and the answer is the fourth. Each draws one state centred on (0, 0).
