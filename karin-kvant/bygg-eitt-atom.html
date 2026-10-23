@@ -105,7 +105,7 @@
     <p class="task" id="task"></p>
     <div class="tools">
       <span class="stars" id="score">0 / 10</span>
-      <a id="home" class="home" href="../../karin-kvant/0_Karin_Kvant.html" aria-label="Heim til filmarnar" title="Heim til filmarnar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-6h4v6h5V10"/></svg></a>
+      <a id="home" class="home" href="https://snardev.ctrl.fo/temasavn/karin-kvant" aria-label="Heim til filmarnar" title="Heim til filmarnar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-6h4v6h5V10"/></svg></a>
       <button id="again" type="button">Byrja umaftur</button>
     </div>
   </header>
@@ -436,11 +436,12 @@ doneEl.addEventListener("click", () => { doneEl.hidden = true; });
 start();
 
 // Opened inside the hub, "home" asks the hub to close the game, so the address bar keeps showing Snar.
+// Opened on its own, the link goes to the hub's page on Snar (the href above).
 let embedded = false;
 const home = document.getElementById("home");
 window.addEventListener("message", ev => {
   const d = ev.data;
-  if (d === "karin:hello" || (d && d.type === "karin:hello")) { embedded = true; if (d.hub) home.href = d.hub; }
+  if (d === "karin:hello" || (d && d.type === "karin:hello")) embedded = true;
 });
 home.addEventListener("click", ev => {
   if (!embedded) return;
