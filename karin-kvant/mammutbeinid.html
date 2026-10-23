@@ -166,7 +166,7 @@ function next() {
   if (current.type === "quiz") {
     locked = true;
     drawFind(null); update();
-    K.task("Svara spurninginum.");
+    K.task(current.q);
     say("Hvat heldur tú?");
     K.options(current.options.map((o, i) => ({ label: o, right: i === current.answer })), { onRight: () => { say(current.say); round++; setTimeout(next, 4200); }, onWrong: () => say("Nei, royn umaftur.") });
     return;

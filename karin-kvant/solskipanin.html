@@ -160,7 +160,7 @@ function next() {
     locked = true;
     sceneG.replaceChildren();
     K.task("Svara spurninginum.");
-    K.wrap(current.q, 44).forEach((l, i) => { el("text", { class: "q", x: 760, y: 330 + i * 52 }, sceneG).textContent = l; });
+    K.lines(current.q, 760, 300, 1100, sceneG, { class: "q" });
     say("Hvat heldur tú?");
     K.options(current.options.map((o, i) => ({ label: o, right: i === current.answer })), { onRight: () => { say(current.say); round++; setTimeout(next, 4500); }, onWrong: () => say("Nei, royn umaftur.") });
     return;

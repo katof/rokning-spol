@@ -151,7 +151,7 @@ function updatePanel() {
   } else {
     setRead("l", "Aldulongd λ:", fmt(lam) + " nm");
     setRead("f", "", null); setRead("t", "", null); setRead("v", "", null); setRead("a", "", null);
-    setRead("f", "1 nm =", "ein milliónta partur av mm");
+    setRead("f", "1 nm =", "ein milliónta mm");
     document.getElementById("mode").textContent = "Ljós";
     swatch.setAttribute("fill", wl2rgb(lam));
     setRead("c", "Litur:", colourName(lam));
@@ -199,7 +199,7 @@ function next() {
   current = ROUNDS[round];
   if (current.quiz) {
     locked = true;
-    K.task("Svara spurninginum.");
+    K.task(current.quiz);
     ctlG.replaceChildren();
     say("Hvat heldur tú?");
     K.options(current.options.map((o, i) => ({ label: o, right: i === current.answer })), { onRight: () => { say(current.say); round++; setTimeout(next, 3600); }, onWrong: () => say("Nei, royn umaftur.") });

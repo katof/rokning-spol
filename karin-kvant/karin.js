@@ -32,8 +32,8 @@ window.K = (() => {
   const bubble = { x: 1215, y: 560, w: 370, max: 30 };
   function setBubble(p) { Object.assign(bubble, p); }
   // brýtur tekstin eftir tí, sum veruliga er pláss fyri í bóbluni (mátar hvørja linju í SVG'inum)
-  function wrapMeasured(text, maxW, g) {
-    const probe = el("text", { x: -9999, y: -9999 }, g);
+  function wrapMeasured(text, maxW, g, attrs = {}) {
+    const probe = el("text", { x: -9999, y: -9999, ...attrs }, g);
     const lines = []; let line = "";
     for (const word of String(text).split(" ")) {
       const t = line ? line + " " + word : word;
@@ -82,17 +82,29 @@ window.K = (() => {
   }
   function tick(x = 760, y = 848) { el("text", { class: "tick", x, y }, actions()).textContent = "✓"; }
   // svarmøguleikar: opts = [{ label, right }]; onRight/onWrong fáa valið
+  // skrivar ein spurning (ella annan tekst) í fleiri linjum, brotnar eftir mátaðari breidd; attrs fer á hvørja linju (t.d. class "q")
+  function lines(text, x, y, maxW, parent, attrs = {}, lh = 52) {
+    const ls = wrapMeasured(text, maxW, parent, attrs);
+    ls.forEach((l, i) => { el("text", { x, y: y + i * lh, ...attrs }, parent).textContent = l; });
+    return ls.length;
+  }
   function options(opts, o = {}) {
     clearActions();
-    const n = opts.length, w = o.w ?? (n <= 2 ? 520 : n === 3 ? 440 : 360), gap = 16, y = o.y ?? 800, h = o.h ?? 84;
+    const n = opts.length, w = o.w ?? (n <= 2 ? 520 : n === 3 ? 440 : 360), gap = 16;
     const x0 = 800 - (n * w + (n - 1) * gap) / 2;
+    // knøttarnir fáa somu hædd: nóg mikið til tann, sum hevur flest linjur; teir standa við botnin á stage'inum
+    const probe = el("g", { class: "opt" }, actions());
+    const allLines = opts.map(opt => wrapMeasured(opt.label, w - 28, probe));
+    probe.remove();
+    const most = Math.max(...allLines.map(l => l.length));
+    const h = o.h ?? Math.max(84, most * 32 + 24), y = o.y ?? 884 - h;
     let settled = false;
     opts.forEach((opt, i) => {
       const x = x0 + i * (w + gap);
       const g = el("g", { class: "opt", role: "button", "aria-label": opt.label }, actions());
       el("rect", { x, y, width: w, height: h, rx: 20 }, g);
-      const lines = wrap(opt.label, Math.floor(w / 15));
-      lines.forEach((l, k) => { el("text", { x: x + w / 2, y: y + h / 2 + (k - (lines.length - 1) / 2) * 30 }, g).textContent = l; });
+      const lines = allLines[i];
+      lines.forEach((l, k) => { el("text", { x: x + w / 2, y: y + h / 2 + (k - (lines.length - 1) / 2) * 32 }, g).textContent = l; });
       g.addEventListener("click", () => {
         if (settled || g.classList.contains("wrong")) return;
         if (opt.right) { settled = true; g.classList.add("right"); o.onRight?.(opt); }
@@ -124,5 +136,5 @@ window.K = (() => {
     });
   }
 
-  return { NS, el, rnd, shuffle, wrap, fmt, setBubble, say, task, score, button, pm, tick, options, clearActions, done, init };
+  return { NS, el, rnd, shuffle, wrap, wrapMeasured, lines, fmt, setBubble, say, task, score, button, pm, tick, options, clearActions, done, init };
 })();
