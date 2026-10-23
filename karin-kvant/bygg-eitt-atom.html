@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bygg eitt atom – Karin Kvant</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap">
+<style>
+  /* Layout: classroom screen — header row (ring, title, task, home, start again), one 1600×900 SVG stage that fills the rest:
+     particle tray at the left, the atom in the middle (nucleus + three shells), periodic table and counts at the right, Karin's speech bubble top right, action buttons along the bottom */
+  :root {
+    color-scheme: light;
+    --paper: #fffafc;
+    --ink: #1F2328;
+    --pink: #E2398A; --pink-dark: #B2235F; --pink-soft: #FDE7F1;
+    --proton: #E24B4B; --neutron: #9AA3AD; --electron: #3C5BD6;
+    --ok: #1F7A3A; --wrong: #D23A2F;
+    --font: "Nunito", "Gill Sans", "Trebuchet MS", system-ui, sans-serif;
+  }
+  html, body { height: 100%; background: var(--paper); color: var(--ink); }
+  body { margin: 0; font-family: var(--font); overflow: hidden; }
+  .page {
+    height: 100%; box-sizing: border-box;
+    padding-block: 1.2vh 1vh;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 1vh;
+  }
+  header { display: flex; align-items: center; gap: clamp(12px, 1.5vw, 28px); flex-wrap: wrap; }
+  .num {
+    width: clamp(48px, 5vw, 84px); aspect-ratio: 1; border-radius: 50%; flex: none;
+    background: var(--pink); color: #fff;
+    display: grid; place-items: center; font-size: clamp(26px, 3vw, 50px); font-weight: 900;
+  }
+  h1 { margin: 0; font-size: clamp(26px, 3.2vw, 54px); font-weight: 900; letter-spacing: .01em; }
+  .book { flex: none; padding: .15em .7em; border-radius: 999px; background: var(--pink-soft); color: var(--pink-dark);
+    font-size: clamp(14px, 1.4vw, 24px); font-weight: 800; letter-spacing: .03em; white-space: nowrap; }
+  .task { margin: 0; font-size: clamp(17px, 2vw, 34px); line-height: 1.25; flex: 1 1 320px; min-width: 0; font-weight: 700; }
+  .tools { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-left: auto; }
+  .stars { font-size: clamp(18px, 1.8vw, 32px); font-weight: 800; font-variant-numeric: tabular-nums; }
+  button, a.home {
+    font: inherit; font-size: clamp(16px, 1.5vw, 26px); font-weight: 800; cursor: pointer;
+    border: 3px solid var(--pink); background: #fff; color: var(--ink);
+    padding: .3em .9em; border-radius: 999px; text-decoration: none;
+  }
+  button:hover, a.home:hover { background: var(--pink-soft); }
+  button:focus-visible, a.home:focus-visible { outline: 3px solid var(--electron); outline-offset: 2px; }
+  a.home { display: grid; place-items: center; padding: .3em .45em; align-self: stretch; }
+  a.home svg { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .stage { position: relative; min-height: 0; }
+  svg#board { width: 100%; height: 100%; display: block; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  text { font-family: var(--font); }
+  .src { cursor: pointer; }
+  .src:hover .ball { filter: brightness(1.08); }
+  .src .lbl { font-size: 30px; font-weight: 800; text-anchor: middle; fill: var(--ink); }
+  .src .sub { font-size: 22px; text-anchor: middle; fill: #6B7280; }
+  .shell { fill: none; stroke: #d9d4de; stroke-width: 3; stroke-dasharray: 10 10; }
+  .nuc { fill: none; stroke: #f0c6d8; stroke-width: 3; }
+  .p { cursor: pointer; }
+  .p:hover { filter: brightness(1.1); }
+  .sign { font-size: 30px; font-weight: 900; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .sign.e { font-size: 24px; }
+  .tile rect { fill: #fff; stroke: #d9d4de; stroke-width: 2; }
+  .tile.on rect { fill: var(--pink); stroke: var(--pink-dark); }
+  .tile text { text-anchor: middle; pointer-events: none; fill: var(--ink); }
+  .tile.on text { fill: #fff; }
+  .tile .z { font-size: 15px; }
+  .tile .sym { font-size: 24px; font-weight: 800; }
+  .count { font-size: 30px; font-weight: 700; fill: var(--ink); }
+  .count tspan.v { font-weight: 900; }
+  .ename { font-size: 44px; font-weight: 900; fill: var(--pink); }
+  .bubble rect { fill: #fff; stroke: var(--pink); stroke-width: 3; }
+  .bubble text { font-size: 28px; fill: var(--ink); font-weight: 700; }
+  .bubble .who { font-size: 20px; fill: var(--pink); font-weight: 900; }
+  .act { cursor: pointer; }
+  .act rect { fill: var(--pink); stroke: var(--pink-dark); stroke-width: 4; }
+  .act:hover rect { filter: brightness(1.08); }
+  .act text { font-size: 40px; font-weight: 900; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .opt { cursor: pointer; }
+  .opt rect { fill: #fff; stroke: var(--pink); stroke-width: 4; }
+  .opt:hover rect { fill: var(--pink-soft); }
+  .opt.right rect { fill: #E8F6EC; stroke: var(--ok); stroke-width: 7; }
+  .opt.wrong rect { fill: #fdf0ee; stroke: var(--wrong); stroke-width: 7; }
+  .opt text { font-size: 28px; font-weight: 700; fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .q { font-size: 40px; font-weight: 900; fill: var(--ink); text-anchor: middle; }
+  .done-msg {
+    position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%);
+    margin: 0; padding: .6em 1.2em; border-radius: 20px; max-width: 90%;
+    background: var(--pink-soft); border: 5px solid var(--pink);
+    font-size: clamp(24px, 3.4vw, 60px); font-weight: 900; text-align: center;
+    box-shadow: 0 10px 40px rgba(120, 30, 70, .25);
+  }
+  footer { display: flex; align-items: center; gap: 14px; border-top: 3px solid var(--pink); padding-top: .5vh; font-size: clamp(13px, 1.1vw, 20px); flex-wrap: wrap; }
+  footer .pg { padding: 0 .6em; height: 2em; border-radius: 999px; border: 3px solid var(--pink); display: grid; place-items: center; font-weight: 800; flex: none; }
+  footer .tab { margin-left: auto; background: var(--pink-soft); padding: 2px 12px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="num">⚛</div>
+    <h1>Bygg eitt atom</h1>
+    <span class="book">Karin Kvant</span>
+    <p class="task" id="task"></p>
+    <div class="tools">
+      <span class="stars" id="score">0 / 10</span>
+      <a id="home" class="home" href="../../karin-kvant/0_Karin_Kvant.html" aria-label="Heim til filmarnar" title="Heim til filmarnar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-6h4v6h5V10"/></svg></a>
+      <button id="again" type="button">Byrja umaftur</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <svg id="board" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" aria-label="Partiklar at leggja í eitt atom, grundevnaskipanin og spurningar">
+      <rect width="1600" height="900" fill="#fffafc"/>
+      <g id="tray"></g>
+      <g id="atom"></g>
+      <g id="panel"></g>
+      <g id="bubble" class="bubble"></g>
+      <g id="actions"></g>
+    </svg>
+    <p class="done-msg" id="done" hidden>Flott! Tú dugir at byggja atom. ⚛ Sí film 2 – Karin sigur, hví elektronin ikki dettur inn í kjarnan.</p>
+  </div>
+
+  <footer>
+    <span class="pg">Film 1 · 2</span>
+    <span>Hvørjum eru atom gjørd úr? · Sissa teg – miss ikki pippið!</span>
+    <span class="tab">7. fl.: atom- og mýlfyrimyndir · 8. fl.: atombygnaður og jonir · 9. fl.: protonir, nevtronir og elektronir</span>
+  </footer>
+</div>
+
+<script>
+// A short game: it starts fresh every time, so the next class never lands in a half-played round.
+const NS = "http://www.w3.org/2000/svg";
+const trayG = document.getElementById("tray");
+const atomG = document.getElementById("atom");
+const panelG = document.getElementById("panel");
+const bubbleG = document.getElementById("bubble");
+const actG = document.getElementById("actions");
+const scoreEl = document.getElementById("score");
+const taskEl = document.getElementById("task");
+const doneEl = document.getElementById("done");
+
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function rnd(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = rnd(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+// The first 18 grundevni: symbol, Faroese name, the usual number of neutrons
+const ELEMENTS = [
+  ["H", "Vetni", 0], ["He", "Helium", 2], ["Li", "Litium", 4], ["Be", "Beryllium", 5], ["B", "Bor", 6], ["C", "Kolevni", 6],
+  ["N", "Kvæva", 7], ["O", "Súrevni", 8], ["F", "Fluor", 10], ["Ne", "Neon", 10], ["Na", "Natrium", 12], ["Mg", "Magnesium", 12],
+  ["Al", "Aluminium", 14], ["Si", "Silisium", 14], ["P", "Fosfor", 16], ["S", "Svávul", 16], ["Cl", "Klor", 18], ["Ar", "Argon", 22],
+];
+const MAX = 18;
+
+// ---- the atom -------------------------------------------------------------
+const CX = 760, CY = 480;
+const SHELLS = [{ r: 170, cap: 2 }, { r: 260, cap: 8 }, { r: 340, cap: 8 }];
+const NUC_R = 20;
+// nucleon spots: centre, then rings of 6, 12 and 18
+const NUC_SPOTS = [[0, 0]];
+[[42, 6], [84, 12], [126, 18]].forEach(([r, n]) => { for (let i = 0; i < n; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / n; NUC_SPOTS.push([r * Math.cos(a), r * Math.sin(a)]); } });
+
+let nucleons = [];   // "p" or "n", in the order they were added
+let electrons = 0;
+let locked = false;  // true while a quiz round is shown or a right answer is celebrated
+let hideName = false;
+
+function counts() {
+  const p = nucleons.filter(x => x === "p").length, n = nucleons.length - p;
+  return { p, n, e: electrons };
+}
+
+function drawAtom() {
+  atomG.replaceChildren();
+  for (const s of SHELLS) el("circle", { class: "shell", cx: CX, cy: CY, r: s.r }, atomG);
+  el("circle", { class: "nuc", cx: CX, cy: CY, r: 150 }, atomG);
+  if (!nucleons.length && !electrons) {
+    const t = el("text", { x: CX, y: CY - 8, "text-anchor": "middle", "font-size": 30, fill: "#9a8f98", "font-weight": 700 }, atomG);
+    t.textContent = "Trýst á partiklarnar til vinstru";
+    const t2 = el("text", { x: CX, y: CY + 32, "text-anchor": "middle", "font-size": 30, fill: "#9a8f98", "font-weight": 700 }, atomG);
+    t2.textContent = "fyri at leggja tær í atomið";
+  }
+  nucleons.forEach((kind, i) => {
+    const [dx, dy] = NUC_SPOTS[i];
+    const g = el("g", { class: "p", role: "button", "aria-label": kind === "p" ? "Proton – tak burtur" : "Nevtron – tak burtur" }, atomG);
+    el("circle", { cx: CX + dx, cy: CY + dy, r: NUC_R, fill: kind === "p" ? "var(--proton)" : "var(--neutron)", stroke: "#fff", "stroke-width": 2 }, g);
+    if (kind === "p") el("text", { class: "sign", x: CX + dx, y: CY + dy }, g).textContent = "+";
+    g.addEventListener("click", () => { if (locked) return; nucleons.splice(i, 1); update(); });
+  });
+  let k = 0;
+  for (let s = 0; s < SHELLS.length && k < electrons; s++) {
+    const { r, cap } = SHELLS[s];
+    const inShell = Math.min(cap, electrons - k);
+    for (let i = 0; i < inShell; i++, k++) {
+      const a = -Math.PI / 2 + i * 2 * Math.PI / cap;
+      const x = CX + r * Math.cos(a), y = CY + r * Math.sin(a);
+      const g = el("g", { class: "p", role: "button", "aria-label": "Elektron – tak burtur" }, atomG);
+      el("circle", { cx: x, cy: y, r: 15, fill: "var(--electron)", stroke: "#fff", "stroke-width": 2 }, g);
+      el("text", { class: "sign e", x, y: y - 1 }, g).textContent = "−";
+      g.addEventListener("click", () => { if (locked) return; electrons--; update(); });
+    }
+  }
+}
+
+// ---- the tray -------------------------------------------------------------
+function drawTray() {
+  trayG.replaceChildren();
+  const items = [
+    ["p", "var(--proton)", "+", "Proton", "ladning +"],
+    ["n", "var(--neutron)", "", "Nevtron", "onga ladning"],
+    ["e", "var(--electron)", "−", "Elektron", "ladning −"],
+  ];
+  items.forEach(([kind, fill, sign, name, sub], i) => {
+    const cx = 170, cy = 190 + i * 230;
+    const g = el("g", { class: "src", role: "button", "aria-label": "Legg " + name.toLowerCase() + " í atomið" }, trayG);
+    el("circle", { class: "ball", cx, cy, r: kind === "e" ? 44 : 60, fill, stroke: "#fff", "stroke-width": 4, filter: "drop-shadow(0 4px 6px rgba(0,0,0,.25))" }, g);
+    if (sign) el("text", { class: "sign", x: cx, y: cy, "font-size": kind === "e" ? 44 : 60 }, g).textContent = sign;
+    el("text", { class: "lbl", x: cx, y: cy + 100 }, g).textContent = name;
+    el("text", { class: "sub", x: cx, y: cy + 130 }, g).textContent = sub;
+    g.addEventListener("click", () => add(kind));
+  });
+}
+
+function add(kind) {
+  if (locked) return;
+  const c = counts();
+  if (kind === "e") {
+    if (electrons >= MAX) return say("Tað er ikki pláss fyri fleiri elektronum her.");
+    electrons++;
+  } else {
+    if (nucleons.length >= NUC_SPOTS.length || (kind === "p" && c.p >= MAX) || (kind === "n" && c.n >= MAX + 4)) return say("Kjarnin er fullur – fleiri er ikki pláss fyri.");
+    nucleons.push(kind);
+  }
+  update();
+}
+
+// ---- the panel: periodic table and counts ----------------------------------
+const TABLE_X = 1215, TABLE_Y = 60, TILE = 44;
+// short form: H left and He right on the first row, then two rows of eight
+const TILE_POS = [[0, 0], [7, 0]];
+for (let r = 1; r <= 2; r++) for (let c = 0; c < 8; c++) TILE_POS.push([c, r]);
+let tiles = [];
+
+function drawPanel() {
+  panelG.replaceChildren();
+  el("text", { x: TABLE_X, y: TABLE_Y - 14, "font-size": 24, "font-weight": 800, fill: "#6B7280" }, panelG).textContent = "Grundevnaskipanin (talið = protonir)";
+  tiles = ELEMENTS.map(([sym], i) => {
+    const [c, r] = TILE_POS[i];
+    const x = TABLE_X + c * (TILE + 4), y = TABLE_Y + r * (TILE + 8);
+    const g = el("g", { class: "tile" }, panelG);
+    el("rect", { x, y, width: TILE, height: TILE + 2, rx: 8 }, g);
+    el("text", { class: "z", x: x + TILE / 2, y: y + 15 }, g).textContent = i + 1;
+    el("text", { class: "sym", x: x + TILE / 2, y: y + 40 }, g).textContent = sym;
+    return g;
+  });
+  const y0 = TABLE_Y + 3 * (TILE + 8) + 40;
+  ["p", "n", "e", "q", "m"].forEach((k, i) => {
+    const t = el("text", { class: "count", id: "c-" + k, x: TABLE_X, y: y0 + i * 46 }, panelG);
+    t.textContent = "";
+  });
+  el("text", { class: "ename", id: "ename", x: TABLE_X, y: y0 + 5 * 46 + 30 }, panelG);
+}
+
+function updatePanel() {
+  const c = counts();
+  const set = (k, label, v) => { const t = document.getElementById("c-" + k); t.textContent = ""; const a = document.createElementNS(NS, "tspan"); a.textContent = label + " "; const b = document.createElementNS(NS, "tspan"); b.setAttribute("class", "v"); b.textContent = v; t.append(a, b); };
+  set("p", "Protonir:", c.p);
+  set("n", "Nevtronir:", c.n);
+  set("e", "Elektronir:", c.e);
+  const q = c.p - c.e;
+  set("q", "Ladning:", q === 0 ? "0" : (q > 0 ? "+" : "−") + Math.abs(q));
+  set("m", "Massatal:", c.p + c.n);
+  tiles.forEach((g, i) => g.classList.toggle("on", !hideName && i + 1 === c.p));
+  const name = document.getElementById("ename");
+  if (hideName || c.p < 1 || c.p > MAX) name.textContent = hideName && c.p >= 1 ? "?" : "";
+  else {
+    const [sym, nm] = ELEMENTS[c.p - 1];
+    name.textContent = nm + " (" + sym + ")" + (q ? "  – jón " + sym + (q > 0 ? "⁺" : "⁻") : "");
+  }
+}
+
+// ---- Karin's bubble -------------------------------------------------------
+function wrap(text, max) {
+  const out = []; let line = "";
+  for (const w of text.split(" ")) {
+    if ((line + " " + w).trim().length > max) { out.push(line.trim()); line = w; } else line += " " + w;
+  }
+  if (line.trim()) out.push(line.trim());
+  return out;
+}
+function say(text) {
+  bubbleG.replaceChildren();
+  const lines = wrap(text, 30);
+  const x = 1215, y = 560, w = 370, h = 44 + lines.length * 36 + 10;
+  el("rect", { x, y, width: w, height: h, rx: 20 }, bubbleG);
+  el("path", { d: `M${x + 30} ${y + h} L${x + 20} ${y + h + 36} L${x + 70} ${y + h}`, fill: "#fff", stroke: "var(--pink)", "stroke-width": 3 }, bubbleG);
+  el("path", { d: `M${x + 32} ${y + h} H${x + 68}`, stroke: "#fff", "stroke-width": 5 }, bubbleG);
+  el("text", { class: "who", x: x + 18, y: y + 30 }, bubbleG).textContent = "Karin:";
+  lines.forEach((l, i) => { el("text", { x: x + 18, y: y + 66 + i * 36 }, bubbleG).textContent = l; });
+}
+
+// ---- rounds ---------------------------------------------------------------
+const ROUNDS = [
+  { type: "build", Z: 1, n: [0, 2], task: "Bygg eitt vetnisatom (H): 1 proton og 1 elektron.", say: "Vetni er tað minsta atomið. Ein proton í kjarnanum og ein elektron uttanum." },
+  { type: "build", Z: 2, n: [2, 2], task: "Bygg helium (He): 2 protonir, 2 nevtronir og 2 elektronir.", say: "Nevtronirnar hava onga ladning. Tær liggja í kjarnanum saman við protonunum." },
+  { type: "build", Z: 6, n: [6, 6], task: "Bygg kolevni (C): 6 protonir og 6 nevtronir – og so nógvar elektronir, at ladningin er 0.", say: "Tá ið protonir og elektronir eru líka nógvar, hevur atomið onga ladning." },
+  { type: "quiz", task: "Svara spurninginum.", q: "Kjarnin er positivur. Hvørja ladning hevur elektronin?", options: ["Positiva (+)", "Negativa (−)", "Onga ladning", "Tað skiftir"], answer: 1,
+    say: "Plus og minus toga í hvørt annað. Tí heldur kjarnin fast í elektronunum." },
+  { type: "build", Z: 8, n: [7, 10], task: "Bygg súrevni (O). Hygg í grundevnaskipanina: hvussu nógvar protonir skulu til?", say: "Talið í grundevnaskipanini sigur, hvussu nógvar protonir atomið hevur. Nevtronirnar eru umleið líka nógvar." },
+  { type: "build", Z: 11, n: [11, 13], e: 10, task: "Bygg natrium (Na) – og tak so eina elektron burtur, so tú fært eina jón: Na⁺.", say: "Missir eitt atom eina elektron, verður tað positivt. Tað eitur ein jón." },
+  { type: "quiz", task: "Svara spurninginum.", q: "Eitt atom fær eina elektron afturat. Hvat hendir?", options: ["Tað verður positivt", "Tað verður negativt", "Tað fær fleiri protonir", "Tað verður eitt annað grundevni"], answer: 1,
+    say: "Fleiri elektronir enn protonir: negativ jón. Grundevnið er tað sama – tað eru protonirnar, sum avgera tað." },
+  { type: "build", Z: 17, n: [17, 20], e: 18, task: "Bygg klor (Cl) – og legg eina elektron afturat, so tú fært jónina Cl⁻.", say: "Klor tekur fegið eina elektron afturat. Tá verður skelin uttast full." },
+  { type: "ident", pick: [3, 5, 7, 9, 10, 12, 13, 14, 16], task: "Tel protonirnar í kjarnanum. Hvat grundevni er hetta?", say: "Tel bert tær reyðu. Finn so talið í grundevnaskipanini." },
+  { type: "quiz", task: "Svara spurninginum.", q: "Hvar er næstan allur massin í atominum?", options: ["Í elektronunum", "Í kjarnanum", "Javnt býtt í øllum atominum", "Í tóma rúminum"], answer: 1,
+    say: "Protonir og nevtronir eru næstan 2000 ferðir tyngri enn elektronir. Mest av atominum er tómt rúm!" },
+];
+let round = 0, current = null, tries = 0;
+
+function start() {
+  doneEl.hidden = true;
+  round = 0;
+  next();
+}
+
+function next() {
+  locked = false; tries = 0; hideName = false;
+  actG.replaceChildren();
+  scoreEl.textContent = `${round} / ${ROUNDS.length}`;
+  if (round === ROUNDS.length) { nucleons = []; electrons = 0; update(); taskEl.textContent = "Liðugt!"; doneEl.hidden = false; say("Tú dugir at byggja atom!"); return; }
+  current = ROUNDS[round];
+  taskEl.textContent = current.task;
+  if (current.type === "build") {
+    nucleons = []; electrons = 0;
+    // the ion rounds start from the finished atom, so the class only has to move one electron
+    if (current.e !== undefined) {
+      const nn = ELEMENTS[current.Z - 1][2];
+      for (let i = 0; i < Math.max(current.Z, nn); i++) { if (i < current.Z) nucleons.push("p"); if (i < nn) nucleons.push("n"); }
+      electrons = current.Z;
+    }
+    say("Hvat sigur uppgávan? Bygg – og trýst so á Kanna.");
+    update();
+    drawCheck();
+  } else if (current.type === "ident") {
+    const Z = current.pick[rnd(0, current.pick.length - 1)];
+    current.Z = Z;
+    nucleons = []; electrons = Z;
+    for (let i = 0; i < Z; i++) nucleons.push("p", "n");
+    nucleons = shuffle(nucleons);
+    hideName = true; locked = true;
+    say(current.say);
+    update();
+    const wrongs = shuffle(ELEMENTS.map((e, i) => i + 1).filter(z => z !== Z && z >= 2)).slice(0, 3);
+    const opts = shuffle([Z, ...wrongs]).map(z => ({ label: ELEMENTS[z - 1][1] + " (" + ELEMENTS[z - 1][0] + ")", right: z === Z }));
+    drawOptions(opts);
+  } else {
+    nucleons = []; electrons = 0; locked = true;
+    update();
+    atomG.replaceChildren();
+    const lines = wrap(current.q, 44);
+    lines.forEach((l, i) => { el("text", { class: "q", x: 760, y: 300 + i * 52 }, atomG).textContent = l; });
+    say("Hvat heldur tú?");
+    drawOptions(current.options.map((o, i) => ({ label: o, right: i === current.answer })));
+  }
+}
+
+function drawCheck() {
+  actG.replaceChildren();
+  const g = el("g", { class: "act", role: "button", "aria-label": "Kanna" }, actG);
+  el("rect", { x: 620, y: 810, width: 280, height: 76, rx: 38 }, g);
+  el("text", { x: 760, y: 848 }, g).textContent = "Kanna";
+  g.addEventListener("click", check);
+}
+
+function drawOptions(opts) {
+  actG.replaceChildren();
+  const w = 360, gap = 16, x0 = 800 - (4 * w + 3 * gap) / 2;
+  opts.forEach((o, i) => {
+    const x = x0 + i * (w + gap);
+    const g = el("g", { class: "opt", role: "button", "aria-label": o.label }, actG);
+    el("rect", { x, y: 800, width: w, height: 84, rx: 20 }, g);
+    const lines = wrap(o.label, 24);
+    lines.forEach((l, k) => { el("text", { x: x + w / 2, y: 842 + (k - (lines.length - 1) / 2) * 30 }, g).textContent = l; });
+    g.addEventListener("click", () => {
+      if (g.classList.contains("wrong") || g.classList.contains("right")) return;
+      if (o.right) {
+        g.classList.add("right");
+        say(current.say);
+        round++;
+        actG.querySelectorAll(".opt").forEach(x => x.style.pointerEvents = "none");
+        setTimeout(next, 3400);
+      } else {
+        g.classList.add("wrong");
+        say(current.type === "ident" ? "Nei. Tel protonirnar umaftur – tær reyðu við +." : "Nei, royn umaftur.");
+      }
+    });
+  });
+}
+
+function check() {
+  if (locked) return;
+  const c = counts();
+  const wantE = current.e !== undefined ? current.e : current.Z;
+  const problems = [];
+  if (c.p < current.Z) problems.push(c.p === 0 ? "Kjarnin hevur ongar protonir enn." : "Tað vanta protonir. Hygg í grundevnaskipanina.");
+  else if (c.p > current.Z) problems.push("Ov nógvar protonir – tá er tað eitt annað grundevni.");
+  if (c.n < current.n[0]) problems.push(c.n === 0 && current.Z > 1 ? "Kjarnin hevur ongar nevtronir." : "Tað vanta nevtronir í kjarnanum.");
+  else if (c.n > current.n[1]) problems.push("Ov nógvar nevtronir í kjarnanum.");
+  if (c.e < wantE) problems.push(current.e !== undefined && current.e > current.Z ? "Legg eina elektron afturat." : "Tað vanta elektronir. Ladningin skal vera " + (current.e !== undefined ? "−1" : "0") + ".");
+  else if (c.e > wantE) problems.push(current.e !== undefined && current.e < current.Z ? "Tak eina elektron burtur." : "Ov nógvar elektronir. Ladningin skal vera 0.");
+  if (problems.length) {
+    tries++;
+    say(problems[0] + (tries >= 3 && c.p !== current.Z ? " (" + ELEMENTS[current.Z - 1][1] + " hevur " + current.Z + " protonir.)" : ""));
+    return;
+  }
+  locked = true;
+  say("Rætt! " + current.say);
+  el("text", { x: 760, y: 848, "font-size": 60, "font-weight": 900, fill: "var(--ok)", "text-anchor": "middle", "dominant-baseline": "central" }, actG).textContent = "✓";
+  actG.querySelector(".act")?.remove();
+  round++;
+  setTimeout(next, 3400);
+}
+
+function update() { drawAtom(); updatePanel(); }
+
+drawTray();
+drawPanel();
+document.getElementById("again").addEventListener("click", start);
+doneEl.addEventListener("click", () => { doneEl.hidden = true; });
+start();
+
+// Opened inside the hub, "home" asks the hub to close the game, so the address bar keeps showing Snar.
+let embedded = false;
+const home = document.getElementById("home");
+window.addEventListener("message", ev => {
+  const d = ev.data;
+  if (d === "karin:hello" || (d && d.type === "karin:hello")) { embedded = true; if (d.hub) home.href = d.hub; }
+});
+home.addEventListener("click", ev => {
+  if (!embedded) return;
+  ev.preventDefault();
+  parent.postMessage("karin:home", "*");
+});
+</script>
+</body>
+</html>
