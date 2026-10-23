@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 6 og 7 – Skriva rætta setningin – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-06-07">
+<main>
+  <h1>Skriva rætta setningin</h1>
+  <p class="sub">Les setningarnar. Skriva tann, sum er rættur, á linjuna.</p>
+
+  <div class="cols">
+    <div class="task">
+      <h2>1.</h2>
+      <div class="sentences">
+        <p>Eva spyr, um tey kunnu gera matin.</p>
+        <p>Evu dámar ikki at gera mat.</p>
+        <p>Per vil gera matin.</p>
+      </div>
+      <h3>Skriva her:</h3>
+      <input class="line" type="text" aria-label="Skriva rætta setningin 1">
+    </div>
+
+    <div class="task">
+      <h2>2.</h2>
+      <div class="sentences">
+        <p>Ása vil sleppa at svimja.</p>
+        <p>Ásu dámar ikki at baka.</p>
+        <p>Ása vil sleppa at baka køkur.</p>
+      </div>
+      <h3>Skriva her:</h3>
+      <input class="line" type="text" aria-label="Skriva rætta setningin 2">
+    </div>
+  </div>
+
+  <div class="task">
+    <h2>Set ring um mat í kassanum</h2>
+    <div id="mat"></div>
+  </div>
+</main>
+
+<script>
+  Lesing.wordbox('#mat', {
+    words: ['stólur', 'pylsa', 'krakkur', 'dýna', 'keks', 'ostur', 'egg', 'kjøt', 'breyð', 'rútur', 'borð', 'knetti'],
+    correct: ['pylsa', 'keks', 'ostur', 'egg', 'kjøt', 'breyð', 'knetti']
+  });
+</script>
+</body>
+</html>

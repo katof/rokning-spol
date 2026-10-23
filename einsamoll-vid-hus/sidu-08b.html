@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 8 (b) – Skriva við marglittum penni – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+<style>
+  .row3{ display:grid; grid-template-columns:1fr 1.7fr; gap:16px; align-items:center }
+  .row3 .prompt{ font-size:1.3em; font-weight:800 }
+  @media (max-width:900px){ .row3{ grid-template-columns:1fr } }
+</style>
+</head>
+<body data-page="sidu-08b">
+<main>
+  <h1>Skriva við marglittum penni 🎨</h1>
+  <p class="sub">Skriva setningarnar liðugar við ælabogapenninum.</p>
+
+  <div class="task"><div class="row3"><div class="prompt">Per kann sópa …</div><div id="p1"></div></div></div>
+  <div class="task"><div class="row3"><div class="prompt">Ása skal reinsa …</div><div id="p2"></div></div></div>
+  <div class="task"><div class="row3"><div class="prompt">Øll trý kunnu … upp</div><div id="p3"></div></div></div>
+</main>
+
+<script>
+  ['#p1', '#p2', '#p3'].forEach((sel, i) => Lesing.pad(sel, {
+    key: 'pad' + (i + 1),
+    tools: ['rainbow'], colors: [{ hex: '#111', name: 'ælabogi' }],
+    size: { min: 3, max: 36, value: 12 },
+    guide: 'lines', height: 220, undo: true, clear: true,
+    label: 'Skriva her'
+  }));
+</script>
+</body>
+</html>

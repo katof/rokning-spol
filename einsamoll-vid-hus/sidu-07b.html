@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 7 (b) – Hygg í kassan – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-07b">
+<main>
+  <h1>Hygg í kassan</h1>
+
+  <div class="task">
+    <h2>Set ring um tað, sum vit nýta, tá vit baka!</h2>
+    <div id="baka"></div>
+  </div>
+
+  <div class="task">
+    <h2>Skriva tey seks orðini her:</h2>
+    <div id="baka-linjur"></div>
+  </div>
+
+  <div class="task">
+    <h2>Hvørjar køkur dámar tær væl?</h2>
+    <div class="linegrid" style="grid-template-columns:1fr 1fr">
+      <input class="line" type="text" placeholder="Skriva her …" aria-label="Køka 1">
+      <input class="line" type="text" placeholder="Skriva her …" aria-label="Køka 2">
+    </div>
+  </div>
+
+  <div class="task">
+    <h2>Set ring um køkur í kassanum</h2>
+    <div id="kokur"></div>
+  </div>
+</main>
+
+<script>
+  const BAKA = ['margarin', 'egg', 'bakipulvur', 'sukur', 'mjøl', 'rosinur'];
+
+  Lesing.wordbox('#baka', {
+    words: ['margarin', 'egg', 'gólv', 'bakipulvur', 'loft', 'kjøt', 'sukur', 'mjøl', 'rosinur', 'breyð'],
+    correct: BAKA
+  });
+
+  Lesing.lines('#baka-linjur', { answers: BAKA, suggest: true });
+
+  Lesing.wordbox('#kokur', {
+    words: ['lagkaka', 'kransakaka', 'sodavatn', 'pannukaka', 'budingur', 'skuffukaka', 'grønakaka', 'súrepladjús', 'appilsindjús', 'smørkaka', 'breyð', 'súreplakaka'],
+    correct: ['lagkaka', 'kransakaka', 'pannukaka', 'skuffukaka', 'grønakaka', 'smørkaka', 'súreplakaka']
+  });
+</script>
+</body>
+</html>

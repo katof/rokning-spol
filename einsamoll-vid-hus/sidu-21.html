@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 21 – Skriva tekst til myndina – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-21">
+<main>
+  <h1>Skriva tekst til myndina</h1>
+
+  <div class="cols left-wide">
+    <div class="task">
+      <h2>Lita myndina</h2>
+      <div id="lita"></div>
+    </div>
+
+    <div class="stack">
+      <div class="task">
+        <h2>Skriva setning um myndina</h2>
+        <textarea class="essay" rows="7" placeholder="Skriva her …" aria-label="Skriva setning um myndina"></textarea>
+      </div>
+
+      <div class="task">
+        <h2>Lita myndina soleiðis:</h2>
+        <table class="plain" aria-label="Litir til myndina">
+          <thead><tr><th></th><th>Eva</th><th>Ása</th><th>Per</th></tr></thead>
+          <tbody>
+            <tr><th>hár</th><td>gult</td><td>svart</td><td>brúnt</td></tr>
+            <tr><th>troyggja</th><td>grøn</td><td></td><td>blá</td></tr>
+            <tr><th>kjóli</th><td>gulur</td><td>reyður</td><td></td></tr>
+          </tbody>
+        </table>
+        <p class="hint">Les talvuna, vel lit omanfyri myndina og lita.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  Lesing.pad('#lita', {
+    image: { src: 'img/skriva-tekst-2.jpg', snar: 'Skriva_tekst_til_mynd_2.JPG', alt: 'Eva, Ása og Per' },
+    tools: ['pen', 'crayon', 'eraser'],
+    colors: [{ hex: '#000000', name: 'svart' }, { hex: '#e3342f', name: 'reytt' }, { hex: '#f6e05e', name: 'gult' }, { hex: '#8b5a2b', name: 'brúnt' }, { hex: '#3182ce', name: 'blátt' }, { hex: '#2f855a', name: 'grønt' }],
+    size: { min: 3, max: 50, value: 10 },
+    save: 'mynd-sida-21.png',
+    label: 'Lita myndina'
+  });
+</script>
+</body>
+</html>

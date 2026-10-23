@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 5 – Lita og skriva – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-05">
+<main>
+  <h1>Lita og skriva</h1>
+  <p class="center"><span class="instructions">Lita myndina soleiðis: brúnt hár – bláa troyggju – gulan ketil – gráan komfýr</span></p>
+
+  <div class="cols left-wide">
+    <div class="task">
+      <h2>Lita myndina</h2>
+      <div id="lita"></div>
+    </div>
+
+    <div class="task">
+      <h2>Skriva um myndina:</h2>
+      <textarea class="essay" id="tekstur" rows="12" placeholder="Skriva her …" aria-label="Skriva um myndina"></textarea>
+    </div>
+  </div>
+</main>
+
+<script>
+  Lesing.pad('#lita', {
+    image: { src: 'img/skriva-tekst.jpg', snar: 'Skriva_tekst_til_mynd.JPG', alt: 'Per stendur við komfýrin við einum katli' },
+    tools: ['pen', 'crayon', 'eraser'],
+    colors: [{ hex: '#8B4513', name: 'brúnt' }, { hex: '#1E90FF', name: 'blátt' }, { hex: '#FFD700', name: 'gult' }, { hex: '#808080', name: 'grátt' }],
+    size: { min: 4, max: 60, value: 16 },
+    save: 'lita-mynd-sida-5.png',
+    label: 'Lita myndina'
+  });
+</script>
+</body>
+</html>

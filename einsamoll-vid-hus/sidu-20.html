@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 20 – Set ring um tað rætta – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-20">
+<main>
+  <h1>Set ring um tað rætta</h1>
+  <p class="sub">Set ring um <b>ja</b> ella <b>nei</b>. Bókstavirnir gera tvey orð.</p>
+
+  <div class="task">
+    <h2>Set ring um ja ella nei</h2>
+    <div id="janei"></div>
+  </div>
+
+  <div class="task">
+    <h2>Set x við tað rætta!</h2>
+    <div id="x"></div>
+  </div>
+</main>
+
+<script>
+  Lesing.janei('#janei', {
+    cols: 2,
+    rows: [
+      ['Tey gjørdu nógvar køkur', 'a', 'ja'],
+      ['Tey settu tær á borðið', 'E', 'nei'],
+      ['Tey settu tær aftur í ovnin', 'b', 'ja'],
+      ['Ása tók køkurnar út', 'v', 'nei'],
+      ['Eva tók køkurnar út', 'b', 'ja'],
+      ['Tær vóru ov myrkar', 'a', 'nei'],
+      ['Tær vóru ov ljósar', 'i', 'ja'],
+      ['Tær vóru ikki bakaðar', 'n', 'nei'],
+    ],
+    ja: 'abbi', nei: 'Evan'
+  });
+
+  Lesing.xq('#x', { text: 'Nei-bókstavirnir gera eitt navn. Er tað ein', options: ['drongur', 'genta', 'hundur'], correct: 'drongur' });
+</script>
+</body>
+</html>

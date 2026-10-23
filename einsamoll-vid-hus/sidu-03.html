@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 3 – Set ring um tað rætta – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-03">
+<main>
+  <h1>Set ring um tað rætta</h1>
+  <p class="sub">Set ring um <b>ja</b> ella <b>nei</b>. Bókstavirnir gera tvey orð.</p>
+
+  <div class="cols">
+    <div class="task">
+      <h2>Uppgáva A – Set ring um ja ella nei</h2>
+      <div id="janei"></div>
+    </div>
+
+    <div class="stack">
+      <div class="task">
+        <h2>Úrslitið – hvørji orð fært tú?</h2>
+        <div id="ord"></div>
+        <div id="x"></div>
+      </div>
+      <div class="decor">
+        <img src="img/eva-asa-per.jpg" data-snar="Eva_asa_per.JPG" alt="Eva, Ása og Per – mynd úr bókini">
+        <div class="caption">Eva, Ása og Per</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  Lesing.janei('#janei', {
+    rows: [
+      ['Børnini eita Per, Ása og Eva', 'h', 'ja'],
+      ['Mamman og Eva fara at ferðast', 'm', 'nei'],
+      ['Mamman og pápin fara at ferðast', 'u', 'ja'],
+      ['Tey fara til Havnar', 'ú', 'nei'],
+      ['Tey fara til ommu og abba', 'n', 'ja'],
+      ['Omma er sjúk', 's', 'nei'],
+      ['Abbi er sjúkur', 'd', 'ja'],
+      ['Børnini kunnu ikki koma við', 'u', 'ja'],
+      ['Tey skulu ansa húsinum', 'r', 'ja'],
+    ],
+    ja: 'hundur', nei: 'mús', result: '#ord'
+  });
+
+  Lesing.xq('#x', { text: 'Set x við tað rætta! Er hetta', options: ['bygdir', 'nøvn', 'dýr'], correct: 'dýr' });
+</script>
+</body>
+</html>

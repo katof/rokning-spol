@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 4 – Set tað rætta inn – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+<style>
+  .sentences p{ font-size:1.15em }
+  .sentences .slot{ min-width:90px }
+  .navn-grid{ display:grid; grid-template-columns:1fr 130px; gap:12px 18px; max-width:620px; align-items:end }
+  .navn-grid .h{ font-weight:800 }
+  .flokkur{ grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)) }
+  .aboutme{ border-style:dashed; background:linear-gradient(0deg, rgba(255,250,220,.45), rgba(255,250,220,.45)) }
+</style>
+</head>
+<body data-page="sidu-04">
+<main>
+  <h1>Set tað rætta inn</h1>
+
+  <div class="task" id="aldur">
+    <h2>Uppgáva A – Skriva rætta aldurin</h2>
+    <div class="cols left-wide">
+      <div class="sentences">
+        <p>Eva var <span class="slot"><input type="text" inputmode="numeric" data-answer="10|tíggju" aria-label="Aldur hjá Evu"></span> ár</p>
+        <p>Ása var <span class="slot"><input type="text" inputmode="numeric" data-answer="9|níggju" aria-label="Aldur hjá Ásu"></span> ár</p>
+        <p>Per var <span class="slot"><input type="text" inputmode="numeric" data-answer="7|sjey" aria-label="Aldur hjá Per"></span> ár</p>
+      </div>
+      <aside class="hintbox" aria-label="Hjálp">
+        <div class="t">Hjálp: aldur</div>
+        <div class="chips"><span class="chip-static">7 ár</span><span class="chip-static">9 ár</span><span class="chip-static">10 ár</span></div>
+      </aside>
+    </div>
+    <div id="aldur-knappar"></div>
+  </div>
+
+  <div class="task aboutme">
+    <h2>✍️ Uppgáva B – Um teg</h2>
+
+    <h3>Hvussu nógv ár ert tú?</h3>
+    <input class="line" type="text" placeholder="Skriva her …" style="max-width:560px" aria-label="Hvussu nógv ár ert tú?">
+
+    <h3>Eigur tú systkin?</h3>
+    <input class="line" type="text" placeholder="Ja ella nei – og hvussu nógv?" style="max-width:560px" aria-label="Eigur tú systkin?">
+
+    <h3>Um ja: hvussu eita tey, og hvussu gomul eru tey?</h3>
+    <div class="navn-grid">
+      <div class="h">Navn</div><div class="h">Ár</div>
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn 1"><input class="line" type="text" placeholder="ár" aria-label="Ár 1">
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn 2"><input class="line" type="text" placeholder="ár" aria-label="Ár 2">
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn 3"><input class="line" type="text" placeholder="ár" aria-label="Ár 3">
+    </div>
+
+    <h3>Hvussu eita børnini í tínum flokki?</h3>
+    <div class="linegrid flokkur">
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum">
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum">
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum">
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum">
+      <input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum"><input class="line" type="text" placeholder="Navn" aria-label="Navn í flokkinum">
+    </div>
+  </div>
+</main>
+
+<script>
+  Lesing.fill('#aldur', { actions: '#aldur-knappar' });
+</script>
+</body>
+</html>

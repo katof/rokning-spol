@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 2 – Set ring um tað, sum er á myndini – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-02">
+<main>
+  <h1>Set ring um tað, sum er á myndini!</h1>
+  <p class="sub">Tekna ringar á myndina, set ring um orðini og skriva tey.</p>
+
+  <div class="cols left-narrow">
+    <div class="task">
+      <h2>Myndin</h2>
+      <div id="tekning"></div>
+    </div>
+
+    <div class="stack">
+      <div class="task">
+        <h2>Set ring um orðini, sum eru á myndini</h2>
+        <div id="ord"></div>
+      </div>
+
+      <div class="task">
+        <h2>Skriva orðini her:</h2>
+        <div id="linjur"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const RAETT = ['hús', 'vindeyga', 'gardinur', 'hurð', 'trappa', 'urtapottur', 'blóma', 'kona', 'stólur'];
+
+  Lesing.pad('#tekning', {
+    image: { src: 'img/hus.jpg', snar: 'Hvat_er_a_myndini.JPG', alt: 'Mynd av húsi við hurð, vindeygum, trappu og eini konu' },
+    tools: ['pen'], colors: [{ hex: '#C62026', name: 'reytt' }], size: false, sizeValue: 6,
+    label: 'Tekna ringar á myndina'
+  });
+
+  Lesing.wordbox('#ord', {
+    words: ['gardinur', 'urtapottur', 'hús', 'stólur', 'kona', 'vindeyga', 'song', 'sól', 'trappa', 'hurð', 'tunna', 'dunna', 'lás', 'blóma', 'bátur'],
+    correct: RAETT
+  });
+
+  Lesing.lines('#linjur', { answers: RAETT, suggest: true });
+</script>
+</body>
+</html>

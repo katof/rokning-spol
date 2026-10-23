@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 7 (c) – Til handils – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-07c">
+<main>
+  <h1>Til handils</h1>
+  <p class="lead">Tú fert at keypa. Tú skalt keypa <b>10 ting</b>. Skriva seðilin!</p>
+
+  <div class="task">
+    <h2>Innkeypslisti</h2>
+    <div id="sedil"></div>
+    <p class="pad-note">Skriva við fingrinum, pennum ella músini. Fleiri kunnu skriva í senn.</p>
+  </div>
+</main>
+
+<script>
+  Lesing.pad('#sedil', {
+    tools: ['pen', 'chalk'],
+    colors: [
+      { hex: '#111111', name: 'svart' }, { hex: '#1E90FF', name: 'blátt' }, { hex: '#2e7d32', name: 'grønt' }, { hex: '#b71c1c', name: 'reytt' },
+      { hex: '#8B4513', name: 'brúnt' }, { hex: '#FF8F00', name: 'appilsingult' }, { hex: '#9C27B0', name: 'lilla' }, { hex: '#555555', name: 'grátt' }
+    ],
+    size: { min: 2, max: 60, value: 10 },
+    guides: ['lines', 'none'],
+    height: 620,
+    save: 'innkeypslisti.png',
+    label: 'Skriva innkeypslistan'
+  });
+</script>
+</body>
+</html>

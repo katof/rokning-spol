@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 5–9 – Skriva rætta tekstin til myndirnar – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-05-09">
+<main>
+  <h1>Skriva rætta tekstin til myndirnar</h1>
+  <p class="sub">Flyt setningarnar niðanfyri til røttu myndina – ella trýst á ein setning og síðan á myndina. Trýst á <b>Kanna</b>, tá tú ert liðug/ur.</p>
+
+  <div id="match"></div>
+</main>
+
+<script>
+  Lesing.match('#match', {
+    cards: [
+      { key: 'evasa',  img: 'img/lita-mynd.jpg',    snar: 'Lita_mynd.JPG',             alt: 'Tvær gentur sita og tosa' },
+      { key: 'kust',   img: 'img/kust-spann.jpg',   snar: 'Kust_spann.JPG',            alt: 'Spann, kustar og ríva' },
+      { key: 'sukur',  img: 'img/kona-bakar.jpg',   snar: 'Kona_bakar.JPG',            alt: 'Genta við posa og skál' },
+      { key: 'komfyr', img: 'img/skriva-tekst.jpg', snar: 'Skriva_tekst_til_mynd.JPG', alt: 'Drongur við komfýr og ketil' },
+    ],
+    chips: [
+      { key: 'evasa',  text: 'Eva og Ása ætla sær at baka' },
+      { key: 'komfyr', text: 'Per stendur við komfýrin' },
+      { key: 'sukur',  text: 'Eva fær sær sukrið' },
+      { key: 'kust',   text: 'Børnini skulu vaska gólv' },
+    ],
+    reveal: true
+  });
+</script>
+</body>
+</html>

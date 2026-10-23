@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 4 og 5 – Svara ja ella nei – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-04-05">
+<main>
+  <h1>Svara ja ella nei</h1>
+  <p class="sub">Set ring um <b>ja</b> ella <b>nei</b>. Bókstavirnir gera tvey orð.</p>
+
+  <div class="cols">
+    <div class="task">
+      <h2>Uppgáva A – Svara ja ella nei</h2>
+      <div id="janei"></div>
+    </div>
+
+    <div class="task">
+      <h2>Úrslitið – hvørji orð fært tú?</h2>
+      <div id="ord"></div>
+      <div id="x"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  Lesing.janei('#janei', {
+    rows: [
+      ['Eva er 10 ár', 'm', 'ja'],
+      ['Ása er 6 ár', 'p', 'nei'],
+      ['Per er 7 ár', 'a', 'ja'],
+      ['Mamman og pápi verða burtur allan dagin', 'm', 'ja'],
+      ['Tey koma heim klokkan trý', 'á', 'nei'],
+      ['Tey koma heim klokkan sjey', 'm', 'ja'],
+      ['Per verður so kedur', 'p', 'nei'],
+      ['Mamman ger mat til børnini', 'a', 'ja'],
+      ['Pápin hjálpir henni', 'i', 'nei'],
+      ['Børnini skulu bara hita matin', 'n', 'ja'],
+      ['Eva, Ása og Per fara at gráta', 'n', 'nei'],
+    ],
+    ja: 'mamman', nei: 'pápin', result: '#ord'
+  });
+
+  Lesing.xq('#x', {
+    text: 'Set x við tað rætta! Hvar fara tey bæði?',
+    options: [{ v: 'abba', label: 'Til ommu og abba' }, { v: 'handil', label: 'Til handils' }, { v: 'skúla', label: 'Í skúla' }],
+    correct: 'abba'
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 12 – Finn villurnar – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-12">
+<main>
+  <h1>Finn villurnar</h1>
+  <p class="sub">Set X á myndina, har villurnar eru. Vel síðan fimm orð í kassanum og skriva tey.</p>
+
+  <div class="task" style="max-width:1100px; margin-inline:auto">
+    <h2>Set X har, sum villurnar eru</h2>
+    <div id="villur"></div>
+  </div>
+
+  <div class="cols">
+    <div class="task">
+      <h2>Vel fimm orð</h2>
+      <div id="ord"></div>
+    </div>
+    <div class="task">
+      <h2>Skriva tey fimm orðini her:</h2>
+      <div id="linjur"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const RAETT = ['hestahali', 'kragi', 'eyga', 'hond', 'bein'];
+
+  Lesing.pad('#villur', {
+    image: { src: 'img/villur.jpg', snar: 'Villur.JPG', alt: 'Mynd við villum' },
+    tools: ['x'], colors: [{ hex: '#c62828', name: 'reytt' }],
+    size: { min: 16, max: 120, value: 44 },
+    clearLabel: 'Strika øll X',
+    save: 'finn-villur.png',
+    label: 'Set X á myndina'
+  });
+
+  Lesing.wordbox('#ord', {
+    words: ['hestahali', 'skógvur', 'bein', 'munnur', 'troyggja', 'eyga', 'kjóli', 'hond', 'kragi', 'oyra'],
+    correct: RAETT, max: 5
+  });
+
+  Lesing.lines('#linjur', { answers: RAETT, suggest: true, placeholder: 'Skriva her …' });
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 14 og 15 – Villiniborg – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-14-15">
+<main>
+  <h1>Villiniborg</h1>
+  <p class="sub">Finn vegin gjøgnum villiniborgina, og finn útav, hvat børnini gera!</p>
+
+  <div class="cols">
+    <div class="task">
+      <h2>Tekna vegin</h2>
+      <div id="maze"></div>
+      <h3>Skriva bókstavirnar, tú fann í villiniborgini:</h3>
+      <input class="line" type="text" aria-label="Bókstavirnir úr villiniborgini" style="font-size:1.4rem; letter-spacing:.15em">
+    </div>
+
+    <div class="stack">
+      <div class="task">
+        <img src="img/baka.jpg" data-snar="Hvat_er_a_myndini_baka.JPG" alt="Børnini baka" style="display:block; width:100%; height:auto; border-radius:10px">
+      </div>
+      <div class="task">
+        <h2>Hvat er á myndini?</h2>
+        <div id="ord"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  Lesing.pad('#maze', {
+    image: { src: 'img/villiniborg.jpg', snar: 'villiniborg.jpeg', alt: 'Villiniborg' },
+    tools: ['pen'], colors: [{ hex: '#0e7afe', name: 'blátt' }],
+    size: { min: 3, max: 28, value: 8 },
+    label: 'Tekna vegin gjøgnum villiniborgina'
+  });
+
+  Lesing.wordbox('#ord', {
+    words: ['mjøl', 'fløska', 'kanna', 'klokka', 'sukur', 'Ása', 'mamma', 'pápi', 'Eva', 'Per', 'deiggj', 'børn'],
+    correct: ['mjøl', 'fløska', 'sukur', 'Ása', 'Eva', 'Per', 'deiggj', 'børn']
+  });
+</script>
+</body>
+</html>

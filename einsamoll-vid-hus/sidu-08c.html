@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 8 (c) – Lita myndina – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-08c">
+<main>
+  <h1>Lita myndina</h1>
+  <p class="center"><span class="instructions">Eva: gult hár og reyða blusu &nbsp;•&nbsp; Ása: svart hár og grøna blusu</span></p>
+
+  <div class="task" style="max-width:1200px; margin-inline:auto">
+    <div id="lita"></div>
+  </div>
+</main>
+
+<script>
+  Lesing.pad('#lita', {
+    image: { src: 'img/lita-mynd.jpg', snar: 'Lita_mynd.JPG', alt: 'Eva og Ása sita við borðið' },
+    tools: ['pen', 'crayon', 'marker', 'dots', 'eraser'],
+    colors: [{ hex: '#FFD500', name: 'gult' }, { hex: '#E11900', name: 'reytt' }, { hex: '#000000', name: 'svart' }, { hex: '#2E8B57', name: 'grønt' }],
+    size: { min: 2, max: 70, value: 12 },
+    save: 'lita-mynd.png',
+    label: 'Lita myndina'
+  });
+</script>
+</body>
+</html>

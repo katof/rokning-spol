@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 12 og 13 – Svara ja ella nei – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-12-13">
+<main>
+  <h1>Svara <em>ja</em> ella <em>nei</em></h1>
+  <p class="sub">Skriva <b>ja</b> ella <b>nei</b> í kassan. Bókstavirnir gera tvey orð.</p>
+
+  <div class="task" style="max-width:1100px; margin-inline:auto">
+    <div id="janei"></div>
+    <h2 style="margin-top:18px">Set x við tað rætta!</h2>
+    <div id="x"></div>
+  </div>
+</main>
+
+<script>
+  Lesing.janei('#janei', {
+    mode: 'type',
+    rows: [
+      ['Tey fóru ikki innaftur', 'r', 'nei'],
+      ['Tey fóru inn', 's', 'ja'],
+      ['Húsið var so tómt', 'p', 'ja'],
+      ['Mamman og pápin vóru farin', 'a', 'ja'],
+      ['Per dámdi væl', 'í', 'nei'],
+      ['Ása vildi fegin fara eftir rívuni', 'v', 'nei'],
+      ['Ása tímdi ikki at fara eftir rívuni', 'k', 'ja'],
+      ['Hon vildi baka', 'i', 'ja'],
+      ['Øll fara at sópa', 'a', 'nei'],
+    ],
+    ja: 'spaki', nei: 'ríva'
+  });
+
+  Lesing.xq('#x', { text: 'Orðini, tú fekst – eru tað', options: ['dýr', 'amboð', 'lond'], correct: 'amboð' });
+</script>
+</body>
+</html>

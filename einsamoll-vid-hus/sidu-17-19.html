@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 17–19 – Skriva rætta tekstin til myndirnar – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-17-19">
+<main>
+  <h1>Skriva rætta tekstin til myndirnar</h1>
+  <p class="sub">Flyt setningin til røttu myndina, og skriva setningin undir myndina. Trýst á <b>Kanna</b>, tá tú ert liðug/ur.</p>
+
+  <div id="match"></div>
+</main>
+
+<script>
+  Lesing.match('#match', {
+    cards: [
+      { key: 'mjol',  img: 'img/tekst-3.jpg', snar: 'Skriva_raett_tekst_til_mynd_3.JPG', alt: 'Mynd 1' },
+      { key: 'egg',   img: 'img/tekst-2.jpg', snar: 'Skriva_raett_tekst_til_mynd_2.JPG', alt: 'Mynd 2' },
+      { key: 'sukur', img: 'img/tekst-4.jpg', snar: 'Skriva_raett_tekst_til_mynd_4.JPG', alt: 'Mynd 3' },
+      { key: 'harid', img: 'img/tekst-1.jpg', snar: 'Skriva_raett_tekst_til_mynd.JPG',   alt: 'Mynd 4' },
+    ],
+    chips: [
+      { key: 'mjol',  text: 'Eva fekk mjøl á seg' },
+      { key: 'egg',   text: 'Eva misti tvey egg á gólvið' },
+      { key: 'sukur', text: 'Per misti sukurpakkan' },
+      { key: 'harid', text: 'Ása fekk deiggj í hárið' },
+    ],
+    typed: {
+      mjol: 'Eva fekk mjøl á seg',
+      egg: 'Eva misti tvey egg á gólvið',
+      sukur: 'Per misti sukurpakkan',
+      harid: 'Ása fekk deiggj í hárið'
+    }
+  });
+</script>
+</body>
+</html>

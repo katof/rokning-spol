@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 16 og 17 – Set inn tað rætta – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+<style>
+  .sentences p{ font-size:1.15em }
+  .sentences .slot{ min-width:130px }
+</style>
+</head>
+<body data-page="sidu-16-17">
+<main>
+  <h1>Set inn tað rætta</h1>
+
+  <div class="task" id="t1">
+    <h2>Skriva orðini, sum mangla</h2>
+    <div class="hintbox" style="display:inline-block; margin-bottom:10px">
+      <div class="t">Orðini</div>
+      <div class="chips"><span class="chip-static">køkur</span><span class="chip-static">hárið</span><span class="chip-static">sukur</span></div>
+    </div>
+    <div class="sentences">
+      <p>Tú tekur ov nógv <span class="slot"><input type="text" data-answer="sukur" maxlength="8" aria-label="Orð 1"></span>, segði Eva.</p>
+      <p>Eg havi ofta verið hjá, tá mamma bakar <span class="slot"><input type="text" data-answer="køkur" maxlength="8" aria-label="Orð 2"></span>, segði Per.</p>
+      <p>Ása fekk deiggj í <span class="slot"><input type="text" data-answer="hárið" maxlength="8" aria-label="Orð 3"></span>.</p>
+    </div>
+    <div id="t1-knappar"></div>
+  </div>
+
+  <div class="task">
+    <h2>Tekna børnini her:</h2>
+    <div id="tekna"></div>
+  </div>
+</main>
+
+<script>
+  Lesing.fill('#t1', { actions: '#t1-knappar' });
+
+  Lesing.pad('#tekna', {
+    tools: ['rainbow', 'pen', 'marker', 'crayon', 'dots', 'spray', 'confetti', 'snow'],
+    colors: [
+      { hex: '#111111', name: 'svart' }, { hex: '#d32f2f', name: 'reytt' }, { hex: '#1976d2', name: 'blátt' }, { hex: '#2e7d32', name: 'grønt' },
+      { hex: '#f9a825', name: 'gult' }, { hex: '#6d4c41', name: 'brúnt' }, { hex: '#7b1fa2', name: 'lilla' }, { hex: '#c2185b', name: 'ljósareytt' },
+      { hex: '#ff6f00', name: 'appilsingult' }, { hex: '#455a64', name: 'grátt' }, { hex: '#00acc1', name: 'túrkis' }, { hex: '#8bc34a', name: 'ljósagrønt' }
+    ],
+    size: { min: 2, max: 70, value: 12 },
+    guides: ['lines', 'dots', 'none'],
+    height: 640,
+    save: 'bornini.png',
+    label: 'Tekna børnini'
+  });
+</script>
+</body>
+</html>

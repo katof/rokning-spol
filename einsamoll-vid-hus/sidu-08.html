@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Síða 8 – Set ring um tað rætta – Mín fyrsta lesing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="lesing.css">
+<script src="lesing.js"></script>
+</head>
+<body data-page="sidu-08">
+<main>
+  <h1>Set ring um tað rætta</h1>
+  <p class="sub">Set ring um <b>ja</b> ella <b>nei</b>. Bókstavirnir gera tvey orð.</p>
+
+  <div class="task">
+    <h2>Set ring um ja ella nei</h2>
+    <div id="janei"></div>
+  </div>
+
+  <div class="task">
+    <h2>Set x við tað rætta!</h2>
+    <div id="x"></div>
+  </div>
+
+  <div class="task">
+    <h2>Set ring um fuglar í kassanum</h2>
+    <div id="fuglar"></div>
+  </div>
+</main>
+
+<script>
+  Lesing.janei('#janei', {
+    cols: 2,
+    rows: [
+      ['Per kann sópa vegin', 's', 'ja'],
+      ['Ása kann vaska upp', 'á', 'nei'],
+      ['Ása kann reinsa túnið', 't', 'ja'],
+      ['Gólvið skal sópast', 'l', 'nei'],
+      ['Gólvið skal vaskast', 'a', 'ja'],
+      ['Per skal vaska gólvið', 'k', 'nei'],
+      ['Eva skal vaska gólvið', 'r', 'ja'],
+      ['Øll skulu vaska upp', 'i', 'ja'],
+      ['Børnini skulu einki gera', 'a', 'nei'],
+    ],
+    ja: 'stari', nei: 'álka'
+  });
+
+  Lesing.xq('#x', { text: 'Orðini, tú fekst – eru tað', options: ['fiskar', 'fuglar', 'flugur'], correct: 'fuglar' });
+
+  Lesing.wordbox('#fuglar', {
+    words: ['stari', 'hundur', 'dúgva', 'ugla', 'ketta', 'likka', 'mús', 'spurvur', 'kúgv', 'ross', 'kráka', 'ravnur', 'filur', 'mási'],
+    correct: ['stari', 'dúgva', 'ugla', 'likka', 'spurvur', 'kráka', 'ravnur', 'mási']
+  });
+</script>
+</body>
+</html>
