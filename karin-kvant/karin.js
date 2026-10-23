@@ -31,11 +31,25 @@ window.K = (() => {
   // ---- talubóblan ----
   const bubble = { x: 1215, y: 560, w: 370, max: 30 };
   function setBubble(p) { Object.assign(bubble, p); }
+  // brýtur tekstin eftir tí, sum veruliga er pláss fyri í bóbluni (mátar hvørja linju í SVG'inum)
+  function wrapMeasured(text, maxW, g) {
+    const probe = el("text", { x: -9999, y: -9999 }, g);
+    const lines = []; let line = "";
+    for (const word of String(text).split(" ")) {
+      const t = line ? line + " " + word : word;
+      probe.textContent = t;
+      if (line && probe.getComputedTextLength() > maxW) { lines.push(line); line = word; } else line = t;
+    }
+    if (line) lines.push(line);
+    probe.remove();
+    return lines;
+  }
   function say(text) {
     const g = document.getElementById("bubble");
     g.replaceChildren();
-    const lines = wrap(text, bubble.max);
-    const { x, y, w } = bubble, h = 44 + lines.length * 36 + 10;
+    const { x, y, w } = bubble;
+    const lines = wrapMeasured(text, w - 36, g);
+    const h = 44 + lines.length * 36 + 10;
     el("rect", { x, y, width: w, height: h, rx: 20 }, g);
     el("path", { d: `M${x + 30} ${y + h} L${x + 20} ${y + h + 36} L${x + 70} ${y + h}`, fill: "#fff", stroke: "var(--c)", "stroke-width": 3 }, g);
     el("path", { d: `M${x + 32} ${y + h} H${x + 68}`, stroke: "#fff", "stroke-width": 5 }, g);
