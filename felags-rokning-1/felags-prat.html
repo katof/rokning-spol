@@ -268,7 +268,7 @@ function plusMinus() {
                : `Á garðinum sita ${a} fuglar. ${b} ${b === 1 ? "fuglur flýgur" : "fuglar flúgva"} burtur. Hvussu nógvir eru eftir?`);
   el("rect", { x: 150, y: 560, width: 1300, height: 40, fill: "#a0703a", stroke: "var(--ink)", "stroke-width": 4 });
   for (let i = 0; i < 9; i++) el("rect", { x: 190 + i * 150, y: 600, width: 30, height: 200, fill: "#a0703a", stroke: "var(--ink)", "stroke-width": 4 });
-  const bird = (x, y, flyAway) => text(flyAway ? "🕊️" : "🐦", x, y, 110, flyAway ? { opacity: .9 } : {});
+  const bird = (x, y, flyAway) => text("🐦", x, y, 110, flyAway ? { transform: `rotate(-20 ${x} ${y})` } : {});
   for (let i = 0; i < a; i++) bird(260 + i * 150, 500, false);
   if (plus) for (let i = 0; i < b; i++) bird(260 + (a + i) * 150, 230, true);
   else for (let i = 0; i < b; i++) { const t = board.querySelectorAll("text")[a - 1 - i]; t.setAttribute("opacity", .35); bird(+t.getAttribute("x") + 40, 200, true); }
