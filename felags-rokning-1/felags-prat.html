@@ -64,6 +64,14 @@
   footer .nav button { font-size: clamp(13px, 1.1vw, 20px); padding: .1em .7em; }
   footer .nav button.on { background: var(--leaf); color: #fff; }
   footer .tab { background: #dbe9b8; padding: 2px 12px; white-space: nowrap; }
+  /* Fuglar sum flúgva (Felags prát 8): dúva upp og niður, hálla og flakka við veingjunum */
+  .fly { transform-box: fill-box; transform-origin: 50% 50%; animation: fly 1.1s ease-in-out infinite alternate; }
+  .fly text { transform-box: fill-box; transform-origin: 50% 60%; animation: flap .32s ease-in-out infinite alternate; }
+  .fly .wind { transform-box: fill-box; animation: wind .55s ease-in-out infinite alternate; }
+  @keyframes fly { from { transform: translateY(0) rotate(-24deg); } to { transform: translateY(-26px) rotate(-12deg); } }
+  @keyframes flap { from { transform: scaleY(1); } to { transform: scaleY(.86); } }
+  @keyframes wind { from { opacity: .25; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) { .fly, .fly text, .fly .wind { animation: none; } .fly { transform: rotate(-20deg); } }
   @media (max-width: 1100px) { #foot { display: none; } }
 </style>
 </head>
@@ -268,7 +276,13 @@ function plusMinus() {
                : `Á garðinum sita ${a} fuglar. ${b} ${b === 1 ? "fuglur flýgur" : "fuglar flúgva"} burtur. Hvussu nógvir eru eftir?`);
   el("rect", { x: 150, y: 560, width: 1300, height: 40, fill: "#a0703a", stroke: "var(--ink)", "stroke-width": 4 });
   for (let i = 0; i < 9; i++) el("rect", { x: 190 + i * 150, y: 600, width: 30, height: 200, fill: "#a0703a", stroke: "var(--ink)", "stroke-width": 4 });
-  const bird = (x, y, flyAway) => text("🐦", x, y, 110, flyAway ? { transform: `rotate(-20 ${x} ${y})` } : {});
+  const bird = (x, y, flyAway) => {
+    if (!flyAway) return text("🐦", x, y, 110);
+    const g = el("g", { class: "fly", style: `animation-delay:${(-Math.random() * 1.2).toFixed(2)}s` });
+    for (let i = 0; i < 3; i++) el("path", { class: "wind", d: `M${x + 60} ${y - 26 + i * 24} q 16 ${i % 2 ? 5 : -5} 34 0`, fill: "none", stroke: "#a9bccf", "stroke-width": 6, "stroke-linecap": "round", style: `animation-delay:${-i * .18}s` }, g);
+    text("🐦", x, y, 110, {}, g);
+    return g;
+  };
   for (let i = 0; i < a; i++) bird(260 + i * 150, 500, false);
   if (plus) for (let i = 0; i < b; i++) bird(260 + (a + i) * 150, 230, true);
   else for (let i = 0; i < b; i++) { const t = board.querySelectorAll("text")[a - 1 - i]; t.setAttribute("opacity", .35); bird(+t.getAttribute("x") + 40, 200, true); }
