@@ -9,7 +9,7 @@
 
   // Forsíðan á Snar. Skift hesa slóðina, um fílan fær aðra slóð. (Verður síðan opnað
   // innan í forsíðuni, sendir forsíðan sína egnu slóð, og hon verður brúkt í staðin.)
-  const HUB_URL = 'https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/Lesing/0_Min_fyrsta_lesing_Einsamoll_vid_hus.html';
+  const HUB_URL = 'https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/HTML_f%C3%ADlur/Talvan.html';
   // Myndirnar liggja í img/. Finst ein mynd ikki har, verður hon tikin frá Snar í staðin.
   const SNAR_IMG = 'https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/Lesing/';
 
