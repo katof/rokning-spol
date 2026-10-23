@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hvussu gamalt er mammutbeinið? – Karin Kvant</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap">
+<link rel="stylesheet" href="karin.css">
+<style>
+  /* Stage: the find at the left, a sample of 32 karbon atoms in the middle that decay half-life by half-life, readouts at the right, time controls along the bottom */
+  .find rect { fill: #fff; stroke: var(--c); stroke-width: 3; }
+  .find .pic { font-size: 120px; text-anchor: middle; }
+  .find .name { font-size: 30px; font-weight: 900; fill: var(--ink); text-anchor: middle; }
+  .find .left { font-size: 28px; font-weight: 800; fill: var(--c-dark); text-anchor: middle; }
+  .sample rect { fill: #fff; stroke: #e9dfe5; stroke-width: 3; }
+  .atom circle { stroke: #fff; stroke-width: 3; }
+  .atom.c circle { fill: var(--ink); }
+  .atom.n circle { fill: #d9d4de; }
+  .atom text { font-size: 22px; font-weight: 900; text-anchor: middle; dominant-baseline: central; fill: #fff; }
+  .atom.n text { fill: #7a7280; }
+  .bar rect.bg { fill: #f1eef0; }
+  .bar rect.fg { fill: var(--c); }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="num">🦣</div>
+    <h1>Hvussu gamalt er mammutbeinið?</h1>
+    <span class="book">Karin Kvant</span>
+    <p class="task" id="task"></p>
+    <div class="tools">
+      <span class="stars" id="score">0 / 10</span>
+      <a id="home" class="home" href="https://snardev.ctrl.fo/temasavn/karin-kvant" aria-label="Heim til filmarnar" title="Heim til filmarnar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-6h4v6h5V10"/></svg></a>
+      <button id="again" type="button">Byrja umaftur</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <svg id="board" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" aria-label="32 karbon-14 atom, sum sundurfalla hálvtíð fyri hálvtíð">
+      <rect width="1600" height="900" fill="#fffafc"/>
+      <g id="find" class="find"></g>
+      <g id="sample" class="sample"></g>
+      <g id="panel"></g>
+      <g id="bubble" class="bubble"></g>
+      <g id="actions"></g>
+    </svg>
+    <p class="done-msg" id="done" hidden>Flott! Tú dugir at áseta aldur við karbon-14. 🦣</p>
+  </div>
+
+  <footer>
+    <span class="pg">Film 18</span>
+    <span>#mammuttar #kolevni #fornlutir</span>
+    <span class="tab">9. fl.: α-, β-, γ-geislingar · 10. fl.: joniserandi geislingar</span>
+  </footer>
+</div>
+
+<script src="karin.js"></script>
+<script>
+const { el, shuffle, say, fmt } = K;
+const findG = document.getElementById("find");
+const sampleG = document.getElementById("sample");
+const panelG = document.getElementById("panel");
+K.setBubble({ x: 1200, y: 520, w: 380 });
+
+const HALF = 5730;           // ár
+const N = 32;
+let k = 0;                   // hálvtíðir, sum eru farnar
+let order = [];              // í hvørjari raðfylgju atomini sundurfalla
+let locked = false;
+
+function remaining() { return N / Math.pow(2, k); }
+function pct() { return 100 / Math.pow(2, k); }
+
+// ---- the sample ----------------------------------------------------------
+function drawSample() {
+  sampleG.replaceChildren();
+  el("rect", { x: 430, y: 110, width: 700, height: 420, rx: 24 }, sampleG);
+  el("text", { class: "panel-h", x: 450, y: 150 }, sampleG).textContent = "Karbon-14 atomini í royndini";
+  const decayed = N - remaining();
+  for (let i = 0; i < N; i++) {
+    const col = i % 8, row = Math.floor(i / 8);
+    const x = 500 + col * 80, y = 215 + row * 85;
+    const gone = order.indexOf(i) < decayed;
+    const g = el("g", { class: "atom " + (gone ? "n" : "c") }, sampleG);
+    el("circle", { cx: x, cy: y, r: 30 }, g);
+    el("text", { x, y: y + 1 }, g).textContent = gone ? "N" : "C";
+  }
+  // tíðarlinja undir
+  el("text", { class: "panel-h", x: 450, y: 590 }, sampleG).textContent = "Tíð";
+  for (let i = 0; i <= 5; i++) {
+    const x = 500 + i * 120;
+    el("circle", { cx: x, cy: 640, r: i === k ? 18 : 10, fill: i <= k ? "var(--c)" : "#e9dfe5" }, sampleG);
+    el("text", { x, y: 690, "text-anchor": "middle", "font-size": 20, "font-weight": 700, fill: "var(--muted)" }, sampleG).textContent = fmt(i * HALF) + " ár";
+    if (i < 5) el("line", { x1: x + 12, y1: 640, x2: x + 108, y2: 640, stroke: i < k ? "var(--c)" : "#e9dfe5", "stroke-width": 6 }, sampleG);
+  }
+}
+
+// ---- readouts -------------------------------------------------------------
+function drawPanel() {
+  panelG.replaceChildren();
+  el("text", { class: "panel-h", x: 1200, y: 80 }, panelG).textContent = "Lesingar";
+  ["h", "t", "c", "a"].forEach((id, i) => el("text", { class: "read", id: "r-" + id, x: 1200, y: 140 + i * 56 }, panelG));
+  const bar = el("g", { class: "bar" }, panelG);
+  el("rect", { class: "bg", x: 1200, y: 380, width: 380, height: 40, rx: 12 }, bar);
+  el("rect", { class: "fg", id: "barfg", x: 1200, y: 380, width: 380, height: 40, rx: 12 }, bar);
+  el("text", { class: "panel-h", x: 1200, y: 455 }, panelG).textContent = "Hálvtíðin hjá karbon-14 er 5 730 ár";
+}
+function setRead(id, label, v) {
+  const t = document.getElementById("r-" + id); t.textContent = "";
+  const a = document.createElementNS(K.NS, "tspan"); a.textContent = label + " ";
+  const b = document.createElementNS(K.NS, "tspan"); b.setAttribute("class", "v"); b.textContent = v;
+  t.append(a, b);
+}
+function updatePanel() {
+  setRead("h", "Hálvtíðir:", k);
+  setRead("t", "Tíð:", fmt(k * HALF) + " ár");
+  setRead("c", "C-14 eftir:", fmt(pct(), k >= 4 ? 3 : 1).replace(",0", "") + " %");
+  setRead("a", "Atom:", fmt(remaining()) + " av " + N);
+  document.getElementById("barfg").setAttribute("width", 380 * pct() / 100);
+}
+
+// ---- the find ---------------------------------------------------------------
+function drawFind(f) {
+  findG.replaceChildren();
+  if (!f) return;
+  el("rect", { x: 40, y: 110, width: 340, height: 420, rx: 24 }, findG);
+  el("text", { class: "pic", x: 210, y: 300 }, findG).textContent = f.pic;
+  el("text", { class: "name", x: 210, y: 400 }, findG).textContent = f.name;
+  el("text", { class: "left", x: 210, y: 460 }, findG).textContent = "C-14 eftir: " + f.pctText;
+}
+
+// ---- controls -------------------------------------------------------------
+function drawControls() {
+  K.clearActions();
+  el("text", { class: "ctl-lbl", x: 780, y: 760 }, document.getElementById("actions")).textContent = "Lat tíðina ganga – ein hálvtíð í senn";
+  K.pm("−", 690, 830, () => { if (!locked && k > 0) { k--; update(); } });
+  K.pm("+", 870, 830, () => { if (!locked && k < 5) { k++; update(); say(k === 1 ? "Ein hálvtíð: helvtin av C-14 atomunum eru vorðin til nitrogen." : "Helvtin av teimum, sum vóru eftir, eru farin aftur."); } });
+  K.button("Kanna", check, { x: 1390, y: 792 });
+}
+function update() { drawSample(); updatePanel(); }
+
+// ---- rounds ---------------------------------------------------------------
+const ROUNDS = [
+  { type: "set", task: "Trýst á +, so ein hálvtíð gongur. Hvussu nógv C-14 er eftir tá? Trýst á Kanna, tá ið ein hálvtíð er farin.", k: 1, say: "Eftir eina hálvtíð er helvtin eftir: 16 av 32 atomum – 50 %." },
+  { type: "quiz", q: "Hvat er hálvtíð?", options: ["Hálva tíðina, sum eitt atom livir", "Tíðin, til helvtin av C-14 atomunum eru sundurfallin", "5 730 dagar", "Tíðin, til alt C-14 er burtur"], answer: 1, say: "Hvørja hálvtíð hvørvur helvtin av tí, sum er eftir. Tí verður C-14 ongantíð heilt burtur – bara minni og minni." },
+  { type: "set", task: "Lat tíðina ganga, til 25 % av C-14 er eftir.", k: 2, say: "Tvær hálvtíðir: helvtin av helvtini = ein fjórðingur. 11 460 ár." },
+  { type: "find", find: { pic: "🦣", name: "Mammutbein", pctText: "12,5 %" }, k: 3, task: "Hetta mammutbeinið hevur 12,5 % C-14 eftir. Stilla tíðina, so tað passar. Hvussu gamalt er beinið?", say: "Tríggjar hálvtíðir: 3 × 5 730 = 17 190 ár. So gamalt er mammutbeinið!" },
+  { type: "find", find: { pic: "⛵", name: "Fornur bátur", pctText: "50 %" }, k: 1, task: "Ein fornur bátur hevur 50 % C-14 eftir í træinum. Hvussu gamal er hann?", say: "Ein hálvtíð: 5 730 ár. Træið vaks fyri 5 730 árum síðani." },
+  { type: "quiz", q: "Eitt C-14 atom sendir út ein β-partikul (eina elektron). Hvat verður úr tí?", options: ["Karbon-12", "Nitrogen-14", "Helium", "Einki – tað hvørvur"], answer: 1, say: "Ein nevtron verður til eina proton og sendir elektronina út. 6 protonir verða til 7: nitrogen." },
+  { type: "find", find: { pic: "🎨", name: "Hellismálning", pctText: "6,25 %" }, k: 4, task: "Kolið í eini hellismálning hevur 6,25 % C-14 eftir. Hvussu gomul er málningin?", say: "Fýra hálvtíðir: 22 920 ár. Fólk málaðu í hellum fyri so langari tíð síðani!" },
+  { type: "quiz", q: "Hví kann man ikki brúka C-14 til at áseta aldurin á einum steini?", options: ["Steinar eru ov tungir", "Steinar hava ongantíð livað og tikið C-14 til sín", "Steinar hava ov nógv C-14", "Tað kann man væl"], answer: 1, say: "Plantur taka C-14 upp úr luftini, og dýr eta planturnar. Steinar gera einki av tí – so har er einki at telja." },
+  { type: "quiz", q: "Hvar fær ein mammutur C-14 frá, meðan hann livir?", options: ["Úr sólarljósinum", "Úr matinum – plantur taka C-14 upp úr luftini", "Úr vatninum", "Hann hevur tað frá føðingini"], answer: 1, say: "Meðan mammuturin livir, fær hann alla tíðina nýtt C-14 úr matinum. Tá ið hann doyr, steðgar tað – og klokkan byrjar at ganga." },
+  { type: "find", find: { pic: "💀", name: "Beinagrind", pctText: "3,125 %" }, k: 5, task: "Ein beinagrind hevur 3,125 % C-14 eftir. Hvussu gomul er hon?", say: "Fimm hálvtíðir: 28 650 ár. Longri aftur enn hetta verður C-14 so lítið, at tað er ringt at máta." },
+];
+let round = 0, current = null;
+
+function start() { K.done(false); round = 0; next(); }
+function next() {
+  locked = false;
+  K.clearActions();
+  K.score(round, ROUNDS.length);
+  k = 0; order = shuffle([...Array(N).keys()]);
+  if (round === ROUNDS.length) { drawFind(null); update(); K.task("Liðugt!"); K.done(true); say("Tú dugir at áseta aldur!"); return; }
+  current = ROUNDS[round];
+  if (current.type === "quiz") {
+    locked = true;
+    drawFind(null); update();
+    K.task("Svara spurninginum.");
+    say("Hvat heldur tú?");
+    K.options(current.options.map((o, i) => ({ label: o, right: i === current.answer })), { onRight: () => { say(current.say); round++; setTimeout(next, 4200); }, onWrong: () => say("Nei, royn umaftur.") });
+    return;
+  }
+  drawFind(current.find || null);
+  update();
+  K.task(current.task);
+  say(current.type === "find" ? "Trýst á +, til lesingin „C-14 eftir“ passar við fundin." : "Trýst á + og hygg at atomunum.");
+  drawControls();
+}
+function check() {
+  if (locked) return;
+  if (k !== current.k) {
+    say(k < current.k ? "Ikki enn. Lat meira tíð ganga." : "Ov langt! Trýst á −.");
+    return;
+  }
+  locked = true;
+  say("Rætt! " + current.say);
+  K.clearActions(); K.tick(1390, 830);
+  round++;
+  setTimeout(next, 4200);
+}
+
+drawPanel();
+K.init({ again: start });
+start();
+</script>
+</body>
+</html>

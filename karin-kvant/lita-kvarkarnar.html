@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lita kvarkarnar – Karin Kvant</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap">
+<link rel="stylesheet" href="karin.css">
+<style>
+  /* Stage: colour legend at the left, a pool of quarks in the middle, the target card and the nucleus being built at the right */
+  :root { --qr: #E24B4B; --qg: #2E9E4F; --qb: #3C5BD6; }
+  .leg text { font-size: 26px; font-weight: 800; fill: var(--ink); }
+  .leg .eq { font-size: 30px; font-weight: 900; text-anchor: middle; }
+  .quark { cursor: pointer; }
+  .quark circle { stroke: #fff; stroke-width: 4; filter: drop-shadow(0 4px 6px rgba(0,0,0,.25)); }
+  .quark.sel circle { stroke: var(--ink); stroke-width: 8; }
+  .quark.bad circle { stroke: var(--wrong); stroke-width: 8; }
+  .quark text { font-size: 46px; font-weight: 900; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .quark:hover circle { filter: brightness(1.1) drop-shadow(0 4px 6px rgba(0,0,0,.25)); }
+  .target rect { fill: #fff; stroke: var(--c); stroke-width: 3; }
+  .target .h { font-size: 22px; font-weight: 800; fill: var(--muted); }
+  .target .name { font-size: 42px; font-weight: 900; fill: var(--c); }
+  .target .f { font-size: 40px; font-weight: 900; fill: var(--ink); }
+  .target .cnt { font-size: 28px; font-weight: 800; fill: var(--ink); }
+  .nucl { fill: #fff; stroke: #f0c6d8; stroke-width: 3; }
+  .built circle { fill: #fff; stroke: var(--ink); stroke-width: 4; }
+  .built text { font-size: 30px; font-weight: 900; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="num">⚛</div>
+    <h1>Lita kvarkarnar</h1>
+    <span class="book">Karin Kvant</span>
+    <p class="task" id="task"></p>
+    <div class="tools">
+      <span class="stars" id="score">0 / 8</span>
+      <a id="home" class="home" href="https://snardev.ctrl.fo/temasavn/karin-kvant" aria-label="Heim til filmarnar" title="Heim til filmarnar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-6h4v6h5V10"/></svg></a>
+      <button id="again" type="button">Byrja umaftur</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <svg id="board" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" aria-label="Kvarkar í trimum litum, sum skulu setast saman til protonir og nevtronir">
+      <rect width="1600" height="900" fill="#fffafc"/>
+      <g id="legend" class="leg"></g>
+      <g id="pool"></g>
+      <g id="panel"></g>
+      <g id="bubble" class="bubble"></g>
+      <g id="actions"></g>
+    </svg>
+    <p class="done-msg" id="done" hidden>Hvítt, hvítt, hvítt! Tú dugir at seta kvarkar saman. ⚛</p>
+  </div>
+
+  <footer>
+    <span class="pg">Film 17 · 12</span>
+    <span>Varlig litsamanseting · Standardmodellið!</span>
+    <span class="tab">9. fl.: atomið er bygt av protonum, nevtronum og elektronum · ískoyti: kvarkar og sterka kraftin</span>
+  </footer>
+</div>
+
+<script src="karin.js"></script>
+<script>
+const { el, rnd, shuffle, say } = K;
+const poolG = document.getElementById("pool");
+const panelG = document.getElementById("panel");
+K.setBubble({ x: 1200, y: 640, w: 380 });
+
+const COL = { r: "var(--qr)", g: "var(--qg)", b: "var(--qb)" };
+const COLNAME = { r: "reyður", g: "grønur", b: "bláur" };
+const NAMES = { p: "proton", n: "nevtron" };
+
+// ---- legend ---------------------------------------------------------------
+(function legend() {
+  const g = document.getElementById("legend");
+  el("text", { class: "panel-h", x: 40, y: 80 }, g).textContent = "Kvarkar hava lit";
+  ["r", "g", "b"].forEach((c, i) => {
+    el("circle", { cx: 75, cy: 150 + i * 90, r: 32, fill: COL[c] }, g);
+    el("text", { x: 125, y: 160 + i * 90 }, g).textContent = COLNAME[c];
+  });
+  el("text", { class: "eq", x: 160, y: 440 }, g).textContent = "reyður + grønur + bláur";
+  el("text", { class: "eq", x: 160, y: 480 }, g).textContent = "= hvítt";
+  el("circle", { cx: 160, cy: 560, r: 40, fill: "#fff", stroke: "var(--ink)", "stroke-width": 4 }, g);
+  el("text", { class: "panel-h", x: 40, y: 660 }, g).textContent = "u = upp-kvarkur";
+  el("text", { class: "panel-h", x: 40, y: 696 }, g).textContent = "d = niður-kvarkur";
+  el("text", { class: "panel-h", x: 40, y: 760 }, g).textContent = "proton = u u d";
+  el("text", { class: "panel-h", x: 40, y: 796 }, g).textContent = "nevtron = u d d";
+})();
+
+// ---- the pool of quarks ----------------------------------------------------
+const CELLS = [];
+[450, 715, 980].forEach(x => [200, 430, 660].forEach(y => CELLS.push([x, y])));
+let quarks = [];   // { c, f, cell, x, y, sel }
+let locked = false;
+
+function newQuark(c, cell, f) {
+  const [cx, cy] = CELLS[cell];
+  return { c, f: f || (Math.random() < .5 ? "u" : "d"), cell, x: cx + rnd(-40, 40), y: cy + rnd(-30, 30), sel: false };
+}
+// three of each colour; every colour has both a u and a d, so any target can always be built
+function fillPool() {
+  quarks = [];
+  const cells = shuffle(CELLS.map((_, i) => i));
+  let k = 0;
+  for (const c of ["r", "g", "b"]) {
+    const fl = shuffle(Math.random() < .5 ? ["u", "u", "d"] : ["u", "d", "d"]);
+    for (let i = 0; i < 3; i++) quarks.push(newQuark(c, cells[k++], fl[i]));
+  }
+}
+function respawn(removed) {
+  for (const q of removed) {
+    const same = quarks.filter(x => x.c === q.c).map(x => x.f);
+    const f = same.length === 2 && same[0] === same[1] ? (same[0] === "u" ? "d" : "u") : null;
+    quarks.push(newQuark(q.c, q.cell, f));
+  }
+}
+
+function drawPool() {
+  poolG.replaceChildren();
+  for (const q of quarks) {
+    const g = el("g", { class: "quark" + (q.sel ? " sel" : ""), role: "button", "aria-label": q.f + " " + COLNAME[q.c] }, poolG);
+    el("circle", { cx: q.x, cy: q.y, r: 48, fill: COL[q.c] }, g);
+    el("text", { x: q.x, y: q.y + 2 }, g).textContent = q.f;
+    g.addEventListener("click", () => pick(q, g));
+    q.g = g;
+  }
+}
+
+function pick(q) {
+  if (locked) return;
+  q.sel = !q.sel;
+  q.g.classList.toggle("sel", q.sel);
+  const sel = quarks.filter(x => x.sel);
+  if (sel.length < 3) return;
+  judge(sel);
+}
+
+// ---- the panel: target and the nucleus being built -------------------------
+let built = { p: 0, n: 0 };
+function drawPanel() {
+  panelG.replaceChildren();
+  const g = el("g", { class: "target" }, panelG);
+  el("rect", { x: 1200, y: 60, width: 380, height: 230, rx: 20 }, g);
+  el("text", { class: "h", x: 1220, y: 95 }, g).textContent = "Mál";
+  el("text", { class: "name", id: "t-name", x: 1220, y: 145 }, g);
+  el("text", { class: "f", id: "t-f", x: 1220, y: 200 }, g);
+  el("text", { class: "cnt", id: "t-cnt", x: 1220, y: 260 }, g);
+  el("text", { class: "panel-h", x: 1200, y: 340 }, panelG).textContent = "Kjarnin, tú byggir";
+  el("circle", { class: "nucl", cx: 1390, cy: 480, r: 120 }, panelG);
+  el("g", { id: "built" }, panelG);
+}
+function updatePanel() {
+  const r = current;
+  const name = document.getElementById("t-name"), f = document.getElementById("t-f"), cnt = document.getElementById("t-cnt");
+  if (!r || r.type !== "build") { name.textContent = ""; f.textContent = ""; cnt.textContent = ""; }
+  else if (r.target === "he") { name.textContent = "Helium-kjarni"; f.textContent = "2 p + 2 n"; cnt.textContent = `Protonir ${built.p} / 2 · Nevtronir ${built.n} / 2`; }
+  else if (r.target === "any") { name.textContent = "Hvítir partiklar"; f.textContent = "u u d ella u d d"; cnt.textContent = `Bygdir: ${built.p + built.n} / ${r.count}`; }
+  else { name.textContent = r.target === "p" ? "Proton" : "Nevtron"; f.textContent = r.target === "p" ? "u u d" : "u d d"; cnt.textContent = `Bygdar: ${built[r.target]} / ${r.count}`; }
+  const bg = document.getElementById("built");
+  bg.replaceChildren();
+  const list = [...Array(built.p).fill("p"), ...Array(built.n).fill("n")];
+  const spots = [[0, 0], [-62, -36], [62, -36], [0, 72], [-62, 36], [62, 36], [0, -72]];
+  list.forEach((k, i) => {
+    const [dx, dy] = spots[i % spots.length];
+    const g = el("g", { class: "built" }, bg);
+    el("circle", { cx: 1390 + dx, cy: 480 + dy, r: 34 }, g);
+    el("text", { x: 1390 + dx, y: 482 + dy }, g).textContent = k;
+  });
+}
+
+// ---- judging three picked quarks -------------------------------------------
+function judge(sel) {
+  locked = true;
+  const colours = new Set(sel.map(q => q.c));
+  const u = sel.filter(q => q.f === "u").length;
+  const kind = u === 2 ? "p" : u === 1 ? "n" : null;
+  const fail = msg => { say(msg); sel.forEach(q => q.g.classList.add("bad")); setTimeout(() => { sel.forEach(q => { q.sel = false; q.g.classList.remove("sel", "bad"); }); locked = false; }, 1400); };
+  if (colours.size < 3) return fail("Ikki hvítt! Tú skalt hava ein reyðan, ein grønan og ein bláan.");
+  if (!kind) return fail(u === 3 ? "Litirnir eru rættir, men u u u er ongin proton. Ein proton er u u d." : "Litirnir eru rættir, men d d d er ongin nevtron. Ein nevtron er u d d.");
+  const t = current.target;
+  if ((t === "p" || t === "n") && kind !== t) return fail(`Hvítt – men tað var ein ${NAMES[kind]} (${kind === "p" ? "u u d" : "u d d"}). Vit skulu hava ${t === "p" ? "protonir: u u d" : "nevtronir: u d d"}.`);
+  if (t === "he" && built[kind] >= 2) return fail(`Nóg nógvar ${kind === "p" ? "protonir" : "nevtronir"}. Nú tørvar ${kind === "p" ? "nevtronir (u d d)" : "protonir (u u d)"}.`);
+  // hvítt og rætt: kvarkarnir smelta saman í kjarnanum
+  built[kind]++;
+  quarks = quarks.filter(q => !q.sel);
+  respawn(sel);
+  drawPool();
+  updatePanel();
+  const finished = t === "he" ? built.p === 2 && built.n === 2 : t === "any" ? built.p + built.n >= current.count : built[t] >= current.count;
+  if (finished) {
+    say(current.say);
+    K.clearActions(); K.tick();
+    round++;
+    setTimeout(next, 3200);
+  } else {
+    say(`Hvítt! Ein ${NAMES[kind]}. ${t === "he" ? "Halt fram." : "Ein afturat!"}`);
+    setTimeout(() => { locked = false; }, 600);
+  }
+}
+
+// ---- rounds ---------------------------------------------------------------
+const ROUNDS = [
+  { type: "build", target: "p", count: 2, task: "Bygg 2 protonir. Ein proton er u u d – og kvarkarnir skulu vera reyður, grønur og bláur.", say: "Tríggir kvarkar í trimum litum: hvítt. Soleiðis er hvør proton." },
+  { type: "build", target: "n", count: 2, task: "Bygg 2 nevtronir. Ein nevtron er u d d.", say: "Nevtronin hevur eisini tríggjar kvarkar – bara ein u og tveir d." },
+  { type: "quiz", task: "Svara spurninginum.", q: "Hví kunnu vit ikki síggja ein kvark einsamallan?", options: ["Teir eru ov smáir", "Kvarkar eru altíð saman í hvítum bólkum", "Teir ferðast ov skjótt", "Teir eru ósýniligir"], answer: 1,
+    say: "Ein litaður kvarkur kann ikki vera einsamallur. Tí finna vit teir altíð í hvítum bólkum – sum protonir og nevtronir." },
+  { type: "build", target: "he", task: "Bygg ein helium-kjarna: 2 protonir og 2 nevtronir.", say: "Tveir protonir og tveir nevtronir: ein helium-kjarni. Legg tvær elektronir uttanum, og tú hevur helium!" },
+  { type: "quiz", task: "Svara spurninginum.", q: "Hvat heldur kvarkunum saman í eini proton?", options: ["Tyngdarkraftin", "Sterka kraftin – gluonir", "Magnetismur", "Einki, teir liggja bara har"], answer: 1,
+    say: "Gluonir bera sterku kraftina. Hon er so sterk, at kvarkarnir ongantíð sleppa leysir." },
+  { type: "build", target: "any", count: 4, task: "Bygg 4 hvítar partiklar – protonir ella nevtronir, sum tú vilt.", say: "Hvítt hvørja ferð. Tú hevur tamarhald á litunum!" },
+  { type: "quiz", task: "Svara spurninginum.", q: "Ein u-kvarkur hevur ladning +⅔ og ein d-kvarkur −⅓. Hvørja ladning hevur ein proton (u u d)?", options: ["+1", "0", "−1", "+2"], answer: 0,
+    say: "⅔ + ⅔ − ⅓ = 1. Tí er protonin positiv. Og nevtronin (u d d): ⅔ − ⅓ − ⅓ = 0." },
+  { type: "quiz", task: "Svara spurninginum.", q: "Hvat er alt tað, tú sært kring teg, gjørt úr?", options: ["Bert protonir", "Kvarkar og elektronir", "Ljós", "Nevtronir og ljós"], answer: 1,
+    say: "Kvarkar í protonum og nevtronum – og elektronir uttanum. Tað er alt, sum skal til!" },
+];
+let round = 0, current = null;
+
+function start() { K.done(false); round = 0; next(); }
+
+function next() {
+  locked = false;
+  K.clearActions();
+  K.score(round, ROUNDS.length);
+  built = { p: 0, n: 0 };
+  if (round === ROUNDS.length) { current = null; poolG.replaceChildren(); updatePanel(); K.task("Liðugt!"); K.done(true); say("Tú dugir at lita kvarkar!"); return; }
+  current = ROUNDS[round];
+  K.task(current.task);
+  if (current.type === "build") {
+    fillPool(); drawPool(); updatePanel();
+    say("Trýst á tríggjar kvarkar. Tað skal verða hvítt!");
+  } else {
+    poolG.replaceChildren(); updatePanel(); locked = true;
+    K.wrap(current.q, 40).forEach((l, i) => { el("text", { class: "q", x: 715, y: 330 + i * 52 }, poolG).textContent = l; });
+    say("Hvat heldur tú?");
+    K.options(current.options.map((o, i) => ({ label: o, right: i === current.answer })), { onRight: () => { say(current.say); round++; setTimeout(next, 3600); }, onWrong: () => say("Nei, royn umaftur.") });
+  }
+}
+
+drawPanel();
+K.init({ again: start });
+start();
+</script>
+</body>
+</html>

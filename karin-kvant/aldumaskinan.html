@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aldumaskinan – Karin Kvant</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap">
+<link rel="stylesheet" href="karin.css">
+<style>
+  /* Stage: readouts at the left, a running wave in the middle with a float bobbing on it, mode and colour at the right, + / − controls along the bottom */
+  .wave { fill: none; stroke: var(--sky); stroke-width: 8; stroke-linecap: round; }
+  .base { stroke: #d9d4de; stroke-width: 2; stroke-dasharray: 8 8; }
+  .float { fill: var(--wrong); stroke: #fff; stroke-width: 3; }
+  .lam path { fill: none; stroke: var(--ink); stroke-width: 3; }
+  .lam text { font-size: 30px; font-weight: 900; fill: var(--ink); text-anchor: middle; }
+  .swatch { stroke: #e9dfe5; stroke-width: 3; }
+  .mode { font-size: 30px; font-weight: 900; fill: var(--c-dark); }
+</style>
+</head>
+<body class="ljos">
+<div class="page">
+  <header>
+    <div class="num">〰</div>
+    <h1>Aldumaskinan</h1>
+    <span class="book">Karin Kvant</span>
+    <p class="task" id="task"></p>
+    <div class="tools">
+      <span class="stars" id="score">0 / 10</span>
+      <a id="home" class="home" href="https://snardev.ctrl.fo/temasavn/karin-kvant" aria-label="Heim til filmarnar" title="Heim til filmarnar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-6h4v6h5V10"/></svg></a>
+      <button id="again" type="button">Byrja umaftur</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <svg id="board" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" aria-label="Ein alda, sum tú kanst stilla aldulongd og amplitudu á">
+      <rect width="1600" height="900" fill="#fffafc"/>
+      <g id="panel"></g>
+      <g id="scene"></g>
+      <g id="bubble" class="bubble"></g>
+      <g id="actions"></g>
+    </svg>
+    <p class="done-msg" id="done" hidden>Flott! Tú dugir at stilla aldur. 〰 Stutt alda = høgur frekvensur.</p>
+  </div>
+
+  <footer>
+    <span class="pg">Film 14 · 4</span>
+    <span>At gera aldur í mótan · Mín yndislitur</span>
+    <span class="tab">9. fl.: sveiggitíð og frekvens · 9. fl.: ljós, litir og ælabogi · 10. fl.: ljósspektur</span>
+  </footer>
+</div>
+
+<script src="karin.js"></script>
+<script>
+const { el, say, fmt } = K;
+const panelG = document.getElementById("panel");
+const sceneG = document.getElementById("scene");
+K.setBubble({ x: 1200, y: 420, w: 380 });
+
+// ---- the wave -------------------------------------------------------------
+const X0 = 380, X1 = 1140, Y0 = 400;
+const V = 4;                 // ferðin á vatnaldunum, m/s
+let mode = "vatn";           // "vatn" ella "ljos"
+let lam = 4;                 // aldulongd: m (vatn) ella nm (ljós)
+let amp = 2;                 // amplituda 1–4 (bert vatn)
+let phase = 0, last = 0;
+let locked = false;
+
+// aldulongd í nm → litur (nærum, nóg gott til ein skíggja)
+function wl2rgb(w) {
+  let r = 0, g = 0, b = 0;
+  if (w < 440) { r = -(w - 440) / 60; b = 1; }
+  else if (w < 490) { g = (w - 440) / 50; b = 1; }
+  else if (w < 510) { g = 1; b = -(w - 510) / 20; }
+  else if (w < 580) { r = (w - 510) / 70; g = 1; }
+  else if (w < 645) { r = 1; g = -(w - 645) / 65; }
+  else { r = 1; }
+  const f = w < 420 ? .7 + .3 * (w - 400) / 20 : w > 680 ? .75 + .25 * (700 - w) / 20 : 1;
+  const c = v => Math.round(255 * Math.pow(v * f, .8));
+  return `rgb(${c(r)},${c(g)},${c(b)})`;
+}
+function colourName(w) {
+  return w < 440 ? "fjólublátt" : w < 490 ? "blátt" : w < 520 ? "blágrønt" : w < 565 ? "grønt" : w < 590 ? "gult" : w < 620 ? "appilsingult" : "reytt";
+}
+
+function freq() { return V / lam; }          // Hz (vatn)
+function period() { return lam / V; }        // s (vatn)
+function lamPx() { return mode === "vatn" ? lam * 90 : lam * 0.4; }
+function ampPx() { return mode === "vatn" ? amp * 45 : 110; }
+
+let wavePath, floatDot, lamG, swatch;
+function drawScene() {
+  sceneG.replaceChildren();
+  el("line", { class: "base", x1: X0, y1: Y0, x2: X1, y2: Y0 }, sceneG);
+  wavePath = el("path", { class: "wave" }, sceneG);
+  // ein bóllur, sum sveiggjar upp og niður: so síggja vit sveiggitíðina
+  el("line", { class: "base", x1: 760, y1: 170, x2: 760, y2: 630 }, sceneG);
+  floatDot = el("circle", { class: "float", cx: 760, cy: Y0, r: 16 }, sceneG);
+  // mát fyri eina aldulongd
+  lamG = el("g", { class: "lam" }, sceneG);
+}
+function drawFrame(t) {
+  const dt = last ? (t - last) / 1000 : 0; last = t;
+  // vatn: fasan flytur seg við frekvensinum (hálva ferð, so eyguni fylgja við); ljós: altíð somu ferð
+  phase += dt * 2 * Math.PI * (mode === "vatn" ? freq() * 0.5 : 1.2);
+  const L = lamPx(), A = ampPx();
+  let d = "";
+  for (let x = X0; x <= X1; x += 6) {
+    const y = Y0 - A * Math.sin(2 * Math.PI * (x - X0) / L - phase);
+    d += (x === X0 ? "M" : "L") + x + " " + y.toFixed(1) + " ";
+  }
+  wavePath.setAttribute("d", d);
+  wavePath.style.stroke = mode === "ljos" ? wl2rgb(lam) : "var(--sky)";
+  floatDot.setAttribute("cy", (Y0 - A * Math.sin(2 * Math.PI * (760 - X0) / L - phase)).toFixed(1));
+  floatDot.style.display = mode === "vatn" ? "" : "none";
+  requestAnimationFrame(drawFrame);
+}
+function drawLam() {
+  lamG.replaceChildren();
+  const L = lamPx(), y = Y0 + ampPx() + 50;
+  const a = 760 - L / 2, b = 760 + L / 2;
+  el("path", { d: `M${a} ${y - 14} V${y + 14} M${a} ${y} H${b} M${b} ${y - 14} V${y + 14}` }, lamG);
+  el("text", { x: 760, y: y + 44 }, lamG).textContent = "ein aldulongd = " + (mode === "vatn" ? fmt(lam) + " m" : fmt(lam) + " nm");
+}
+
+// ---- readouts -------------------------------------------------------------
+function drawPanel() {
+  panelG.replaceChildren();
+  el("text", { class: "panel-h", x: 40, y: 80 }, panelG).textContent = "Lesingar";
+  ["l", "f", "t", "v", "a"].forEach((k, i) => el("text", { class: "read", id: "r-" + k, x: 40, y: 140 + i * 56 }, panelG));
+  el("text", { class: "mode", id: "mode", x: 1200, y: 90 }, panelG);
+  swatch = el("rect", { class: "swatch", id: "swatch", x: 1200, y: 120, width: 380, height: 200, rx: 20 }, panelG);
+  el("text", { class: "read", id: "r-c", x: 1200, y: 365 }, panelG);
+}
+function setRead(k, label, v) {
+  const t = document.getElementById("r-" + k); t.textContent = "";
+  if (v === null) return;
+  const a = document.createElementNS(K.NS, "tspan"); a.textContent = label + " ";
+  const b = document.createElementNS(K.NS, "tspan"); b.setAttribute("class", "v"); b.textContent = v;
+  t.append(a, b);
+}
+function updatePanel() {
+  if (mode === "vatn") {
+    setRead("l", "Aldulongd λ:", fmt(lam) + " m");
+    setRead("f", "Frekvensur f:", fmt(freq(), 2) + " Hz");
+    setRead("t", "Sveiggitíð T:", fmt(period(), 2) + " s");
+    setRead("v", "Ferð v:", fmt(V) + " m/s");
+    setRead("a", "Amplituda:", fmt(amp));
+    document.getElementById("mode").textContent = "Aldur á vatni";
+    swatch.setAttribute("fill", "#e8f0fb");
+    setRead("c", "f = v / λ  ·  T = 1 / f", "");
+  } else {
+    setRead("l", "Aldulongd λ:", fmt(lam) + " nm");
+    setRead("f", "", null); setRead("t", "", null); setRead("v", "", null); setRead("a", "", null);
+    setRead("f", "1 nm =", "ein milliónta partur av mm");
+    document.getElementById("mode").textContent = "Ljós";
+    swatch.setAttribute("fill", wl2rgb(lam));
+    setRead("c", "Litur:", colourName(lam));
+  }
+  drawLam();
+}
+
+// ---- controls -------------------------------------------------------------
+const ctlG = el("g", { id: "ctl" }, document.getElementById("board"));
+document.getElementById("board").insertBefore(ctlG, document.getElementById("bubble"));
+function drawControls() {
+  ctlG.replaceChildren();
+  const step = mode === "vatn" ? 1 : 20, lo = mode === "vatn" ? 1 : 400, hi = mode === "vatn" ? 8 : 700;
+  el("text", { class: "ctl-lbl", x: 560, y: 755 }, ctlG).textContent = "Aldulongd";
+  K.pm("−", 470, 830, () => { if (!locked && lam > lo) { lam -= step; updatePanel(); } }, ctlG);
+  K.pm("+", 650, 830, () => { if (!locked && lam < hi) { lam += step; updatePanel(); } }, ctlG);
+  if (mode === "vatn") {
+    el("text", { class: "ctl-lbl", x: 1000, y: 755 }, ctlG).textContent = "Amplituda";
+    K.pm("−", 910, 830, () => { if (!locked && amp > 1) { amp--; updatePanel(); } }, ctlG);
+    K.pm("+", 1090, 830, () => { if (!locked && amp < 4) { amp++; updatePanel(); } }, ctlG);
+  }
+}
+
+// ---- rounds ---------------------------------------------------------------
+const ROUNDS = [
+  { mode: "vatn", task: "Stilla aldulongdina til 2 m.", ok: () => lam === 2, say: "Stutt alda. Hygg at frekvensinum: hann er vaksin!" },
+  { mode: "vatn", task: "Ger eina aldu við frekvensi 1 Hz. (f = v / λ, og v er 4 m/s.)", ok: () => Math.abs(freq() - 1) < .01, say: "4 m/s deilt við 4 m = 1 alda um sekundið: 1 Hz." },
+  { quiz: "Hvat hendir við frekvensinum, tá ið aldulongdin verður styttri?", options: ["Hann veksur", "Hann minkar", "Hann er óbroyttur", "Aldan steðgar"], answer: 0, say: "Styttri aldur – fleiri aldur um sekundið. Frekvensurin veksur." },
+  { mode: "vatn", task: "Ger eina aldu við sveiggitíð 2 s. (T = 1 / f.)", ok: () => Math.abs(period() - 2) < .01, say: "Ein alda hvørja aðru sekund: T = 2 s, f = 0,5 Hz. Sí bóllin sveiggja!" },
+  { mode: "vatn", task: "Ger alduna so høga, sum hon kann (amplituda 4) – uttan at broyta aldulongdina.", ok: () => amp === 4, say: "Amplitudan er hæddin. Hon broytir hvørki frekvens ella aldulongd." },
+  { mode: "ljos", task: "Nú er aldan ljós. Stilla ljósið til reyðan lit.", ok: () => lam >= 620, say: "Reytt ljós hevur ta longstu alduna, vit kunnu síggja – um 700 nm." },
+  { mode: "ljos", task: "Stilla ljósið til bláan lit.", ok: () => lam >= 440 && lam < 490, say: "Blátt ljós hevur stutta aldu og høgan frekvens." },
+  { quiz: "Hvat skilir reyðan og bláan lit í ljósi?", options: ["Ferðin", "Aldulongdin", "Hvussu bjart tað er", "Einki – tað er sami litur"], answer: 1, say: "Litur er aldulongd. Reytt er langt, fjólublátt er stutt – og ælabogin er allar aldulongdirnar í røð." },
+  { mode: "ljos", task: "Stilla ljósið til grønan lit.", ok: () => lam >= 520 && lam < 565, say: "Grønt liggur í miðjuni á ælaboganum, um 530 nm." },
+  { quiz: "Ein alda hevur frekvensin 5 Hz. Hvat er sveiggitíðin?", options: ["5 s", "0,5 s", "0,2 s", "2 s"], answer: 2, say: "T = 1 / f = 1 / 5 = 0,2 s. Fimm aldur um sekundið – hvør tekur 0,2 s." },
+];
+let round = 0, current = null;
+
+function start() { K.done(false); round = 0; next(); }
+function next() {
+  locked = false;
+  K.clearActions();
+  K.score(round, ROUNDS.length);
+  if (round === ROUNDS.length) { K.task("Liðugt!"); K.done(true); say("Tú dugir at stilla aldur!"); ctlG.replaceChildren(); return; }
+  current = ROUNDS[round];
+  if (current.quiz) {
+    locked = true;
+    K.task("Svara spurninginum.");
+    ctlG.replaceChildren();
+    say("Hvat heldur tú?");
+    K.options(current.options.map((o, i) => ({ label: o, right: i === current.answer })), { onRight: () => { say(current.say); round++; setTimeout(next, 3600); }, onWrong: () => say("Nei, royn umaftur.") });
+    return;
+  }
+  if (current.mode !== mode) { mode = current.mode; lam = mode === "vatn" ? 4 : 540; amp = 2; }
+  K.task(current.task);
+  updatePanel();
+  drawControls();
+  say(mode === "vatn" ? "Trýst á + og − og hygg at lesingunum." : "Trýst á + og − og hygg at litinum.");
+  K.button("Kanna", check, { x: 1390, y: 792 });
+}
+function check() {
+  if (locked) return;
+  if (!current.ok()) {
+    const hint = mode === "ljos" ? "Ikki enn. Hugsa um, hvar liturin er í ælaboganum." : "Ikki enn. Hygg at lesingunum til vinstru.";
+    say(hint);
+    return;
+  }
+  locked = true;
+  say("Rætt! " + current.say);
+  K.clearActions(); K.tick(1390, 830);
+  round++;
+  setTimeout(next, 3600);
+}
+
+drawPanel();
+drawScene();
+requestAnimationFrame(drawFrame);
+K.init({ again: start });
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+/* Felags útsjónd fyri Karin Kvant spølini: header row (ring, heiti, uppgáva, Heim, Byrja umaftur),
+   eitt 1600×900 SVG-stage, sum fyllir restina av rammuni, og ein fótur við filmunum og førleikamálunum.
+   Hvørt spæl leggur sínar egnu reglur afturat í egnum <style>. */
+:root {
+  color-scheme: light;
+  --paper: #fffafc;
+  --ink: #1F2328;
+  --muted: #6B7280;
+  --pink: #E2398A; --pink-dark: #B2235F; --pink-soft: #FDE7F1;
+  --sun: #F2A51A; --sun-dark: #C27D06; --sun-soft: #FFF3D9;
+  --sky: #3C5BD6; --sky-dark: #2A3F9C; --sky-soft: #E6EBFB;
+  --ok: #1F7A3A; --wrong: #D23A2F;
+  --c: var(--pink); --c-dark: var(--pink-dark); --c-soft: var(--pink-soft);
+  --font: "Nunito", "Gill Sans", "Trebuchet MS", system-ui, sans-serif;
+}
+html, body { height: 100%; background: var(--paper); color: var(--ink); }
+body { margin: 0; font-family: var(--font); overflow: hidden; }
+.page {
+  height: 100%; box-sizing: border-box;
+  padding-block: 1.2vh 1vh;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 1vh;
+}
+header { display: flex; align-items: center; gap: clamp(12px, 1.5vw, 28px); flex-wrap: wrap; }
+.num {
+  width: clamp(48px, 5vw, 84px); aspect-ratio: 1; border-radius: 50%; flex: none;
+  background: var(--c); color: #fff;
+  display: grid; place-items: center; font-size: clamp(26px, 3vw, 50px); font-weight: 900;
+}
+h1 { margin: 0; font-size: clamp(26px, 3.2vw, 54px); font-weight: 900; letter-spacing: .01em; }
+.book { flex: none; padding: .15em .7em; border-radius: 999px; background: var(--c-soft); color: var(--c-dark);
+  font-size: clamp(14px, 1.4vw, 24px); font-weight: 800; letter-spacing: .03em; white-space: nowrap; }
+.task { margin: 0; font-size: clamp(17px, 2vw, 34px); line-height: 1.25; flex: 1 1 320px; min-width: 0; font-weight: 700; }
+.tools { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-left: auto; }
+.stars { font-size: clamp(18px, 1.8vw, 32px); font-weight: 800; font-variant-numeric: tabular-nums; }
+button, a.home {
+  font: inherit; font-size: clamp(16px, 1.5vw, 26px); font-weight: 800; cursor: pointer;
+  border: 3px solid var(--c); background: #fff; color: var(--ink);
+  padding: .3em .9em; border-radius: 999px; text-decoration: none;
+}
+button:hover, a.home:hover { background: var(--c-soft); }
+button:focus-visible, a.home:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+a.home { display: grid; place-items: center; padding: .3em .45em; align-self: stretch; }
+a.home svg { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.stage { position: relative; min-height: 0; }
+svg#board { width: 100%; height: 100%; display: block; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+svg text { font-family: var(--font); }
+
+/* Karin's talubóbla */
+.bubble rect { fill: #fff; stroke: var(--c); stroke-width: 3; }
+.bubble text { font-size: 28px; fill: var(--ink); font-weight: 700; }
+.bubble .who { font-size: 20px; fill: var(--c); font-weight: 900; }
+
+/* stórir knøttar á stage'inum */
+.act { cursor: pointer; }
+.act rect { fill: var(--c); stroke: var(--c-dark); stroke-width: 4; }
+.act:hover rect { filter: brightness(1.08); }
+.act text { font-size: 40px; font-weight: 900; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.act.off { opacity: .35; pointer-events: none; }
+/* + og − knøttar */
+.pm { cursor: pointer; }
+.pm rect { fill: #fff; stroke: var(--c); stroke-width: 4; }
+.pm:hover rect { fill: var(--c-soft); }
+.pm text { font-size: 52px; font-weight: 900; fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.pm.off { opacity: .3; pointer-events: none; }
+.ctl-lbl { font-size: 28px; font-weight: 800; fill: var(--ink); text-anchor: middle; }
+/* svarmøguleikar */
+.opt { cursor: pointer; }
+.opt rect { fill: #fff; stroke: var(--c); stroke-width: 4; }
+.opt:hover rect { fill: var(--c-soft); }
+.opt.right rect { fill: #E8F6EC; stroke: var(--ok); stroke-width: 7; }
+.opt.wrong rect { fill: #fdf0ee; stroke: var(--wrong); stroke-width: 7; }
+.opt text { font-size: 28px; font-weight: 700; fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.q { font-size: 40px; font-weight: 900; fill: var(--ink); text-anchor: middle; }
+.tick { font-size: 60px; font-weight: 900; fill: var(--ok); text-anchor: middle; dominant-baseline: central; }
+/* lesingar og kort */
+.panel-h { font-size: 24px; font-weight: 800; fill: var(--muted); }
+.read { font-size: 30px; font-weight: 700; fill: var(--ink); }
+.read .v { font-weight: 900; }
+.card rect { fill: #fff; stroke: #e9dfe5; stroke-width: 3; }
+.hint { font-size: 30px; font-weight: 700; fill: #9a8f98; text-anchor: middle; }
+
+.done-msg {
+  position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%);
+  margin: 0; padding: .6em 1.2em; border-radius: 20px; max-width: 90%;
+  background: var(--c-soft); border: 5px solid var(--c);
+  font-size: clamp(24px, 3.4vw, 60px); font-weight: 900; text-align: center;
+  box-shadow: 0 10px 40px rgba(120, 30, 70, .25);
+}
+footer { display: flex; align-items: center; gap: 14px; border-top: 3px solid var(--c); padding-top: .5vh; font-size: clamp(13px, 1.1vw, 20px); flex-wrap: wrap; }
+footer .pg { padding: 0 .6em; height: 2em; border-radius: 999px; border: 3px solid var(--c); display: grid; place-items: center; font-weight: 800; flex: none; }
+footer .tab { margin-left: auto; background: var(--c-soft); padding: 2px 12px; border-radius: 6px; }
+
+/* temalitir: hvørt spæl setur ein av hesum á <body> */
+body.ljos { --c: var(--sun); --c-dark: var(--sun-dark); --c-soft: var(--sun-soft); }
+body.alheim { --c: var(--sky); --c-dark: var(--sky-dark); --c-soft: var(--sky-soft); }
