@@ -415,7 +415,7 @@
   root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
 
   /* ------------------------------------------------------------ Allar 42 lúkurnar */
-  var DEILD = { g: ['Grunddeild', '1.–3. flokkur', '/jol/grunddeild'], m: ['Miðdeild', '4.–6. flokkur', '/jol/middeild'], h: ['Hádeild', '7.–9. flokkur', '/jol/hadeild'] };
+  var DEILD = { g: ['Grunddeild', '1.–3. flokkur', 'grunddeild.html'], m: ['Miðdeild', '4.–6. flokkur', 'middeild.html'], h: ['Hádeild', '7.–9. flokkur', 'hadeild.html'] };
   var EVNI = { sogur: 'Søgur, mál og miðlar', sidir: 'Jól, siðir og søga', stodd: 'Støddfrøði og spøl', ljos: 'Ljós, myrkur og náttúra', gavur: 'Gávur, nýtsla og samfelag', sangur: 'Sangur og leikur', hand: 'Handverk, list og talgild skapan', matur: 'Bakstur og matur' };
   var FAK = { fo: 'Føroyskt', da: 'Danskt', en: 'Enskt', st: 'Støddfrøði', nt: 'Náttúra og tøkni', hl: 'Heimstaðarlæra', al: 'Alisfrøði og evnafrøði', la: 'Landafrøði', sa: 'Samfelagsfrøði', so: 'Søga og samtíð', kr: 'Kristnikunnleiki og átrúnaður', hv: 'Handaverk og list', ml: 'Myndlist og tónleikur' };
   /* [deild, lúka, heiti, lærugreinir, evni, tíð] */
