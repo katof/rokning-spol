@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jól í grunddeildini – Snar.fo</title>
+<link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   Jól í grunddeildini – jólakalendari til 1.–3. flokk.
+   Stílur: barnatekningar og jól. Tjúkkar tussjstrikur, skeivar rammur, jólalitir
+   (reytt, grønt, gult), og litríkar smáar myndir. Alt er avmarkað til .jol.
+   ===================================================================== */
+.jol {
+  --paper: #fffdf7; --ink: #2b2a28; --muted: #6b665c;
+  --red: #d8382c; --green: #2f9b47; --gold: #f4b81c; --blue: #3b6fd8; --purple: #8a3fb0; --pink: #e36aa6;
+  --red-l: #fbd9d4; --green-l: #d6efd9; --gold-l: #fdf0bf; --blue-l: #d9e4fb; --purple-l: #ead9f3;
+  --wobble: 255px 18px 225px 18px / 18px 225px 18px 255px;
+  --wobble2: 18px 225px 18px 255px / 255px 18px 225px 18px;
+  --top: 0px;
+  font-family: Nunito, "Segoe UI", Arial, sans-serif; font-size: 18px; line-height: 1.55; color: var(--ink); background: var(--paper); position: relative;
+  background-image: radial-gradient(circle, #e8e2d6 0 1.6px, transparent 2.2px), radial-gradient(circle, #ece6da 0 1.2px, transparent 1.8px);
+  background-size: 110px 110px, 70px 70px; background-position: 0 0, 35px 40px;
+}
+.jol *, .jol *::before, .jol *::after { box-sizing: border-box; }
+.jol h1, .jol h2, .jol h3 { font-family: "Gochi Hand", "Comic Sans MS", cursive; font-weight: 400; line-height: 1.05; margin: 0; color: var(--ink); }
+.jol p { margin: 0 0 .9em; }
+.jol p:last-child { margin-bottom: 0; }
+.jol a { color: var(--blue); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.jol img { max-width: 100%; height: auto; display: block; }
+.jol button { font-family: inherit; }
+.jg-wrap { width: min(1120px, 100% - 40px); margin: 0 auto; }
+.jg-mono { font-weight: 800; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.jol .jg-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border: 3px solid var(--ink); border-radius: var(--wobble); background: #fff; color: var(--ink); font-family: inherit; font-weight: 800; font-size: 1rem; line-height: 1.1; text-decoration: none; cursor: pointer; box-shadow: 3px 4px 0 rgba(43,42,40,.25); }
+.jol .jg-btn:hover { transform: rotate(-1deg) translateY(-1px); }
+.jol .jg-btn--red { background: var(--red); color: #fff; } .jol .jg-btn--green { background: var(--green); color: #fff; } .jol .jg-btn--gold { background: var(--gold); } .jol .jg-btn--blue { background: var(--blue-l); }
+.jol .jg-btn--sm { padding: 8px 13px; font-size: .9rem; }
+.jol .jg-btn[disabled] { opacity: .4; cursor: default; transform: none; }
+.jg-ic { width: 1.2em; height: 1.2em; flex: none; }
+
+/* ---- Hero ------------------------------------------------------------ */
+.jol-hero { padding: 24px 0 18px; }
+.jg-hero__in { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
+.jg-hero h1 { font-size: clamp(2.6rem, 7vw, 5.4rem); color: var(--red); transform: rotate(-1.5deg); display: inline-block; }
+.jg-hero h1 span { color: var(--green); }
+.jg-hero__lead { font-size: clamp(1.05rem, 1.6vw, 1.25rem); max-width: 58ch; margin-top: 12px; font-weight: 700; }
+.jg-hero__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; }
+.jg-hero__art { position: relative; width: clamp(260px, 36vw, 440px); margin-right: 76px; }
+.jg-hero__art svg { width: 100%; height: auto; }
+.jg-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; z-index: 2; }
+.jg-dog img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--ink); background: #fff; }
+.jg-dog__hat { position: absolute; left: 50%; top: -34%; width: 78%; transform: translateX(-46%); pointer-events: none; }
+.jg-dog__say { display: none; position: absolute; left: 50%; top: -6px; transform: translate(-50%, -100%) scale(.6); opacity: 0; background: #fff; border: 3px solid var(--ink); border-radius: var(--wobble2); color: var(--ink); font-family: "Gochi Hand", cursive; font-size: 1.1rem; padding: 4px 12px; white-space: nowrap; pointer-events: none; transition: transform .2s, opacity .2s; }
+.jg-dog.is-saying .jg-dog__say { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+.jg-dog--hero { width: 70px; height: 70px; right: -80px; bottom: 6px; }
+.jg-dog--peek { width: 58px; height: 58px; }
+.jg-toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 24px); opacity: 0; max-width: calc(100vw - 32px); background: #fff; border: 3px solid var(--ink); border-radius: var(--wobble2); padding: 10px 20px; font-family: "Gochi Hand", cursive; font-size: clamp(1.2rem, 2.6vw, 1.7rem); line-height: 1.2; color: var(--red); text-align: center; z-index: 60; pointer-events: none; box-shadow: 3px 4px 0 rgba(43,42,40,.25); transition: transform .2s, opacity .2s; }
+.jg-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+.jg-dog--tiny { width: 34px; height: 34px; }
+.jg-dog__n { position: absolute; right: -10px; top: -10px; width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--ink); background: var(--gold); color: var(--ink); font-family: "Gochi Hand", cursive; font-size: 1.15rem; line-height: 22px; text-align: center; display: none; z-index: 3; }
+.jg-dog.is-found .jg-dog__n { display: block; animation: jg-wiggle .5s ease-in-out 1; }
+.jg-dog.is-found { animation: jg-wiggle .5s ease-in-out 2; }
+.jg-dog.is-dancing img { animation: jg-dance .5s ease-in-out 6; }
+@keyframes jg-wiggle { 0%,100% { rotate: 0deg; } 25% { rotate: -14deg; } 75% { rotate: 14deg; } }
+@keyframes jg-dance { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg) translateY(-8px); } }
+.jg-cookies { display: flex; gap: 6px; margin: 10px 0 6px; }
+.jg-cookies svg { width: 46px; height: 46px; filter: grayscale(1); opacity: .35; transition: filter .3s, opacity .3s; }
+.jg-cookies svg.is-on { filter: none; opacity: 1; animation: jg-wiggle .5s ease-in-out 1; }
+.jg-dog--peek img { filter: grayscale(1); }
+.jg-dog.is-found img { filter: none; }
+
+/* ---- Pynt ---------------------------------------------------------------- */
+.jg-doodles { display: flex; justify-content: space-between; gap: 6px; padding: 4px 0 10px; }
+.jg-doodles svg { width: clamp(30px, 5vw, 50px); height: auto; aspect-ratio: 1; }
+.jg-doodles svg:nth-child(odd) { transform: rotate(-8deg); } .jg-doodles svg:nth-child(even) { transform: rotate(7deg) translateY(4px); }
+@media (max-width: 700px) { .jg-doodles svg:nth-child(n+7) { display: none; } }
+
+/* ---- Kalendarin -------------------------------------------------------- */
+.jg-cal { padding: 10px 0 36px; }
+.jg-cal__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px 24px; margin-bottom: 16px; }
+.jg-cal__head h2 { font-size: clamp(1.9rem, 3.4vw, 2.8rem); color: var(--green); }
+.jg-legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.jg-legend span { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 2px solid var(--ink); border-radius: 999px; font-weight: 800; font-size: .8rem; background: #fff; }
+.jg-legend i { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--ink); }
+.jg-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
+.jg-door { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; min-height: 168px; padding: 12px 8px 10px; border: 3px solid var(--ink); border-radius: var(--wobble); background: #fff; color: var(--ink); cursor: pointer; font-family: inherit; text-align: center; box-shadow: 3px 4px 0 rgba(43,42,40,.22); transition: transform .12s; }
+.jg-door:nth-child(odd) { border-radius: var(--wobble2); }
+.jg-door:hover { transform: rotate(-1.5deg) scale(1.03); }
+.jg-door[data-c="red"] { background: var(--red-l); } .jg-door[data-c="green"] { background: var(--green-l); } .jg-door[data-c="gold"] { background: var(--gold-l); } .jg-door[data-c="blue"] { background: var(--blue-l); } .jg-door[data-c="purple"] { background: var(--purple-l); }
+.jg-door__n { font-family: "Gochi Hand", cursive; font-size: 2.6rem; line-height: .9; }
+.jg-door__ic { width: 56px; height: 56px; }
+.jg-door__ic svg { width: 100%; height: 100%; }
+.jg-door__t { font-weight: 800; font-size: .88rem; line-height: 1.15; margin-top: auto; }
+.jg-door__d { font-size: .68rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.jg-door.is-locked { background: #f1ede4; cursor: not-allowed; box-shadow: none; color: var(--muted); }
+.jg-door.is-locked:hover { transform: none; }
+.jg-door.is-locked .jg-door__ic { opacity: .35; filter: grayscale(1); }
+.jg-door.is-open { outline: 4px dashed var(--red); outline-offset: 4px; }
+.jg-door.is-done::after { content: "★"; position: absolute; right: 8px; top: 6px; color: var(--gold); font-size: 1.4rem; -webkit-text-stroke: 1.5px var(--ink); }
+
+/* ---- Lúkan, sum er opin ------------------------------------------------ */
+.jg-open { margin-top: 26px; border: 3px solid var(--ink); border-radius: var(--wobble); background: #fff; box-shadow: 5px 6px 0 rgba(43,42,40,.22); display: none; overflow: hidden; }
+.jg-open.is-on { display: block; }
+.jg-open__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; padding: 18px 24px 14px; border-bottom: 3px dashed var(--ink); }
+.jg-open__head h2 { font-size: clamp(1.8rem, 3.4vw, 2.7rem); color: var(--red); }
+.jg-open__fak { display: inline-flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.jg-open__fak span { padding: 3px 10px; border: 2px solid var(--ink); border-radius: 999px; font-size: .78rem; font-weight: 800; background: var(--gold-l); }
+.jg-open__body { display: grid; grid-template-columns: 1.15fr .85fr; }
+.jg-open__col { padding: 20px 24px; }
+.jg-open__col + .jg-open__col { border-left: 3px dashed var(--ink); background: #fffaf0; }
+.jg-part { padding: 14px 0; border-top: 2px dotted #cfc8b8; }
+.jg-part:first-child { border-top: 0; padding-top: 0; }
+.jg-part h3 { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; margin-bottom: 8px; }
+.jg-part h3 svg { width: 30px; height: 30px; flex: none; }
+.jg-part--les h3 { color: var(--red); } .jg-part--tos h3 { color: var(--blue); } .jg-part--ger h3 { color: var(--green); } .jg-part--ord h3 { color: var(--purple); }
+.jg-les { font-size: clamp(1.15rem, 1.9vw, 1.4rem); line-height: 1.55; font-weight: 700; white-space: pre-line; }
+.jg-tos { font-size: 1.15rem; font-weight: 800; padding: 12px 16px; border: 3px solid var(--blue); border-radius: var(--wobble2); background: var(--blue-l); white-space: pre-line; }
+.jg-ger { font-size: 1.05rem; font-weight: 700; white-space: pre-line; }
+.jg-ord { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.jg-ord__w { font-family: "Gochi Hand", cursive; font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--purple); background: var(--purple-l); border: 3px solid var(--ink); border-radius: var(--wobble); padding: 4px 18px; transform: rotate(-2deg); }
+.jg-ord__c { font-weight: 800; }
+.jg-ord__c b { color: var(--red); font-size: 1.3em; }
+.jg-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.jg-det { margin-top: 10px; border: 3px solid var(--ink); border-radius: 14px; background: #fff; }
+.jg-det summary { cursor: pointer; padding: 10px 14px; font-weight: 900; font-size: 1.05rem; list-style: none; display: flex; align-items: center; gap: 8px; }
+.jg-det summary::-webkit-details-marker { display: none; }
+.jg-det summary::before { content: "▸"; color: var(--red); font-size: 1.2em; }
+.jg-det[open] summary::before { content: "▾"; }
+.jg-det__b { padding: 0 14px 12px; font-size: .98rem; white-space: pre-line; }
+.jg-dent { margin-top: 12px; font-size: .9rem; color: var(--muted); font-weight: 700; }
+.jg-yt { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border: 3px solid var(--ink); border-radius: 14px; padding: 0; cursor: pointer; background: #ddd; overflow: hidden; margin-top: 8px; }
+.jg-yt img { width: 100%; height: 100%; object-fit: cover; }
+.jg-yt__play { position: absolute; left: 10px; bottom: 10px; padding: 8px 14px; background: var(--red); color: #fff; border: 3px solid var(--ink); border-radius: 999px; font-weight: 900; font-size: .9rem; }
+.jg-yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.jg-ytcap { font-size: .85rem; color: var(--muted); margin: 6px 0 0; font-weight: 700; }
+.jg-open__foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding: 14px 24px; border-top: 3px dashed var(--ink); background: var(--gold-l); }
+
+/* ---- Sangir --------------------------------------------------------------- */
+.jg-songs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; align-items: start; }
+.jg-song { border: 3px solid var(--ink); border-radius: var(--wobble); background: #fff; padding: 18px 20px; box-shadow: 4px 5px 0 rgba(43,42,40,.22); scroll-margin-top: 90px; }
+.jg-song:nth-child(2) { border-radius: var(--wobble2); background: var(--gold-l); }
+.jg-song:nth-child(3) { background: var(--green-l); }
+.jg-song h3 { font-size: 1.6rem; color: var(--red); }
+.jg-song__by { font-size: .82rem; font-weight: 800; color: var(--muted); margin: 4px 0 10px; }
+.jg-song__t { white-space: pre-line; font-size: 1.05rem; font-weight: 700; line-height: 1.6; }
+.jg-song__t.is-empty { border: 3px dashed var(--ink); border-radius: 14px; padding: 12px 14px; font-size: .92rem; color: var(--muted); white-space: normal; }
+@media (max-width: 860px) { .jg-songs { grid-template-columns: 1fr; } }
+
+/* ---- Niðanfyri ---------------------------------------------------------- */
+.jg-section { padding: 26px 0; }
+.jg-section__in { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(20px, 4vw, 56px); }
+.jg-section h2 { font-size: clamp(1.8rem, 3.2vw, 2.6rem); margin-bottom: 8px; color: var(--green); }
+.jg-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.jg-list a { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; padding: 10px 14px; border: 3px solid var(--ink); border-radius: var(--wobble2); background: #fff; text-decoration: none; color: var(--ink); }
+.jg-list li:nth-child(even) a { border-radius: var(--wobble); }
+.jg-list a:hover { background: var(--gold-l); transform: rotate(-.6deg); }
+.jg-list svg { width: 40px; height: 40px; }
+.jg-list b { font-size: 1.1rem; }
+.jg-list span span { display: block; font-size: .88rem; color: var(--muted); font-weight: 700; }
+.jg-hunt { position: relative; border: 3px solid var(--ink); border-radius: var(--wobble); background: #fff; padding: 20px 22px; box-shadow: 4px 5px 0 rgba(43,42,40,.22); }
+.jg-outro { padding: 30px 0 26px; text-align: center; }
+.jg-outro h2 { font-size: clamp(2.2rem, 6vw, 4.6rem); color: var(--red); transform: rotate(-2deg); display: inline-block; }
+.jg-outro h2 span { color: var(--green); }
+.jg-garland { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 6px 0 14px; }
+.jg-garland svg { width: 42px; height: 42px; }
+
+@media (max-width: 1000px) { .jg-grid { grid-template-columns: repeat(5, 1fr); } }
+@media (max-width: 860px) { .jg-open__body, .jg-section__in { grid-template-columns: 1fr; } .jg-open__col + .jg-open__col { border-left: 0; border-top: 3px dashed var(--ink); } }
+@media (max-width: 700px) { .jg-hero__in { grid-template-columns: 1fr; } .jg-hero__art { width: 240px; } .jg-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; } .jg-door { min-height: 140px; padding: 10px 6px 8px; } .jg-door__ic { width: 44px; height: 44px; } .jg-door__n { font-size: 2.1rem; } }
+@media (max-width: 430px) { .jg-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
+</style>
+<style>body { margin: 0; }</style>
+</head>
+<body>
+<div class="jol jg">
+  <!-- Barnatekningar: tjúkkar tussjstrikur, skeivar linjur -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="crayon" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+      <pattern id="p-red" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#d8382c" opacity=".32"/><path d="M0 3h6" stroke="#d8382c" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-green" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#2f9b47" opacity=".32"/><path d="M0 3h6" stroke="#2f9b47" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-gold" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#f4b81c" opacity=".32"/><path d="M0 3h6" stroke="#f4b81c" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-blue" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#3b6fd8" opacity=".32"/><path d="M0 3h6" stroke="#3b6fd8" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-purple" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#8a3fb0" opacity=".32"/><path d="M0 3h6" stroke="#8a3fb0" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-pink" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#e36aa6" opacity=".32"/><path d="M0 3h6" stroke="#e36aa6" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-brown" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#8a5a2b" opacity=".32"/><path d="M0 3h6" stroke="#8a5a2b" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-orange" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#ef8a2c" opacity=".32"/><path d="M0 3h6" stroke="#ef8a2c" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-sky" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#6cc3e8" opacity=".32"/><path d="M0 3h6" stroke="#6cc3e8" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern><pattern id="p-skin" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><rect width="6" height="6" fill="#f2c9a6" opacity=".32"/><path d="M0 3h6" stroke="#f2c9a6" stroke-width="2.1" stroke-linecap="round" opacity=".9"/></pattern>
+      <g id="g-note" filter="url(#crayon)"><path d="M24 46 L25 12 Q40 10 44 22" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="19" cy="47" rx="9" ry="6.5" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M48 14 l2-7 2 7 -2 2z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 28 q3-4 6 0 q3 4 6 0" fill="none" stroke="#3b6fd8" stroke-width="2.4" stroke-linecap="round"/></g>
+      <g id="g-envelope" filter="url(#crayon)"><path d="M9 19 L55 17 L56 47 L10 49 Z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 19 L32 37 L55 17" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="42" y="22" width="9" height="9" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" transform="rotate(6 46 26)"/><path d="M14 44 h10" stroke="#3b6fd8" stroke-width="2.4" stroke-linecap="round"/></g>
+      <g id="g-house" filter="url(#crayon)"><path d="M13 30 L32 9 L51 30 L51 54 L13 55 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 32 L32 7 L55 31" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="19" y="34" width="9" height="9" fill="url(#p-blue)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="36" y="34" width="9" height="9" fill="url(#p-blue)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="43" width="10" height="12" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M42 12 l0 7 M46 14 c-2-3 0-5 2-4" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 58 q14-4 28 0 q14 4 28 0" fill="none" stroke="#6cc3e8" stroke-width="2.6" stroke-linecap="round"/></g>
+      <g id="g-tree" filter="url(#crayon)"><path d="M32 7 L45 24 L39 23 L49 38 L42 37 L53 54 L11 55 L22 37 L15 38 L25 23 L19 24 Z" fill="url(#p-green)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="54" width="10" height="8" fill="url(#p-brown)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="30" r="3.5" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="41" r="3.5" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="46" r="3.5" fill="url(#p-blue)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="41" cy="50" r="3" fill="url(#p-pink)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 2 l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-card" filter="url(#crayon)"><path d="M10 14 L53 12 L55 50 L12 53 Z" fill="#fff" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 43 C 20 35, 17 23, 25 22 C 29 22, 32 26, 32 26 C 32 26, 35 22, 39 22 C 47 23, 44 35, 32 43 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 47 h12 M18 10 l-3-5 M46 9 l3-5" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-mitten" filter="url(#crayon)"><path d="M20 9 C 10 9, 8 22, 12 31 L 14 43 L 36 45 L 40 31 C 48 29, 50 18, 42 16 C 38 15, 34 18, 34 22 L 34 12 C 30 6, 24 6, 20 9 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 45 L 38 47 L 37 57 L 12 55 Z" fill="url(#p-blue)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 25 h16 M18 32 h16" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="3 4"/></g>
+      <g id="g-frame" filter="url(#crayon)"><path d="M8 12 L56 10 L55 52 L9 54 Z" fill="url(#p-brown)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 19 L48 18 L47 46 L17 47 Z" fill="#fff" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="27" r="5" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 32 v8 M26 36 h12 M28 48 l4-8 4 8" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30" cy="26" r="1" fill="#3a3734"/><circle cx="34" cy="26" r="1" fill="#3a3734"/><path d="M12 14 l3-5 M51 51 l4 4" fill="none" stroke="#f4b81c" stroke-width="2.6" stroke-linecap="round"/></g>
+      <g id="g-star" filter="url(#crayon)"><path d="M32 5 L39 24 L59 25 L43 37 L49 57 L32 45 L15 57 L21 37 L5 25 L25 24 Z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 30 q6 6 12 0" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="26" r="1.4" fill="#3a3734"/><circle cx="37" cy="26" r="1.4" fill="#3a3734"/></g>
+      <g id="g-bauble" filter="url(#crayon)"><rect x="27" y="7" width="10" height="7" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 2 v5" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="37" r="22" fill="url(#p-blue)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 33 C 20 27, 44 27, 52 33 M12 41 C 20 47, 44 47, 52 41" fill="none" stroke="#fff" stroke-width="3"/><path d="M25 16 c-6-4-9 2-4 4 c-5 2-2 8 4 4 c6 4 9-2 4-4 c5-2 2-8-4-4z" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-vest" filter="url(#crayon)"><path d="M18 14 L26 10 L32 16 L38 10 L46 14 L50 30 L44 30 L44 54 L20 54 L20 30 L14 30 Z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 38 L44 38 M20 46 L44 46" stroke="#fff" stroke-width="4"/><path d="M20 38 L44 38 M20 46 L44 46" stroke="#b9b9b9" stroke-width="4" stroke-dasharray="3 3"/><path d="M6 6 l6 6 M58 6 l-6 6 M4 20 h7 M53 20 h7 M6 34 l6-4 M58 34 l-6-4" fill="none" stroke="#f4b81c" stroke-width="2.6" stroke-linecap="round"/></g>
+      <g id="g-wind" filter="url(#crayon)"><path d="M22 20 L52 14 L56 40 L26 46 Z" fill="#fff" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-14 38 30)"/><path d="M30 30 l5 4 5-7" fill="none" stroke="#d8382c" stroke-width="3" stroke-linecap="round" transform="rotate(-14 38 30)"/><path d="M3 16 C 9 12, 13 20, 19 16 M2 28 C 10 22, 14 32, 22 26 M5 40 C 11 36, 15 44, 21 40" fill="none" stroke="#3b6fd8" stroke-width="3" stroke-linecap="round"/></g>
+      <g id="g-bird" filter="url(#crayon)"><ellipse cx="34" cy="37" rx="18" ry="12" fill="url(#p-brown)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="26" r="9" fill="url(#p-brown)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="24" r="1.8" fill="#3a3734"/><path d="M9 27 l-7 2 7 2z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 36 C 20 42, 30 44, 30 38 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 49 l-2 8 M38 49 l2 8 M26 57 h6 M36 57 h6" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M50 32 l10-6" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 8 l3 4 M14 4 l1 5 M56 10 l-3 4" fill="none" stroke="#6cc3e8" stroke-width="2.4" stroke-linecap="round"/></g>
+      <g id="g-shapes" filter="url(#crayon)"><path d="M20 10 L34 34 L6 34 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="22" r="12" fill="url(#p-green)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 36 L56 38 L54 58 L26 56 Z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-bell" filter="url(#crayon)"><path d="M32 8 C 18 10, 16 26, 16 40 L 12 46 L 52 46 L 48 40 C 48 26, 46 10, 32 8 Z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="52" r="5" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 4 h8" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 24 l-4 2 M56 24 l4 2 M10 34 l-4 4 M54 34 l4 4" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 44 C 24 50, 40 50, 50 44" fill="none" stroke="#2f9b47" stroke-width="3"/></g>
+      <g id="g-candle" filter="url(#crayon)"><rect x="24" y="24" width="16" height="32" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 22 C 26 14, 28 10, 32 6 C 36 10, 38 14, 32 22 Z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 56 h28" fill="none" stroke="#2f9b47" stroke-width="4" stroke-linecap="round"/><path d="M14 52 l-4-4 M50 52 l4-4" fill="none" stroke="#2f9b47" stroke-width="3" stroke-linecap="round"/></g>
+      <g id="g-sock" filter="url(#crayon)"><path d="M22 6 L44 6 L44 32 C 44 44, 56 44, 56 52 C 56 58, 38 60, 30 54 C 22 48, 22 40, 22 32 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 4 L46 4 L46 14 L20 14 Z" fill="#fff" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 22 h14 M26 30 h14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M40 48 q6 2 10 6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g>
+      <g id="g-cane" filter="url(#crayon)"><path d="M22 58 L22 20 C 22 6, 44 6, 44 20" fill="none" stroke="#d8382c" stroke-width="9" stroke-linecap="round"/><path d="M22 58 L22 20 C 22 6, 44 6, 44 20" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="7 7"/><path d="M22 58 L22 20 C 22 6, 44 6, 44 20" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 58 L22 20 C 22 6, 44 6, 44 20" fill="none" stroke="#3a3734" stroke-width="12" stroke-linecap="round" opacity="0"/></g>
+      <g id="g-heart" filter="url(#crayon)"><path d="M32 56 C 14 42, 6 30, 12 18 C 17 9, 28 10, 32 20 C 36 10, 47 9, 52 18 C 58 30, 50 42, 32 56 Z" fill="url(#p-pink)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-sun" filter="url(#crayon)"><circle cx="32" cy="32" r="13" fill="url(#p-gold)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 6 v8 M32 50 v8 M6 32 h8 M50 32 h8 M13 13 l6 6 M45 45 l6 6 M51 13 l-6 6 M19 45 l-6 6" fill="none" stroke="#f4b81c" stroke-width="3.5" stroke-linecap="round"/><circle cx="27" cy="30" r="1.5" fill="#3a3734"/><circle cx="37" cy="30" r="1.5" fill="#3a3734"/><path d="M26 36 q6 5 12 0" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-gift" filter="url(#crayon)"><path d="M10 26 L54 24 L55 56 L11 58 Z" fill="url(#p-purple)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 18 L56 16 L56 27 L8 29 Z" fill="url(#p-green)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 16 L32 58 M20 22 L44 21" fill="none" stroke="#f4b81c" stroke-width="4" stroke-linecap="round"/><path d="M32 16 c-8-10-14-2-4 2 c-10 2-4 10 4 0 c8 10 14 2 4-2 c10-2 4-10-4 0z" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-snowflake" filter="url(#crayon)"><path d="M32 6 v52 M9 19 l46 26 M9 45 l46-26 M32 6 l-5 6 M32 6 l5 6 M32 58 l-5-6 M32 58 l5-6 M9 19 l7 1 M9 19 l1 7 M55 45 l-7-1 M55 45 l-1-7 M9 45 l1-7 M9 45 l7-1 M55 19 l-1 7 M55 19 l-7 1" fill="none" stroke="#6cc3e8" stroke-width="3" stroke-linecap="round"/></g>
+      <g id="g-nissa" filter="url(#crayon)"><path d="M30 60 L 70 60 L 68 88 L 32 88 Z" fill="url(#p-green)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="44" r="14" fill="url(#p-skin)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 40 C 40 18, 60 14, 72 22 C 62 26, 54 30, 36 40 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="73" cy="22" r="6" fill="#fff" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 41 C 44 33, 58 29, 73 25" fill="none" stroke="#3a3734" stroke-width="8.5" stroke-linecap="round"/><path d="M33 41 C 44 33, 58 29, 73 25" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/><circle cx="45" cy="44" r="1.8" fill="#3a3734"/><circle cx="55" cy="44" r="1.8" fill="#3a3734"/><circle cx="50" cy="49" r="2.6" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M44 54 q6 5 12 0" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 66 L 14 78 M68 66 L 86 78" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="80" r="4" fill="url(#p-skin)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="88" cy="80" r="4" fill="url(#p-skin)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 88 l-2 10 M60 88 l2 10" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 99 l10-1 M58 99 l10-1" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-snowman" filter="url(#crayon)"><circle cx="50" cy="72" r="22" fill="#fff" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="38" r="15" fill="#fff" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 12 h44 v6 h-44z M34 2 h32 v12 h-32z" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="45" cy="36" r="1.8" fill="#3a3734"/><circle cx="55" cy="36" r="1.8" fill="#3a3734"/><path d="M50 40 l10 2 -10 3z" fill="url(#p-orange)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M44 46 q6 4 12 0" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="2.2" fill="#3a3734"/><circle cx="50" cy="72" r="2.2" fill="#3a3734"/><circle cx="50" cy="82" r="2.2" fill="#3a3734"/><path d="M28 64 L 10 54 M72 64 L 90 54 M10 54 l-5-2 M10 54 l1-5" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 50 q14 6 28 0" fill="none" stroke="#3b6fd8" stroke-width="5" stroke-linecap="round"/></g>
+      <g id="g-child" filter="url(#crayon)"><circle cx="50" cy="30" r="13" fill="url(#p-skin)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 26 C 40 8, 60 8, 64 26 Z" fill="url(#p-brown)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="45" cy="30" r="1.6" fill="#3a3734"/><circle cx="55" cy="30" r="1.6" fill="#3a3734"/><path d="M45 36 q5 4 10 0" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 44 L 62 44 L 66 76 L 34 76 Z" fill="url(#p-blue)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 50 L 18 62 M62 50 L 82 62" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="63" r="3.5" fill="url(#p-skin)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="84" cy="63" r="3.5" fill="url(#p-skin)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M42 76 l-2 16 M58 76 l2 16" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 93 l10-1 M58 93 l10-1" fill="none" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 20 C 40 4, 60 4, 64 20 L 62 24 C 56 18, 44 18, 38 24 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="7" r="4" fill="#fff" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-hat" filter="url(#crayon)"><path d="M12 48 C 18 20, 36 8, 56 8 C 68 8, 76 12, 78 18 C 70 16, 64 30, 68 48 Z" fill="url(#p-red)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="78" cy="18" r="7" fill="#fff" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 50 C 26 42, 54 42, 74 50 L 70 60 C 52 52, 28 52, 12 60 Z" fill="#fff" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-dog-paw" filter="url(#crayon)"><ellipse cx="32" cy="40" rx="12" ry="10" fill="url(#p-brown)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="28" r="5" fill="url(#p-brown)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="20" r="5" fill="url(#p-brown)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="20" r="5" fill="url(#p-brown)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="47" cy="28" r="5" fill="url(#p-brown)" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g id="g-cookie" filter="url(#crayon)"><circle cx="32" cy="34" r="20" fill="url(#p-orange)" stroke="#3a3734" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="28" r="2.5" fill="#3a3734"/><circle cx="38" cy="26" r="2.5" fill="#3a3734"/><circle cx="30" cy="40" r="2.5" fill="#3a3734"/><circle cx="42" cy="40" r="2.5" fill="#3a3734"/><path d="M14 22 l4 6" fill="none" stroke="#3a3734" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+    </defs>
+  </svg>
+
+  <!-- ============================================================ Hero -->
+  <section class="jol-hero jg-hero" id="jol-top">
+    <div class="jg-wrap">
+      <div class="jg-hero__in">
+        <div>
+          <span class="jg-mono">Snar · 1.–3. flokkur · desember 2026</span>
+          <h1>Jól í <span>grunddeildini</span></h1>
+          <p class="jg-hero__lead">Ein nýggj lúka hvønn skúladag. Lærarin lesur upp, flokkurin tosar saman, og so gera vit okkurt: syngja, telja, tekna, kanna. Umleið tíggju til fimtan minuttir.</p>
+          <div class="jg-hero__btns">
+            <a class="jg-btn jg-btn--red" href="#kalendari">Far til lúkurnar ↓</a>
+            <button class="jg-btn" type="button" id="jg-alt" title="Til læraran, sum leggur til rættis">Lat allar lúkur upp</button>
+            <span class="jg-mono" id="jg-count"></span>
+          </div>
+        </div>
+        <div class="jg-hero__art" aria-hidden="false">
+          <svg viewBox="0 0 330 120" aria-hidden="true" class="jg-hero__scene"><use href="#g-house" x="0" y="26" width="84" height="84"/><use href="#g-child" x="84" y="8" width="100" height="100"/><use href="#g-nissa" x="160" y="4" width="104" height="104"/><use href="#g-snowman" x="240" y="14" width="92" height="92"/><use href="#g-snowflake" x="60" y="0" width="22" height="22"/><use href="#g-snowflake" x="140" y="10" width="16" height="16"/><use href="#g-snowflake" x="300" y="2" width="20" height="20"/><path d="M0 112 q40-8 80 0 t80 0 t80 0 t80 0" fill="none" stroke="#6cc3e8" stroke-width="3" stroke-linecap="round"/></svg>
+          <button class="jg-dog jg-dog--hero" type="button" aria-label="Snar-hundurin" data-dog>
+            <img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar_hundur.png" alt="" loading="lazy">
+            <svg class="jg-dog__hat" viewBox="0 0 90 64" aria-hidden="true"><use href="#g-hat"/></svg>
+            <span class="jg-dog__say">Vuff!</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="jg-wrap jg-doodles" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#g-star"/></svg><svg viewBox="0 0 64 64"><use href="#g-cane"/></svg><svg viewBox="0 0 64 64"><use href="#g-sock"/></svg><svg viewBox="0 0 64 64"><use href="#g-tree"/></svg><svg viewBox="0 0 64 64"><use href="#g-bauble"/></svg><svg viewBox="0 0 64 64"><use href="#g-heart"/></svg><svg viewBox="0 0 64 64"><use href="#g-gift"/></svg><svg viewBox="0 0 64 64"><use href="#g-snowflake"/></svg><svg viewBox="0 0 64 64"><use href="#g-sun"/></svg><svg viewBox="0 0 64 64"><use href="#g-bell"/></svg></div>
+
+  <!-- ====================================================== Kalendarin -->
+  <section class="jg-cal" id="kalendari">
+    <div class="jg-wrap">
+      <div class="jg-cal__head">
+        <div><span class="jg-mono">14 skúladagar · 1.–18. desember</span><h2>Lúkurnar</h2></div>
+        <div class="jg-legend" aria-label="Lærugreinir">
+          <span><i style="background:var(--red)"></i>Føroyskt</span>
+          <span><i style="background:var(--green)"></i>Støddfrøði</span>
+          <span><i style="background:var(--blue)"></i>Heimstaðarlæra</span>
+          <span><i style="background:var(--gold)"></i>Handaverk og list</span>
+        </div>
+      </div>
+      <div class="jg-grid" id="jg-grid" role="list"></div>
+
+      <article class="jg-open" id="jg-open" aria-live="polite">
+        <div class="jg-open__head">
+          <div><span class="jg-mono" id="jo-meta"></span><h2 id="jo-title"></h2><div class="jg-open__fak" id="jo-fak"></div></div>
+          <button class="jg-btn jg-btn--sm" type="button" id="jo-close">Lat aftur ×</button>
+        </div>
+        <div class="jg-open__body">
+          <div class="jg-open__col">
+            <div class="jg-part jg-part--les"><h3><svg viewBox="0 0 64 64"><use href="#g-candle"/></svg> Lesið upp</h3><p class="jg-les" id="jo-les"></p><div id="jo-media"></div></div>
+            <div class="jg-part jg-part--tos"><h3><svg viewBox="0 0 64 64"><use href="#g-bell"/></svg> Tosið saman</h3><p class="jg-tos" id="jo-tos"></p></div>
+            <div class="jg-part jg-part--ger"><h3><svg viewBox="0 0 64 64"><use href="#g-shapes"/></svg> Gerið</h3><p class="jg-ger" id="jo-ger"></p><div class="jg-btns" id="jo-btns"></div></div>
+          </div>
+          <div class="jg-open__col">
+            <div class="jg-part jg-part--ord"><h3><svg viewBox="0 0 64 64"><use href="#g-star"/></svg> Dagsins orð</h3><div class="jg-ord"><span class="jg-ord__w" id="jo-ord"></span><span class="jg-ord__c" id="jo-ordc"></span></div><p style="font-size:.9rem;color:var(--muted);font-weight:700;margin-top:8px">Sigið orðið týðiliga. Klappið stavilsini. Tosið um, hvat orðið merkir.</p></div>
+            <div class="jg-part">
+              <details class="jg-det" id="jo-laer-det" open><summary>Til læraran</summary><div class="jg-det__b" id="jo-laer"></div></details>
+              <details class="jg-det" id="jo-fram-det"><summary>Framhald (valfrítt)</summary><div class="jg-det__b" id="jo-fram"></div></details>
+              <p class="jg-dent" id="jo-dent"></p>
+            </div>
+          </div>
+        </div>
+        <div class="jg-open__foot">
+          <button class="jg-btn jg-btn--sm" type="button" id="jo-prev">← Fyrra lúka</button>
+          <button class="jg-btn jg-btn--sm jg-btn--green" type="button" id="jo-done">Merk sum liðugt ★</button>
+          <button class="jg-btn jg-btn--sm" type="button" id="jo-next">Næsta lúka →</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================ Sangir -->
+  <section class="jg-section" id="sangir">
+    <div class="jg-wrap">
+      <span class="jg-mono">Sangbókin</span>
+      <h2>Sangir, vit syngja í desember</h2>
+      <div class="jg-songs" style="position:relative">
+        <button class="jg-dog jg-dog--peek" type="button" aria-label="Snar-hundur, sum goymir seg" data-dog style="right:-6px;top:-34px"><img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar_hundur.png" alt="" loading="lazy"><span class="jg-dog__say">Vuff!</span></button>
+        <article class="jg-song" id="sangur-hugnaligt">
+          <h3>Hví man alt vera so hugnaligt í kvøld!</h3>
+          <p class="jg-song__by">Orð: Kristin í Geil · Lúka 1</p>
+          <div class="jg-song__t">
+1. Hví man alt vera so hugnaligt í kvøld!
+Frosturin bítur, men ongi er køld.
+Dagur var strævin, men ongin sýnast móð,
+hví eru øll so blíð og fró?
+
+Tað er jólaaftan! Klokkan ring:
+Bing, bang, bing! Bing, bang, bing!
+Brátt er træið tendrað – slá so ring,
+dansa kvøð og syng!
+
+2. Myrkt er og kalt er og følnað hvør urt,
+sólin hin bleika næstan kámast burt,
+smáfuglar stirdir ei orka á flog –
+tá sendir sólin gleðisboð:
+
+3. Fjart er hon stødd, men vit hoyra tað ljóð,
+børn síni minnist sólarmamman góð:
+Eg komi aftur til alt tað, sum grør
+og andar á tí køldu jørð.
+
+4. Børn eru børn, og tað verða vit við,
+tá vit um jólatræið, lið um lið,
+dansa og minnast á summar og sól,
+meðan vit kvøða hátt um jól.
+
+Tað er jólaaftan! Klokkan ring:
+Bing, bang, bing! Bing, bang, bing!
+Brátt er træið tendrað – slá so ring,
+dansa kvøð og syng!
+          </div>
+        </article>
+        <article class="jg-song" id="sangur-nissa">
+          <h3>Lítla fitta nissa mín</h3>
+          <p class="jg-song__by">Føroysk týðing: Alexandur Kristiansen · Upptøka: Barnasangbók Føroya · Lúka 1</p>
+          <div class="jg-song__t">
+1. Lítla fitta nissa mín,
+tú skalt fáa greyt í trygil tín,
+jólagreyt við mandlu í.
+Ja, so oysa vit uppí.
+
+2. Mandlan melur bert í kring,
+melur runt í greytinum í ring,
+hvar man mandlan vera nú?
+Nissa mín, hvat heldur tú?
+          </div>
+        </article>
+        <article class="jg-song" id="sangur-gledilig">
+          <h3>Gleðilig jól! Gleðilig jól!</h3>
+          <p class="jg-song__by">Føroysk útgáva: Fríðrikur Petersen, 1891 · Lagtilvísing: sálmur 84 · Kelda: Sálmabókin nr. 95, skeyk.fo · Lúka 14</p>
+          <div class="jg-song__t">
+«Gleðilig jól! Gleðilig jól!»
+ljóðar av himli einglalag.
+«Armi syndari, óttast ei nú,
+gleðiboðskapin hoyrir tú:
+:,: Jesus er føddur í dag. :,:»
+
+2. Faðir vár! Faðir vár!
+Høgt tó tú á himli býrt,
+ikki gloymdi tú barnið títt,
+elskaði syndiga hjarta mítt;
+:,: veri um ævi tær dýrd. :,:
+
+3. Frelsari mín! Frelsari mín!
+Náði tín hon er mítt skjól.
+Paradísportrið er opnað mær,
+aldri kann eg fulltakka tær
+:,: fyri gleðilig jól. :,:
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ Funkur og tilfar -->
+  <section class="jg-section" id="funkur" style="position:relative">
+    <div class="jg-wrap jg-section__in">
+      <div>
+        <span class="jg-mono">Amboðini</span>
+        <h2>Funkur, sum lúkurnar brúka</h2>
+        <p style="font-weight:700;color:var(--muted)">Lærarin stýrir funkunum á stórskíggjanum. Børnini peika, siga, tekna og telja.</p>
+      </div>
+      <ul class="jg-list">
+        <li><a href="https://snar.fo/spaelsavn/teknari"><svg viewBox="0 0 64 64"><use href="#g-card"/></svg><span><b>Teknari</b><span>Jólakort, mynstur og myndir til søguna – lúka 3, 5, 6 og 11</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/funkur/tilvildarligir-spurningar-/-noevn"><svg viewBox="0 0 64 64"><use href="#g-star"/></svg><span><b>Ringla nøvn</b><span>Hvør sigur næsta jólaorð? – lúka 4</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/funkur/spoel/stoeddfroedi/hoppandi-toel-1"><svg viewBox="0 0 64 64"><use href="#g-envelope"/></svg><span><b>Hoppandi tøl</b><span>Tøl 0–10 og 0–20 til tey elstu – lúka 2 og 8</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/funkur/eginleikar-vid-skapum"><svg viewBox="0 0 64 64"><use href="#g-shapes"/></svg><span><b>Skipa skapini</b><span>Sært tú skap við trimum kantum? – lúka 13</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/skjol#jol"><svg viewBox="0 0 64 64"><use href="#g-tree"/></svg><span><b>Jólaskjøl</b><span>Litbøkur, stjørnur og søgur at prenta</span></span><i>→</i></a></li>
+      </ul>
+    </div>
+    <button class="jg-dog jg-dog--peek" type="button" aria-label="Snar-hundur, sum goymir seg" data-dog style="left:-8px;bottom:8px"><img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar_hundur.png" alt="" loading="lazy"><span class="jg-dog__say">Vuff!</span></button>
+  </section>
+
+  <section class="jg-section" id="postarenning">
+    <div class="jg-wrap jg-section__in">
+      <div><span class="jg-mono">Finn Snar</span><h2>Hvussu nógvir hundar eru á síðuni?</h2></div>
+      <div class="jg-hunt">
+        <p style="font-weight:700">Fýra piparkøkur eru farnar úr kassanum, og Snar-hundurin goymir seg fýra staðir á hesi síðuni – við molum í skegginum. Finnið hann og trýstið á hann! Hann fær eitt nummar, so tit vita, at hann er taldur, og ein piparkøka kemur aftur í kassan.</p>
+        <div class="jg-cookies" id="jg-cookies" aria-label="Piparkøkur, sum eru funnar"><svg viewBox="0 0 64 64"><use href="#g-cookie"/></svg><svg viewBox="0 0 64 64"><use href="#g-cookie"/></svg><svg viewBox="0 0 64 64"><use href="#g-cookie"/></svg><svg viewBox="0 0 64 64"><use href="#g-cookie"/></svg></div>
+        <p class="jg-mono" id="jg-hunt-msg">Funnir: <b id="jg-dog-count" style="font-size:1.3rem;color:var(--red)">0</b> av 4</p>
+        <button class="jg-dog jg-dog--peek jg-dog--tiny" type="button" aria-label="Snar-hundur, sum goymir seg" data-dog style="right:14px;bottom:-14px"><img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar_hundur.png" alt="" loading="lazy"><span class="jg-dog__say">Vuff!</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="jg-outro">
+    <div class="jg-wrap">
+      <div class="jg-garland" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#g-star"/></svg><svg viewBox="0 0 64 64"><use href="#g-bauble"/></svg><svg viewBox="0 0 64 64"><use href="#g-tree"/></svg><svg viewBox="0 0 64 64"><use href="#g-bell"/></svg><svg viewBox="0 0 64 64"><use href="#g-candle"/></svg><svg viewBox="0 0 64 64"><use href="#g-mitten"/></svg></div>
+      <h2>Gleðilig <span>jól</span>!</h2>
+      <p class="jg-mono" style="margin-top:10px">Góðan arbeiðshug í adventini</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var root = document.querySelector('.jol');
+  if (!root) return;
+  root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
+
+  var FAK = { fo: 'Føroyskt', st: 'Støddfrøði', hl: 'Heimstaðarlæra', hv: 'Handaverk og list' };
+  var MONTHS = ['januar', 'februar', 'mars', 'apríl', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
+  var DAYS = ['sunnudagur', 'mánadagur', 'týsdagur', 'mikudagur', 'hósdagur', 'fríggjadagur', 'leygardagur'];
+
+  /* ------------------------------------------------------------ Lúkurnar
+     d dagfesting · t heiti · fak · c litur · ic tekning · les (lesið upp) · tos (tosið saman) · ger (gerið)
+     laer (til læraran) · fram (framhald) · dent (fakligur dentur) · ord [dagsins orð, stavilsi] · btns [[tekstur, slóð]] · yt [[id, tekstur]] */
+  var DOORS = [
+    { d: '2026-12-01', t: 'Vit syngja jólini inn', fak: ['fo', 'hv'], c: 'red', ic: 'g-note',
+      les: 'Í dag byrja vit við einum jólasangi. Lurtið eftir orðunum, og leggið merki til, hvat hendir í sanginum. Kanska fáa tit eina mynd í høvdið, meðan tit lurta.',
+      tos: 'Hvat hoyrdu tit um í sanginum? Hvørji orð minnast tit?\nHvørjar jólasangir kennir tú? Vit skriva heitini á talvuna.',
+      ger: 'Syngið fyrst „Hví man alt vera so hugnaligt í kvøld!“. Upptøkan niðanfyri er ein annar sangur, sum tit kunnu syngja aftaná. Teknið síðan okkurt, sum verður nevnt í sanginum. Vísið einum floksfelaga myndina, og greiðið frá henni.',
+      laer: 'Hav sangin og tekniamboð klár. Arbeið við einum ørindi ella niðurlagnum. Orðini eru eftir Kristin í Geil – teksturin stendur niðanfyri undir Sangir.\nSangalistin á talvuni er felags sangúrvalið hjá flokkinum í desember. Veljið ein av sangunum aftur í lúku 14.\nTillaging: tey yngstu tekna bert; tey elstu skriva eitt orð úr sanginum undir myndina.',
+      fram: 'Skrivið eitt orð ella ein setning undir myndina. Klappið síðan rytmuna í einum stuttum broti úr sanginum.\nEin annar sangur, sum øll kunnu vera við í: „Lítla fitta nissa mín“ (filmurin her niðanfyri).',
+      dent: 'Sangur, lurting og at lýsa tað hoyrda við myndum og orðum.', ord: ['jó-la-sang-ur', 4],
+      btns: [['Teksturin: Hví man alt vera so hugnaligt í kvøld!', '#sangur-hugnaligt'], ['Teksturin: Lítla fitta nissa mín', '#sangur-nissa']], yt: [['IXOKSUHvrWw', 'Lítla fitta nissa mín – Barnasangbók Føroya']] },
+    { d: '2026-12-02', t: 'Ein brævbjálvi til hvørt kort', fak: ['st'], c: 'green', ic: 'g-envelope',
+      les: 'Á borðinum liggja jólakort og brævbjálvar. Hvørt kort skal í ein brævbjálva. Vit skulu kanna, um brævbjálvarnir røkka til øll kortini.',
+      tos: 'Hvussu kunnu vit finna út av tí? Mugu vit telja alt?',
+      ger: 'Leggið átta smá pappírskort og seks brævbjálvar á borðið. Leggið eitt kort við hvønn brævbjálva. Kannið, hvussu nógvir brævbjálvar mangla.',
+      laer: 'Brúka veruligar brævbjálvar ella pappírsbrikkar. Lat børnini royna sínar egnu loysnir og greiða frá. Tillaga mongdirnar eftir flokkinum. Til tey yngstu: fimm kort og tríggjar brævbjálvar. Til tey elstu: tólv kort og níggju brævbjálvar.\nSvar: í høvuðsuppgávuni mangla tveir brævbjálvar. Í framhaldinum eru fimm brævbjálvar eftir.\nUmleið 10 minuttir.',
+      fram: 'Nú eru tíggju kort og fimtan brævbjálvar. Hvussu nógvir brævbjálvar verða eftir, tá øll kortini hava fingið ein?\nTey elstu kunnu rokna somu stykki í Hoppandi tøl (0–10 ella 0–20) á stórskíggjanum.',
+      dent: 'Teljing, samanbering av mongdum og at finna og greiða frá einari loysn.', ord: ['bræv-bjál-vi', 3],
+      btns: [['Hoppandi tøl', '/funkur/spoel/stoeddfroedi/hoppandi-toel-1']] },
+    { d: '2026-12-03', t: 'Jólini hjá okkum', fak: ['hl'], c: 'blue', ic: 'g-house',
+      les: 'Hyggið at einari mynd úr okkara bygd ella býi. Hvat kenna tit aftur? Í desember kann okkurt síggja øðrvísi út enn annars. Nú fara vit at kanna myndina saman.',
+      tos: 'Hvat á myndini vísir, at tað er jólatíð? Hvat hevði eisini verið har um summarið?',
+      ger: 'Finnið trý ting á myndini, sum tit kenna. Teknið eitt teirra, og forteljið, hvar tað er.',
+      laer: 'Vel eina nýggja mynd úr nærumhvørvinum við jólaprýði – tak hana sjálv/-ur dagin fyri. Skriva staðarnøvnini á talvuna, meðan børnini siga frá.\nTey yngstu peika og siga frá. Tey elstu skriva navnið á staðnum ella lutinum undir tekningina.',
+      fram: 'Teknið eitt einfalt kort við skúlanum og staðnum á myndini. Vísið, hvussu tit koma hagar. Tað kann gerast í Teknaranum á stórskíggjanum, meðan flokkurin sigur, hvat skal vera við.',
+      dent: 'Nærumhvørvi, staðarnøvn og at kanna og greiða frá egnum eygleiðingum.', ord: ['bygd', 1],
+      btns: [['Teknari', '/spaelsavn/teknari']] },
+    { d: '2026-12-04', t: 'Vit byggja jólaorð', fak: ['fo'], c: 'red', ic: 'g-tree',
+      les: 'Eitt træ kann vera eitt jólatræ. Eitt kort kann vera eitt jólakort. Hoyra tit, hvat orðini hava í felag? Í dag fara vit at byggja og kanna jólaorð.',
+      tos: 'Hvørji onnur orð kenna tit, sum byrja við „jóla-“?',
+      ger: 'Hyggið at myndum av einum træi, einum korti, einari gávu og einari stjørnu. Sigið orðini týðiliga, og finnið jólaorð, sum passa til myndirnar. Teknið ella skrivið nøkur av orðunum.',
+      laer: 'Hav myndir og orðakort klár. Børnini kunnu svara munnliga, tekna ella skriva eftir førimuni.\nSet nøvnini á flokkinum í Ringla nøvn, og lat eitt barn í senn fáa orðið: tað barnið, sum verður drigið, sigur næsta jólaorð. Tak navnið úr úrvalinum, tá barnið hevur svarað, so øll sleppa framat.\nSvar til framhaldið: barnið og jólasang eru navnorð, syngur er sagnorð, og vakran er lýsingarorð. Framhaldið er til tey, sum eru komin til hesa mállæruna.',
+      fram: 'Samanberið „gáva“ og „gávur“. Tey elstu kunnu eisini finna navnorð, sagnorð og lýsingarorð í setninginum: „Barnið syngur ein vakran jólasang.“',
+      dent: 'Orðfeingi, orðmyndan og einføld mállæra eftir førimuni.', ord: ['jó-la-træ', 3],
+      btns: [['Ringla nøvn', '/funkur/tilvildarligir-spurningar-/-noevn']] },
+    { d: '2026-12-07', t: 'Ein jólaheilsan til tín', fak: ['fo', 'hv'], c: 'gold', ic: 'g-card',
+      les: 'Í dag gera vit eitt kort til onkran, vit vilja gleða. Kortið kann hava eina mynd og nøkur orð. Tú velur, hvør skal fáa tað, og hvat tú vilt siga.',
+      tos: 'Hvat kann vera gott at fáa at vita í einum korti? Hvør skal fáa títt kort?',
+      ger: 'Teknið eitt jólakort. Hvør næmingur skrivar eina heilsan, navnið á móttakaranum og sítt egna navn. Lesið heilsanina fyri einum floksfelaga.',
+      laer: 'Hav pappír og litir klár. Skriva orð og stuttar heilsanir á talvuna sum hjálp. Børnini kunnu siga heilsanina, meðan tú skrivar hana.\nÍ Teknaranum er ein litmynd, sum eitur „Jólakort“ – nýt hana á stórskíggjanum til at vísa, hvar myndin og heilsanin skulu standa.\nKortini kunnu latast móttakaranum beinleiðis ella sendast við posti.',
+      fram: 'Skrivið ein persónligan setning afturat, til dømis um okkurt, tit gleða tykkum at gera saman við tí, sum fær kortið. Tey elstu skriva adressuna á brævbjálvan við hjálp.',
+      dent: 'At skriva til ein veruligan móttakara og seta orð og mynd saman.', ord: ['jó-la-kort', 3],
+      btns: [['Teknari – litmyndin Jólakort', '/spaelsavn/teknari']] },
+    { d: '2026-12-08', t: 'Eitt mynstur heldur fram', fak: ['st', 'hv'], c: 'green', ic: 'g-mitten',
+      les: 'Á einari troyggju kunnu somu litir og skap koma aftur og aftur. Vit kunnu eisini gera mynstur í jólaprýði. Men hvat skal koma næst?',
+      tos: 'Hvussu síggja tit, at nakað endurtekur seg? Hava tit eina troyggju ella vøttir við mynstri heima?',
+      ger: 'Leggið ein reyðan brikk, ein hvítan brikk, ein reyðan brikk og ein hvítan brikk á rað. Haldið fram við somu reglu. Gerið síðan tykkara egna mynstur, og latið ein floksfelaga halda fram við tí.',
+      laer: 'Hav brikkar í ymiskum litum og skapum klárar. Vís gjarna eina føroyska troyggju við einum týðiligum mynstri.\nÁ stórskíggjanum kann flokkurin gera eitt mynstur við stemplunum í Teknaranum: stjørna, træ, stjørna, træ … og børnini siga, hvat kemur næst.',
+      fram: 'Brúkið mynstur sum reytt, reytt, hvítt ella tríkant, runding, fýrkant. Greiðið frá regluni.',
+      dent: 'At finna, skapa og greiða frá mynstrum.', ord: ['myn-stur', 2],
+      btns: [['Teknari – stempul', '/spaelsavn/teknari']] },
+    { d: '2026-12-09', t: 'Jól, tá tú vart lítil', fak: ['hl', 'fo'], c: 'blue', ic: 'g-frame',
+      les: 'Hvussu vóru jólini, tá tey vaksnu vóru børn? Í dag skulu vit hoyra eitt jólaminni. Lurtið eftir tí, sum líkist okkara tíð, og tí, sum er øðrvísi.',
+      tos: 'Hvat í frásøgnini kendu tit aftur? Hvat var nýtt fyri tykkum?',
+      ger: 'Hoyrið eina stutta frásøgn frá einum vaksnum. Teknið eina hending ella ein lut úr frásøgnini. Setið myndirnar saman, og forteljið hvør øðrum um tær.',
+      laer: 'Fá frammanundan eitt veruligt, stutt jólaminni frá einum vaksnum – ommu, abba ella onkrum í nærumhvørvinum. Tú kanst lesa tað upp, ella viðkomandi kann koma í flokkin. Greið frá, hvør eigur minnið, og hvar viðkomandi vaks upp.\nUmleið 15 minuttir.',
+      fram: 'Skrivið ein setning um nakað, sum var øðrvísi fyrr. Gerið ein felags spurning, sum tit vilja spyrja frásøgufólkið. Tey elstu kunnu spyrja heima: „Hvat fekst tú í jólagávu, tá tú vart lítil?“',
+      dent: 'Siðir, frásagnir og at samanbera upplivingar frá ymiskum tíðum.', ord: ['min-ni', 2], btns: [] },
+    { d: '2026-12-10', t: 'Øll skulu fáa líka nógv', fak: ['st'], c: 'green', ic: 'g-star',
+      les: 'Vit hava gjørt tólv pappírsstjørnur. Fýra børn skulu býta tær millum sín. Øll skulu fáa líka nógv. Hvussu gera vit tað?',
+      tos: 'Hvussu kunnu tit kanna, at býtið er javnt?',
+      ger: 'Leggið tólv stjørnur á borðið, og býtið tær í fýra bólkar. Teljið í hvørjum bólki. Roynið síðan at býta tær millum tvey børn.',
+      laer: 'Brúka stjørnur ella aðrar brikkar og fýra undirlegg. Børnini kunnu byrja við seks brikkum og tveimum undirleggum. Stjørnur at klippa út eru í Jólaskjølum.\nSvar: fýra børn fáa tríggjar stjørnur hvør. Tvey børn fáa seks hvør. Trý børn fáa fýra hvør. Fimm børn fáa tvær hvør, og tvær stjørnur eru eftir.\nUmleið 10 minuttir.',
+      fram: 'Kannið, um tólv heilar stjørnur kunnu býtast javnt millum trý ella fimm børn. Tit skulu ikki klippa stjørnurnar sundur. Greiðið frá, hvat hendir.',
+      dent: 'At býta ítøkiligar mongdir og greiða frá úrslitinum.', ord: ['stjør-na', 2],
+      btns: [['Jólaskjøl – stjørnur', '/skjol#jol-stoddfrodi']] },
+    { d: '2026-12-11', t: 'Gamalt pappír verður til prýði', fak: ['hv', 'hl'], c: 'gold', ic: 'g-bauble',
+      les: 'Á borðinum liggja pappírsleivdir frá øðrum arbeiði. Litirnir og skapini eru ymisk. Í dag skulu vit kanna, hvat vit kunnu skapa burtur úr teimum.',
+      tos: 'Hvørjar leivdir kunnu tit brúka? Hvat fáa litirnir og skapini tykkum at hugsa um?',
+      ger: 'Veljið nakrar pappírsleivdir, og gerið eitt lítið jólaprýði. Vísið tað fram, og greiðið frá, hvussu tit gjørdu.',
+      laer: 'Hav reinar pappírsleivdir, lím, saksar og tráð klár. Gev børnunum rúm at velja skap og litir. Einføld prýði kunnu gerast á 15 minuttum. Hongið jólaprýðið upp í skúlastovuni. Tað verður brúkt aftur í lúku 13 og 14.',
+      fram: 'Finnið ein máta at nýta smáu leivdirnar, sum eru eftir. Tosið um, nær tilfar kann nýtast aftur.',
+      dent: 'Tilfarsval, skapandi arbeiði og endurnýtsla.', ord: ['prý-ði', 2], btns: [] },
+    { d: '2026-12-14', t: 'At síggjast í myrkrinum', fak: ['hl'], c: 'blue', ic: 'g-vest',
+      les: 'Í desember kann vera myrkt, tá vit fara í skúla. Vit skulu bæði síggja og síggjast í ferðsluni. Í dag kanna vit, hvussu endurskin sæst, tá ljós rakar tað.',
+      tos: 'Hvar hava tit sæð endurskin? Hvussu kunnu vit kanna, hvussu væl tað sæst?',
+      ger: 'Samanberið ein jakka við endurskini og ein uttan. Lærarin lýsir á teir við einari lummalykt í einum dimmum rúmi. Forteljið, hvat tit leggja merki til.',
+      laer: 'Hav lummalykt, endurskin og klæði klár. Lat børnini standa nær læraranum, sum heldur lummalyktini. Lýsið á báðar jakkarnar úr somu frástøðu, og latið ljós og eygleiðarar vera á sama staði, meðan tit samanbera. Knýt samrøðuna at teirra skúlavegi: hvar er myrkast?\nUmleið 10 minuttir.',
+      fram: 'Gerið eina mynd, sum minnir onnur á at brúka endurskin. Hongið hana upp har, tit ganga út.',
+      dent: 'Ferðsla, eygleiðing og at kanna ein spurning saman.', ord: ['en-dur-skin', 3], btns: [] },
+    { d: '2026-12-15', t: 'Kortið fór við vindinum', fak: ['fo'], c: 'red', ic: 'g-wind',
+      les: 'Nóra hevði gjørt eitt jólakort til grannan. Hon hevði teknað húsini, fjallið og eina stjørnu.\n\nTá hon kom út, tók vindurin kortið. Tað fór eftir túninum og steðgaði við ein stein. Nóra tók tað upp. Annað hornið var vátt.\n\nHeima turkaði hon kortið og teknaði eina lítla stjørnu á blettin. So fór hon aftur avstað. Hesa ferð lá kortið í einum brævbjálva.',
+      tos: 'Hvat hendi fyrst? Hvussu loysti Nóra trupulleikan?\nHvat heldur tú, grannin sigur, tá hann fær kortið?',
+      ger: 'Teknið eina hending úr søguni. Forteljið einum floksfelaga, hvat hendi beint áðrenn og beint aftaná.',
+      laer: 'Søgan er nýskrivað til kalendaran. Hav pappír og litir klár. Les søguna tvær ferðir, um tørvur er á tí. Stuðla frásøgnini við orðunum „fyrst“, „síðan“ og „at enda“.',
+      fram: 'Teknið tríggjar myndir í tíðarrøð, og skrivið ein stuttan myndatekst til hvørja. Á stórskíggjanum kann flokkurin tekna myndirnar saman í Teknaranum.',
+      dent: 'Lurtifatan, tíðarrøð og at endurgeva við orðum og myndum.', ord: ['vin-dur', 2],
+      btns: [['Teknari', '/spaelsavn/teknari']] },
+    { d: '2026-12-16', t: 'Hvørjir fuglar eru her í vetur?', fak: ['hl'], c: 'blue', ic: 'g-bird',
+      les: 'Vit hyggja ofta eftir jólaljósum og prýði í desember. Men hvat annað er at síggja uttanfyri? Í dag skulu vit hyggja eftir fuglunum nær skúlanum.',
+      tos: 'Hvørjar fuglar hava tit sæð her? Hvat vilja tit vita um teir?',
+      ger: 'Hyggið út í nakrar minuttir. Leggið merki til lit, stødd og rørslur hjá fuglunum. Teknið ein fugl, tit hava sæð. Tit kunnu eisini velja eina fuglamynd hjá læraranum at tekna eftir.',
+      laer: 'Vel myndir av fuglum, sum veruliga síggjast nær skúlanum um veturin, til dømis stara, kráku ella svartbak. Tjaldur kann takast við, um tað er staðfest í økinum. Hav eina fuglabók klára. Hjálp børnunum at finna navnið á fuglinum út frá eyðkennunum.\nUmleið 15 minuttir, um tit fara út.',
+      fram: 'Skrivið fuglanavnið og eitt eyðkenni. Veljið ein felags spurning, sum tit leita eftir svari upp á.',
+      dent: 'Føroyskt fuglalív, eygleiðing og at leita eftir vitan.', ord: ['fug-lur', 2], btns: [] },
+    { d: '2026-12-17', t: 'Skap í jólaprýðinum', fak: ['st', 'hv'], c: 'green', ic: 'g-shapes',
+      les: 'Jólaprýði kann hava nógv ymisk skap. Okkurt er runt, og okkurt hevur horn. Í dag fara vit at finna skapini og brúka tey í okkara egnu mynd.',
+      tos: 'Hvørji skap síggja tit? Hvussu kunnu tit lýsa tey uttan at siga navnið?',
+      ger: 'Hyggið fyrst at jólaprýðinum frá lúku 9. Hvørji skap finna tit?\nVeljið pappírsrundingar, tríkantar og fýrkantar. Setið tey saman til eina jólamynd. Forteljið einum floksfelaga, hvørji skap tit brúktu.',
+      laer: 'Hav tilklipt skap, pappír og lím klár. Lat børnini kanna síður og horn og samanbera skapini.\nÁ stórskíggjanum: í Skipa skapini flytur flokkurin skapini inn í rætta rúmið – „Sært tú skap við trimum kantum?“ Tey yngstu peika, tey elstu siga navnið.',
+      fram: 'Boyggið eitt blað í helvt, og breiðið tað út aftur. Brúkið boyggingina sum spegilsás. Teknið eitt einfalt mynstur øðrumegin og samsvarandi spegilmynd hinumegin. Boyggið blaðið aftur fyri at kanna, um skapini samsvara.',
+      dent: 'Geometrisk skap, eginleikar og einfaldar speglingar.', ord: ['trí-kan-tur', 3],
+      btns: [['Skipa skapini', '/funkur/eginleikar-vid-skapum']] },
+    { d: '2026-12-18', t: 'Okkara jólaløta', fak: ['fo', 'hv'], c: 'gold', ic: 'g-bell',
+      les: 'Nú hava vit sungið, kannað, roknað og skapað saman. Hyggið at myndunum og jólaprýðinum, sum eru eftir í skúlastovuni, og minnist eisini kortini, sum tit hava latið øðrum. Í dag velja vit nakað at vísa fram og enda við einum jólasálmi.',
+      tos: 'Hvat vilt tú vísa hinum? Hvat lærdi tú, ella hvat undraði teg?',
+      ger: 'Veljið hvør sítt verk, og forteljið stutt um tað. Lurtið síðan eftir „Gleðilig jól“, og syngið eitt ørindi saman.',
+      laer: 'Legg verkini fram og hav sangin kláran. Børnini kunnu greiða frá í pørum, so øll sleppa framat. Føroyski sálmateksturin er eftir Fríðrik Petersen frá 1891 og stendur niðanfyri undir Sangir. Filmurin er úr Barnasangbók Føroya.\nVel gjarna eisini ein sang av sangalistanum frá lúku 1.',
+      fram: 'Savnið verkini í eina jólabók hjá flokkinum. Børnini kunnu skriva ella siga ein setning hvør, sum verður settur í bókina.',
+      dent: 'At leggja fram, lurta hvør eftir øðrum og luttaka í felagssangi.', ord: ['jó-la-sál-mur', 4],
+      btns: [['Teksturin: Gleðilig jól', '#sangur-gledilig']], yt: [['pqiu4UyxKjo', 'Gleðilig jól – Barnasangbók Føroya']] }
+  ];
+
+  /* ------------------------------------------------------------ Dagar og lásar */
+  function today() { var n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); }
+  function fmt(iso) { var p = iso.split('-'), dt = new Date(+p[0], +p[1] - 1, +p[2]); return DAYS[dt.getDay()] + ' ' + (+p[2]) + '. ' + MONTHS[+p[1] - 1]; }
+  var ALT_KEY = 'snar-jol-grunddeild-alt-2026', DONE_KEY = 'snar-jol-grunddeild-done-2026';
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  var allOpen = /[?&]alt=1/.test(location.search) || store(ALT_KEY) === '1';
+  var done = {}; try { done = JSON.parse(store(DONE_KEY) || '{}'); } catch (e) {}
+  function unlocked(door) { return allOpen || today() >= door.d; }
+
+  /* ------------------------------------------------------------ Kalendarin */
+  var grid = root.querySelector('#jg-grid'), openEl = root.querySelector('#jg-open'), current = -1;
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function renderGrid() {
+    grid.innerHTML = DOORS.map(function (d, i) {
+      var lock = !unlocked(d), n = i + 1;
+      return '<button type="button" class="jg-door' + (lock ? ' is-locked' : '') + (done[n] ? ' is-done' : '') + '" data-c="' + d.c + '" data-i="' + i + '" role="listitem" aria-label="Lúka ' + n + ', ' + fmt(d.d) + (lock ? ', letur upp seinni' : '') + '">' +
+        '<span class="jg-door__n">' + n + '</span><span class="jg-door__ic"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#' + d.ic + '"/></svg></span>' +
+        '<span class="jg-door__t">' + (lock ? 'Letur upp ' + (+d.d.split('-')[2]) + '. des' : esc(d.t)) + '</span><span class="jg-door__d">' + fmt(d.d).split(' ')[0] + ' ' + (+d.d.split('-')[2]) + '.</span></button>';
+    }).join('');
+  }
+  function ytFacade(id, cap) { return '<button class="jg-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jg-yt__play">▶ Spæl</span></button><p class="jg-ytcap">' + esc(cap) + '</p>'; }
+  function openDoor(i, scroll) {
+    var d = DOORS[i]; if (!d || !unlocked(d)) return;
+    current = i;
+    Array.prototype.forEach.call(grid.children, function (b) { b.classList.toggle('is-open', +b.getAttribute('data-i') === i); });
+    root.querySelector('#jo-meta').textContent = 'Lúka ' + (i + 1) + ' · ' + fmt(d.d);
+    root.querySelector('#jo-title').textContent = d.t;
+    root.querySelector('#jo-fak').innerHTML = d.fak.map(function (f) { return '<span>' + FAK[f] + '</span>'; }).join('');
+    root.querySelector('#jo-les').textContent = d.les;
+    var m = root.querySelector('#jo-media'); m.innerHTML = (d.yt || []).map(function (y) { return ytFacade(y[0], y[1]); }).join(''); bindYt(m);
+    root.querySelector('#jo-tos').textContent = d.tos;
+    root.querySelector('#jo-ger').textContent = d.ger;
+    root.querySelector('#jo-btns').innerHTML = (d.btns || []).map(function (b) { var ext = /^https?:/.test(b[1]); return '<a class="jg-btn jg-btn--sm ' + (ext ? '' : 'jg-btn--gold') + '" href="' + b[1] + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '>' + esc(b[0]) + (ext ? ' ↗' : ' →') + '</a>'; }).join('');
+    root.querySelector('#jo-ord').textContent = d.ord[0];
+    root.querySelector('#jo-ordc').innerHTML = '<b>' + d.ord[1] + '</b> ' + (d.ord[1] === 1 ? 'klapp' : 'klapp');
+    root.querySelector('#jo-laer').textContent = d.laer;
+    root.querySelector('#jo-fram').textContent = d.fram;
+    root.querySelector('#jo-fram-det').open = false;
+    root.querySelector('#jo-dent').textContent = d.dent ? 'Fakligur dentur: ' + d.dent : '';
+    root.querySelector('#jo-done').textContent = done[i + 1] ? 'Merkt sum liðugt ★ – tak merkið burtur' : 'Merk sum liðugt ★';
+    root.querySelector('#jo-prev').disabled = i === 0; root.querySelector('#jo-next').disabled = i === DOORS.length - 1 || !unlocked(DOORS[i + 1]);
+    openEl.classList.add('is-on');
+    if (history.replaceState) history.replaceState(null, '', '#luka-' + (i + 1));
+    if (scroll) openEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  grid.addEventListener('click', function (e) { var b = e.target.closest('.jg-door'); if (!b || b.classList.contains('is-locked')) return; openDoor(+b.getAttribute('data-i'), true); });
+  root.querySelector('#jo-close').addEventListener('click', function () { openEl.classList.remove('is-on'); Array.prototype.forEach.call(grid.children, function (b) { b.classList.remove('is-open'); }); if (history.replaceState) history.replaceState(null, '', '#kalendari'); });
+  root.querySelector('#jo-prev').addEventListener('click', function () { openDoor(current - 1, true); });
+  root.querySelector('#jo-next').addEventListener('click', function () { openDoor(current + 1, true); });
+  root.querySelector('#jo-done').addEventListener('click', function () { var n = current + 1; if (done[n]) delete done[n]; else done[n] = 1; store(DONE_KEY, JSON.stringify(done)); renderGrid(); openDoor(current, false); });
+  var altBtn = root.querySelector('#jg-alt');
+  function altLabel() { altBtn.textContent = allOpen ? 'Fylg dagfestingunum aftur' : 'Lat allar lúkur upp'; }
+  altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); if (typeof toast === 'function') toast(allOpen ? 'Allar lúkur eru latnar upp til fyrireiking.' : 'Komandi lúkur eru aftur læstar. Lúkur frá undanfarnum skúladøgum eru framvegis tøkar.'); });
+  altLabel(); renderGrid();
+  var hm = /#luka-(\d+)/.exec(location.hash || '');
+  if (hm && DOORS[+hm[1] - 1]) openDoor(+hm[1] - 1, true);
+  else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
+  root.querySelector('.jg-hero__btns a').addEventListener('click', function (e) { if (current >= 0) { e.preventDefault(); openEl.scrollIntoView({ behavior: 'smooth' }); } });
+
+  /* ------------------------------------------------------------ Sangir uttan tekst enn */
+  Array.prototype.forEach.call(root.querySelectorAll('[data-song-slot]'), function (el) { if (!el.textContent.trim()) { el.classList.add('is-empty'); el.textContent = 'Teksturin kemur her. Lærarin hevur sangbókina við í dag.'; } });
+
+  /* ------------------------------------------------------------ Niðurteljing */
+  (function () {
+    var n = new Date(), y = n.getFullYear(), d0 = new Date(y, n.getMonth(), n.getDate()), t = new Date(y, 11, 24); if (t < d0) t = new Date(y + 1, 11, 24);
+    var dd = Math.round((t - d0) / 86400000);
+    root.querySelector('#jg-count').textContent = dd === 0 ? 'Í dag er jólaaftan' : dd + (dd === 1 ? ' dagur' : ' dagar') + ' til jólaaftan';
+  })();
+
+  /* ------------------------------------------------------------ YouTube og hundar */
+  function bindYt(scope) { Array.prototype.forEach.call(scope.querySelectorAll('.jg-yt[data-yt]'), function (b) { b.addEventListener('click', function () { var f = document.createElement('iframe'); f.src = 'https://www.youtube.com/embed/' + b.getAttribute('data-yt') + '?autoplay=1&rel=0'; f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; f.allowFullscreen = true; f.title = b.getAttribute('aria-label') || 'YouTube'; b.innerHTML = ''; b.appendChild(f); }, { once: true }); }); }
+  var SAY = ['Vuff! Tað var ikki eg!', 'Mmm … piparkøkur.', 'Eg havi molar í skegginum.', 'Hvar er mandlan?', 'Eg goymi meg betur næstu ferð!', 'Vuff vuff! Gleðilig jól!', 'Eg eti bert eina afturat.'];
+  var toastEl = document.createElement('div'); toastEl.className = 'jg-toast'; toastEl.setAttribute('role', 'status'); root.appendChild(toastEl); var toastT = 0;
+  function toast(text) { toastEl.textContent = text; toastEl.classList.add('is-on'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('is-on'); }, 2200); }
+  var found = 0, counter = root.querySelector('#jg-dog-count'), cookies = root.querySelectorAll('#jg-cookies svg'), msg = root.querySelector('#jg-hunt-msg'), hero = root.querySelector('.jg-dog--hero');
+  Array.prototype.forEach.call(root.querySelectorAll('[data-dog]'), function (dog) {
+    var say = dog.querySelector('.jg-dog__say');
+    dog.addEventListener('click', function () {
+      toast('Snar: ' + SAY[Math.floor(Math.random() * SAY.length)]);
+      if (dog.classList.contains('is-found')) { if (dog === hero) { hero.classList.add('is-dancing'); setTimeout(function () { hero.classList.remove('is-dancing'); }, 3000); } return; }
+      dog.classList.add('is-found'); found++;
+      var badge = document.createElement('span'); badge.className = 'jg-dog__n'; badge.textContent = found; dog.appendChild(badge);
+      if (counter) counter.textContent = found;
+      if (cookies[found - 1]) cookies[found - 1].classList.add('is-on');
+      if (found === cookies.length && msg) { msg.innerHTML = '<b style="color:var(--green)">Allar piparkøkurnar eru aftur í kassanum!</b> Snar dansar – og lovar at eta bert eina afturat.'; if (hero) { hero.classList.add('is-dancing'); setTimeout(function () { hero.classList.remove('is-dancing'); }, 3200); } }
+    });
+  });
+
+  /* ------------------------------------------------------------ Leinkjur innan síðuna (capture, tí smoothscroll hjá Snar steðgar klikkinum) */
+  window.addEventListener('click', function (e) {
+    if (!root.contains(e.target)) return;
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null; if (!a) return;
+    var id = a.getAttribute('href').slice(1), target = root.querySelector('#' + id); if (!target) return;
+    e.preventDefault(); e.stopPropagation();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
+  }, true);
+})();
+</script>
+</body>
+</html>

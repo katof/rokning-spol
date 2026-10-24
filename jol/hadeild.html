@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Desember undir sjóneykuni – Snar.fo</title>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@500;700&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   Desember undir sjóneykuni – jólakalendari til 7.–9. flokk.
+   Stílur: skissubók og meme. Svart tussj á hvítum pappíri, klistrimerki,
+   handskrift, hjørtu, ein spenningsteljari og eitt sindur av skegi.
+   Alt er avmarkað til .jol (eitt HTML-element í Typo3).
+   ===================================================================== */
+.jol {
+  --paper: #ffffff; --ink: #141414; --muted: #6b6b6b; --line: #e3e3e3;
+  --pink: #ff3d8a; --red: #e5383b; --green: #1fbf75; --yellow: #ffd60a; --blue: #3a86ff;
+  --pink-l: #ffe3ee; --green-l: #dff8ea; --yellow-l: #fff6c4; --blue-l: #e3edff; --red-l: #ffe1e1;
+  --top: 0px;
+  font-family: Inter, "Segoe UI", Arial, sans-serif; font-size: 17px; line-height: 1.55; color: var(--ink); background: var(--paper); position: relative;
+  background-image: repeating-linear-gradient(transparent 0 31px, #eef0f3 31px 32px);
+}
+.jol *, .jol *::before, .jol *::after { box-sizing: border-box; }
+.jol h1, .jol h2 { font-family: "Permanent Marker", "Comic Sans MS", cursive; font-weight: 400; line-height: 1.05; margin: 0; color: var(--ink); }
+.jol h3 { font-family: Inter, sans-serif; font-weight: 800; margin: 0; }
+.jol p { margin: 0 0 .9em; }
+.jol p:last-child { margin-bottom: 0; }
+.jol a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--pink); text-underline-offset: 3px; }
+.jol button { font-family: inherit; }
+.jh-wrap { width: min(1120px, 100% - 40px); margin: 0 auto; }
+.jh-hand { font-family: Caveat, "Comic Sans MS", cursive; font-weight: 700; font-size: 1.3rem; line-height: 1.15; }
+.jh-mono { font-weight: 800; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.jh-sticker { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; font-weight: 800; font-size: .8rem; box-shadow: 2px 3px 0 var(--ink); transform: rotate(-2deg); }
+.jh-sticker--pink { background: var(--pink); color: #fff; } .jh-sticker--yellow { background: var(--yellow); } .jh-sticker--green { background: var(--green); color: #fff; }
+.jol .jh-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; color: var(--ink); font-family: Inter, sans-serif; font-weight: 800; font-size: .92rem; text-decoration: none; cursor: pointer; box-shadow: 3px 4px 0 var(--ink); transition: transform .1s, box-shadow .1s; }
+.jol .jh-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 5px 0 var(--ink); }
+.jol .jh-btn:active { transform: translate(2px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.jol .jh-btn--ink { background: var(--ink); color: #fff; } .jol .jh-btn--pink { background: var(--pink); color: #fff; } .jol .jh-btn--yellow { background: var(--yellow); } .jol .jh-btn--sm { padding: 8px 13px; font-size: .84rem; box-shadow: 2px 3px 0 var(--ink); }
+.jol .jh-btn[disabled] { opacity: .35; cursor: default; transform: none; }
+.jh-ic { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.jh-meme { font-family: Inter, Impact, sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; color: #fff; -webkit-text-stroke: 1.2px var(--ink); paint-order: stroke fill; text-shadow: 2px 2px 0 var(--ink); }
+
+/* ---- Hero ------------------------------------------------------------ */
+.jol-hero { padding: 22px 0 10px; }
+.jh-hero__in { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: center; }
+.jh-hero h1 { font-size: clamp(2.3rem, 5.6vw, 4.4rem); transform: rotate(-1.2deg); }
+.jh-hero h1 span { color: var(--pink); }
+.jh-hero__lead { font-size: clamp(1rem, 1.5vw, 1.2rem); max-width: 56ch; margin-top: 14px; }
+.jh-hero__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; }
+.jh-hero__art { position: relative; }
+.jh-hero__art svg { width: 100%; height: auto; display: block; }
+.jh-face { display: none; }
+#jh-stick[data-mood="sour"] .jh-face--sour, #jh-stick[data-mood="happy"] .jh-face--happy { display: block; }
+.jh-memebox { position: absolute; left: 0; right: 0; bottom: -6px; text-align: center; font-size: clamp(1rem, 2.2vw, 1.5rem); }
+.jh-memebox .jh-meme { display: block; }
+.jh-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 70px; height: 70px; right: -6px; top: 6px; transform: rotate(8deg); }
+.jh-dog img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--ink); background: #fff; box-shadow: 2px 3px 0 var(--ink); }
+.jh-dog__hat { position: absolute; left: 50%; top: -34%; width: 80%; transform: translateX(-46%); pointer-events: none; }
+.jh-dog__say { position: absolute; right: 78px; top: 8px; white-space: nowrap; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 4px 10px; font-family: Caveat, cursive; font-weight: 700; font-size: 1.15rem; opacity: 0; transform: scale(.7); transition: .2s; pointer-events: none; }
+.jh-dog.is-saying .jh-dog__say { opacity: 1; transform: scale(1); }
+.jh-countdown { margin-top: 10px; padding: 10px 14px; border: 2px dashed var(--ink); border-radius: 12px; display: inline-flex; gap: 10px; align-items: center; font-weight: 700; font-size: .92rem; background: var(--yellow-l); }
+.jh-countdown b { font-family: "Permanent Marker", cursive; font-weight: 400; font-size: 1.25rem; }
+
+/* ---- Kalendarin -------------------------------------------------------- */
+.jh-cal { padding: 20px 0 36px; }
+.jh-cal__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px 24px; margin-bottom: 16px; }
+.jh-cal__head h2 { font-size: clamp(1.8rem, 3.2vw, 2.6rem); }
+.jh-legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.jh-legend span { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 2px solid var(--ink); border-radius: 999px; font-weight: 800; font-size: .72rem; background: #fff; }
+.jh-legend i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); border: 1.5px solid var(--ink); }
+.jh-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; }
+.jh-door { position: relative; display: flex; flex-direction: column; align-items: center; min-height: 196px; padding: 14px 10px 12px; border: 2px solid var(--ink); border-radius: 16px; background: #fff; color: var(--ink); cursor: pointer; font-family: inherit; text-align: center; box-shadow: 3px 4px 0 var(--ink); transition: transform .12s; --c: var(--pink); }
+.jh-door:nth-child(3n+1) { transform: rotate(-1deg); } .jh-door:nth-child(3n+2) { transform: rotate(.8deg); }
+.jh-door:hover { transform: rotate(0) translateY(-4px); }
+.jh-door__n { position: absolute; left: -8px; top: -10px; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--ink); background: var(--c); color: #fff; font-family: "Permanent Marker", cursive; font-size: 1.15rem; line-height: 32px; box-shadow: 2px 2px 0 var(--ink); }
+.jh-door__ic { width: 58px; height: 58px; margin: 6px 0 4px; }
+.jh-door__ic svg { width: 100%; height: 100%; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.jh-door__t { font-weight: 800; font-size: .86rem; line-height: 1.2; margin-top: auto; }
+.jh-door__d { font-family: Caveat, cursive; font-weight: 700; font-size: 1rem; color: var(--muted); margin-top: 4px; }
+.jh-door__fak { position: absolute; right: -6px; bottom: -8px; padding: 2px 8px; border: 2px solid var(--ink); border-radius: 999px; background: var(--c); color: #fff; font-weight: 800; font-size: .62rem; text-transform: uppercase; letter-spacing: .04em; transform: rotate(-4deg); max-width: 92%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jh-door.is-locked { background: repeating-linear-gradient(-45deg, #fff 0 6px, #f1f1f1 6px 12px); color: var(--muted); cursor: not-allowed; box-shadow: none; }
+.jh-door.is-locked:hover { transform: none; }
+.jh-door.is-locked .jh-door__ic svg { opacity: .35; }
+.jh-door.is-locked .jh-door__n { background: #bbb; }
+.jh-door.is-locked::after { content: "LÆST"; position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%) rotate(-12deg); padding: 3px 14px; background: var(--yellow); border: 2px solid var(--ink); font-weight: 800; font-size: .72rem; letter-spacing: .1em; }
+.jh-door.is-open { outline: 3px solid var(--pink); outline-offset: 4px; }
+.jh-door.is-done .jh-door__n::after { content: "✓"; position: absolute; right: -8px; top: -6px; font-size: .8rem; background: var(--green); color: #fff; border-radius: 50%; width: 18px; height: 18px; line-height: 16px; border: 1.5px solid var(--ink); }
+
+/* ---- Lúkan, sum er opin ------------------------------------------------ */
+.jh-open { margin-top: 28px; border: 2px solid var(--ink); border-radius: 18px; background: #fff; box-shadow: 5px 6px 0 var(--ink); display: none; overflow: hidden; --c: var(--pink); }
+.jh-open.is-on { display: block; }
+.jh-open__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; padding: 18px 24px 14px; border-bottom: 2px solid var(--ink); background: linear-gradient(90deg, color-mix(in srgb, var(--c) 18%, #fff), #fff 70%); }
+.jh-open__head h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); }
+.jh-open__tags { display: inline-flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.jh-open__body { display: grid; grid-template-columns: 1.2fr .8fr; }
+.jh-open__col { padding: 20px 24px; }
+.jh-open__col + .jh-open__col { border-left: 2px solid var(--ink); background: #fafafa; }
+.jh-part { padding: 14px 0; border-top: 2px dashed var(--line); }
+.jh-part:first-child { border-top: 0; padding-top: 0; }
+.jh-part h3 { display: inline-flex; align-items: center; gap: 8px; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; padding: 3px 10px; border: 2px solid var(--ink); border-radius: 999px; background: var(--c); color: #fff; }
+.jh-part h3 b { font-weight: 800; background: #fff; color: var(--ink); border-radius: 999px; padding: 0 6px; margin-left: 2px; }
+.jh-tx { font-size: clamp(1.05rem, 1.7vw, 1.2rem); line-height: 1.6; white-space: pre-line; }
+.jh-src { display: flex; flex-wrap: wrap; gap: 8px; }
+.jh-hold-box { margin-top: 12px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; font-size: 1rem; line-height: 1.6; box-shadow: 3px 3px 0 var(--line); }
+.jh-hold-box p { margin-bottom: .7em; }
+.jh-hold-box em { font-style: italic; }
+.jh-hold-box table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.jh-hold-box th, .jh-hold-box td { border: 2px solid var(--ink); padding: 8px 10px; text-align: left; vertical-align: top; }
+.jh-hold-box th { background: var(--yellow-l); }
+.jh-hold-box .jh-ad { padding: 12px 14px; border: 2px solid var(--ink); border-radius: 10px; margin-bottom: 10px; }
+.jh-hold-box .jh-ad:last-child { margin-bottom: 0; }
+.jh-hold-box .jh-ad b { display: inline-block; margin-bottom: 4px; }
+.jh-task { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 1.02rem; }
+.jh-task li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
+.jh-task li input { width: 22px; height: 22px; margin: 3px 0 0; accent-color: var(--green); cursor: pointer; }
+.jh-task li.is-on { text-decoration: line-through; color: var(--muted); }
+.jh-hint { margin-top: 10px; padding: 10px 14px; border-left: 4px solid var(--yellow); background: var(--yellow-l); border-radius: 0 10px 10px 0; font-size: .95rem; white-space: pre-line; }
+.jh-vid { margin-top: 6px; padding: 12px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--pink-l); white-space: pre-line; font-size: 1rem; position: relative; }
+.jh-det { margin-top: 10px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; }
+.jh-det summary { cursor: pointer; padding: 10px 14px; font-weight: 800; font-size: .95rem; list-style: none; display: flex; align-items: center; gap: 8px; }
+.jh-det summary::-webkit-details-marker { display: none; }
+.jh-det summary::before { content: "▸"; color: var(--pink); }
+.jh-det[open] summary::before { content: "▾"; color: var(--pink); }
+.jh-det__b { padding: 0 14px 12px; font-size: .96rem; white-space: pre-line; }
+.jh-like { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; font-weight: 800; cursor: pointer; box-shadow: 2px 3px 0 var(--ink); }
+.jh-like svg { width: 20px; height: 20px; fill: none; stroke: var(--ink); stroke-width: 2; }
+.jh-like.is-on svg { fill: var(--pink); stroke: var(--pink); animation: jh-pop .35s; }
+@keyframes jh-pop { 50% { transform: scale(1.4); } }
+.jh-yt { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border: 2px solid var(--ink); border-radius: 14px; padding: 0; cursor: pointer; background: #ddd; overflow: hidden; margin-top: 10px; box-shadow: 3px 4px 0 var(--ink); }
+.jh-yt img { width: 100%; height: 100%; object-fit: cover; }
+.jh-yt__play { position: absolute; left: 12px; bottom: 12px; padding: 8px 14px; background: var(--pink); color: #fff; border: 2px solid var(--ink); border-radius: 999px; font-weight: 800; font-size: .85rem; }
+.jh-yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.jh-ytcap { font-size: .85rem; color: var(--muted); margin: 6px 0 0; }
+.jh-open__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 24px; border-top: 2px solid var(--ink); background: #fafafa; }
+.jh-hold { display: none; }
+
+/* ---- Niðanfyri ---------------------------------------------------------- */
+.jh-section { padding: 26px 0; border-top: 2px solid var(--ink); }
+.jh-section__in { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(20px, 4vw, 56px); }
+.jh-section h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 8px; }
+.jh-tips { display: grid; gap: 10px; }
+.jh-tip { padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: #fff; box-shadow: 3px 3px 0 var(--ink); font-size: .98rem; }
+.jh-tip b { display: block; margin-bottom: 4px; }
+.jh-outro { padding: 30px 0 26px; text-align: center; }
+.jh-outro h2 { font-size: clamp(2rem, 5vw, 3.6rem); transform: rotate(-1.5deg); display: inline-block; }
+.jh-outro h2 span { color: var(--pink); }
+
+@media (max-width: 1000px) { .jh-grid { grid-template-columns: repeat(5, 1fr); } }
+@media (max-width: 860px) { .jh-open__body, .jh-section__in { grid-template-columns: 1fr; } .jh-open__col + .jh-open__col { border-left: 0; border-top: 2px solid var(--ink); } }
+@media (max-width: 700px) { .jh-hero__in { grid-template-columns: 1fr; } .jh-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } .jh-door { min-height: 160px; } .jh-door__ic { width: 44px; height: 44px; } }
+@media (max-width: 430px) { .jh-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
+</style>
+<style>body { margin: 0; }</style>
+</head>
+<body>
+<div class="jol jh">
+  <!-- Skissur: tussjstrikur, ongin fylling -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <g id="k-note"><path d="M24 48V14l22-5v32"/><circle cx="18" cy="49" r="6"/><circle cx="40" cy="42" r="6"/><path d="M24 22l22-5"/></g>
+      <g id="k-percent"><path d="M14 50L50 14"/><circle cx="19" cy="19" r="7"/><circle cx="45" cy="45" r="7"/><path d="M8 8l4 2M56 56l-4-2"/></g>
+      <g id="k-bowl"><path d="M10 28h44c0 14-10 22-22 22S10 42 10 28z"/><path d="M18 50h28M26 56h12"/><ellipse cx="32" cy="22" rx="5" ry="8" transform="rotate(-30 32 22)"/><path d="M40 12l10-6"/></g>
+      <g id="k-bulb"><path d="M24 44h16M26 50h12M32 8a14 14 0 0 0-8 25c2 2 2 4 2 7h12c0-3 0-5 2-7a14 14 0 0 0-8-25z"/><path d="M28 24l4 6 4-6"/><path d="M8 20l4 2M56 20l-4 2M12 8l3 3M52 8l-3 3"/></g>
+      <g id="k-coins"><ellipse cx="26" cy="20" rx="14" ry="5"/><path d="M12 20v20c0 3 6 5 14 5s14-2 14-5V20M12 28c0 3 6 5 14 5s14-2 14-5M12 36c0 3 6 5 14 5s14-2 14-5"/><path d="M44 30l12-8M46 40l10 2M48 20l8-4"/></g>
+      <g id="k-church"><path d="M14 56V30l18-14 18 14v26z"/><path d="M32 4v12M28 8h8M8 56h48M26 56V42h12v14M20 38h6v6h-6zM38 38h6v6h-6z"/></g>
+      <g id="k-hoodie"><path d="M20 22c0-8 6-14 12-14s12 6 12 14l10 6-4 10-6-2v22H20V36l-6 2-4-10z"/><path d="M26 22c2 4 10 4 12 0M32 36v10M28 50h8"/></g>
+      <g id="k-dice"><rect x="8" y="22" width="26" height="26" rx="4"/><path d="M34 32l16-12-6-12-18 8"/><circle cx="16" cy="30" r="2"/><circle cx="26" cy="40" r="2"/><circle cx="21" cy="35" r="2"/><circle cx="40" cy="21" r="1.6"/></g>
+      <g id="k-map"><path d="M8 16l16-6 16 6 16-6v38l-16 6-16-6-16 6z"/><path d="M24 10v38M40 16v38"/><circle cx="18" cy="26" r="2"/><circle cx="46" cy="40" r="2"/><path d="M18 26c6 4 10 6 14 6s8 2 14 8" stroke-dasharray="3 3"/></g>
+      <g id="k-frame"><rect x="8" y="12" width="48" height="40"/><rect x="14" y="18" width="36" height="28"/><path d="M20 40l8-10 6 6 6-9 8 13"/><circle cx="24" cy="25" r="2.5"/></g>
+      <g id="k-pen"><path d="M14 50l4-14L42 12l10 10-24 24z"/><path d="M38 16l10 10M18 36l10 10M14 50l-4 4"/><path d="M8 58h30"/></g>
+      <g id="k-city"><path d="M8 56V30h12v26M20 56V18h14v38M34 56V36h12v20M46 56V26h10v30M4 56h56"/><path d="M12 36h4M12 42h4M24 24h6M24 30h6M24 36h6M38 42h4M50 32h2M50 38h2"/><path d="M28 10l2-6 2 6"/></g>
+      <g id="k-play"><rect x="6" y="14" width="52" height="34" rx="4"/><path d="M27 23v16l13-8z"/><path d="M18 56h28M32 48v8"/></g>
+      <g id="k-camera"><rect x="8" y="20" width="40" height="30" rx="4"/><circle cx="28" cy="35" r="8"/><path d="M48 28l10-6v22l-10-6M16 20l4-6h16l4 6"/><path d="M52 12c2 2 2 4 0 6M56 9c3 3 3 9 0 12"/></g>
+      <g id="k-heart"><path d="M32 54C16 42 8 32 12 22c3-7 13-8 20 0 7-8 17-7 20 0 4 10-4 20-20 32z"/></g>
+      <g id="k-hat"><path d="M12 48 C 18 20, 36 8, 56 8 C 68 8, 76 12, 78 18 C 70 16, 64 30, 68 48 Z" fill="#e5383b" stroke="#141414" stroke-width="3"/><circle cx="78" cy="18" r="7" fill="#fff" stroke="#141414" stroke-width="3"/><path d="M8 50 C 26 42, 54 42, 74 50 L 70 60 C 52 52, 28 52, 12 60 Z" fill="#fff" stroke="#141414" stroke-width="3"/></g>
+    </defs>
+  </svg>
+
+  <!-- ============================================================ Hero -->
+  <section class="jol-hero jh-hero" id="jol-top">
+    <div class="jh-wrap">
+      <div class="jh-hero__in">
+        <div>
+          <span class="jh-sticker jh-sticker--yellow">7.–9. flokkur · desember 2026</span>
+          <h1 style="margin-top:14px">Desember undir <span>sjóneykuni</span></h1>
+          <p class="jh-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka byrjar við onkrum, sum vekir forvitni: ein tekstur, ein mynd, ein pástandur ella ein trupulleiki. Tú skalt kanna, rokna, tulka og grundgeva fyri tínum sjónarmiðum. Flestu lúkurnar taka 10–15 minuttir, einstakar umleið 20.</p>
+          <div class="jh-hero__btns">
+            <a class="jh-btn jh-btn--pink" href="#kalendari">Far til lúkurnar ↓</a>
+            <button class="jh-btn" type="button" id="jh-alt" title="Til læraran, sum leggur til rættis">Lat allar lúkur upp</button>
+          </div>
+          <div class="jh-countdown" id="jh-countdown" hidden><span>⏳</span><span id="jh-count-txt"></span></div>
+        </div>
+        <div class="jh-hero__art">
+          <!-- Skissa: ein ung við húgvu, sum hyggur gjøgnum eina sjóneyku -->
+          <svg viewBox="0 0 320 260" aria-hidden="true" fill="none" stroke="#141414" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" id="jh-stick" data-mood="sour">
+            <!-- høvd og kroppur -->
+            <path d="M128 118c-14-34 4-78 46-80 40-2 60 34 46 70-10 26-40 36-62 26-14-6-24-10-30-16z" fill="#fff"/>
+            <path d="M166 134v70M166 204l-28 50M166 204l28 50M166 150l-40 30"/>
+            <!-- SÚRUR: brúgvar niður, rukkur, surt munn, bendur fingur -->
+            <g class="jh-face jh-face--sour">
+              <ellipse cx="150" cy="80" rx="12" ry="11" fill="#fff"/><ellipse cx="184" cy="78" rx="12" ry="11" fill="#fff"/>
+              <circle cx="154" cy="83" r="4.5" fill="#141414" stroke="none"/><circle cx="188" cy="81" r="4.5" fill="#141414" stroke="none"/>
+              <path d="M136 64l28 8M198 56l-24 10"/>
+              <path d="M142 48c6-4 12-4 18 0M164 40c8-6 16-6 24 0M146 38c4-2 8-2 12 0" stroke-width="3"/>
+              <path d="M126 96c4-3 8-3 12 0M124 106c4-2 8-2 12 0" stroke-width="3"/>
+              <path d="M168 88l-4 14 8 2" stroke-width="4"/>
+              <path d="M156 118c8-6 18-6 26 0" stroke-width="5"/>
+              <path d="M166 150l44-14 22-26"/>
+              <path d="M232 110c0-10 8-16 14-10 4 4 0 12-4 14 6-2 12 0 12 6s-6 8-12 6c4 4 2 12-4 12s-10-6-10-12" fill="#fff" stroke-width="4"/>
+              <circle cx="236" cy="70" r="3" fill="#141414" stroke="none"/><circle cx="250" cy="66" r="3" fill="#141414" stroke="none"/><circle cx="264" cy="62" r="3" fill="#141414" stroke="none"/>
+              <path d="M214 66c2 6 0 12-4 16" stroke="#3a86ff" stroke-width="3"/>
+            </g>
+            <!-- GLAÐUR: brúgvar upp, stór eygu, breitt smíl, fingurin beint upp -->
+            <g class="jh-face jh-face--happy">
+              <ellipse cx="150" cy="78" rx="13" ry="15" fill="#fff"/><ellipse cx="184" cy="76" rx="13" ry="15" fill="#fff"/>
+              <circle cx="153" cy="81" r="5" fill="#141414" stroke="none"/><circle cx="187" cy="79" r="5" fill="#141414" stroke="none"/>
+              <path d="M136 56c8-10 20-10 28-4M172 48c8-8 20-8 28-2"/>
+              <path d="M168 86l-4 14 8 2" stroke-width="4"/>
+              <path d="M150 108c12 14 30 12 38-2" stroke-width="5"/>
+              <path d="M166 150l44-24 16-40"/>
+              <path d="M226 86c-2-10 2-18 8-16 4 2 4 8 2 12 6 0 10 4 8 10s-8 6-12 4c2 6-2 12-8 10s-6-10-2-14" fill="#fff" stroke-width="4"/>
+              <path d="M240 50l4-8M254 58l8-4M250 44l6-6" stroke="#ffd60a" stroke-width="4"/>
+              <path d="M136 100c-6 2-10 6-10 12" stroke="#ff3d8a" stroke-width="3"/><path d="M198 98c6 2 10 6 10 12" stroke="#ff3d8a" stroke-width="3"/>
+            </g>
+            <!-- hjørtu og stjørnur -->
+            <path d="M54 56c-6-6-14 0-8 8l8 8 8-8c6-8-2-14-8-8z" fill="#ff3d8a" stroke="#141414" stroke-width="3"/>
+            <path d="M284 180c-4-4-10 0-6 6l6 6 6-6c4-6-2-10-6-6z" fill="#ff3d8a" stroke="#141414" stroke-width="3"/>
+            <path d="M46 170l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#ffd60a" stroke="#141414" stroke-width="3"/>
+            <path d="M286 44l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#ffd60a" stroke="#141414" stroke-width="3"/>
+            <path d="M92 110l10 2M90 122l10 1M94 98l10 3" stroke="#3a86ff" stroke-width="3"/>
+          </svg>
+          <div class="jh-memebox"><span class="jh-meme" id="jh-meme">Eg, tá lúkan í dag er læst:</span></div>
+          <button class="jh-dog" type="button" aria-label="Snar-hundurin" data-dog>
+            <img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar_hundur.png" alt="" loading="lazy">
+            <svg class="jh-dog__hat" viewBox="0 0 90 64" aria-hidden="true"><use href="#k-hat"/></svg>
+            <span class="jh-dog__say">Vuff. Eg las ikki uppgávuna.</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== Kalendarin -->
+  <section class="jh-cal" id="kalendari">
+    <div class="jh-wrap">
+      <div class="jh-cal__head">
+        <div><span class="jh-mono">14 skúladagar · 1.–18. desember</span><h2>Lúkurnar</h2></div>
+        <div class="jh-legend" aria-label="Lærugreinir" id="jh-legend"></div>
+      </div>
+      <div class="jh-grid" id="jh-grid" role="list"></div>
+
+      <article class="jh-open" id="jh-open" aria-live="polite">
+        <div class="jh-open__head">
+          <div><span class="jh-mono" id="jo-meta"></span><h2 id="jo-title"></h2><div class="jh-open__tags" id="jo-tags"></div></div>
+          <button class="jh-btn jh-btn--sm" type="button" id="jo-close">Lat aftur ×</button>
+        </div>
+        <div class="jh-open__body">
+          <div class="jh-open__col">
+            <div class="jh-part"><div class="jh-src" id="jo-src"></div><p class="jh-tx" id="jo-tx" style="margin-top:12px"></p><div id="jo-hold"></div><div id="jo-media"></div></div>
+            <div class="jh-part"><h3 id="jo-upp-h">Uppgáva</h3><ul class="jh-task" id="jo-upp"></ul><p class="jh-tx" id="jo-upp-after" style="font-size:1rem;margin-top:10px"></p><div class="jh-hint" id="jo-hint" hidden></div><div class="jh-src" id="jo-btns" style="margin-top:12px"></div></div>
+          </div>
+          <div class="jh-open__col">
+            <div class="jh-part"><h3 id="jo-vid-h">Kanna víðari</h3><div class="jh-vid" id="jo-vid"></div></div>
+            <div class="jh-part">
+              <details class="jh-det" id="jo-laer-det"><summary>Til læraran – viðmerkingar og svar (trýst fyri at síggja tey)</summary><div class="jh-det__b" id="jo-laer"></div></details>
+            </div>
+            <div class="jh-part"><button class="jh-like" type="button" id="jo-like"><svg viewBox="0 0 24 24"><path d="M12 21C5 15 2 11 3.5 7.5 5 4.5 9.5 4 12 7c2.5-3 7-2.5 8.5.5C22 11 19 15 12 21z"/></svg><span class="jh-hand" style="font-size:1.05rem">Mær dámar</span><span id="jo-like-n" class="jh-hand" style="font-size:1.05rem" hidden></span></button><p style="font-size:.78rem;color:var(--muted);margin-top:6px">Títt val verður goymt í hesum kagaranum.</p></div>
+          </div>
+        </div>
+        <div class="jh-open__foot">
+          <button class="jh-btn jh-btn--sm" type="button" id="jo-prev">← Fyrra lúka</button>
+          <button class="jh-btn jh-btn--sm jh-btn--yellow" type="button" id="jo-done">Merk sum liðugt ✓</button>
+          <button class="jh-btn jh-btn--sm" type="button" id="jo-next">Næsta lúka →</button>
+        </div>
+      </article>
+
+      <!-- Tekstir, sum standa á síðuni og verða settir inn í lúkuna -->
+      <div class="jh-hold" id="jh-hold">
+        <div data-hold="mandlen" class="jh-hold-box" lang="da"><p class="jh-mono" style="margin-bottom:8px">Nýskrivaður, hugsaður tekstur · á donskum</p>
+<p><em>Freja havde fundet mandlen for fem minutter siden. Hun gemte den i hånden under bordet.</em></p>
+<p><em>»Jeg kan godt spise en portion mere,« sagde hendes lillebror.</em></p>
+<p><em>»Du har allerede fået tre,« sagde far.</em></p>
+<p><em>Freja så på mandelgaven. Den var lille og flad. Måske et gavekort.</em></p>
+<p><em>»Er der overhovedet en mandel i?« spurgte mor.</em></p>
+<p><em>Freja åbnede munden og skulle til at sige noget, men lillebroren var hurtigere.</em></p>
+<p><em>»Jeg bliver ved, til jeg finder den.«</em></p>
+<p><em>Hun lagde mandlen på bordet.</em></p>
+<p><em>Der blev stille.</em></p>
+<p><em>»Du kunne godt have sagt noget,« sagde far.</em></p>
+<p><em>Så skubbede han selv sin tomme tallerken væk.</em></p></div>
+        <div data-hold="scrooge" class="jh-hold-box" lang="en"><p class="jh-mono" style="margin-bottom:8px">Stytt endursøgn á lættari enskum, grundað á samrøðuna millum Scrooge og systurson hansara í fyrsta parti av «A Christmas Carol» eftir Charles Dickens · ikki orðrættur tekstur úr bókini</p>
+<p><em>Scrooge’s nephew visits his uncle and wishes him a merry Christmas. Scrooge does not welcome the greeting. He asks why his nephew should be happy when he has so little money.</em></p>
+<p><em>His nephew turns the question around: why should Scrooge be unhappy when he is so rich?</em></p>
+<p><em>The nephew knows that Christmas has never made him richer. Still, he believes it has done him good. To him, kindness and the way people treat each other also have value.</em></p>
+</div>
+        <div data-hold="lysingar" class="jh-hold-box"><p class="jh-mono" style="margin-bottom:8px">Tvær hugsaðar lýsingar · sama hettutroyggja · 349 kr.</p>
+<div class="jh-ad"><b>Lýsing A</b><br><em>Bleyt hettutroyggja í fýra litum. Støddir XS–XL. Vaskast á 30 stigum.</em></div>
+<div class="jh-ad"><b>Lýsing B</b><br><em>Desember er fullur av løtum, tú vilt minnast. Finn títt jólahýr í okkara nýggju hettutroyggju. Bert hesa vikuna.</em></div></div>
+        <div data-hold="reglur" class="jh-hold-box"><p><b>Regla A:</b> Kasta ein vanligan sekssíðaðan terning. Tú vinnur við einum seksara.</p><p><b>Regla B:</b> Kasta tveir vanligar sekssíðaðar terningar. Tú vinnur, um summurin er seks.</p><p style="margin:0;color:var(--muted);font-size:.92rem">Vit rokna við terningum, har allar seks síður eru líka sannlíkar, og óheftum køstum.</p></div>
+        <div data-hold="ferdin" class="jh-hold-box"><p class="jh-mono" style="margin-bottom:8px">Ein hugsað ferð · gjørd til uppgávuna; skal ikki brúkast sum upplýsingar um eitt ávíst vørumerki</p><table><tr><th>Stað</th><th>Hvat hendir?</th></tr><tr><td>Gana</td><td>Kakaobaunir verða dyrkaðar og heystaðar.</td></tr><tr><td>Niðurlond</td><td>Kakaoið verður brúkt í sjokulátuframleiðslu.</td></tr><tr><td>Danmark</td><td>Lidna vøran kemur á goymslu.</td></tr><tr><td>Føroyar</td><td>Sjokulátan verður seld í einum handli.</td></tr></table></div>
+        <div data-hold="talva" class="jh-hold-box"><table><tr><th>Hetta síggja vit í myndini</th><th>Hetta finna vit í tekstinum</th></tr><tr><td style="height:70px"></td><td></td></tr></table></div>
+        <div data-hold="phrases" class="jh-hold-box" lang="en"><p class="jh-mono" style="margin-bottom:8px">Useful phrases</p><p><em>At the beginning …</em><br><em>The music makes the scene feel …</em><br><em>The advert suggests that …</em><br><em>The company wants viewers to …</em></p></div>
+        <div data-hold="hugnaligt" class="jh-hold-box"><p class="jh-mono" style="margin-bottom:8px">Til samanbering · «Hví man alt vera so hugnaligt í kvøld!» · orð: Kristin í Geil</p>
+<p>1. Hví man alt vera so hugnaligt í kvøld!<br>Frosturin bítur, men ongi er køld.<br>Dagur var strævin, men ongin sýnast móð,<br>hví eru øll so blíð og fró?</p>
+<p>Tað er jólaaftan! Klokkan ring:<br>Bing, bang, bing! Bing, bang, bing!<br>Brátt er træið tendrað – slá so ring,<br>dansa kvøð og syng!</p>
+<p>2. Myrkt er og kalt er og følnað hvør urt,<br>sólin hin bleika næstan kámast burt,<br>smáfuglar stirdir ei orka á flog –<br>tá sendir sólin gleðisboð:</p>
+<p>3. Fjart er hon stødd, men vit hoyra tað ljóð,<br>børn síni minnist sólarmamman góð:<br>Eg komi aftur til alt tað, sum grør<br>og andar á tí køldu jørð.</p>
+<p>4. Børn eru børn, og tað verða vit við,<br>tá vit um jólatræið, lið um lið,<br>dansa og minnast á summar og sól,<br>meðan vit kvøða hátt um jól.</p>
+<p>Tað er jólaaftan! Klokkan ring:<br>Bing, bang, bing! Bing, bang, bing!<br>Brátt er træið tendrað – slá so ring,<br>dansa kvøð og syng!</p></div>
+        <div data-hold="utgangs" class="jh-hold-box"><p class="jh-mono" style="margin-bottom:8px">Vel eitt av hesum hugskotunum sum støði undir søguni</p><p>• Ein pakki verður latin skeivum persóni.<br>• Streymurin fer, beint áðrenn nakað týdningarmikið skal henda.<br>• Ein persónur fær eina jólaheilsan, sum var ætlað onkrum øðrum.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ Til læraran -->
+  <section class="jh-section" id="laerari">
+    <div class="jh-wrap jh-section__in">
+      <div><span class="jh-mono">Til tín, sum svarar</span><h2>Høvuðsspurningurin</h2><p style="color:var(--muted)">Hann gildir fyri allar opnu uppgávurnar í kalendaranum.</p></div>
+      <div class="jh-tips">
+        <div class="jh-tip" style="background:var(--yellow-l);font-size:1.25rem;font-weight:800">Hvat í tekstinum, myndini, tølunum ella døminum stuðlar tínum svari?</div>
+        <details class="jh-det"><summary>Til læraran – felags tillaging til 7.–9. flokk</summary><div class="jh-det__b"><b>7. flokkur:</b> Næmingarnir kunnu fáa upplestur, orðafrágreiðingar og hjálp at finna fyrsta dømið. Pararbeiði kann stuðla bæði lesing og munnligari luttøku.
+
+<b>8.–9. flokkur:</b> Tey kunnu arbeiða sjálvstøðugari, samanbera tulkingar og viðgera aðrar møguligar frágreiðingar. "Kanna víðari" er ætlað sum faklig dýping.
+
+<b>Svarini:</b> Viðmerkingar og svar eru savnað undir „Til læraran“ í hvørjari lúku. Trýst á yvirskriftina fyri at síggja tey. Knappurin „Lat allar lúkur upp“ ovast letur allar lúkur upp til at leggja til rættis; „Fylg dagfestingunum aftur“ læsir komandi lúkur aftur, meðan eldri lúkur framvegis eru tøkar.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="jh-outro">
+    <div class="jh-wrap">
+      <h2>Gleðilig <span>jól</span>!</h2>
+      <p class="jh-hand" style="margin-top:12px;color:var(--muted)">Takk fyri góðar spurningar og grundgevingar. Vit síggjast í januar.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var root = document.querySelector('.jol');
+  if (!root) return;
+  root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
+
+  var FAK = { fo: ['Føroyskt', 'var(--pink)'], da: ['Danskt', 'var(--red)'], en: ['Enskt', 'var(--blue)'], st: ['Støddfrøði', 'var(--green)'], al: ['Alisfrøði og evnafrøði', '#8338ec'], sa: ['Samfelagsfrøði', '#fb8500'], so: ['Søga og samtíð', '#6f4e37'], kr: ['Kristnikunnleiki og átrúnaður', '#0096c7'], la: ['Landafrøði', '#2a9d8f'], ml: ['Myndlist og tónleikur', '#e5383b'] };
+  var LABEL = { fo: 'Uppgáva', da: 'Opgave', en: 'Task' }, VIDLABEL = { fo: 'Kanna víðari', da: 'Undersøg mere', en: 'Go further' };
+  var MONTHS = ['januar', 'februar', 'mars', 'apríl', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
+  var DAYS = ['sunnudagur', 'mánadagur', 'týsdagur', 'mikudagur', 'hósdagur', 'fríggjadagur', 'leygardagur'];
+
+  /* ------------------------------------------------------------ Lúkurnar
+     d · t · fak · min · ic · lang (mál í uppgávuni) · src [[tekstur, slóð]] · tx (inngangur) · hold (tekstur á síðuni)
+     upp [punkt] · uppAfter · hint · vid (kanna víðari) · laer · yt [[id, tekstur]] */
+  var DOORS = [
+    { d: '2026-12-01', t: 'Hvussu ljóða føroysk jól?', fak: ['fo'], min: '10–15', ic: 'k-note', lang: 'fo',
+      src: [['«Jólaaftan» eftir Edmund í Garði – í Kórbók 2 á Snar (PDF)', '/fileadmin/05_bokavising/korbok/korbok2/files/assets/common/downloads/K.pdf']],
+      tx: 'Ein tekstur kann skapa eina heila verð við fáum orðum. Í sanginum «Jólaaftan» eftir Edmund í Garði møta vit bæði landslagi, menniskjum og jólahýri.\n\nOpna fyrst «Jólaaftan» í Kórbók 2, og les tey fimm ørindini. Tú kanst lesa tekstin uttan at lesa nótarnar. Sangurin niðanfyri er til samanberingar í «Kanna víðari».',
+      upp: ['Finn tvey dømi um orð, sum knýta tekstin at einum heimligum umhvørvi.', 'Vel eina endurtøku. Hvat ger hon við tekstin?', 'Hvussu verða menniskjuni lýst í øðrum ørindi? Vís á orð, sum stuðla tínum svari.'],
+      uppAfter: 'Samanber síðan tína tulking við tulkingina hjá einum øðrum.',
+      hold: 'hugnaligt',
+      vid: 'Hvør talar í sanginum, og hvønn vendir røddin sær til? Kanna, um hetta broytist gjøgnum ørindini.\n\nSamanber við «Hví man alt vera so hugnaligt í kvøld!» eftir Kristin í Geil (teksturin stendur omanfyri): hvat hava sangirnir í felag, og hvørjir munir eru á teimum? Kanna serliga myndir av ljósi og myrkri.',
+      laer: 'Arbeiðið snýr seg um orðaval, endurtøku, rødd og tulking. Næmingarnir skulu stuðla svarunum við tekstinum. Í 7. flokki kunnu tey arbeiða við fyrsta og øðrum ørindi.' },
+    { d: '2026-12-02', t: 'Gevur 20 % og síðan 10 % í avsláttri til samans 30 %?', fak: ['st'], min: '10–15', ic: 'k-percent', lang: 'fo',
+      src: [],
+      tx: 'Ein vøra kostar 500 kr. Handilin setur hana 20 % niður. Við kassan fært tú síðan 10 % av tí nýggja prísinum í eyka avsláttri.\n\nHetta er eitt hugsað roknidømi.',
+      upp: ['Rokna prísin eftir fyrsta avsláttin.', 'Rokna prísin, tú skalt gjalda við kassan.', 'Hvussu nógvar krónur sparir tú til samans?', 'Hvussu nógv prosent av upprunaprísinum hevur tú spart?'],
+      uppAfter: 'Greið einum øðrum frá, hví tey seinastu 10 prosentini verða roknað av 400 kr. og ikki av 500 kr.',
+      vid: 'Handilin gevur í staðin 30 % í avsláttri beinanvegin. Hvussu stórur verður munurin á endaligu prísunum?',
+      btns: [['Prenta roknistykki – fleiri prosentstykki', '/funkur/prenta-roknistykki']],
+      laer: 'Svar: Fyrst 400 kr., síðan 360 kr. Samlaði avslátturin er 140 kr., svarandi til 28 %. Við 30 % avsláttri kostar vøran 350 kr. Munurin er 10 kr.\nFunkan Prenta roknistykki ger prosentuppgávur við heilum tølum í svarinum, til at venja víðari.' },
+    { d: '2026-12-03', t: 'Hvem har mandlen?', fak: ['da'], min: '10–15', ic: 'k-bowl', lang: 'da',
+      src: [], hold: 'mandlen',
+      tx: 'I mange danske familier gemmer man en hel mandel i risalamanden juleaften. Den, der finder mandlen, får mandelgaven. Læs den nyskrevne, fiktive tekst nedenfor.',
+      upp: ['Find et sted, hvor læseren ved noget, som nogle af de andre personer ved bordet ikke ved.', 'Hvorfor gemmer Freja mandlen? Find noget i teksten, som støtter dit forslag.', 'Skriv to nye replikker, som kunne afslutte scenen.'],
+      vid: 'Undersøg mere: Hvordan kan den sidste sætning ændre vores opfattelse af faren?',
+      laer: 'Dentur er á persónslýsing, undirtekst og munnligt danskt. Fleiri tulkingar kunnu vera væl grundaðar. Næmingarnir kunnu hava ymisk uppskot til, hví pápin skumpar tallerkin burtur. Tey skulu grundgeva við tekstinum.' },
+    { d: '2026-12-04', t: 'Hvat brúka jólaljósini?', fak: ['al'], min: '10–15', ic: 'k-bulb', lang: 'fo',
+      src: [],
+      tx: 'Tvær ljósketur skulu lýsa seks tímar um dagin í 18 dagar.\n\nÍ hesum hugsaða døminum er effektin hjá ljósketu A 8 W, og effektin hjá B er 40 W. Orkunýtslan verður síðan roknað í kWh. Vit rokna við einum elprísi á 2,50 kr. fyri kWh.\n\nTølini eru gjørd til uppgávuna.',
+      upp: ['Hvussu nógvar tímar lýsir hvør ketan til samans?', 'Rokna orkunýtsluna hjá báðum ketunum.', 'Rokna kostnaðin hjá báðum.', 'Hvussu nógvar ferðir so nógva orku brúkar B sum A?'],
+      hint: 'Hjálp: Orkunýtsla í kWh = effekt í W × tímar ÷ 1.000.',
+      vid: 'Hvørjar aðrar upplýsingar hevði tú viljað havt, áðrenn tú valdi, hvørja ketu tú skuldi keypa?',
+      btns: [['Kanna koturnar – forrita jólaperur', '/funkur/kanna-koturnar']],
+      laer: 'Svar: 108 tímar. A brúkar 0,864 kWh og kostar 2,16 kr. B brúkar 4,32 kWh og kostar 10,80 kr. B brúkar fimm ferðir so nógva orku. Tosa um munin á effekt og orkunýtslu.\nÍskoyti: í Kanna koturnar setur knappurin Jólaperur eina kotu inn, har perur blinka. Lat næmingarnar broyta tíðina í animatiónini og talið á perum. Hetta framhaldið snýr seg um forritan og animatión; tað er ikki ein útrokning av elnýtslu.' },
+    { d: '2026-12-07', t: 'Scrooge: What is Christmas worth?', fak: ['en'], min: '10–15', ic: 'k-coins', lang: 'en',
+      src: [['Upprunateksturin hjá Dickens (Project Gutenberg)', 'https://www.gutenberg.org/cache/epub/24022/pg24022-images.html']], hold: 'scrooge',
+      tx: 'Charles Dickens skrivaði «A Christmas Carol». Her er ein stytt endursøgn á lættari enskum, grundað á samrøðuna millum Scrooge og systurson hansara í fyrsta parti.',
+      upp: ['Work in pairs. One of you speaks for Scrooge. The other speaks for his nephew.', 'Explain what your character thinks makes Christmas valuable.', 'Use one detail from the text.', 'Ask the other character one question.'],
+      uppAfter: 'Finish this sentence together: They disagree about …',
+      vid: 'Go further: Can something have value without having a price? Give one example and explain it.',
+      laer: 'Stuðulsorð: wealth, kindness, value, price, agree, disagree. Met um, hvussu næmingarnir brúka tekstin og samskifta á enskum.' },
+    { d: '2026-12-08', t: '1950 sæð úr 2004', fak: ['so'], min: '10–15', ic: 'k-church', lang: 'fo',
+      src: [['Frits Johannesen: «Jólakvøld í Oyndarfjarðar kirkju 1950» (in.fo, 22. des. 2004)', 'https://in.fo/grein/j-lakv-ld-oyndarfjar-ar-kirkju-1950']],
+      tx: 'Ein tekstur um fortíðina er eisini skrivaður í einari ávísari tíð.\n\nFrits Johannesen skrivaði greinina «Jólakvøld í Oyndarfjarðar kirkju 1950», sum varð útgivin 22. desember 2004. Í byrjanini lýsir hann kirkjurúmið, ljósið og fólkið.\n\nLes fyrsta frágreiðandi tekstbrotið undir yvirskriftini, fram til partin, sum byrjar við umrøðuni av altartalvuni.',
+      upp: ['Hvussu nógv ár eru millum jólakvøldið, greinin lýsir, og útgávuárið?', 'Finn tvey dømi um ítøkilig viðurskifti og eitt dømi um eina meting ella kensluborna lýsing.', 'Hvat kann hetta brotið hjálpa okkum at skilja um jól fyrr?', 'Hvat kunnu vit ikki staðfesta við hesum brotinum einsamøllum?'],
+      vid: 'Vel eina aðra keldu, sum tú hevði viljað samanborið við tekstin: eina mynd, eitt bræv frá umleið 1950 ella eitt kirkjuskjal. Greið frá valinum.',
+      laer: 'Tíðarmunurin er 54 ár. Skiljið millum árið, sum verður lýst, og árið, tá ið teksturin varð skrivaður. Arbeiðið við kelduvirði og sjónarhorni.' },
+    { d: '2026-12-09', t: 'Sama vøra, ymisk ávirkan', fak: ['sa'], min: '10–15', ic: 'k-hoodie', lang: 'fo',
+      src: [], hold: 'lysingar',
+      tx: 'Her eru tvær hugsaðar lýsingar fyri somu hettutroyggju. Prísurin er 349 kr.\n\nArbeiðið tvey og tvey.',
+      upp: ['Hvat fáa tit at vita um sjálva vøruna í hvørjari lýsing?', 'Hvørjar kenslur ella ynskir roynir lýsing B at vekja? Hvat fáa vit í veruleikanum at vita við orðunum «Bert hesa vikuna»?', 'Hvønn halda tit, at hvør lýsing vendir sær til? Grundgevið.', 'Skrivið eina nýggja lýsing við í mesta lagi 25 orðum. Veljið ein ávísan málbólk.'],
+      vid: 'Hvussu hevði tað ávirkað lýsingina, um hon varð borin fram av einum persóni, sum nógv ung fylgja?',
+      laer: 'Arbeiðið við avsendara, málbólki, upplýsingum og sannføring. Tað er ikki givið frammanundan, hvør lýsing virkar best.' },
+    { d: '2026-12-10', t: 'Vel tína vinnarareglu', fak: ['st'], min: '10–15', ic: 'k-dice', lang: 'fo',
+      src: [], hold: 'reglur',
+      tx: 'Í einum hugsaðum gávuspæli sleppur tú at velja eina av tveimum reglum.',
+      upp: ['Hvørja reglu hevði tú valt beinanvegin?', 'Skriva allar møguleikarnar við tveimum terningum, sum geva summin seks.', 'Rokna vinningslíkindini við báðum reglum.', 'Samanber úrslitið við títt fyrsta val.'],
+      hint: 'Prei: Við tveimum terningum eru 36 líka sannlík raðað úrslit. Til dømis telja 1 og 5 og 5 og 1 sum hvør sítt úrslit.',
+      vid: 'Hvør summur við tveimum terningum gevur somu vinningslíkindi sum ein seksari við einum terningi?',
+      btns: [['Terningar – royn reglurnar 100 ferðir', '/funkur/terningar'], ['Jatsi – spæl við fimm terningum', '/funkur/spoel/stoeddfroedi/jatsi']],
+      laer: 'Svar: A: 1/6 = 6/36. B: 5/36. Møguleikarnir eru (1,5), (2,4), (3,3), (4,2) og (5,1). A gevur størri vinningslíkindi. Summurin sjey gevur 6/36.\nFunka: í Terningar (Líkindarokning) kann flokkurin kasta 100 ferðir við einum og við tveimum terningum og samanbera royndarúrslitið við tey væntaðu líkindini. Úrslitini av 100 køstum nýtast ikki at vera júst tey somu sum ástøðiligu líkindini; samanberið munirnar. Jatsi er eitt annað terningaspæl, har vit eisini kunnu kanna líkindi.' },
+    { d: '2026-12-11', t: 'Ferðin hjá einari jólagávu', fak: ['la'], min: '10–15', ic: 'k-map', lang: 'fo',
+      src: [], hold: 'ferdin',
+      tx: 'Ein sjokulátupláta liggur undir jólatrænum í Føroyum. Áðrenn hon kom hagar, hevur hon verið partur av einari longri framleiðsluketu.\n\nArbeiðið við hesi hugsaðu ferðini.',
+      upp: ['Finn støðini á einum heimskorti, og tekna ferðina.', 'Greið frá muninum á ráevni, framleiðslu og sølu við støði í døminum.', 'Nevn tvey arbeiði, sum kunnu vera partur av ferðini.', 'Hvørjar upplýsingar mangla, um vit skulu meta um samlaðu umhvørvisávirkanina?'],
+      vid: 'Er landið, sum stendur á pakkanum, altíð nóg mikið til at greiða frá allari ferðini hjá vøruni? Grundgev við støði í døminum.',
+      laer: 'Hav eitt heimskort tøkt, talgilt ella á pappíri. Knýtið kortlesing saman við tilfeingi, framleiðslu og altjóða sambondum. Næmingarnir kunnu til dømis sakna upplýsingar um flutningshátt, orkunýtslu og pakkitilfar.' },
+    { d: '2026-12-14', t: 'Ein jólamynd tulkar eina frásøgn', fak: ['kr'], min: '15–20', ic: 'k-frame', lang: 'fo',
+      src: [['Sandro Botticelli: «Mystic Nativity» (1500) – National Gallery', 'https://www.nationalgallery.org.uk/paintings/sandro-botticelli-mystic-nativity'], ['Jólaevangeliið hjá Lukasi (PDF á Snar)', '/fileadmin/00_filagoymsla/Heimspeki_TEMA_KT/13._Jolaevangeliid_raettlisid_TD_til_prent.pdf']], hold: 'talva',
+      tx: 'Listafólk velja, hvat tey vísa, og hvat tey leggja dent á.\n\nHygg at málninginum «Mystic Nativity» eftir Sandro Botticelli. Hann er frá 1500. Les síðan bíbliutekstin á síðu 6 í skjalinum, fram til hirðarnir fara avstað aftur. Brúka ikki fríu endursøgnina á síðunum 1–3 til hesa samanberingina.',
+      upp: ['Gerið eina talvu við tveimum teigum: Hetta síggja vit í myndini – Hetta finna vit í tekstinum.', 'Veljið trý viðurskifti at kanna, til dømis persónar, umhvørvi og hendingar. Skrivið, hvussu hvørt viðurskifti verður lýst í myndini og í tekstinum.', 'Veljið síðan ein smálut í myndini, sum ikki er beinleiðis lýstur í hesum tekstbrotinum.', 'Greiðið frá, hvussu smáluturin kann ávirka tulkingina av myndini.'],
+      vid: 'Lesið frágreiðingina hjá National Gallery. Hvussu knýtir savnið myndina at tíðini, tá ið hon varð málað?',
+      laer: 'Skiljið millum tekst, mynd og tulking. At ein smálutur ikki stendur í Lukasi, merkir ikki, at hann ikki kann hava støði í øðrum tekstum ella siðum.' },
+    { d: '2026-12-15', t: 'Ein søga við í mesta lagi 60 orðum', fak: ['fo'], min: '10–15', ic: 'k-pen', lang: 'fo',
+      src: [], hold: 'utgangs',
+      tx: 'Ein stutt søga krevur neyvt orðaval. Lesarin skal fáa nóg mikið at vita til at skilja støðuna og samstundis fáa rúm at hugsa sjálvur.\n\nSkriva eina søgu við í mesta lagi 60 orðum. Søgan skal hava hetta – brúka listan til at kanna søguna, tá tú hevur skrivað hana:',
+      upp: ['fara fram í Føroyum í desember;', 'hava ein persón, sum vil okkurt;', 'hava eina hending, sum broytir støðuna;', 'enda við einum setningi, sum fær lesaran at hugsa.'],
+      uppAfter: 'Les søguna fyri einum øðrum. Bið viðkomandi siga, hvat søgan gevur at vita, og hvat lesarin sjálvur má hugsa sær.',
+      vid: 'Strika fimm orð, og kanna, um søgan gerst neyvari.',
+      btns: [['Tilvildarligir spurningar – hvør lesur upp?', '/funkur/tilvildarligir-spurningar-/-noevn']],
+      laer: 'Met um søgugongd, orðaval og virknaðin av endanum. Hámarkið er ein arbeiðskarmur; meining og mál hava størri týdning enn sjálv orðateljingin.\nSet nøvnini í Tilvildarligir spurningar og lat funkuna velja, hvør lesur søguna upp fyri flokkinum.' },
+    { d: '2026-12-16', t: 'Hvør heldur samfelagnum gangandi?', fak: ['sa'], min: '10–15', ic: 'k-city', lang: 'fo',
+      src: [],
+      tx: 'Í einari hugsaðari føroyskari bygd er jólakvøld. Nógv fólk eru heima. Samstundis skulu fólk hava atgongd til neyðugar tænastur.\n\nVeljið tríggjar tænastur, sum tit meta hava stóran týdning hetta kvøldið. Tit kunnu til dømis hugsa um heilsuhjálp, elveiting, vatnveiting, samskifti og bjarging. Fyri hvørja tænastu skulu tit greiða frá:',
+      upp: ['hvønn tørv hon nøktar;', 'hvørjum starvsfólkum ella øðrum tænastum hon er tengd at;', 'hvat kann henda, um hon steðgar.'],
+      uppAfter: 'Teknið sambondini við pílum. Veljið eitt samband, og greiðið flokkinum frá, hví tað hevur týdning.',
+      vid: 'Hvør er munurin á einum steðgi í tíggju minuttir og einum steðgi í tvey samdøgur?',
+      laer: 'Arbeiðið við arbeiðsbýti, felags tørvum og tí, hvussu tænastur eru tengdar hvør at aðrari. Næmingarnir skulu grundgeva fyri valinum. Uppgávan krevur ikki upplýsingar um arbeiðið hjá foreldrunum.' },
+    { d: '2026-12-17', t: 'Can a story sell a gift?', fak: ['en'], min: '10–15', ic: 'k-play', lang: 'en',
+      src: [['Upplýsingar frá avsendaranum (John Lewis Partnership)', 'https://www.johnlewispartnership.co.uk/media-centre/latest-news/2024/21290']], hold: 'phrases',
+      yt: [['55ghIHTaRzM', 'The Gifting Hour – John Lewis, jólalýsing 2024']],
+      tx: 'Hyggið at bretsku jólalýsingini «The Gifting Hour» hjá John Lewis frá 2024. Lýsingin fylgir einari kvinnu, sum leitar eftir einari gávu til systur sína.\n\nWatch the advert once. Then work in pairs.',
+      upp: ['Describe the story in three sentences.', 'Choose one moment where music or images affect the mood. Explain how.', 'What does the advert suggest makes a good gift?', 'What does the company want viewers to do?'],
+      uppAfter: 'Choose one of your answers and record it in about 30 seconds, or present it to another pair. Refer to a specific moment in the advert.',
+      vid: 'Go further: What might change if the same images had a very different soundtrack?',
+      laer: 'Dentur er á enskt samskifti, miðlafatan og grundgeving við ítøkiligum dømum. Lærarin kann vísa lýsingina felags.' },
+    { d: '2026-12-18', t: 'Desember í Føroyum, uttan orð', fak: ['ml'], min: 'umleið 20', ic: 'k-camera', lang: 'fo',
+      src: [],
+      tx: 'Hvussu siga tit eina søgu uttan orð? Sjálv ljóðfrásøgnin ella myndarøðin skal vera uttan talaðan og skrivaðan tekst. Tit kunnu greiða frá valunum aftaná.\n\nArbeiðið í smáum bólkum. Veljið annan av hesum møguleikunum:\n\nA – Ljóðfrásøgn: Gerið eina ljóðfrásøgn, sum varir 20–30 sekund. Brúkið í minsta lagi trý ymisk ljóð, sum tit sjálv gera ella taka upp. Frásøgnin skal hava eina byrjan, eina broyting og ein enda.\n\nB – Myndarøð: Gerið eina søgu við fýra myndum. Tit kunnu tekna ella taka myndir av lutum. Myndarøðin skal hava eina byrjan, eina broyting og ein enda.\n\nHeitið er «Desember í Føroyum». Tit velja sjálv, um søgan er stuttlig, stillfør, løgin ella spennandi.',
+      upp: ['Vísið einum øðrum bólki avrikið uttan at greiða frá fyrst.', 'Biðið tey siga, hvørja søgu tey uppliva.', 'Greiðið síðan frá einum vali, sum tit gjørdu við vilja.'],
+      vid: 'Broytið eitt ljóð ella eina mynd. Hvussu broytist søgan?',
+      laer: 'Leggið dent á tilvitað val av ljóði, mynd og raðfylgju. Avrikið kann gerast einfalt við lutum og amboðum, sum longu eru í skúlastovuni.' }
+  ];
+
+  /* ------------------------------------------------------------ Dagar og lásar */
+  function today() { var n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); }
+  function fmt(iso) { var p = iso.split('-'), dt = new Date(+p[0], +p[1] - 1, +p[2]); return DAYS[dt.getDay()] + ' ' + (+p[2]) + '. ' + MONTHS[+p[1] - 1]; }
+  var ALT_KEY = 'snar-jol-hadeild-alt-2026', DONE_KEY = 'snar-jol-hadeild-done-2026', LIKE_KEY = 'snar-jol-hadeild-like-2026';
+  // Felags hjartateljari: Google Apps Script web app (sí jol/likes/LES MEG.txt). Tómur = bert goymt í kagaranum.
+  var LIKE_API = '', likeN = {};
+  function likeText() { var n = current + 1, el = root.querySelector('#jo-like-n'); if (!LIKE_API) { el.hidden = true; return; } el.hidden = false; el.textContent = ' · ' + (likeN[n] || 0); }
+  if (LIKE_API && window.fetch) { fetch(LIKE_API, { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (o) { likeN = o || {}; if (current >= 0) likeText(); }).catch(function () {}); }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  var allOpen = /[?&]alt=1/.test(location.search) || store(ALT_KEY) === '1';
+  var done = {}; try { done = JSON.parse(store(DONE_KEY) || '{}'); } catch (e) {}
+  var likes = {}; try { likes = JSON.parse(store(LIKE_KEY) || '{}'); } catch (e) {}
+  function unlocked(door) { return allOpen || today() >= door.d; }
+
+  /* ------------------------------------------------------------ Kalendarin */
+  var grid = root.querySelector('#jh-grid'), openEl = root.querySelector('#jh-open'), hold = root.querySelector('#jh-hold'), current = -1;
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  root.querySelector('#jh-legend').innerHTML = Object.keys(FAK).map(function (k) { return '<span><i style="--c:' + FAK[k][1] + '"></i>' + FAK[k][0] + '</span>'; }).join('');
+  function renderGrid() {
+    grid.innerHTML = DOORS.map(function (d, i) {
+      var lock = !unlocked(d), n = i + 1, c = FAK[d.fak[0]][1];
+      return '<button type="button" class="jh-door' + (lock ? ' is-locked' : '') + (done[n] ? ' is-done' : '') + '" style="--c:' + c + '" data-i="' + i + '" role="listitem" aria-label="Lúka ' + n + ', ' + fmt(d.d) + (lock ? ', letur upp seinni' : '') + '">' +
+        '<span class="jh-door__n">' + n + '</span><span class="jh-door__ic"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#' + d.ic + '"/></svg></span>' +
+        '<span class="jh-door__t">' + (lock ? 'Letur upp ' + (+d.d.split('-')[2]) + '. des' : esc(d.t)) + '</span><span class="jh-door__d">' + fmt(d.d).split(' ')[0] + ' ' + (+d.d.split('-')[2]) + '.</span>' + (lock ? '' : '<span class="jh-door__fak">' + FAK[d.fak[0]][0] + '</span>') + '</button>';
+    }).join('');
+  }
+  function ytFacade(id, cap) { return '<button class="jh-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jh-yt__play">▶ Spæl</span></button><p class="jh-ytcap">' + esc(cap) + '</p>'; }
+  function returnHold() { Array.prototype.forEach.call(root.querySelector('#jo-hold').children, function (c) { hold.appendChild(c); }); }
+  function openDoor(i, scroll) {
+    var d = DOORS[i]; if (!d || !unlocked(d)) return;
+    returnHold(); current = i;
+    var c = FAK[d.fak[0]][1]; openEl.style.setProperty('--c', c);
+    Array.prototype.forEach.call(grid.children, function (b) { b.classList.toggle('is-open', +b.getAttribute('data-i') === i); });
+    root.querySelector('#jo-meta').textContent = 'Lúka ' + (i + 1) + ' · ' + fmt(d.d);
+    root.querySelector('#jo-title').textContent = d.t;
+    root.querySelector('#jo-tags').innerHTML = d.fak.map(function (f) { return '<span class="jh-sticker" style="background:' + FAK[f][1] + ';color:#fff">' + FAK[f][0] + '</span>'; }).join('') + '<span class="jh-sticker jh-sticker--yellow" style="transform:rotate(2deg)">' + d.min + ' min</span>';
+    root.querySelector('#jo-src').innerHTML = (d.src || []).map(function (b) { var ext = /^https?:/.test(b[1]) || /\.pdf$/i.test(b[1]); return '<a class="jh-btn jh-btn--sm" href="' + b[1] + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '><svg class="jh-ic" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M19 14v6H4V5h6"/></svg>' + esc(b[0]) + '</a>'; }).join('');
+    root.querySelector('#jo-tx').textContent = d.tx;
+    if (d.hold) { var h = hold.querySelector('[data-hold="' + d.hold + '"]'); if (h) root.querySelector('#jo-hold').appendChild(h); }
+    var m = root.querySelector('#jo-media'); m.innerHTML = (d.yt || []).map(function (y) { return ytFacade(y[0], y[1]); }).join(''); bindYt(m);
+    root.querySelector('#jo-upp-h').innerHTML = (LABEL[d.lang] || LABEL.fo) + (d.lang !== 'fo' ? '<b>' + d.lang.toUpperCase() + '</b>' : '');
+    var ul = root.querySelector('#jo-upp'); ul.innerHTML = d.upp.map(function (u, k) { return '<li><input type="checkbox" id="jo-c' + k + '" aria-label="Liðugt"><label for="jo-c' + k + '" lang="' + d.lang + '">' + esc(u) + '</label></li>'; }).join('');
+    Array.prototype.forEach.call(ul.querySelectorAll('input'), function (cb) { cb.addEventListener('change', function () { cb.parentElement.classList.toggle('is-on', cb.checked); }); });
+    root.querySelector('#jo-upp-after').textContent = d.uppAfter || '';
+    var hint = root.querySelector('#jo-hint'); hint.hidden = !d.hint; hint.textContent = d.hint || '';
+    root.querySelector('#jo-btns').innerHTML = (d.btns || []).map(function (b) { return '<a class="jh-btn jh-btn--sm jh-btn--yellow" href="' + b[1] + '">🎮 ' + esc(b[0]) + ' →</a>'; }).join('');
+    root.querySelector('#jo-vid').textContent = d.vid.replace(/^(Go further|Undersøg mere|Kanna víðari):\s*/, ''); root.querySelector('#jo-vid-h').textContent = VIDLABEL[d.lang] || VIDLABEL.fo;
+    root.querySelector('#jo-laer').textContent = d.laer; root.querySelector('#jo-laer-det').open = false;
+    var lk = root.querySelector('#jo-like'); lk.classList.toggle('is-on', !!likes[i + 1]); likeText();
+    root.querySelector('#jo-done').textContent = done[i + 1] ? 'Merkt sum liðugt ✓ – tak merkið burtur' : 'Merk sum liðugt ✓';
+    root.querySelector('#jo-prev').disabled = i === 0; root.querySelector('#jo-next').disabled = i === DOORS.length - 1 || !unlocked(DOORS[i + 1]);
+    openEl.classList.add('is-on');
+    if (history.replaceState) history.replaceState(null, '', '#luka-' + (i + 1));
+    if (scroll) openEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  grid.addEventListener('click', function (e) { var b = e.target.closest('.jh-door'); if (!b || b.classList.contains('is-locked')) return; openDoor(+b.getAttribute('data-i'), true); });
+  root.querySelector('#jo-close').addEventListener('click', function () { returnHold(); openEl.classList.remove('is-on'); Array.prototype.forEach.call(grid.children, function (b) { b.classList.remove('is-open'); }); if (history.replaceState) history.replaceState(null, '', '#kalendari'); });
+  root.querySelector('#jo-prev').addEventListener('click', function () { openDoor(current - 1, true); });
+  root.querySelector('#jo-next').addEventListener('click', function () { openDoor(current + 1, true); });
+  root.querySelector('#jo-done').addEventListener('click', function () { var n = current + 1; if (done[n]) delete done[n]; else done[n] = 1; store(DONE_KEY, JSON.stringify(done)); renderGrid(); openDoor(current, false); });
+  root.querySelector('#jo-like').addEventListener('click', function () {
+    var n = current + 1, on = !likes[n]; if (on) likes[n] = 1; else delete likes[n]; store(LIKE_KEY, JSON.stringify(likes)); this.classList.toggle('is-on', on);
+    if (LIKE_API && window.fetch) { likeN[n] = Math.max(0, (likeN[n] || 0) + (on ? 1 : -1)); likeText();
+      fetch(LIKE_API + '?luka=' + n + '&op=' + (on ? 'add' : 'sub'), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (o) { if (o && o.tal != null) { likeN[n] = o.tal; if (current + 1 === n) likeText(); } }).catch(function () {}); }
+    else likeText();
+  });
+  var altBtn = root.querySelector('#jh-alt');
+  function altLabel() { altBtn.textContent = allOpen ? 'Fylg dagfestingunum aftur' : 'Lat allar lúkur upp'; }
+  altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); countdown(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); });
+  altLabel(); renderGrid();
+  var hm = /#luka-(\d+)/.exec(location.hash || '');
+  if (hm && DOORS[+hm[1] - 1]) openDoor(+hm[1] - 1, true);
+  else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
+  root.querySelector('.jh-hero__btns a').addEventListener('click', function (e) { if (current >= 0) { e.preventDefault(); openEl.scrollIntoView({ behavior: 'smooth' }); } });
+
+  /* ------------------------------------------------------------ Spenningur: nær letur næsta lúka upp? */
+  var MEMES = [['Eg, meðan eg bíði eftir næstu lúku:', 'sour'], ['Eg, tá lærarin sigur „kanna víðari“:', 'happy'], ['Eg, tá eg haldi meg hava svarið – og so kemur ein nýggjur spurningur:', 'sour'], ['Eg, tá tveir avsláttir ikki geva tað, eg fyrst roknaði við:', 'sour'], ['Eg, tá søgan má vera í mesta lagi 60 orð:', 'sour'], ['Eg, tá lúkan í dag letur upp:', 'happy'], ['Eg, tá eg fái mandluna:', 'happy']];
+  (function () {
+    var t0 = today(), locked = false; for (var i = 0; i < DOORS.length; i++) { if (DOORS[i].d === t0 && !unlocked(DOORS[i])) locked = true; }
+    var pick = locked ? MEMES[0] : MEMES[1 + Math.floor(Math.random() * (MEMES.length - 1))];
+    root.querySelector('#jh-meme').textContent = pick[0];
+    root.querySelector('#jh-stick').setAttribute('data-mood', pick[1]);
+  })();
+  var cdEl = root.querySelector('#jh-countdown'), cdTxt = root.querySelector('#jh-count-txt');
+  function countdown() {
+    var n = new Date(), next = null;
+    for (var i = 0; i < DOORS.length; i++) { if (!unlocked(DOORS[i])) { next = DOORS[i]; break; } }
+    if (!next) { cdEl.hidden = false; cdTxt.innerHTML = allOpen ? 'Allar lúkur eru latnar upp til fyrireiking. Komandi lúkur verða læstar aftur við „Fylg dagfestingunum aftur“; eldri lúkur eru framvegis tøkar.' : 'Allar lúkur eru latnar upp. <b>Gleðilig jól.</b>'; return; }
+    var p = next.d.split('-'), t = new Date(+p[0], +p[1] - 1, +p[2]), d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+    var dd = Math.round((t - d0) / 86400000);
+    cdEl.hidden = false;
+    cdTxt.innerHTML = dd === 1 ? 'Næsta lúka letur upp <b>í morgin</b>' : 'Næsta lúka letur upp um <b>' + dd + ' dagar</b> (' + DAYS[t.getDay()] + ' ' + (+p[2]) + '. desember)';
+  }
+  countdown(); setInterval(countdown, 30000);
+
+  /* ------------------------------------------------------------ YouTube og hundurin */
+  function bindYt(scope) { Array.prototype.forEach.call(scope.querySelectorAll('.jh-yt[data-yt]'), function (b) { b.addEventListener('click', function () { var f = document.createElement('iframe'); f.src = 'https://www.youtube.com/embed/' + b.getAttribute('data-yt') + '?autoplay=1&rel=0'; f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; f.allowFullscreen = true; f.title = b.getAttribute('aria-label') || 'YouTube'; b.innerHTML = ''; b.appendChild(f); }, { once: true }); }); }
+  var SAY = ['Vuff. Eg las ikki uppgávuna.', 'Eg svaraði 30 %. Skeivt.', 'Kanna víðari? Eg kanni greytin.', 'Grundgev fyri mær, hví eg ikki fái piparkøku.', 'Eg, tá lúkan er læst: vuff.'];
+  var dog = root.querySelector('[data-dog]');
+  if (dog) dog.addEventListener('click', function () { var s = dog.querySelector('.jh-dog__say'); s.textContent = SAY[Math.floor(Math.random() * SAY.length)]; dog.classList.add('is-saying'); setTimeout(function () { dog.classList.remove('is-saying'); }, 2000); });
+
+  /* ------------------------------------------------------------ Leinkjur innan síðuna (capture, tí smoothscroll hjá Snar steðgar klikkinum) */
+  window.addEventListener('click', function (e) {
+    if (!root.contains(e.target)) return;
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null; if (!a) return;
+    var id = a.getAttribute('href').slice(1), target = root.querySelector('#' + id); if (!target) return;
+    e.preventDefault(); e.stopPropagation();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
+  }, true);
+})();
+</script>
+</body>
+</html>

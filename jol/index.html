@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jól á Snar – til læraran</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   Jól á Snar – hubbin til læraran. Rólig og hvít, so teir tríggir kalendararnir,
+   hvør í sínum stíli, eru tað, sum sæst. Alt er avmarkað til .jol.
+   ===================================================================== */
+.jol {
+  --paper: #fbf8f2; --ink: #1f1d1a; --muted: #6b665d; --line: #e3ddd1; --card: #ffffff;
+  --red: #c8102e; --green: #2f6b45; --gold: #d9a521;
+  --top: 0px;
+  font-family: Nunito, "Segoe UI", Arial, sans-serif; font-size: 17px; line-height: 1.55; color: var(--ink); background: var(--paper); position: relative;
+}
+.jol *, .jol *::before, .jol *::after { box-sizing: border-box; }
+.jol h1, .jol h2 { font-family: Fraunces, Georgia, serif; font-weight: 700; line-height: 1.08; letter-spacing: -.015em; margin: 0; color: var(--ink); }
+.jol h3 { font-family: Nunito, sans-serif; font-weight: 800; margin: 0; }
+.jol p { margin: 0 0 .9em; }
+.jol p:last-child { margin-bottom: 0; }
+.jol a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; text-decoration-color: var(--red); }
+.jol button { font-family: inherit; }
+.jx-wrap { width: min(1120px, 100% - 40px); margin: 0 auto; }
+.jx-mono { font-weight: 800; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.jol .jx-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--card); color: var(--ink); font-weight: 800; font-size: .92rem; text-decoration: none; cursor: pointer; transition: background .15s, transform .1s; }
+.jol .jx-btn:hover { transform: translateY(-1px); background: #f3eee4; }
+.jol .jx-btn--red { background: var(--red); border-color: var(--red); color: #fff; } .jol .jx-btn--red:hover { background: #a60d26; }
+.jol .jx-btn--sm { padding: 7px 12px; font-size: .84rem; }
+.jx-section { padding: 36px 0; border-top: 1px solid var(--line); }
+.jx-section h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 6px; }
+.jx-section__lead { color: var(--muted); max-width: 70ch; margin-bottom: 20px; }
+
+/* ---- Hero ------------------------------------------------------------ */
+.jol-hero { padding: 30px 0 26px; }
+.jx-hero__in { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; }
+.jx-hero h1 { font-size: clamp(2.4rem, 5.5vw, 4.2rem); }
+.jx-hero h1 em { font-style: italic; color: var(--red); }
+.jx-hero__lead { font-size: clamp(1.02rem, 1.5vw, 1.2rem); max-width: 62ch; margin-top: 14px; }
+.jx-hero__btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.jx-dog { position: relative; width: clamp(120px, 14vw, 160px); border: 0; padding: 0; background: none; cursor: pointer; }
+.jx-dog img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 3px solid var(--ink); background: #fff; }
+.jx-dog__hat { position: absolute; left: 50%; top: -30%; width: 74%; transform: translateX(-46%); pointer-events: none; }
+
+/* ---- Leitingin --------------------------------------------------------- */
+.jx-search { position: relative; display: flex; align-items: center; margin-top: 18px; max-width: 640px; }
+.jx-search__ic { position: absolute; left: 14px; width: 20px; height: 20px; fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; pointer-events: none; }
+.jx-search input { width: 100%; padding: 13px 44px 13px 44px; border: 2px solid var(--ink); border-radius: 12px; background: var(--card); font: inherit; font-size: 1.02rem; color: var(--ink); }
+.jx-search input:focus { outline: 3px solid var(--gold); outline-offset: 2px; }
+.jx-search input::-webkit-search-cancel-button { display: none; }
+.jx-search button { position: absolute; right: 8px; width: 30px; height: 30px; border: 0; border-radius: 50%; background: var(--line); color: var(--ink); font-size: 1.2rem; line-height: 1; cursor: pointer; }
+.jx-search__res { max-width: 640px; margin-top: 8px; border: 2px solid var(--ink); border-radius: 12px; background: var(--card); max-height: 420px; overflow: auto; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+.jx-search__res a, .jx-search__res .jx-search__empty { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 10px 14px; border-top: 1px solid var(--line); text-decoration: none; color: var(--ink); }
+.jx-search__res a:first-child { border-top: 0; }
+.jx-search__res a:hover { background: #f6f1e7; }
+.jx-search__res .jx-search__empty { grid-template-columns: 1fr; color: var(--muted); }
+.jx-search__res .jx-search__tag, .jx-search__tag { display: inline-block; margin-top: 2px; padding: 2px 8px; border-radius: 999px; font-size: .66rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--tc, #555); white-space: nowrap; }
+.jx-search__res b { display: block; font-size: .98rem; line-height: 1.25; }
+.jx-search__res b mark { background: var(--gold); color: inherit; padding: 0 1px; border-radius: 2px; }
+.jx-search__res span { display: block; font-size: .84rem; color: var(--muted); }
+.jx-search__more { padding: 8px 14px; font-size: .82rem; color: var(--muted); border-top: 1px solid var(--line); }
+
+/* ---- Teir tríggir kalendararnir: hvør í sínum stíli -------------------- */
+.jx-cals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.jx-cal { display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; border: 2px solid var(--ink); background: var(--card); min-height: 100%; }
+.jx-cal__art { height: 150px; display: flex; align-items: center; justify-content: center; position: relative; }
+.jx-cal__art svg { width: 100%; height: 100%; display: block; }
+.jx-cal__body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.jx-cal__body h3 { font-size: 1.35rem; }
+.jx-cal__body small { color: var(--muted); font-weight: 700; }
+.jx-cal__body p { font-size: .97rem; }
+.jx-cal__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 8px; }
+/* grunddeild: barnatekning */ .jx-cal--g .jx-cal__art { background: #fffdf7; background-image: repeating-linear-gradient(transparent 0 23px, #f0ebe0 23px 24px); }
+.jx-cal--g h3 { font-family: Fraunces, serif; }
+/* miðdeild: teknitekning */ .jx-cal--m .jx-cal__art { background: #0f2740; background-image: linear-gradient(rgba(94,211,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(94,211,255,.09) 1px, transparent 1px); background-size: 22px 22px; }
+/* hádeild: skissubók */ .jx-cal--h .jx-cal__art { background: #fff; background-image: repeating-linear-gradient(transparent 0 23px, #eceff2 23px 24px); }
+.jx-cal__note { font-size: .85rem; color: var(--muted); margin-top: 14px; }
+
+/* ---- Úrvalt ------------------------------------------------------------- */
+.jx-picks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.jx-pick { display: block; padding: 18px 20px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--card); text-decoration: none; color: var(--ink); }
+.jx-pick:hover { border-color: var(--ink); }
+.jx-pick b { display: block; font-family: Fraunces, serif; font-size: 1.25rem; line-height: 1.2; margin: 6px 0 8px; }
+.jx-pick p { font-size: .95rem; color: var(--muted); }
+
+/* ---- Finn jólatilfar: allar 42 lúkurnar --------------------------------- */
+.jx-filters { display: grid; gap: 10px; margin-bottom: 18px; }
+.jx-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.jx-filter span.jx-mono { margin-right: 6px; min-width: 86px; }
+.jx-chip { padding: 6px 12px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); font-weight: 800; font-size: .82rem; cursor: pointer; color: var(--ink); }
+.jx-chip:hover { border-color: var(--ink); }
+.jx-chip.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.jx-count { font-size: .9rem; color: var(--muted); margin-bottom: 10px; }
+.jx-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.jx-item { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); text-decoration: none; color: var(--ink); border-left-width: 5px; }
+.jx-item:hover { border-color: var(--ink); border-left-color: var(--c); }
+.jx-item--g { --c: #d8382c; } .jx-item--m { --c: #5ed3ff; } .jx-item--h { --c: #ff3d8a; }
+.jx-item__meta { font-size: .74rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.jx-item b { font-size: 1.05rem; line-height: 1.25; }
+.jx-item__fak { font-size: .85rem; color: var(--muted); }
+.jol .jx-item *, .jol .jx-pick *, .jol .jx-funkur a *, .jol .jx-cal__btns a, .jol .jx-list a.jx-btn, .jol .jx-chips a { text-decoration: none !important; }
+.jx-empty { padding: 24px; border: 1.5px dashed var(--line); border-radius: 12px; color: var(--muted); text-align: center; }
+
+/* ---- Meira jólatilfar ------------------------------------------------------ */
+.jx-more { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 32px; }
+.jx-more__h { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 1.25rem; margin-bottom: 10px; }
+.jx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.jx-chips .jx-chip { text-decoration: none; }
+.jx-det { margin-top: 8px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); }
+.jx-det summary { cursor: pointer; padding: 10px 14px; font-weight: 800; font-size: .95rem; list-style: none; display: flex; align-items: center; gap: 8px; }
+.jx-det summary::-webkit-details-marker { display: none; }
+.jx-det summary::before { content: "▸"; color: var(--red); }
+.jx-det[open] summary::before { content: "▾"; }
+.jx-films { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 14px 14px; }
+.jx-yt { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border: 1.5px solid var(--ink); border-radius: 8px; padding: 0; cursor: pointer; background: #ddd; overflow: hidden; }
+.jx-yt img { width: 100%; height: 100%; object-fit: cover; }
+.jx-yt__play { position: absolute; left: 8px; bottom: 8px; padding: 5px 10px; background: var(--red); color: #fff; border-radius: 999px; font-weight: 800; font-size: .78rem; }
+.jx-yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.jx-ytcap { font-size: .82rem; color: var(--muted); margin: 4px 0 0; }
+@media (max-width: 760px) { .jx-more, .jx-films { grid-template-columns: 1fr; } }
+
+.jx-fold { border: 1.5px solid var(--line); border-radius: 14px; background: var(--card); padding: 0 22px 0; }
+.jx-fold > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; }
+.jx-fold > summary::-webkit-details-marker { display: none; }
+.jx-fold > summary h2 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin-bottom: 4px; }
+.jx-fold__lead { display: block; color: var(--muted); font-size: .95rem; }
+.jx-fold__btn { flex: none; padding: 9px 16px; border: 1.5px solid var(--ink); border-radius: 8px; font-weight: 800; font-size: .9rem; white-space: nowrap; }
+.jx-fold[open] > summary { border-bottom: 1.5px solid var(--line); }
+.jx-fold[open] > .jx-more { padding-bottom: 22px; }
+.jx-fold[open] .jx-fold__btn::after { content: ""; }
+.jx-fold[open] .jx-fold__btn { background: var(--ink); color: #fff; }
+.jx-section--fold { padding: 26px 0; }
+
+/* ---- Jól í Føroyum, funkur, skjøl, læraran -------------------------------- */
+.jx-two { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(20px, 4vw, 56px); }
+.jx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.jx-list li { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); }
+.jx-list b { display: block; }
+.jx-list span { display: block; font-size: .88rem; color: var(--muted); }
+.jx-tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.jx-tag--fo { border-color: var(--red); color: var(--red); } .jx-tag--tytt { border-color: var(--gold); color: #8a6a12; } .jx-tag--um { border-color: var(--green); color: var(--green); }
+.jx-list a.jx-btn { white-space: nowrap; }
+.jx-funkur { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.jx-funkur a { display: block; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); text-decoration: none; color: var(--ink); font-size: .95rem; }
+.jx-funkur a:hover { border-color: var(--ink); }
+.jx-funkur b { display: block; }
+.jx-funkur span { font-size: .85rem; color: var(--muted); }
+.jx-steps { counter-reset: s; display: grid; gap: 10px; }
+.jx-steps div { position: relative; padding: 12px 14px 12px 50px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); font-size: .97rem; }
+.jx-steps div::before { counter-increment: s; content: counter(s); position: absolute; left: 14px; top: 11px; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff; font-weight: 800; font-size: .85rem; display: grid; place-items: center; }
+.jx-outro { padding: 30px 0 26px; text-align: center; border-top: 1px solid var(--line); }
+.jx-outro h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
+.jx-outro h2 em { font-style: italic; color: var(--red); }
+
+@media (max-width: 960px) { .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: repeat(2, 1fr); } .jx-two { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .jx-hero__in { grid-template-columns: 1fr; } .jx-dog { width: 110px; } .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: 1fr; } .jx-filter span.jx-mono { min-width: 0; width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
+</style>
+<style>body { margin: 0; }</style>
+</head>
+<body>
+<div class="jol jx">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <g id="x-hat"><path d="M12 48 C 18 20, 36 8, 56 8 C 68 8, 76 12, 78 18 C 70 16, 64 30, 68 48 Z" fill="#c8102e" stroke="#1f1d1a" stroke-width="3"/><circle cx="78" cy="18" r="7" fill="#fff" stroke="#1f1d1a" stroke-width="3"/><path d="M8 50 C 26 42, 54 42, 74 50 L 70 60 C 52 52, 28 52, 12 60 Z" fill="#fff" stroke="#1f1d1a" stroke-width="3"/></g>
+  </defs></svg>
+
+  <!-- ============================================================ Hero -->
+  <section class="jol-hero jx-hero" id="jol-top">
+    <div class="jx-wrap jx-hero__in">
+      <div>
+        <span class="jx-mono">Snar · desember 2026</span>
+        <h1>Jól <em>á Snar</em></h1>
+        <p class="jx-hero__lead">Lesið, lurtið, kannið og skapið í desember. Her eru jólakalendarar til grunddeild, miðdeild og hádeild. Her finna tit eisini søgur, sangir, royndir, spøl og skapandi uppgávur. Fylgið einum kalendara, ella veljið tilfar til undirvísingina eftir deild og lærugrein.</p>
+        <form class="jx-search" id="jx-search" role="search" autocomplete="off">
+          <svg class="jx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <input type="search" id="jx-q" placeholder="Leita eftir lúkum og jólatilfari, t.d. jólaljós, Marin ella terningar …" aria-label="Leita í jólatilfarinum">
+          <button type="button" id="jx-q-clear" aria-label="Rudda leititeigin" hidden>×</button>
+        </form>
+        <div class="jx-search__res" id="jx-res" hidden></div>
+        <div class="jx-hero__btns">
+          <a class="jx-btn jx-btn--red" href="#kalendarar">Jólakalendararnir</a>
+          <a class="jx-btn" href="#finn">Finn jólatilfar</a>
+          <a class="jx-btn" href="#meira">Undanfarin jól</a>
+          <a class="jx-btn" href="#laerari">Til læraran</a>
+        </div>
+      </div>
+      <button class="jx-dog" type="button" aria-label="Fá Snar-hundin at røra seg" data-dog>
+        <img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar_hundur.png" alt="" loading="lazy">
+        <svg class="jx-dog__hat" viewBox="0 0 90 64" aria-hidden="true"><use href="#x-hat"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ====================================================== Kalendararnir -->
+  <section class="jx-section" id="kalendarar">
+    <div class="jx-wrap">
+      <h2>Jólakalendarar 2026</h2>
+      <p class="jx-section__lead">Hvør kalendari hevur 14 lúkur til skúladagarnar 1.–18. desember 2026. Ein nýggj lúka letur upp hvønn skúladag. Lúkur frá undanfarnum skúladøgum eru framvegis opnar, komandi lúkur eru læstar.</p>
+      <div class="jx-cals">
+        <article class="jx-cal jx-cal--g">
+          <div class="jx-cal__art" aria-hidden="true">
+            <svg viewBox="0 0 300 150" fill="none" stroke="#2b2a28" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M40 120 L40 70 L70 42 L100 70 L100 120 Z" fill="#fbd9d4"/><path d="M32 72 L70 36 L108 72" stroke="#d8382c" stroke-width="4"/><rect x="52" y="82" width="14" height="14" fill="#fdf0bf"/><rect x="76" y="82" width="14" height="14" fill="#fdf0bf"/>
+              <path d="M170 40 L196 72 L186 72 L206 100 L196 100 L218 128 L122 128 L144 100 L134 100 L154 72 L144 72 Z" fill="#d6efd9"/><circle cx="166" cy="78" r="5" fill="#d8382c"/><circle cx="180" cy="104" r="5" fill="#f4b81c"/><circle cx="154" cy="114" r="5" fill="#3b6fd8"/>
+              <circle cx="258" cy="106" r="20" fill="#fff"/><circle cx="258" cy="76" r="14" fill="#fff"/><path d="M252 74h4M262 74h4M258 80l6 2-6 2M236 100l-14-8M280 100l14-8" stroke-width="2.5"/>
+              <path d="M20 138 q40-8 80 0 t80 0 t80 0 t60 0" stroke="#6cc3e8"/>
+              <path d="M22 28c-5-5-12 0-7 7l7 7 7-7c5-7-2-12-7-7z" fill="#e36aa6"/><path d="M276 30l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#f4b81c"/>
+            </svg>
+          </div>
+          <div class="jx-cal__body">
+            <small>1.–3. flokkur</small>
+            <h3>Jól í grunddeildini</h3>
+            <p>Smáar søgur, tøl, kanningar og skapandi løtur. Lærarin lesur upp, og næmingarnir tosa saman, syngja, telja og tekna. Børnini klappa stavilsini í dagsins orði.</p>
+            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="grunddeild.html">Lat kalendaran upp</a><a class="jx-btn jx-btn--sm" href="grunddeild.html?alt=1">Sí allar lúkurnar</a></div>
+          </div>
+        </article>
+        <article class="jx-cal jx-cal--m">
+          <div class="jx-cal__art" aria-hidden="true">
+            <svg viewBox="0 0 300 150" fill="none" stroke="#3f6a8f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M150 22 L112 76 L128 76 L96 128 L204 128 L172 76 L188 76 Z"/><path d="M150 22v54M150 76L128 128M150 76l22 52M128 76h44M96 128h108M96 128h-20v-16h-10M204 128h20v-16h10"/>
+              <circle cx="150" cy="22" r="6" fill="#ffd166"/><circle cx="150" cy="76" r="4" fill="#5ed3ff"/><circle cx="128" cy="128" r="4" fill="#ff5a5a"/><circle cx="172" cy="128" r="4" fill="#3ddc84"/><circle cx="139" cy="102" r="3" fill="#ff8fcf"/><circle cx="161" cy="102" r="3" fill="#b69cff"/>
+              <g font-family="Consolas, monospace" font-size="8" fill="#9fbdd4" stroke="none"><text x="40" y="104">BATTARÍ</text><text x="236" y="104">KONTAKT</text><text x="160" y="18">LED 1</text></g>
+            </svg>
+          </div>
+          <div class="jx-cal__body">
+            <small>4.–6. flokkur</small>
+            <h3>Jól í miðdeildini</h3>
+            <p>Mál, mentan, royndir og uppgávur at loysa saman. Til hvørja lúku eru eisini eyka uppgávur til næmingar í 5.–6. flokki.</p>
+            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="middeild.html">Lat kalendaran upp</a><a class="jx-btn jx-btn--sm" href="middeild.html?alt=1">Sí allar lúkurnar</a></div>
+          </div>
+        </article>
+        <article class="jx-cal jx-cal--h">
+          <div class="jx-cal__art" aria-hidden="true">
+            <svg viewBox="0 0 300 150" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M126 70c-8-22 4-50 30-52 26-2 40 22 30 46-6 16-26 24-40 18-10-4-16-6-20-12z" fill="#fff"/>
+              <ellipse cx="142" cy="46" rx="7" ry="8" fill="#fff"/><ellipse cx="164" cy="44" rx="7" ry="8" fill="#fff"/><circle cx="144" cy="48" r="2.5" fill="#141414"/><circle cx="166" cy="46" r="2.5" fill="#141414"/>
+              <path d="M134 34c4-6 12-6 18-2M158 30c4-4 12-4 18 0M150 54l-2 8 5 1M146 68c6 4 14 2 18-2"/>
+              <path d="M152 82v36M152 118l-16 26M152 118l16 26M152 92l28-10 14-16M152 92l-26 18"/>
+              <path d="M194 66c0-6 5-10 9-6 3 3 0 8-3 9 4-1 8 0 8 4s-4 5-8 4c3 3 1 8-2 8s-7-4-7-8" fill="#fff" stroke-width="3"/>
+              <path d="M44 40c-5-5-12 0-7 7l7 7 7-7c5-7-2-12-7-7z" fill="#ff3d8a" stroke-width="2.5"/><path d="M256 100l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#ffd60a" stroke-width="2.5"/>
+              <text x="150" y="146" text-anchor="middle" font-family="Inter, Arial" font-weight="800" font-size="12" fill="#fff" stroke="#141414" stroke-width="2.5" paint-order="stroke">EG, TÁ LÚKAN ER LÆST:</text>
+            </svg>
+          </div>
+          <div class="jx-cal__body">
+            <small>7.–9. flokkur</small>
+            <h3>Desember undir sjóneykuni</h3>
+            <p>Bókmentir, miðlar, vísindi og spurningar at kanna. Hvør lúka byrjar við onkrum, sum vekir forvitni, og gevur næmingunum høvi at kanna, tulka og grundgeva fyri sínum hugsanum. Læraraviðmerkingar og svar eru savnað í einum serligum, samanfaldum parti í hvørjari lúku.</p>
+            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="hadeild.html">Lat kalendaran upp</a><a class="jx-btn jx-btn--sm" href="hadeild.html?alt=1">Sí allar lúkurnar</a></div>
+          </div>
+        </article>
+      </div>
+      <p class="jx-cal__note">Vel „Sí allar lúkurnar“, um tú vilt kanna tilfarið og fyrireika undirvísingina frammanundan.</p>
+    </div>
+  </section>
+
+  <!-- ====================================================== Úrvalt -->
+  <section class="jx-section" id="urvalt">
+    <div class="jx-wrap">
+      <h2>Tríggjar lúkur at byrja við</h2>
+      <p class="jx-section__lead">Roynið eina lúku úr hvørjum kalendara.</p>
+      <div class="jx-picks">
+        <a class="jx-pick" href="grunddeild.html#luka-7"><span class="jx-mono">Grunddeild · heimstaðarlæra · 15 minuttir</span><b>Jól, tá tú vart lítil</b><p>Ein vaksin sigur frá jólunum í sínum barndómi. Børnini tekna og samanbera jól fyrr og nú.</p></a>
+        <a class="jx-pick" href="middeild.html#luka-7"><span class="jx-mono">Miðdeild · søga og samtíð · 15 minuttir</span><b>Ein jólasálmur í 1891</b><p>Blaðið Føringatíðindi prentaði „Gleðilig jól“ á forsíðuni í 1891. Lesið eina grein, sum er skrivað seinni, og kannið, hvat hon gevur at vita, og hvørjir spurningar standa ósvaraðir.</p></a>
+        <a class="jx-pick" href="hadeild.html#luka-4"><span class="jx-mono">Hádeild · alisfrøði og evnafrøði · 15 minuttir</span><b>Hvat brúka jólaljósini?</b><p>Tvær ljósketur, 18 dagar, ein elprísur. Roknið orkunýtslu og kostnað. Greiðið síðan frá, hvørjar aðrar upplýsingar tit høvdu viljað havt.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== Finn jólatilfar -->
+  <section class="jx-section" id="finn">
+    <div class="jx-wrap">
+      <h2>Finn jólatilfar</h2>
+      <p class="jx-section__lead">Her finnur tú allar 42 lúkurnar. Vel deild og lærugrein fyri at avmarka yvirlitið; valini kunnu brúkast saman. Leinkjan fer beint í lúkuna.</p>
+      <div class="jx-filters">
+        <div class="jx-filter" data-f="deild"><span class="jx-mono">Deild</span></div>
+        <div class="jx-filter" data-f="fak"><span class="jx-mono">Lærugrein</span></div>
+      </div>
+      <p class="jx-count" id="jx-count"></p>
+      <div class="jx-items" id="jx-items"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================== Jól í Føroyum -->
+  <section class="jx-section" id="foroyar">
+    <div class="jx-wrap jx-two">
+      <div>
+        <span class="jx-mono">Føroysk jól</span>
+        <h2>Jól í Føroyum, fyrr og nú</h2>
+        <p class="jx-section__lead">Her er eitt úrval av tilfarinum í kalendarunum við sambandi við føroyskt mál, mentan og jólahald. Við hvørt tilfar stendur ein stutt frágreiðing um uppruna ella evni.</p>
+      </div>
+      <ul class="jx-list">
+        <li><div><b>Jólaaftan – Edmund í Garði</b><span>Sangur í fimm ørindum úr Kórbók 2. Les og tulka tekstin í hádeildarkalendaranum. <span class="jx-tag jx-tag--fo">upprunaføroyskt</span></span></div><a class="jx-btn jx-btn--sm" href="hadeild.html#luka-1">Hádeild · lúka 1</a></li>
+        <li><div><b>Hví man alt vera so hugnaligt í kvøld! – Kristin í Geil</b><span>Les sangtekstin í grunddeildarkalendaranum. <span class="jx-tag jx-tag--fo">upprunaføroyskt</span></span></div><a class="jx-btn jx-btn--sm" href="grunddeild.html#sangur-hugnaligt">Grunddeild · sangbókin</a></li>
+        <li><div><b>Gleðilig jól! Gleðilig jól! – Fríðrikur Petersen, 1891</b><span>Føroysk útgáva av Stille Nacht eftir Fríðrik Petersen frá 1891. Les sálmatekstin, og arbeið við søguligum keldum í miðdeildarkalendaranum. <span class="jx-tag jx-tag--tytt">týtt</span></span></div><a class="jx-btn jx-btn--sm" href="middeild.html#luka-7">Miðdeild · lúka 7</a></li>
+        <li><div><b>Lítla fitta nissa mín</b><span>Føroysk týðing eftir Alexandur Kristiansen. Sangupptøka úr Barnasangbók Føroya. <span class="jx-tag jx-tag--tytt">týtt</span></span></div><a class="jx-btn jx-btn--sm" href="grunddeild.html#luka-1">Grunddeild · lúka 1</a></li>
+        <li><div><b>Marin – M. Heinesen</b><span>Søga um gávur og jólahald í bygdini. <span class="jx-tag jx-tag--fo">upprunaføroyskt</span></span></div><a class="jx-btn jx-btn--sm" href="middeild.html#luka-1">Miðdeild · lúka 1</a></li>
+        <li><div><b>Jólakvøld í Oyndarfjarðar kirkju 1950 – Frits Johannesen</b><span>Grein eftir Frits Johannesen, útgivin í 2004, um jólakvøld í Oyndarfjarðar kirkju í 1950. <span class="jx-tag jx-tag--um">um jól í Føroyum</span></span></div><a class="jx-btn jx-btn--sm" href="hadeild.html#luka-6">Hádeild · lúka 6</a></li>
+        <li><div><b>At bera jólini á baki</b><span>Føroyskar máliskur um jól. <span class="jx-tag jx-tag--fo">upprunaføroyskt</span></span></div><a class="jx-btn jx-btn--sm" href="middeild.html#luka-6">Miðdeild · lúka 6</a></li>
+        <li><div><b>Jól, tá tú vart lítil</b><span>Ein vaksin í nærumhvørvinum sigur frá jólunum í sínum barndómi. <span class="jx-tag jx-tag--um">um jól í Føroyum</span></span></div><a class="jx-btn jx-btn--sm" href="grunddeild.html#luka-7">Grunddeild · lúka 7</a></li>
+        <li><div><b>Føroysk jól á einum frímerki</b><span>Jólafrímerki hjá Posta geva næmingunum íblástur at sniðgeva síni egnu frímerki. <span class="jx-tag jx-tag--um">um jól í Føroyum</span></span></div><a class="jx-btn jx-btn--sm" href="middeild.html#luka-12">Miðdeild · lúka 12</a></li>
+        <li><div><b>Desember í Føroyum, uttan orð</b><span>Ljóðfrásøgn ella myndarøð, sum næmingarnir sjálvir gera. <span class="jx-tag jx-tag--um">um jól í Føroyum</span></span></div><a class="jx-btn jx-btn--sm" href="hadeild.html#luka-14">Hádeild · lúka 14</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================================================== Meira jólatilfar -->
+  <section class="jx-section jx-section--fold" id="meira">
+    <div class="jx-wrap">
+      <details class="jx-fold" id="jx-meira-fold">
+        <summary><span><h2>Jólatilfar frá undanfarnum jólasíðum</h2><span class="jx-fold__lead">Spøl, aðrar kalendarar, undirvísingargongdir, prenttilfar, bøkur, sangir og upptøkur. Trýst fyri at lata upp.</span></span><span class="jx-fold__btn">Lat upp</span></summary>
+      <div class="jx-more" style="margin-top:20px">
+        <div>
+          <h3 class="jx-more__h">Spøl</h3>
+          <ul class="jx-list">
+            <li><div><b>Pynta jólatræ</b><span>Vel træ, kúlur og ljós, og pynta.</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/Skj%C3%B8l/Sp%C3%B8l/pynta_jolatrae.html" target="_blank" rel="noopener">Lat upp</a></li>
+            <li><div><b>Heingja mann</b><span>Talgild útgáva av klassiska orðaspælinum, við jólaorðum.</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/Skj%C3%B8l/Sp%C3%B8l/heingja_mann.html" target="_blank" rel="noopener">Lat upp</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="jx-more__h">Kalendarar og undirvísingargongdir</h3>
+          <ul class="jx-list">
+            <li><div><b>Støddfrøðikalendari</b><span>Jólakalendari við einari rokniuppgávu hvønn dag.</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/Skj%C3%B8l/HTML_f%C3%ADlur/j%C3%B3lakalendari_rokning.html" target="_blank" rel="noopener">Lat upp</a></li>
+            <li><div><b>Jólakalendari á Thinglink</b><span>Lúkurnar vísa til úrvalt jólatilfar á Snar.</span></div><a class="jx-btn jx-btn--sm" href="https://www.thinglink.com/scene/2044986562717942246" target="_blank" rel="noopener">Lat upp</a></li>
+            <li><div><b>Styrkirnar – jólakalendari</b><span>Jólakalendari við uppgávum um styrkir, á Thinglink.</span></div><a class="jx-btn jx-btn--sm" href="https://www.thinglink.com/scene/2050971661703840421" target="_blank" rel="noopener">Lat upp</a></li>
+            <li><div><b>Hvít jól</b><span>Undirvísingargongd í náttúru og tøkni um kava og ískrystallar, á fakportalinum hjá Námi.</span></div><a class="jx-btn jx-btn--sm" href="https://natturaogtokni.nam.fo/course/aOhz-hvit-jol" target="_blank" rel="noopener">Lat upp</a></li>
+            <li><div><b>Nissumamma og nissupápi</b><span>Føroyskir jólasangir á Thinglink.</span></div><a class="jx-btn jx-btn--sm" href="https://www.thinglink.com/view/scene/2042430933260305061" target="_blank" rel="noopener">Lat upp</a></li>
+            <li><div><b>Minnislepi við jólafilmum</b><span>MíttCFU. Krevur innritan.</span></div><a class="jx-btn jx-btn--sm" href="https://mitcfu.dk/MaterialeInfo/?faust=CFUHUSK109942&amp;notepadhash=49294a38dd21fcaa815882f6f1b71f03" target="_blank" rel="noopener">Lat upp</a></li>
+            <li><div><b>Jólabøkur sum flokssett</b><span>Yvirlit frá 2020 yvir jólabøkur, sum tá vóru tøkar sum flokssett í Námi (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Flokssett/Yvirlit__jola-flokssett_i_Nami_2020.pdf" target="_blank" rel="noopener">PDF</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="jx-more__h">Bøkur, sangir og hoyrispøl</h3>
+          <ul class="jx-list">
+            <li><div><b>Jólini hjá Finku</b><span>Móðurmálstilfar til 2. flokk (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/pages/Jol/FinkaJolasidur.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li><div><b>Jól í 5. a</b><span>Hoyrispæl á Kringvarpinum, 2015.</span></div><a class="jx-btn jx-btn--sm" href="https://kvf.fo/vit/utvarp/2015/11/17/jol-i-5-1-partur" target="_blank" rel="noopener">Lurta</a></li>
+            <li><div><b>Barnajólasangir við nótum</b><span>Sanghefti (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Jolasangir/barnajolasangur_vid_notum.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li><div><b>Jólarokning við Johann</b><span>Jólabók úr bókarøðini Kom og rokna (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Kom_og_rokna__jolabok.pdf" target="_blank" rel="noopener">PDF</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="jx-more__h">Jólaskjøl at prenta</h3>
+          <p style="font-size:.95rem;color:var(--muted)">Finn jólaskjøl til prentingar, millum annað søgur, sjónleikir, litbøkur, villiniborgir, binding, uppskriftir og rokniuppgávur. Tey liggja í Skjølum, skipað eftir lærugrein.</p>
+          <div class="jx-chips"><a class="jx-chip" href="https://snar.fo/skjol#jol">Øll jólaskjølini</a><a class="jx-chip" href="https://snar.fo/skjol#jol-foroyskt">Søgur og føroyskt</a><a class="jx-chip" href="https://snar.fo/skjol#jol-leikir">Sjónleikir</a><a class="jx-chip" href="https://snar.fo/skjol#jol-stoddfrodi">Jólarokning</a><a class="jx-chip" href="https://snar.fo/skjol#jol-enskt">Enskt</a></div>
+          <h3 class="jx-more__h" style="margin-top:18px">Filmar og sangupptøkur</h3>
+          <details class="jx-det"><summary>Jólahjørtu við GeoGebra – fimm vegleiðingarfilmar (framleitt av Nextfilmum)</summary><div class="jx-films" data-films="_cg0TPMRWP8|Jólahjarta við GeoGebra 1,CbF0UJRIves|Jólahjarta við GeoGebra 2,qvZJIW5WGO8|Jólahjarta við GeoGebra 3,tOusWvApOys|Jólahjarta við GeoGebra 4,jN8tJ_TPjWc|Jólahjarta við GeoGebra 5"></div></details>
+          <details class="jx-det"><summary>Eg vil telja stjørnurnar – sangupptøkur á føroyskum og donskum</summary><div class="jx-films" data-films="YxjIDUSI-B0|Eg vil telja stjørnurnar – Barnasangbók Føroya,i46OFEd2ZKk|Jeg vil tælle stjernerne – Dansk Sang"></div></details>
+          <details class="jx-det"><summary>Jólaprýði úr grønmeti – tveir vegleiðingarfilmar</summary><div class="jx-films" data-films="9GYivyDcqtU|Jólatræ úr gularót,1fWJ_Vu1Few|Kavamaður og jólatræ úr grønmeti"></div></details>
+        </div>
+      </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ====================================================== Funkur og skjøl -->
+  <section class="jx-section" id="funkur">
+    <div class="jx-wrap jx-two">
+      <div>
+        <span class="jx-mono">Amboðini</span>
+        <h2>Funkur í jólabúna</h2>
+        <p class="jx-section__lead">Tólv funkur á Snar fáa jólabúna í desember. Tær hava til dømis jólaorð, jólatekstir, jólaligar rokniuppgávur og jólaprýði í Teknaranum. Lærarin kann sløkkja jólabúnan í hvørjari funku.</p>
+        <p><a class="jx-btn jx-btn--sm" href="https://snar.fo/skjol#jol">Jólaskjøl at prenta →</a></p>
+        <p class="jx-cal__note">Í Skjølum liggja millum annað søgur, sjónleikir, litbøkur, uppskriftir og sangir frá undanfarnum árum, skipað eftir lærugrein.</p>
+      </div>
+      <div class="jx-funkur">
+        <a href="https://snar.fo/funkur/spoel/finn-ord"><b>Finn orð</b><span>Arbeið við jólaorðum</span></a>
+        <a href="https://snar.fo/funkur/ger-fyrisoegn-1"><b>Ger fyrisøgn</b><span>Tríggir jólatekstir</span></a>
+        <a href="https://snar.fo/funkur/prenta-roknistykki"><b>Prenta roknistykki</b><span>Prenta jólaligar rokniuppgávur</span></a>
+        <a href="https://snar.fo/funkur/terningar"><b>Terningar</b><span>Jólaroynd: 20 køst við tveimum terningum</span></a>
+        <a href="https://snar.fo/spaelsavn/teknari"><b>Teknari</b><span>Tekna jólakort, við jólastemplum og litmyndum</span></a>
+        <a href="https://snar.fo/funkur/spoel/stoeddfroedi/brotspael"><b>Brotspæl</b><span>Arbeið við brotum, í jólalitum</span></a>
+        <a href="https://snar.fo/funkur/eginleikar-vid-skapum"><b>Skipa skapini</b><span>Skap og symmetri</span></a>
+        <a href="https://snar.fo/funkur/kanna-koturnar"><b>Kanna koturnar</b><span>Forrita jólaperur</span></a>
+        <a href="https://snar.fo/funkur/tilvildarligir-spurningar-/-noevn"><b>Tilvildarligir spurningar</b><span>Jólaspurningar á enskum</span></a>
+        <a href="https://snar.fo/funkur/spoel/stoeddfroedi/fiskarnir-kava"><b>Fiskarnir kava</b><span>Rokna og fáa fiskarnar at kava, í jólalitum</span></a>
+        <a href="https://snar.fo/funkur/spoel/stoeddfroedi/jatsi"><b>Jatsi</b><span>Terningaspæl við fimm terningum, í jólalitum</span></a>
+        <a href="https://snar.fo/funkur/spoel/stoeddfroedi/hoppandi-toel-1"><b>Hoppandi tøl</b><span>Rokna og trýst á rætta froskin, í vetrarbúna</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== Til læraran -->
+  <section class="jx-section" id="laerari">
+    <div class="jx-wrap jx-two">
+      <div>
+        <span class="jx-mono">Fyrireiking</span>
+        <h2>Til læraran</h2>
+        <p class="jx-section__lead">Soleiðis eru kalendararnir hugsaðir.</p>
+      </div>
+      <div class="jx-steps">
+        <div><b>Ein lúka hvønn skúladag.</b> Ein nýggj lúka letur upp hvønn skúladag frá 1. til 18. desember. Jólafrítíðin byrjar 19. desember. Flestu uppgávurnar taka 10–15 minuttir; einstakar taka umleið 20 minuttir.</div>
+        <div><b>Felags bygnaður.</b> Lúkurnar hava eitt heiti, eitt tilfar, ein spurning at tosa um, eina felags høvuðsuppgávu og møguleika at arbeiða víðari. Í miðdeild eru eyka uppgávur til 5.–6. flokk. Í hádeild eitur framhaldið „Kanna víðari“.</div>
+        <div><b>Vegleiðing og svar.</b> Í grunddeild og miðdeild stendur „Til læraran“ í hvørjari lúku. Í hádeild eru læraraviðmerkingar og svar savnað í einum serligum læraraparti, sum er samanfaldur, til lærarin letur hann upp.</div>
+        <div><b>Arbeiðshættir.</b> Tilfarið kann brúkast felags á stórskíggja. Fleiri uppgávur kunnu eisini gerast tvey og tvey ella í smáum bólkum.</div>
+        <div><b>Fyrireiking.</b> „Sí allar lúkurnar“ her á síðuni vísir allar lúkurnar, meðan tú hevur kalendaran opnan; einki verður goymt. Inni í kalendaranum letur „Lat allar lúkur upp“ allar lúkur upp í tínum kaga, til tú trýstir á „Lat lúkurnar aftur“. Lúkur kunnu merkjast liðugar, og tú kanst eisini brúka beinleiðis leinki til einstakar lúkur.</div>
+        <div><b>Tilfarið.</b> Við tilfarinum standa upplýsingar um høvund og keldu. Leinki vísa til viðkomandi tilfar á øðrum síðum. Filmar kunnu spælast beinleiðis á síðuni.</div>
+        <div><b>Finn uppgávuna aftur.</b> Í „Finn jólatilfar“ kanst tú finna allar 42 lúkurnar eftir deild og lærugrein. Soleiðis kanst tú velja einstakar uppgávur uttan at fylgja kalendaranum dag fyri dag.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="jx-outro">
+    <div class="jx-wrap">
+      <h2>Gleðilig <em>jól</em></h2>
+      <p class="jx-mono" style="margin-top:10px">Góðan arbeiðshug í adventini</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var root = document.querySelector('.jol');
+  if (!root) return;
+  root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
+
+  /* ------------------------------------------------------------ Allar 42 lúkurnar */
+  var DEILD = { g: ['Grunddeild', '1.–3. flokkur', '/jol/grunddeild'], m: ['Miðdeild', '4.–6. flokkur', '/jol/middeild'], h: ['Hádeild', '7.–9. flokkur', '/jol/hadeild'] };
+  var EVNI = { sogur: 'Søgur, mál og miðlar', sidir: 'Jól, siðir og søga', stodd: 'Støddfrøði og spøl', ljos: 'Ljós, myrkur og náttúra', gavur: 'Gávur, nýtsla og samfelag', sangur: 'Sangur og leikur', hand: 'Handverk, list og talgild skapan', matur: 'Bakstur og matur' };
+  var FAK = { fo: 'Føroyskt', da: 'Danskt', en: 'Enskt', st: 'Støddfrøði', nt: 'Náttúra og tøkni', hl: 'Heimstaðarlæra', al: 'Alisfrøði og evnafrøði', la: 'Landafrøði', sa: 'Samfelagsfrøði', so: 'Søga og samtíð', kr: 'Kristnikunnleiki og átrúnaður', hv: 'Handaverk og list', ml: 'Myndlist og tónleikur' };
+  /* [deild, lúka, heiti, lærugreinir, evni, tíð] */
+  var ITEMS = [
+    ['g', 1, 'Vit syngja jólini inn', ['fo', 'hv'], 'sangur', '10–15'], ['g', 2, 'Ein brævbjálvi til hvørt kort', ['st'], 'stodd', '10'], ['g', 3, 'Jólini hjá okkum', ['hl'], 'sidir', '10–15'], ['g', 4, 'Vit byggja jólaorð', ['fo'], 'sogur', '10–15'],
+    ['g', 5, 'Ein jólaheilsan til tín', ['fo', 'hv'], 'hand', '15'], ['g', 6, 'Eitt mynstur heldur fram', ['st', 'hv'], 'stodd', '10–15'], ['g', 7, 'Jól, tá tú vart lítil', ['hl', 'fo'], 'sidir', '15'], ['g', 8, 'Øll skulu fáa líka nógv', ['st'], 'stodd', '10'],
+    ['g', 9, 'Gamalt pappír verður til prýði', ['hv', 'hl'], 'hand', '15'], ['g', 10, 'At síggjast í myrkrinum', ['hl'], 'ljos', '10'], ['g', 11, 'Kortið fór við vindinum', ['fo'], 'sogur', '10–15'], ['g', 12, 'Hvørjir fuglar eru her í vetur?', ['hl'], 'ljos', '15'],
+    ['g', 13, 'Skap í jólaprýðinum', ['st', 'hv'], 'stodd', '10–15'], ['g', 14, 'Okkara jólaløta', ['fo', 'hv'], 'sangur', '15'],
+    ['m', 1, 'Gávan hjá Marini', ['fo'], 'sogur', '10–15'], ['m', 2, 'Bollar til fleiri', ['st'], 'matur', '10–15'], ['m', 3, 'Et træ, der altid ønsker sig mere', ['da'], 'sogur', '10–15'], ['m', 4, 'Fá jólaljósið at lýsa', ['nt'], 'ljos', '15'],
+    ['m', 5, 'What is a Christmas cracker?', ['en'], 'sidir', '10–15'], ['m', 6, 'At bera jólini á baki', ['fo'], 'sogur', '10–15'], ['m', 7, 'Ein jólasálmur í 1891', ['so'], 'sidir', '15'], ['m', 8, 'Fra gårdnisse til julenisse', ['da'], 'sidir', '10–15'],
+    ['m', 9, 'Eitt jólakort við symmetri', ['st'], 'stodd', '15'], ['m', 10, 'Ein heilsan, sum sigur nakað', ['fo'], 'sogur', '15'], ['m', 11, 'Hví er dagurin so stuttur?', ['nt'], 'ljos', '15'], ['m', 12, 'Føroysk jól á einum frímerki', ['hv'], 'hand', '15'],
+    ['m', 13, 'Christmas in summer', ['en'], 'sidir', '10–15'], ['m', 14, 'Hvat stendur í jólaevangeliinum?', ['kr'], 'sidir', '15'],
+    ['h', 1, 'Hvussu ljóða føroysk jól?', ['fo'], 'sangur', '10–15'], ['h', 2, 'Gevur 20 % og síðan 10 % í avsláttri til samans 30 %?', ['st'], 'stodd', '10–15'], ['h', 3, 'Hvem har mandlen?', ['da'], 'sogur', '10–15'], ['h', 4, 'Hvat brúka jólaljósini?', ['al'], 'ljos', '10–15'],
+    ['h', 5, 'Scrooge: What is Christmas worth?', ['en'], 'sogur', '10–15'], ['h', 6, '1950 sæð úr 2004', ['so'], 'sidir', '10–15'], ['h', 7, 'Sama vøra, ymisk ávirkan', ['sa'], 'gavur', '10–15'], ['h', 8, 'Vel tína vinnarareglu', ['st'], 'stodd', '10–15'],
+    ['h', 9, 'Ferðin hjá einari jólagávu', ['la'], 'gavur', '10–15'], ['h', 10, 'Ein jólamynd tulkar eina frásøgn', ['kr'], 'sidir', '15–20'], ['h', 11, 'Ein søga við í mesta lagi 60 orðum', ['fo'], 'sogur', '10–15'], ['h', 12, 'Hvør heldur samfelagnum gangandi?', ['sa'], 'gavur', '10–15'],
+    ['h', 13, 'Can a story sell a gift?', ['en'], 'gavur', '10–15'], ['h', 14, 'Desember í Føroyum, uttan orð', ['ml'], 'hand', '20']
+  ];
+  var sel = { deild: '', evni: '', fak: '' };
+  function chips(container, key, map, labelFn, allLabel) {
+    var all = document.createElement('button'); all.type = 'button'; all.className = 'jx-chip is-on'; all.textContent = allLabel; all.dataset.v = ''; container.appendChild(all);
+    Object.keys(map).forEach(function (k) { var b = document.createElement('button'); b.type = 'button'; b.className = 'jx-chip'; b.dataset.v = k; b.textContent = labelFn(k); container.appendChild(b); });
+    container.addEventListener('click', function (e) { var b = e.target.closest('.jx-chip'); if (!b) return; sel[key] = b.dataset.v; Array.prototype.forEach.call(container.querySelectorAll('.jx-chip'), function (x) { x.classList.toggle('is-on', x === b); }); render(); });
+  }
+  var usedFak = {}; ITEMS.forEach(function (it) { it[3].forEach(function (f) { usedFak[f] = 1; }); });
+  var FAK_USED = {}; Object.keys(FAK).forEach(function (k) { if (usedFak[k]) FAK_USED[k] = FAK[k]; });
+  chips(root.querySelector('[data-f="deild"]'), 'deild', DEILD, function (k) { return DEILD[k][0] + ' · ' + DEILD[k][1]; }, 'Allar deildir');
+  chips(root.querySelector('[data-f="fak"]'), 'fak', FAK_USED, function (k) { return FAK[k]; }, 'Allar lærugreinir');
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function render() {
+    var list = ITEMS.filter(function (it) { return (!sel.deild || it[0] === sel.deild) && (!sel.evni || it[4] === sel.evni) && (!sel.fak || it[3].indexOf(sel.fak) >= 0); });
+    root.querySelector('#jx-count').textContent = 'Vísir ' + list.length + ' av ' + ITEMS.length + ' lúkum.';
+    root.querySelector('#jx-items').innerHTML = list.length ? list.map(function (it) {
+      return '<a class="jx-item jx-item--' + it[0] + '" href="' + DEILD[it[0]][2] + '#luka-' + it[1] + '"><span class="jx-item__meta">' + DEILD[it[0]][0] + ' · lúka ' + it[1] + ' · ' + it[5] + ' minuttir</span><b>' + esc(it[2]) + '</b><span class="jx-item__fak">' + it[3].map(function (f) { return FAK[f]; }).join(' · ') + '</span></a>';
+    }).join('') : '<div class="jx-empty">Ongar lúkur samsvara við valini. Vel „Allar deildir“ ella „Allar lærugreinir“ fyri at víðka yvirlitið.</div>';
+  }
+  render();
+
+  /* ------------------------------------------------------------ Leitingin: alt á síðuni í einum lista */
+  var TAGC = { luka: '#2f6b45', kal: '#c8102e', fo: '#8a3fb0', meira: '#1f6f8b', skjol: '#6f4e37', film: '#b5451b', funka: '#d9a521', laer: '#555' };
+  var INDEX = [];
+  function fold(t) { return String(t).toLowerCase().replace(/á/g, 'a').replace(/ð/g, 'd').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ý/g, 'y').replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a').replace(/é/g, 'e').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function add(tag, tc, title, desc, href, el) { if (!title) return; INDEX.push({ tag: tag, tc: tc, title: title.trim(), desc: (desc || '').trim(), href: href, el: el || null, key: fold(title + ' ' + (desc || '') + ' ' + tag) }); }
+  ITEMS.forEach(function (it) { add('Lúka · ' + DEILD[it[0]][0], TAGC.luka, it[2], DEILD[it[0]][1] + ' · ' + it[3].map(function (f) { return FAK[f]; }).join(', ') + ' · ' + it[5] + ' minuttir', DEILD[it[0]][2] + '#luka-' + it[1]); });
+  Array.prototype.forEach.call(root.querySelectorAll('.jx-cal'), function (c) { add('Jólakalendari', TAGC.kal, c.querySelector('h3').textContent, c.querySelector('small').textContent + ' · ' + c.querySelector('p').textContent, c.querySelector('.jx-cal__btns a').getAttribute('href')); });
+  Array.prototype.forEach.call(root.querySelectorAll('#foroyar .jx-list li'), function (li) { var a = li.querySelector('a'); add('Jól í Føroyum', TAGC.fo, li.querySelector('b').textContent, li.querySelector('span').textContent, a.getAttribute('href')); });
+  var meiraLabel = 'Undanfarin jól · ';
+  Array.prototype.forEach.call(root.querySelectorAll('#meira .jx-more > div'), function (col) {
+    var tag = meiraLabel + ((col.querySelector('.jx-more__h') || {}).textContent || 'tilfar');
+    Array.prototype.forEach.call(col.querySelectorAll('.jx-list li'), function (li) { var a = li.querySelector('a'); add(tag, TAGC.meira, li.querySelector('b').textContent, li.querySelector('span').textContent, a.getAttribute('href')); });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll('#meira .jx-chips a'), function (a) { add('Jólaskjøl', TAGC.skjol, a.textContent, 'Skjøl at prenta', a.getAttribute('href')); });
+  Array.prototype.forEach.call(root.querySelectorAll('#meira details.jx-det'), function (d) { (d.querySelector('.jx-films').getAttribute('data-films') || '').split(',').forEach(function (f) { add('Filmur', TAGC.film, f.split('|')[1] || '', d.querySelector('summary').textContent, '#meira', d); }); });
+  Array.prototype.forEach.call(root.querySelectorAll('.jx-funkur a'), function (a) { add('Funka í jólabúna', TAGC.funka, a.querySelector('b').textContent, a.querySelector('span').textContent, a.getAttribute('href')); });
+  Array.prototype.forEach.call(root.querySelectorAll('.jx-steps > div'), function (d) { add('Til læraran', TAGC.laer, d.querySelector('b').textContent, d.textContent.replace(d.querySelector('b').textContent, ''), '#laerari'); });
+  var q = root.querySelector('#jx-q'), res = root.querySelector('#jx-res'), clr = root.querySelector('#jx-q-clear');
+  function mark(text, words) { var out = esc(text); words.forEach(function (w) { if (w.length < 2) return; out = out.replace(new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<mark>$1</mark>'); }); return out; }
+  function search() {
+    var raw = q.value.trim(), words = fold(raw).split(' ').filter(Boolean);
+    clr.hidden = !raw;
+    if (!words.length) { res.hidden = true; res.innerHTML = ''; return; }
+    var hits = INDEX.filter(function (e) { return words.every(function (w) { return e.key.indexOf(w) >= 0; }); });
+    var shown = hits.slice(0, 40), rawWords = raw.split(/\s+/);
+    res.innerHTML = shown.length ? shown.map(function (e, i) { return '<a href="' + e.href + '" data-i="' + INDEX.indexOf(e) + '"><span class="jx-search__tag" style="--tc:' + e.tc + '">' + esc(e.tag) + '</span><span><b>' + mark(e.title, rawWords) + '</b><span>' + esc(e.desc) + '</span></span></a>'; }).join('') + (hits.length > shown.length ? '<div class="jx-search__more">' + hits.length + ' úrslit. Fyrstu 40 úrslitini verða víst. Skriva fleiri leitiorð fyri at avmarka leitingina.</div>' : '<div class="jx-search__more">' + hits.length + (hits.length === 1 ? ' úrslit' : ' úrslit') + '</div>') : '<div class="jx-search__empty">Einki funnið fyri „' + esc(raw) + '“. Royn eitt annað orð, til dømis eina lærugrein ella eitt heiti.</div>';
+    res.hidden = false;
+  }
+  q.addEventListener('input', search);
+  root.querySelector('#jx-search').addEventListener('submit', function (e) { e.preventDefault(); var first = res.querySelector('a'); if (first) first.click(); });
+  clr.addEventListener('click', function () { q.value = ''; search(); q.focus(); });
+  q.addEventListener('keydown', function (e) { if (e.key === 'Escape') { q.value = ''; search(); } });
+  var meiraFold = root.querySelector('#jx-meira-fold');
+  res.addEventListener('click', function (e) { var a = e.target.closest('a'); if (!a) return; var entry = INDEX[+a.getAttribute('data-i')]; if (entry && entry.el) { entry.el.open = true; } if (entry && meiraFold && (entry.el || (entry.href && entry.href.indexOf('#meira') === 0))) meiraFold.open = true; });
+  Array.prototype.forEach.call(root.querySelectorAll('#meira .jx-list li, #meira .jx-chips a'), function () {});
+
+  /* ------------------------------------------------------------ Filmar: innbygdir, tá man trýstir */
+  Array.prototype.forEach.call(root.querySelectorAll('.jx-films[data-films]'), function (box) {
+    box.innerHTML = box.getAttribute('data-films').split(',').map(function (f) { var id = f.split('|')[0], cap = f.split('|')[1] || ''; return '<div><button class="jx-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jx-yt__play">▶ Spæl</span></button><p class="jx-ytcap">' + esc(cap) + '</p></div>'; }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('.jx-yt'), function (b) { b.addEventListener('click', function () { var fr = document.createElement('iframe'); fr.src = 'https://www.youtube.com/embed/' + b.getAttribute('data-yt') + '?autoplay=1&rel=0'; fr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; fr.allowFullscreen = true; fr.title = b.getAttribute('aria-label') || 'YouTube'; b.innerHTML = ''; b.appendChild(fr); }, { once: true }); });
+  });
+
+  /* ------------------------------------------------------------ Hundurin og leinkjur innan síðuna */
+  var dog = root.querySelector('[data-dog]');
+  if (dog) dog.addEventListener('click', function () { dog.style.transform = 'rotate(-8deg)'; setTimeout(function () { dog.style.transform = ''; }, 400); });
+  window.addEventListener('click', function (e) {
+    if (!root.contains(e.target)) return;
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null; if (!a) return;
+    var id = a.getAttribute('href').slice(1), target = root.querySelector('#' + id); if (!target) return;
+    if (id === 'meira' && meiraFold) meiraFold.open = true;
+    if (a.closest('#jx-res')) { var en = INDEX[+a.getAttribute('data-i')]; if (en && en.el) en.el.open = true; }
+    e.preventDefault(); e.stopPropagation();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
+  }, true);
+})();
+</script>
+</body>
+</html>
