@@ -456,7 +456,7 @@
   function fmt(iso) { var p = iso.split('-'), dt = new Date(+p[0], +p[1] - 1, +p[2]); return DAYS[dt.getDay()] + ' ' + (+p[2]) + '. ' + MONTHS[+p[1] - 1]; }
   var ALT_KEY = 'snar-jol-hadeild-alt-2026', DONE_KEY = 'snar-jol-hadeild-done-2026', LIKE_KEY = 'snar-jol-hadeild-like-2026';
   // Felags hjartateljari: Google Apps Script web app (sí jol/likes/LES MEG.txt). Tómur = bert goymt í kagaranum.
-  var LIKE_API = '', likeN = {};
+  var LIKE_API = 'https://script.google.com/macros/s/AKfycbx_Qk79EMjTWpzJ-WOhyHcWVtU-KVWWaL_pSe_MVqc0psgyJN9HRxtEM1cXoY3b06ejEg/exec', likeN = {};
   function likeText() { var n = current + 1, el = root.querySelector('#jo-like-n'); if (!LIKE_API) { el.hidden = true; return; } el.hidden = false; el.textContent = ' · ' + (likeN[n] || 0); }
   if (LIKE_API && window.fetch) { fetch(LIKE_API, { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (o) { likeN = o || {}; if (current >= 0) likeText(); }).catch(function () {}); }
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
