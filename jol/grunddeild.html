@@ -535,7 +535,8 @@ aldri kann eg fulltakka tær
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
   var allOpen = /[?&]alt=1/.test(location.search) || store(ALT_KEY) === '1';
   var done = {}; try { done = JSON.parse(store(DONE_KEY) || '{}'); } catch (e) {}
-  function unlocked(door) { return allOpen || today() >= door.d; }
+  // Ein beinleiðis leinkja (#luka-N) letur lúkuna upp í hesi vitjanini, eisini um hon enn er læst – til læraran, sum leggur til rættis.
+  function unlocked(door) { return allOpen || door.peek || today() >= door.d; }
 
   /* ------------------------------------------------------------ Kalendarin */
   var grid = root.querySelector('#jg-grid'), openEl = root.querySelector('#jg-open'), current = -1;
@@ -583,7 +584,7 @@ aldri kann eg fulltakka tær
   altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); if (typeof toast === 'function') toast(allOpen ? 'Allar lúkur eru latnar upp til fyrireiking.' : 'Komandi lúkur eru aftur læstar. Lúkur frá undanfarnum skúladøgum eru framvegis tøkar.'); });
   altLabel(); renderGrid();
   var hm = /#luka-(\d+)/.exec(location.hash || '');
-  if (hm && DOORS[+hm[1] - 1]) openDoor(+hm[1] - 1, true);
+  if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }
   else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
   root.querySelector('.jg-hero__btns a').addEventListener('click', function (e) { if (current >= 0) { e.preventDefault(); openEl.scrollIntoView({ behavior: 'smooth' }); } });
 

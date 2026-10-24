@@ -463,7 +463,8 @@
   var allOpen = /[?&]alt=1/.test(location.search) || store(ALT_KEY) === '1';
   var done = {}; try { done = JSON.parse(store(DONE_KEY) || '{}'); } catch (e) {}
   var likes = {}; try { likes = JSON.parse(store(LIKE_KEY) || '{}'); } catch (e) {}
-  function unlocked(door) { return allOpen || today() >= door.d; }
+  // Ein beinleiðis leinkja (#luka-N) letur lúkuna upp í hesi vitjanini, eisini um hon enn er læst – til læraran, sum leggur til rættis.
+  function unlocked(door) { return allOpen || door.peek || today() >= door.d; }
 
   /* ------------------------------------------------------------ Kalendarin */
   var grid = root.querySelector('#jh-grid'), openEl = root.querySelector('#jh-open'), hold = root.querySelector('#jh-hold'), current = -1;
@@ -522,7 +523,7 @@
   altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); countdown(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); });
   altLabel(); renderGrid();
   var hm = /#luka-(\d+)/.exec(location.hash || '');
-  if (hm && DOORS[+hm[1] - 1]) openDoor(+hm[1] - 1, true);
+  if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }
   else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
   root.querySelector('.jh-hero__btns a').addEventListener('click', function (e) { if (current >= 0) { e.preventDefault(); openEl.scrollIntoView({ behavior: 'smooth' }); } });
 
