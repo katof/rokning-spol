@@ -1,0 +1,72 @@
+<!doctype html><html lang="fo"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upptøkuamboð</title>
+<style>
+body{margin:0;font-family:Nunito,system-ui,Arial,sans-serif;background:#f6f8f5;color:#1f2a37}
+main{max-width:900px;margin:0 auto;padding:24px}
+h1{margin:0 0 4px}p.s{color:#5b6673;margin:0 0 18px}
+.top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.big{border:0;border-radius:14px;padding:14px 20px;font:900 1.1rem inherit;cursor:pointer;background:#1f9a57;color:#fff}
+.big.dl{background:#2a78c2}
+.cur{background:#fff;border:2px solid #1f9a57;border-radius:20px;padding:28px;text-align:center;margin-bottom:18px}
+.cur .w{font-size:3.4rem;font-weight:900;line-height:1}
+.cur .n{color:#5b6673;margin:8px 0 18px}
+.rec{width:150px;height:150px;border-radius:50%;border:0;background:#d9412f;color:#fff;font:900 1.1rem inherit;cursor:pointer;touch-action:none}
+.rec.on{background:#111;animation:p 1s infinite}@keyframes p{50%{transform:scale(1.06)}}
+.ctl{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.ctl button{border:2px solid #e3e7ec;background:#fff;border-radius:999px;padding:10px 18px;font:800 1rem inherit;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.grid button{border:2px solid #e3e7ec;background:#fff;border-radius:12px;padding:10px;font:800 1rem inherit;cursor:pointer;text-align:left}
+.grid button.ok{border-color:#1f9a57;background:#e4f4ea}.grid button.sel{outline:3px solid #2a78c2}
+.txt{background:#fff;border:1px solid #e3e7ec;border-radius:16px;padding:14px 16px;margin-bottom:16px}
+.txt summary{font-weight:900;cursor:pointer}
+.txt textarea{width:100%;box-sizing:border-box;margin-top:10px;font:600 1.05rem/1.5 inherit;border:2px solid #e3e7ec;border-radius:12px;padding:10px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px}.hint{color:#5b6673;font-size:.92rem}
+.cur.empty .rec,.cur.empty .ctl{display:none}
+</style></head><body><main>
+<h1>Upptøkuamboð</h1>
+<p class="s">Halt reyða knøttin niðri, meðan tú sigur orðið, og slepp so. Síðan fert tú sjálvvirkandi til næsta orð. Tá ið tú ert liðug, trýstir tú á «Tak niður».</p>
+<details class="txt" open><summary>1. Skriva orðini her – eitt á hvørja linju</summary>
+<textarea id="txt" rows="8" placeholder="hús&#10;bátur&#10;Hon gevur blómunum vatn.&#10;sol = sól   (vil tú sjálv velja fílunavnið)"></textarea>
+<div class="row"><button class="big" id="use">Brúka listan</button><span class="hint">Fílunavnið verður gjørt av sær sjálvum (hús → hus.webm). Vilt tú sjálv velja, skriva <b>navn = tekstur</b>.</span></div></details>
+<div class="top"><b id="cnt"></b><button class="big dl" id="dl">Tak niður (zip)</button></div>
+<div class="cur"><div class="w" id="w"></div><div class="n" id="n"></div>
+<button class="rec" id="rec">Halt niðri<br>og tala</button>
+<div class="ctl"><button id="prev">← Aftur</button><button id="play">▶ Hoyr</button><button id="next">Fram →</button></div></div>
+<div class="grid" id="grid"></div>
+</main><script>
+let L=[];
+const recs={};let i=0;
+const $=id=>document.getElementById(id);
+function show(){if(!L.length){$('w').textContent='Skriva orðini omanfyri';$('n').textContent='';$('cnt').textContent='';$('grid').innerHTML='';document.querySelector('.cur').classList.add('empty');return}document.querySelector('.cur').classList.remove('empty');const[k,w]=L[i];$('w').textContent=w;$('n').textContent=`${i+1} av ${L.length} · fíla: ${k}`;
+ $('cnt').textContent=`${Object.keys(recs).length} av ${L.length} tikin upp`;
+ $('grid').innerHTML=L.map(([k,w],j)=>`<button class="${recs[k]?'ok':''}${j===i?' sel':''}" data-j="${j}">${w}</button>`).join('')}
+$('grid').onclick=e=>{const b=e.target.closest('[data-j]');if(b){i=+b.dataset.j;show()}};
+$('prev').onclick=()=>{i=Math.max(0,i-1);show()};$('next').onclick=()=>{i=Math.min(L.length-1,i+1);show()};
+$('play').onclick=()=>{const r=recs[L[i][0]];if(r)new Audio(URL.createObjectURL(r.blob)).play()};
+let mr=null,st=null;
+async function start(e){e.preventDefault();if(mr)return;try{st=st||await navigator.mediaDevices.getUserMedia({audio:true})}catch(x){alert('Mikrofonin riggar ikki.');return}
+ const ch=[],k=L[i][0];mr=new MediaRecorder(st);mr.ondataavailable=e=>e.data.size&&ch.push(e.data);
+ mr.onstop=()=>{const t=mr.mimeType||'audio/webm';mr=null;$('rec').classList.remove('on');if(!ch.length)return;
+  recs[k]={blob:new Blob(ch,{type:t}),ext:/ogg/.test(t)?'ogg':/mp4/.test(t)?'m4a':'webm'};
+  new Audio(URL.createObjectURL(recs[k].blob)).play();setTimeout(()=>{if(i<L.length-1)i++;show()},900);show()};
+ mr.start();$('rec').classList.add('on')}
+function stop(){if(mr&&mr.state!=='inactive')mr.stop()}
+$('rec').addEventListener('pointerdown',start);['pointerup','pointerleave','pointercancel'].forEach(t=>$('rec').addEventListener(t,stop));
+const T=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;T[n]=c>>>0}
+const crc=u=>{let c=0xFFFFFFFF;for(const b of u)c=T[(c^b)&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
+$('dl').onclick=async()=>{const ks=Object.keys(recs);if(!ks.length){alert('Einki er tikið upp enn.');return}
+ const enc=new TextEncoder(),parts=[],cd=[];let off=0;
+ for(const k of ks){const u=new Uint8Array(await recs[k].blob.arrayBuffer()),nm=enc.encode(`ljod/${k}.${recs[k].ext}`),c=crc(u),h=new DataView(new ArrayBuffer(30));
+  h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x800,true);h.setUint32(14,c,true);h.setUint32(18,u.length,true);h.setUint32(22,u.length,true);h.setUint16(26,nm.length,true);parts.push(h,nm,u);
+  const e=new DataView(new ArrayBuffer(46));e.setUint32(0,0x02014b50,true);e.setUint16(4,20,true);e.setUint16(6,20,true);e.setUint16(8,0x800,true);e.setUint32(16,c,true);e.setUint32(20,u.length,true);e.setUint32(24,u.length,true);e.setUint16(28,nm.length,true);e.setUint32(42,off,true);cd.push(e,nm);off+=30+nm.length+u.length}
+ const cs=cd.reduce((s,x)=>s+x.byteLength,0),z=new DataView(new ArrayBuffer(22));z.setUint32(0,0x06054b50,true);z.setUint16(8,ks.length,true);z.setUint16(10,ks.length,true);z.setUint32(12,cs,true);z.setUint32(16,off,true);
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(parts.concat(cd,[z]),{type:'application/zip'}));a.download='upptokur.zip';a.click()};
+
+const slug=w=>w.toLowerCase().normalize('NFC').replace(/æ/g,'ae').replace(/ø/g,'oe').replace(/ð/g,'d').replace(/å/g,'aa').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60)||'ord';
+function parse(){const used={};return $('txt').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{let k,w;const m=l.match(/^(.+?)\s*=\s*(.+)$/);if(m){k=slug(m[1]);w=m[2]}else{w=l;k=slug(l)}let kk=k,n=2;while(used[kk])kk=k+'-'+n++;used[kk]=1;return[kk,w]})}
+$('use').onclick=()=>{const N=parse();if(!N.length){alert('Skriva í minsta lagi eitt orð.');return}L=N;i=Math.max(0,L.findIndex(([k])=>!recs[k]));if(i<0)i=0;document.querySelector('.txt').open=false;show()};
+try{const v=localStorage.getItem('upptoka-tekstur');if(v)$('txt').value=v}catch(e){}
+$('txt').addEventListener('input',()=>{try{localStorage.setItem('upptoka-tekstur',$('txt').value)}catch(e){}});
+$('dl').onclick=(f=>async()=>{f()})($('dl').onclick);
+show();
+</script></body></html>

@@ -10,6 +10,7 @@ Forsíðurnar (hubbarnir) liggja á Snar; her liggur tað, sum Snar letur upp í
 | `einsamoll-vid-hus/` | Uppgávusíðurnar til lesibókina *Einsamøll við hús* (Mín fyrsta lesing), ein HTML-fíla fyri hvørja síðu, felags `lesing.css` og `lesing.js`, myndir í `img/`. | https://katof.github.io/rokning-spol/einsamoll-vid-hus/sidu-02.html … |
 | `karin-kvant/` | Fimm alisfrøðispøl til filmarnar við Karin Kvant (bygg eitt atom, lita kvarkarnar, aldumaskinan, mammutbeinið, sólskipanin), felags `karin.css` og `karin.js`. | https://katof.github.io/rokning-spol/karin-kvant/bygg-eitt-atom.html … |
 | `jol/` | Jól 2026: hubbin til læraran og tríggir jólakalendarar (grunddeild, miðdeild, hádeild), 14 lúkur hvør, 1.–18. desember. | https://katof.github.io/rokning-spol/jol/ |
+| `ambod/` | Amboð til at gera tilfar. `upptokuambod.html`: skriva ein lista við orðum ella setningum, tak tey upp eitt í senn við mikrofonini og tak tey niður sum zip við ljóðfílum (fílunøvn uttan føroyskar stavir, ella `navn = tekstur`). | https://katof.github.io/rokning-spol/ambod/upptokuambod.html |
 
 ## Jól 2026
 
