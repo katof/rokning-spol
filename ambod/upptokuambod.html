@@ -7,6 +7,7 @@ h1{margin:0 0 4px}p.s{color:#5b6673;margin:0 0 18px}
 .top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
 .big{border:0;border-radius:14px;padding:14px 20px;font:900 1.1rem inherit;cursor:pointer;background:#1f9a57;color:#fff}
 .big.dl{background:#2a78c2}
+.big.del{background:#fff;color:#d9412f;box-shadow:inset 0 0 0 2px #d9412f}
 .cur{background:#fff;border:2px solid #1f9a57;border-radius:20px;padding:28px;text-align:center;margin-bottom:18px}
 .cur .w{font-size:3.4rem;font-weight:900;line-height:1}
 .cur .n{color:#5b6673;margin:8px 0 18px}
@@ -28,7 +29,7 @@ h1{margin:0 0 4px}p.s{color:#5b6673;margin:0 0 18px}
 <details class="txt" open><summary>1. Skriva orðini her – eitt á hvørja linju</summary>
 <textarea id="txt" rows="8" placeholder="hús&#10;bátur&#10;Hon gevur blómunum vatn.&#10;sol = sól   (vil tú sjálv velja fílunavnið)"></textarea>
 <div class="row"><button class="big" id="use">Brúka listan</button><span class="hint">Fílunavnið verður gjørt av sær sjálvum (hús → hus.webm). Vilt tú sjálv velja, skriva <b>navn = tekstur</b>.</span></div></details>
-<div class="top"><b id="cnt"></b><button class="big dl" id="dl">Tak niður (zip)</button></div>
+<div class="top"><b id="cnt"></b><button class="big dl" id="dl">Tak niður (zip)</button><button class="big del" id="clr">Strika alt</button></div>
 <div class="cur"><div class="w" id="w"></div><div class="n" id="n"></div>
 <button class="rec" id="rec">Halt niðri<br>og tala</button>
 <div class="ctl"><button id="prev">← Aftur</button><button id="play">▶ Hoyr</button><button id="next">Fram →</button></div></div>
@@ -68,5 +69,9 @@ $('use').onclick=()=>{const N=parse();if(!N.length){alert('Skriva í minsta lagi
 try{const v=localStorage.getItem('upptoka-tekstur');if(v)$('txt').value=v}catch(e){}
 $('txt').addEventListener('input',()=>{try{localStorage.setItem('upptoka-tekstur',$('txt').value)}catch(e){}});
 $('dl').onclick=(f=>async()=>{f()})($('dl').onclick);
+$('clr').onclick=()=>{const n=Object.keys(recs).length;
+ if(!confirm(n?`Vilt tú strika allar ${n} upptøkurnar og listan? Hevur tú tikið zip-fíluna niður?`:'Vilt tú strika listan?'))return;
+ for(const k in recs)delete recs[k];L=[];i=0;$('txt').value='';try{localStorage.removeItem('upptoka-tekstur')}catch(e){}
+ document.querySelector('.txt').open=true;show()};
 show();
 </script></body></html>
