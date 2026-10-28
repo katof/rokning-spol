@@ -210,6 +210,36 @@ body.on-map .footer{display:none}
 .strika{padding:6px 12px;border:2px solid #e3c8c5;border-radius:9px;background:#fff;color:#b8322b;font-size:13px;font-weight:800;white-space:nowrap}
 .strika:hover,.strika.sure{border-color:#b8322b;background:#b8322b;color:#fff}
 .strika.all{margin-top:12px}
+/* learning island: hear the letters' names and sounds */
+.isl.learn .isl-num{background:#ffd074}
+.isl.learn .isl-num svg{width:66%;height:66%}
+.isl.learn .isl-name{background:#a5531ad9}
+.isl-sub{margin-top:3px;color:#ffe7a1;font-size:clamp(11px,.9vw,14px);font-weight:800;text-shadow:0 1px 0 #0c294866}
+.learn .level-bar{flex-wrap:wrap}
+.learn-tabs{display:flex;gap:6px}
+.learn-tabs button{padding:8px 16px;border:2px solid #c7d4dc;border-radius:99px;background:#fff;color:var(--navy);font-size:14px;font-weight:850}
+.learn-tabs button[aria-selected="true"]{border-color:var(--navy);background:var(--navy);color:#fff}
+.learn-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(20px,4vw,56px)}
+.learn-big{display:grid;place-items:center;min-width:clamp(150px,20vw,250px);height:clamp(150px,20vw,250px);padding:0 24px;border-radius:28px;background:var(--fc,#e8eef0);color:#fff;font:800 clamp(64px,10vw,130px)/1 var(--sans);box-shadow:0 10px 0 #0002;transition:background .2s}
+.learn-card:not([data-f]) .learn-big{color:#9aa8b3}
+.learn-info{max-width:430px}
+.learn-name{margin:0;font:700 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
+.learn-finger{margin:8px 0 0;color:var(--muted);font-size:17px;font-weight:700;line-height:1.45}
+.learn-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.learn-btns .press{margin:0}
+.press svg{width:20px;height:20px}
+.learn-note{min-height:20px;margin:12px 0 0;color:#a5531a;font-size:14px;font-weight:800}
+.finn{text-align:center}
+.finn-play{display:inline-grid;place-items:center;width:clamp(110px,13vw,150px);height:clamp(110px,13vw,150px);margin:6px 0 0;border:0;border-radius:50%;background:var(--blue);color:#fff;box-shadow:0 8px 0 #163f9e}
+.finn-play svg{width:50%;height:50%}
+.finn-play:active{transform:translateY(4px);box-shadow:0 4px 0 #163f9e}
+.finn-q{margin:16px 0 0;font:700 clamp(22px,2.6vw,30px)/1.2 var(--serif)}
+.finn-a{min-height:1.6em;margin:12px 0 0;font-size:clamp(20px,2.4vw,28px);font-weight:850}
+.finn-a.good{color:var(--good)}.finn-a.bad{color:#c0392b}
+.finn-a b{display:inline-block;margin-left:8px;padding:2px 14px;border-radius:12px;background:var(--fc,#9aa8b3);color:#fff}
+.say{display:inline-grid;place-items:center;width:40px;height:40px;border:2px solid #c7d4dc;border-radius:50%;background:#fff;color:var(--navy)}
+.say:hover{border-color:var(--navy)}
+.say svg{width:20px;height:20px}
 @media(max-width:640px){
   .level-title strong{font-size:19px}.dots i{width:9px;height:9px}
   .newkey .cap{width:66px;height:66px;font-size:32px}
@@ -400,10 +430,17 @@ function renderMap(){
   ${SHEET_URL&&!prog.who?`<button class="sign-nudge" type="button" id="nudge">Rita inn, so verður spælið goymt</button>`:""}</div>
   ${LV.map(lv=>{const n=lv.n,open=unlocked(n),[x,y]=ringAt(n);
     return `<button class="isl${open?"":" locked"}${n===cur?" current":""}${Math.floor((n-1)/LAND.length)%2?" flipx":""}" type="button" data-level="${n}" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--d:-${(n*.7%6).toFixed(1)}s" aria-label="Oyggj ${n}: ${esc(lv.title)}${open?"":" (stongd)"}"><span class="isl-art"><span class="isl-land">${LAND[(n-1)%LAND.length]}</span><span class="isl-num">${n}</span>${open?"":`<span class="isl-lock" aria-hidden="true">🔒</span>`}${n===cur?`<span class="puffin-here">${PUFFIN}</span>`:""}</span><span class="isl-name">${esc(lv.title)}</span>${starHTML(starsOf(n))}</button>`;}).join("")}
+  <button class="isl learn" type="button" id="learn-isl" style="left:9%;top:13%;--d:-2.3s" aria-label="Bókstavaoyggjin: hoyr bókstavirnar"><span class="isl-art"><span class="isl-land">${LAND[1]}</span><span class="isl-num">${SPEAKER}</span></span><span class="isl-name">Bókstavaoyggjin</span><span class="isl-sub">Hoyr bókstavirnar</span></button>
   <p class="sea-credit">Tekstir úr Lesibók til 2. og 3. skúlaár (Føroya Skúlabókagrunnur 1983 og 1981)</p></section>`;
   $("#go").addEventListener("click",()=>startLevel(target));
   if($("#nudge"))$("#nudge").addEventListener("click",openAcct);
-  app.querySelectorAll(".isl").forEach(b=>b.addEventListener("click",()=>openIsland(b)));
+  app.querySelectorAll(".isl[data-level]").forEach(b=>b.addEventListener("click",()=>openIsland(b)));
+  $("#learn-isl").addEventListener("click",e=>{
+    if(opening)return;
+    if(calm.matches){renderLearn();return;}
+    opening=true;e.currentTarget.classList.add("opening");playFx(e.currentTarget.style,"lundi");
+    setTimeout(()=>{if(opening&&$(".sea"))renderLearn();},1000);
+  });
   drawRoute();updateTotal();
 }
 function drawRoute(){
@@ -434,7 +471,7 @@ function playFx(at,kind,ambient){
   sea.appendChild(fx);setTimeout(()=>fx.remove(),ambient?3200:1200);
 }
 // now and then a whale comes up in a corner of the sea
-const WHALE_SPOTS=[[7,12],[93,14],[6,90],[94,88]];
+const WHALE_SPOTS=[[93,14],[6,90],[94,88]]; // the top-left corner is Bókstavaoyggjin
 setInterval(()=>{if(!$(".sea")||calm.matches||document.hidden)return;const[x,y]=rnd(WHALE_SPOTS);playFx({left:x+"%",top:y+"%"},"hvalur",true);},11000);
 
 /* ---------- level ---------- */
@@ -465,8 +502,9 @@ function startLevel(n){
   if(matchMedia("(pointer:coarse)").matches)$("#nokb").hidden=false;
   const newKeys=n<=12?Array.from(lv.keys):n===13?[",","."]:n===14?["´"]:n===15?["⇧"]:[];
   if(newKeys.length){
-    $("#stage").innerHTML=`<div class="panel"><p class="kicker" style="color:var(--blue)">${n<=12?"Nýggir bókstavir":"Nýggir knappar"}</p><h2>${esc(lv.title)}</h2><div class="newkeys">${newKeys.map(k=>{const f=k==="⇧"?"lp":KEYF[k]||"rp";return `<div class="newkey" data-f="${f}"><span class="cap">${esc(k.toLocaleUpperCase("fo"))}</span><span>${FINGER_NAMES[f]}</span></div>`;}).join("")}</div><p>${esc(EXTRA[n]||"Finn knappin við fingrinum, og hygg so at skerminum – ikki at fingrunum.")}</p><button class="press" type="button" id="begin">Byrja <kbd>millumrúm</kbd></button></div>`;
+    $("#stage").innerHTML=`<div class="panel"><p class="kicker" style="color:var(--blue)">${n<=12?"Nýggir bókstavir":"Nýggir knappar"}</p><h2>${esc(lv.title)}</h2><div class="newkeys">${newKeys.map(k=>{const f=k==="⇧"?"lp":KEYF[k]||"rp";return `<div class="newkey" data-f="${f}"><span class="cap">${esc(k.toLocaleUpperCase("fo"))}</span><span>${FINGER_NAMES[f]}</span>${soundsReady?`<button class="say" type="button" data-say="${esc(k)}" aria-label="Hoyr ${esc(k)}">${SPEAKER}</button>`:""}</div>`;}).join("")}</div><p>${esc(EXTRA[n]||"Finn knappin við fingrinum, og hygg so at skerminum – ikki at fingrunum.")}</p><button class="press" type="button" id="begin">Byrja <kbd>millumrúm</kbd></button></div>`;
     showKeys(newKeys);
+    $("#stage").querySelectorAll("[data-say]").forEach(b=>b.addEventListener("click",()=>{b.blur();say(b.dataset.say.toLocaleLowerCase("fo"),"bæði");}));
     $("#begin").addEventListener("click",beginRound);
     L.waitStart=true;
   }else beginRound();
@@ -567,10 +605,119 @@ function levelDone(){
   if(n===LV.length&&stars)$("#again").textContent="Skriva fleiri skjaldur";
 }
 
+/* ---------- letter sounds: only on Bókstavaoyggjin and behind the 🔊 buttons for new letters ---------- */
+// recordings from the Upptøkuamboð: ljod/navn-<id>.webm (the name) and ljod/ljod-<id>.webm (the sound)
+const SOUND_DIR="ljod/",SOUND_EXTS=["webm","m4a","ogg","mp3","wav"]; // the recording tool makes webm (m4a on iPad)
+const SOUND_ID={a:"a","á":"aa",b:"b",d:"d","ð":"dd",e:"e",f:"f",g:"g",h:"h",i:"i","í":"ii",j:"j",k:"k",l:"l",m:"m",n:"n",o:"o","ó":"oo",p:"p",r:"r",s:"s",t:"t",u:"u","ú":"uu",v:"v",y:"y","ý":"yy","æ":"ae","ø":"oe"," ":"millumrum",",":"komma",".":"punktum","´":"aseting","⇧":"shift"};
+const SIGN_NAME={" ":"Millumrúm",",":"Komma",".":"Punktum","´":"Ásetingartekin","⇧":"Shift"}; // these have a name, no sound
+const LETTERS=Object.keys(SOUND_ID).filter(c=>!SIGN_NAME[c]);
+const SPEAKER=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+let soundsReady=false,soundExt=null,voice=null,voiceRun=0;
+(async()=>{for(const x of SOUND_EXTS){try{if((await fetch(`${SOUND_DIR}navn-a.${x}`,{method:"HEAD"})).ok){soundsReady=true;soundExt=x;return;}}catch(_){}}})();
+function playFile(file){ // resolves false when no recording is found
+  return new Promise(done=>{
+    const exts=soundExt?[soundExt,...SOUND_EXTS.filter(x=>x!==soundExt)]:[...SOUND_EXTS]; // the type found at start first
+    const next=()=>{
+      if(!exts.length){done(false);return;}
+      const a=new Audio(`${SOUND_DIR}${file}.${exts.shift()}`);voice=a;
+      a.onended=()=>done(true);a.onerror=next;
+      a.play().catch(e=>{if(e.name==="NotAllowedError")done(false);});
+    };
+    next();
+  });
+}
+function stopVoice(){voiceRun++;if(voice){voice.pause();voice=null;}}
+async function say(ch,what){ // what: "navn", "ljod" or "bæði"
+  const id=SOUND_ID[ch];if(!id)return true;
+  stopVoice();const run=voiceRun;
+  const parts=SIGN_NAME[ch]?["navn"]:what==="bæði"?["navn","ljod"]:[what];
+  for(let i=0;i<parts.length;i++){
+    if(i)await new Promise(r=>setTimeout(r,300));
+    if(run!==voiceRun)return true;
+    if(!await playFile(`${parts[i]}-${id}`))return false;
+  }
+  return true;
+}
+const NO_SOUND="Ljóðini eru ikki komin enn. Tá ið tey eru upptikin, hoyrir tú tey her.";
+const fingerOf=ch=>ch==="⇧"?"lp":ch==="´"?"rp":KEYF[ACCENT[ch]||ch]||"th";
+const keysOf=ch=>ch==="⇧"?["⇧"]:ACCENT[ch]?["´",ACCENT[ch]]:[ch];
+const bigOf=ch=>SIGN_NAME[ch]?(ch===" "?"␣":ch):`${ch.toLocaleUpperCase("fo")} ${ch}`;
+
+let LEARN=null; // Bókstavaoyggjin state
+function renderLearn(){
+  stopTyping();document.body.classList.remove("on-map");
+  LEARN={mode:"kanna"};
+  app.innerHTML=`<section class="level learn"><div class="level-bar"><button class="back" type="button" id="back">← Oyggjaleiðin</button><div class="level-title"><small>Lær bókstavirnar at kenna</small><strong>Bókstavaoyggjin</strong></div><div class="learn-tabs" role="tablist"><button type="button" role="tab" data-mode="kanna">Kanna</button><button type="button" role="tab" data-mode="finn">Hoyr og finn</button></div></div><div class="stage" id="stage"></div>
+  <div class="kb-wrap">${keyboardHTML(LV.length)}${handsHTML()}</div></section>`;
+  $("#back").addEventListener("click",renderMap);
+  app.querySelectorAll(".learn-tabs button").forEach(b=>b.addEventListener("click",()=>{b.blur();b.dataset.mode==="finn"?startFinn():showKanna();}));
+  $("#kb").addEventListener("click",e=>{ // the keys on the screen can be clicked too
+    const k=e.target.closest(".k");if(!k)return;
+    const id=k.dataset.k,ch=id.startsWith("shift")?"⇧":id.toLocaleLowerCase("fo");
+    LEARN.mode==="kanna"?showLetter(ch):finnKey(ch);
+  });
+  attachTyping();showKanna();
+}
+const setTab=m=>app.querySelectorAll(".learn-tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.mode===m));
+function showKanna(){
+  LEARN={mode:"kanna"};setTab("kanna");stopVoice();showKeys([]);
+  $("#stage").innerHTML=`<div class="learn-card" id="lcard"><div class="learn-big" id="lbig">?</div><div class="learn-info"><p class="learn-name" id="lname">Trýst á ein bókstav</p><p class="learn-finger" id="lfinger">Trýst á ein knapp á knappaborðinum, og hoyr, hvussu bókstavurin eitur, og hvussu hann ljóðar.</p><div class="learn-btns" id="lbtns" hidden><button class="press" type="button" id="say-name">${SPEAKER} Navnið</button><button class="press ghost" type="button" id="say-sound">${SPEAKER} Ljóðið</button></div><p class="learn-note" id="lnote" role="status">${soundsReady?"":NO_SOUND}</p></div></div>`;
+  const sayBtn=(what)=>e=>{e.currentTarget.blur();if(LEARN.ch)say(LEARN.ch,what).then(ok=>{if(!ok)$("#lnote").textContent=NO_SOUND;});};
+  $("#say-name").addEventListener("click",sayBtn("navn"));
+  $("#say-sound").addEventListener("click",sayBtn("ljod"));
+}
+function showLetter(ch){
+  if(!SOUND_ID[ch]){$("#lnote").textContent="Hesin knappurin er ikki við í spælinum.";return;}
+  const f=fingerOf(ch),base=ACCENT[ch];LEARN.ch=ch;
+  $("#lcard").dataset.f=f;$("#lbig").textContent=bigOf(ch);
+  $("#lname").textContent=SIGN_NAME[ch]||`Bókstavurin ${ch.toLocaleUpperCase("fo")}`;
+  $("#lfinger").textContent=base?`Fyrst ´ við ${FINGER_NAMES.rp}, so ${base.toLocaleUpperCase("fo")} við ${FINGER_NAMES[f]}.`:ch==="⇧"?"Lítlifingur á hinari hondini.":FINGER_NAMES[f][0].toLocaleUpperCase("fo")+FINGER_NAMES[f].slice(1)+".";
+  $("#lbtns").hidden=false;$("#say-sound").hidden=!!SIGN_NAME[ch];
+  showKeys(keysOf(ch));
+  if(soundsReady)say(ch,"bæði").then(ok=>{$("#lnote").textContent=ok?"":NO_SOUND;});
+}
+function startFinn(){
+  setTab("finn");stopVoice();showKeys([]);
+  if(!soundsReady){LEARN={mode:"finn"};$("#stage").innerHTML=`<div class="finn"><p class="finn-q">Hoyr og finn</p><p class="learn-note">${NO_SOUND}</p></div>`;return;}
+  LEARN={mode:"finn",i:0,score:0,q:shuffle(LETTERS).slice(0,10).map(ch=>({ch,what:Math.random()<.5?"navn":"ljod",tries:0}))};
+  finnRound();
+}
+function finnRound(){
+  const q=LEARN.q[LEARN.i];LEARN.wait=false;showKeys([]);
+  $("#stage").innerHTML=`<div class="finn"><div class="round-label"><span>Umfar ${LEARN.i+1} av ${LEARN.q.length} · ${q.what==="navn"?"Hoyr navnið":"Hoyr ljóðið"}</span><span class="acc">${LEARN.score?`Rætt beinanvegin: ${LEARN.score}`:""}</span></div><button class="finn-play" type="button" id="finn-play" aria-label="Hoyr aftur">${SPEAKER}</button><p class="finn-q">Trýst á bókstavin, tú hoyrir.</p><p class="finn-a" id="finn-a" role="status"></p></div>`;
+  const play=()=>say(q.ch,q.what).then(ok=>{if(!ok)finnAnswer("bad","Hetta ljóðið er ikki upptikið enn.");});
+  $("#finn-play").addEventListener("click",e=>{e.currentTarget.blur();play();});
+  play();
+}
+function finnAnswer(cls,txt,ch){const a=$("#finn-a");a.className=`finn-a ${cls}`;a.innerHTML=`${txt}${ch?`<b>${esc(bigOf(ch))}</b>`:""}`;if(ch)a.dataset.f=fingerOf(ch);else delete a.dataset.f;}
+function finnKey(ch){
+  const q=LEARN.q&&LEARN.q[LEARN.i];
+  if(!q||LEARN.wait||!SOUND_ID[ch]||SIGN_NAME[ch])return;
+  const next=ms=>{LEARN.wait=true;setTimeout(()=>{if(!LEARN||LEARN.mode!=="finn")return;LEARN.i++;LEARN.i<LEARN.q.length?finnRound():finnDone();},ms);};
+  if(ch===q.ch){if(!q.tries)LEARN.score++;finnAnswer("good","Rætt!",ch);showKeys(keysOf(ch));next(1300);return;}
+  q.tries++;flashKey(ACCENT[ch]||ch);
+  if(q.tries>=3){finnAnswer("bad","Tað var hesin:",q.ch);showKeys(keysOf(q.ch));say(q.ch,q.what);next(2600);}
+  else{finnAnswer("bad","Ikki hesin. Hoyr aftur.");say(q.ch,q.what);}
+}
+function finnDone(){
+  const s=LEARN.score,n=LEARN.q.length;showKeys([]);
+  $("#stage").innerHTML=`<div class="panel">${PUFFIN}<h2>${s>=8?"Frálíkt!":s>=5?"Sera væl gjørt!":"Væl gjørt!"}</h2><p>Tú fanst ${s} av ${n} í fyrstu roynd.</p><div class="panel-actions"><button class="press" type="button" id="finn-again">Spæl aftur</button><button class="press ghost" type="button" id="finn-kanna">Kanna bókstavirnar</button></div></div>`;
+  $("#finn-again").addEventListener("click",startFinn);$("#finn-kanna").addEventListener("click",showKanna);
+}
+function learnKey(e){
+  if(e.repeat||e.ctrlKey||e.metaKey||e.altKey&&!e.getModifierState("AltGraph"))return;
+  const ch=e.key==="Dead"?"´":e.key==="Shift"?"⇧":e.key.length===1?e.key.toLocaleLowerCase("fo"):null;
+  if(!ch)return;
+  if(e.key.length===1)e.preventDefault(); // keep space from scrolling the page
+  LEARN.mode==="kanna"?showLetter(ch):finnKey(ch);
+}
+
 /* ---------- input ---------- */
 let typingOn=false;
 function onKey(e){
-  if(!L||$("#acct-dlg").open)return;
+  if($("#acct-dlg").open)return;
+  if(LEARN){learnKey(e);return;}
+  if(!L)return;
   if(e.ctrlKey||e.metaKey)return;
   if(L.done){if(e.key==="Enter"){e.preventDefault();(document.getElementById("next")||document.getElementById("again")).click();}return;}
   if(e.key==="Dead"){ // accent dead key: count as first step of an accented letter
@@ -585,7 +732,7 @@ function onKey(e){
 }
 function onInput(e){if(e.isComposing)return;const v=e.target.value.replace(/[´`¨^~]/g,"");e.target.value="";if(v)Array.from(v).forEach(handleChar);}
 function attachTyping(){if(typingOn)return;typingOn=true;window.addEventListener("keydown",onKey);$("#catcher").addEventListener("input",onInput);}
-function stopTyping(){if(L)clearTimeout(L.hintTimer);L=null;}
+function stopTyping(){if(L)clearTimeout(L.hintTimer);L=null;LEARN=null;stopVoice();}
 /* ---------- sign-in dialog ---------- */
 const setNote=(id,txt,bad)=>{const el=$(id);el.textContent=txt;el.classList.toggle("bad",!!bad);};
 function fillAcct(){
