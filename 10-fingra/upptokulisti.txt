@@ -72,5 +72,5 @@ ljod-oe-stutt = Ø – sig stutta ljóðið
 navn-millumrum = Millumrúm – sig: millumrúm
 navn-komma = , – sig: komma
 navn-punktum = . – sig: punktum
-navn-aseting = ´ – sig: ásetingartekin
+navn-aseting = ´ – sig: strika
 navn-shift = Shift – sig: shift
