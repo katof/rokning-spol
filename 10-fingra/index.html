@@ -31,38 +31,77 @@ button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .star-total{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:99px;background:#fff;font-weight:800;font-size:14px}
 .star-total b{color:var(--gold);font-size:18px}
 
-/* map */
-.map-hero{position:relative;overflow:hidden;padding:clamp(28px,5vw,56px) clamp(16px,4vw,48px) 0;background:linear-gradient(#12375d,#1c517a 70%,#2e6f98);color:#fff}
-.map-hero-inner{max-width:980px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:20px;padding-bottom:30px}
+/* map: the islands in a ring on a sea that fills the screen */
+body{display:flex;flex-direction:column}
+main{flex:1 0 auto;display:flex;flex-direction:column}
+body.on-map .footer{display:none}
 .kicker{margin:0 0 10px;font-size:11px;font-weight:900;letter-spacing:.17em;text-transform:uppercase;color:#9fd1e6}
-.map-hero h1{margin:0;font:700 clamp(36px,5.4vw,64px)/1 var(--serif);letter-spacing:-.04em}
-.map-hero h1 em{font-style:normal;color:#ffd074}
-.map-hero p.lead{max-width:520px;margin:14px 0 0;color:#d6e6ef;font-size:17px;line-height:1.55}
-.go-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 24px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:850;font-size:17px;box-shadow:0 6px 0 #a92c25;transition:transform .15s,box-shadow .15s}
+.go-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 24px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:850;font-size:clamp(16px,2vmin,21px);box-shadow:0 6px 0 #a92c25;transition:transform .15s,box-shadow .15s}
 .go-btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #a92c25}
 .go-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #a92c25}
-.go-btn small{display:block;font-size:12px;font-weight:700;opacity:.85}
-.map-sea{height:26px;background:repeating-linear-gradient(90deg,#cfe9f022 0 40px,transparent 40px 90px),#2e6f98}
-.route{position:relative;max-width:760px;margin:0 auto;padding:30px 16px 80px}
-.route-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.node{position:relative;display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:16px;width:min(420px,100%);margin:0 0 26px;padding:0;border:0;background:none;text-align:left;color:var(--ink)}
-.node:not(.flip){text-align:right}.node.flip{margin-left:auto;flex-direction:row}
-.node-art{position:relative;flex:0 0 auto;width:178px;height:92px;border-radius:16px;overflow:hidden;border:3px solid #fff;box-shadow:0 6px 0 #d6dfdf,0 0 0 1px #cbd7d9;background:#e4f1f5;transition:transform .2s}
-.node-art svg{display:block;width:100%;height:100%}
-.node:not(:disabled):hover .node-art{transform:translateY(-4px) rotate(-1deg)}
-.node-num{position:absolute;top:7px;left:8px;display:grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:99px;background:var(--navy);color:#fff;font-size:13px;font-weight:900}
-.node-text{flex:1 1 auto}.node-text strong{display:block;font:700 21px/1.15 var(--serif)}
-.node-text .sub{display:block;margin-top:4px;color:var(--muted);font-size:13px;font-weight:700}
+.sea{position:relative;flex:1 0 auto;min-height:max(560px,calc(100dvh - var(--top-h,66px)));overflow:hidden;color:#fff;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='160'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.13' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M20 30q8-6 16 0t16 0'/%3E%3Cpath d='M130 82q8-6 16 0t16 0'/%3E%3Cpath d='M58 132q8-6 16 0t16 0'/%3E%3C/g%3E%3C/svg%3E") 0 0/220px 160px,
+  radial-gradient(ellipse 70% 62% at 50% 50%,#3c87ae,#2b6b94 55%,#1b4d75 85%,#143e63);animation:sea-drift 90s linear infinite}
+@keyframes sea-drift{to{background-position:220px 0,0 0}}
+.sea-route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sea-center{position:absolute;left:50%;top:51%;z-index:1;width:min(46%,640px);transform:translate(-50%,-50%);text-align:center}
+.sea-center h1{margin:0;font:700 clamp(30px,6.4vmin,90px)/1 var(--serif);letter-spacing:-.04em;text-shadow:0 3px 0 #0c294866}
+.sea-center h1 em{font-style:normal;color:#ffd074}
+.sea-center .lead{max-width:30em;margin:12px auto 0;color:#d6e6ef;font-size:clamp(14px,1.9vmin,21px);line-height:1.5}
+.sea-center .go-btn{margin-top:clamp(14px,3vmin,32px)}
+.sign-nudge{display:block;margin:16px auto 0;padding:4px;border:0;background:none;color:#cfe9f0;font-size:clamp(14px,1.7vmin,18px);font-weight:800;text-decoration:underline;text-underline-offset:4px}
+.sign-nudge:hover{color:#fff}
+.sea-credit{position:absolute;left:0;right:0;bottom:6px;margin:0;color:#ffffff7a;font-size:11px;text-align:center}
+.isl{--w:clamp(60px,min(11.5vw,18.5vh),220px);position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;width:var(--w);padding:0;border:0;background:none;color:#fff;transform:translate(-50%,-50%)}
+.isl:focus-visible{outline:3px solid #ffd074;outline-offset:6px;border-radius:14px}
+.isl-art{position:relative;display:block;width:100%;aspect-ratio:240/110;animation:bob 6s ease-in-out infinite;animation-delay:var(--d,0s)}
+.isl-art::before{content:"";position:absolute;left:-4%;right:-4%;bottom:-8%;height:46%;border-radius:50%;background:radial-gradient(closest-side,#bfe9f2a6,#bfe9f200)}
+.isl-land{position:relative;display:block;width:100%;height:100%;transition:transform .25s}
+.isl-land svg{display:block;width:100%;height:100%;overflow:visible}
+.isl.flipx .isl-land svg{transform:scaleX(-1)}
+.isl:not(.locked):hover .isl-land,.isl:focus-visible .isl-land,.isl.opening .isl-land{transform:translateY(-5px) scale(1.07)}
+.isl-num{position:absolute;left:2%;top:4%;display:grid;place-items:center;min-width:clamp(20px,2vw,32px);height:clamp(20px,2vw,32px);padding:0 5px;border-radius:99px;background:#fffdf8;color:var(--navy);font-size:clamp(11px,1vw,15px);font-weight:900;box-shadow:0 2px 0 #0c294855}
+.isl-lock{position:absolute;right:6%;top:0;font-size:clamp(13px,1.4vw,22px)}
+.isl-name{margin-top:-2px;padding:3px 10px;border-radius:99px;background:#0c2948b3;font-size:clamp(11px,.95vw,16px);font-weight:800;white-space:nowrap}
 .stars{display:inline-flex;gap:2px;margin-top:6px;font-size:18px;letter-spacing:1px;color:#cfd6d8}
 .stars .on{color:var(--gold)}
-.node:disabled{cursor:default}
-.node:disabled .node-art{filter:grayscale(1) brightness(1.08);opacity:.55;box-shadow:0 6px 0 #e1e5e4}
-.node:disabled .node-text{opacity:.5}
-.node-lock{position:absolute;right:8px;top:7px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;color:var(--muted);font-size:14px}
-.node.current .node-art{border-color:#ffd074;box-shadow:0 6px 0 #e3b84d,0 0 0 6px #ffd07455;animation:glow 2.4s ease-in-out infinite}
-.node .puffin-here{position:absolute;bottom:-6px;right:-14px;width:62px;height:62px;filter:drop-shadow(0 3px 2px #0003)}
-.node:not(.flip) .puffin-here{right:auto;left:-14px;transform:scaleX(-1)}
-@keyframes glow{50%{box-shadow:0 6px 0 #e3b84d,0 0 0 11px #ffd07433}}
+.isl .stars{margin-top:3px;font-size:clamp(12px,1.15vw,20px);color:#ffffff4d;text-shadow:0 1px 0 #0c294866}
+.isl.locked .isl-land{filter:grayscale(.8) brightness(.95);opacity:.55}
+.isl.locked .isl-name{opacity:.6}
+.isl.shake .isl-land{animation:shake .4s}
+.isl.current .isl-art::after{content:"";position:absolute;left:-7%;right:-7%;top:-14%;bottom:-6%;border:3px dashed #ffd074;border-radius:50%;animation:spin 24s linear infinite;pointer-events:none}
+.isl .puffin-here{position:absolute;right:-6%;bottom:36%;width:36%;filter:drop-shadow(0 3px 2px #0005)}
+.isl .puffin-here svg{display:block;width:100%;height:auto}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sea-deco{position:absolute;inset:0;pointer-events:none}
+.sea-deco .boat{position:absolute;top:3%;left:-90px;width:clamp(40px,4vw,70px);animation:sea-sail 80s linear infinite}
+.sea-deco .gulls{position:absolute;display:flex;gap:12px;left:-70px}
+.sea-deco .gulls svg{width:22px}
+.sea-deco .g1{top:26%;animation:sea-sail 55s linear -12s infinite}
+.sea-deco .g2{top:72%;animation:sea-sail 75s linear -40s infinite}
+@keyframes sea-sail{to{transform:translateX(calc(100vw + 200px))}}
+/* what happens when an island is opened */
+.fx{position:absolute;z-index:3;width:0;height:0;pointer-events:none}
+.fx svg{position:absolute}
+.fx-lundi svg{left:-30px;top:-70px;width:60px;height:60px;animation:fx-fly 1s ease-in forwards}
+.fx-batur svg{left:-10px;top:0;width:60px;animation:fx-sail 1s ease-out forwards}
+.fx-fuglar svg{left:-12px;top:-40px;width:30px;opacity:0;animation:fx-scatter 1s ease-out forwards}
+.fx-fuglar svg:nth-child(1){--dx:-90px;--dy:-110px}.fx-fuglar svg:nth-child(2){--dx:10px;--dy:-150px;animation-delay:.08s}.fx-fuglar svg:nth-child(3){--dx:100px;--dy:-100px;animation-delay:.16s}
+.fx-hvalur svg:first-child{left:52px;top:-48px;width:40px;transform-origin:50% 100%;animation:fx-spout 1s ease-out forwards}
+.fx-hvalur svg:last-child{left:30px;top:0;width:80px;animation:fx-whale 1s ease-out forwards}
+.fx-hvalur.ambient svg:first-child{left:-6px;animation-duration:3s}
+.fx-hvalur.ambient svg:last-child{left:-28px;animation-duration:3s}
+.fx-regnbogi svg{left:-95px;top:-120px;width:190px;transform-origin:50% 100%;animation:fx-bow 1s ease-out forwards}
+.fx-ljos svg{left:0;top:-80px;width:200px;transform-origin:0 50%;animation:fx-beam 1s ease-in-out forwards}
+@keyframes fx-fly{0%{transform:translate(0,20px) scale(.6);opacity:0}20%{opacity:1}100%{transform:translate(110px,-150px) rotate(-18deg);opacity:0}}
+@keyframes fx-sail{0%{transform:translate(0,10px);opacity:0}20%{opacity:1}100%{transform:translate(150px,34px);opacity:0}}
+@keyframes fx-scatter{0%{transform:scale(.5);opacity:0}25%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.2);opacity:0}}
+@keyframes fx-spout{0%{transform:scaleY(0);opacity:0}30%{transform:scaleY(1.1);opacity:1}75%{opacity:1}100%{transform:scaleY(1);opacity:0}}
+@keyframes fx-whale{0%{transform:translateY(16px);opacity:0}30%{transform:none;opacity:1}80%{opacity:1}100%{transform:translateY(14px);opacity:0}}
+@keyframes fx-bow{0%{transform:scale(.2);opacity:0}40%{transform:none;opacity:.95}100%{opacity:0}}
+@keyframes fx-beam{0%{transform:rotate(-25deg);opacity:0}30%,70%{opacity:.85}100%{transform:rotate(25deg);opacity:0}}
+@media(max-width:700px){.isl-name{display:none}.sea-center .lead{display:none}.sea-center{width:56%}}
 
 /* level */
 .level{max-width:1080px;margin:0 auto;padding:18px clamp(14px,3vw,32px) 40px}
@@ -138,29 +177,37 @@ button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .settings label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
 .footer{padding:24px;color:var(--muted);font-size:12px;text-align:center}
 
-/* save code dialog, opened from the "Kota" button in the header */
-.top-right{display:flex;align-items:center;gap:6px}
-.code-btn{padding:8px 12px;border:0;border-radius:99px;background:none;color:var(--muted);font-size:13px;font-weight:800}
-.code-btn:hover{background:#eef2f2;color:var(--navy)}
-.code-dlg{width:min(420px,calc(100% - 32px));padding:24px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 20px 60px #0c294855}
-.code-dlg::backdrop{background:#0c294866}
-.code-dlg h2{margin:0 0 16px;font:700 26px/1.1 var(--serif)}
-.code-x{position:absolute;top:12px;right:12px;margin:0}
-.code-x button{width:36px;height:36px;border:0;border-radius:50%;background:none;color:var(--muted);font-size:24px;line-height:1}
-.code-x button:hover{background:#eef2f2;color:var(--navy)}
-.code-mine{margin:0 0 18px;padding:12px 16px;border:2px dashed #c7d4dc;border-radius:14px;background:#fff;color:var(--muted);font-size:13px;font-weight:800}
-.code-mine b{display:block;margin-top:6px;color:var(--navy);font:800 26px/1 ui-monospace,Consolas,monospace;letter-spacing:.08em}
-.code-mine small{display:block;margin-top:8px;font-size:13px;font-weight:700}
-.code-form+.code-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
-.code-form label{display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:800}
-.code-row{display:flex;gap:8px}
-.code-row input{flex:1;min-width:0;padding:9px 12px;border:2px solid #c7d4dc;border-radius:10px;background:#fff;color:var(--navy);font:800 18px/1.2 ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase}
-.code-row input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
-.code-row .press{margin:0;padding:9px 16px;box-shadow:0 4px 0 #071d33}
-.code-note{min-height:18px;margin:6px 0 0;color:var(--good);font-size:13px;font-weight:800}
-.code-note.bad{color:#c0392b}
+/* sign-in dialog, opened from the name button in the header */
+.top-right{display:flex;align-items:center;gap:8px}
+.acct-btn{display:inline-flex;align-items:center;gap:8px;max-width:46vw;padding:7px 14px;border:2px solid var(--navy);border-radius:99px;background:#fff;color:var(--navy);font-size:14px;font-weight:850}
+.acct-btn:hover{background:var(--navy);color:#fff}
+.acct-btn svg{flex:0 0 auto;width:16px;height:16px}
+#acct-name{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.acct-dlg{width:min(440px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:24px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 20px 60px #0c294855}
+.acct-dlg::backdrop{background:#0c294866}
+.acct-dlg h2{margin:0 40px 8px 0;font:700 26px/1.15 var(--serif);overflow-wrap:anywhere}
+.acct-dlg h3{margin:0 0 4px;font:700 19px/1.2 var(--serif)}
+.acct-x{position:absolute;top:12px;right:12px;margin:0}
+.acct-x button{width:36px;height:36px;border:0;border-radius:50%;background:none;color:var(--muted);font-size:24px;line-height:1}
+.acct-x button:hover{background:#eef2f2;color:var(--navy)}
+.acct-help{margin:0 0 6px;color:var(--muted);font-size:14px;line-height:1.5}
+.acct-form label{display:block;margin:12px 0 6px;color:var(--muted);font-size:13px;font-weight:800}
+.acct-form input{width:100%;padding:10px 12px;border:2px solid #c7d4dc;border-radius:10px;background:#fff;color:var(--navy);font:800 19px/1.2 var(--sans)}
+.acct-form input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.acct-form #pin-in{width:9ch;font-family:ui-monospace,Consolas,monospace;letter-spacing:.3em}
+.acct-form .press,#logout{margin-top:16px}
+.acct-note{min-height:18px;margin:10px 0 0;color:var(--good);font-size:14px;font-weight:800}
+.acct-note.bad{color:#c0392b}
+#acct-reset{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.reset-list{max-height:38vh;margin:0;padding:0;overflow:auto;list-style:none}
+.reset-list li{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #edf0ef;font-size:14px;font-weight:800}
+.reset-list .rl-n{display:grid;place-items:center;min-width:26px;height:26px;border-radius:99px;background:var(--navy);color:#fff;font-size:12px}
+.reset-list .rl-t{flex:1}
+.reset-list .stars{margin:0;font-size:15px}
+.strika{padding:6px 12px;border:2px solid #e3c8c5;border-radius:9px;background:#fff;color:#b8322b;font-size:13px;font-weight:800;white-space:nowrap}
+.strika:hover,.strika.sure{border-color:#b8322b;background:#b8322b;color:#fff}
+.strika.all{margin-top:12px}
 @media(max-width:640px){
-  .node{gap:10px}.node-art{width:140px;height:74px}.node-text strong{font-size:18px}
   .level-title strong{font-size:19px}.dots i{width:9px;height:9px}
   .newkey .cap{width:66px;height:66px;font-size:32px}
 }
@@ -173,15 +220,34 @@ button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
     <span class="brand-mark" aria-hidden="true"><i style="height:14px;background:var(--f-pinky)"></i><i style="height:20px;background:var(--f-ring)"></i><i style="height:24px;background:var(--f-middle)"></i><i style="height:18px;background:var(--f-index)"></i><i style="height:10px;background:var(--f-thumb)"></i></span>
     <span><strong>10 fingra</strong><small>Oyggjaleiðin</small></span>
   </button>
-  <span class="top-right"><button class="code-btn" type="button" id="code-open">Kota</button><span class="star-total" aria-live="polite"><b aria-hidden="true">★</b><span id="star-total">0</span></span></span>
+  <span class="top-right"><button class="acct-btn" type="button" id="acct-open"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5" r="3" fill="currentColor"/><path d="M2 15c.5-3.5 3-5 6-5s5.5 1.5 6 5Z" fill="currentColor"/></svg><span id="acct-name">Rita inn</span></button><span class="star-total" aria-live="polite"><b aria-hidden="true">★</b><span id="star-total">0</span></span></span>
 </header>
 <main id="app"></main>
-<dialog class="code-dlg" id="code-dlg" aria-labelledby="code-dlg-h">
-  <form class="code-x" method="dialog"><button type="submit" aria-label="Lat aftur">×</button></form>
-  <h2 id="code-dlg-h">Kota</h2>
-  <p class="code-mine" id="code-mine" hidden></p>
-  <form class="code-form" id="code-form" novalidate><label for="code-in">Hevur tú eina kotu frá eini aðrari teldu?</label><span class="code-row"><input id="code-in" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14"><button class="press" type="submit">Heinta</button></span><p class="code-note" id="code-note" role="status"></p></form>
-  <form class="code-form" id="who-form" novalidate hidden><label for="who-in">Flokkur og nummar (t.d. 3B-14)</label><span class="code-row"><input id="who-in" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20"><button class="press" type="submit">Goym</button></span><p class="code-note" id="who-note" role="status"></p></form>
+<dialog class="acct-dlg" id="acct-dlg" aria-labelledby="acct-h">
+  <form class="acct-x" method="dialog"><button type="submit" aria-label="Lat aftur">×</button></form>
+  <section id="acct-in">
+    <h2 id="acct-h">Rita inn</h2>
+    <p class="acct-help">So verður spælið goymt, og tú kanst halda fram á hvørji teldu sum helst. Fyrstu ferð velur tú fýra tøl. Minst til tey!</p>
+    <form class="acct-form" id="login-form" novalidate>
+      <label for="who-in">Navn og flokkur</label><input id="who-in" type="text" placeholder="t.d. Anna 3B" maxlength="20" autocomplete="off" spellcheck="false">
+      <label for="pin-in">Fýra tøl</label><input id="pin-in" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+      <button class="press" type="submit" id="login-btn">Rita inn</button>
+      <p class="acct-note" id="login-note" role="status"></p>
+    </form>
+  </section>
+  <section id="acct-me" hidden>
+    <h2 id="me-name"></h2>
+    <p class="acct-help">Stjørnurnar verða goymdar, so tú kanst halda fram á hvørji teldu sum helst.</p>
+    <p class="acct-note" id="me-note" role="status"></p>
+    <button class="press ghost" type="button" id="logout">Rita út</button>
+  </section>
+  <section id="acct-reset" hidden>
+    <h3>Byrja umaftur</h3>
+    <p class="acct-help">Strika stjørnurnar á eini oyggj, og spæl hana umaftur.</p>
+    <ul class="reset-list" id="reset-list"></ul>
+    <button class="strika all" type="button" id="reset-all">Strika alt spælið</button>
+    <p class="acct-note" id="reset-note" role="status"></p>
+  </section>
 </dialog>
 <input id="catcher" class="sr" aria-hidden="true" tabindex="-1" autocomplete="off" autocapitalize="off" spellcheck="false">
 <footer class="footer">10 fingra · Oyggjaleiðin · Tekstir úr Lesibók til 2. og 3. skúlaár (Føroya Skúlabókagrunnur 1983 og 1981)</footer>
@@ -268,78 +334,101 @@ function makeRounds(n){
 const KEY="oyggjaleidin-v1";
 let prog={stars:{},best:{},hints:true};
 try{prog={...prog,...JSON.parse(localStorage.getItem(KEY)||"{}")};}catch(_){}
+if(!prog.pin)delete prog.who; // the old "flokkur og nummar" field had no four digits
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(prog));}catch(_){}};
 const starsOf=n=>prog.stars[n]||0;
-const unlocked=n=>n===1||starsOf(n-1)>0;
-const currentLevel=()=>{for(let n=1;n<=LV.length;n++)if(!starsOf(n))return n;return LV.length+1;};
-function updateTotal(){$("#star-total").textContent=`${totalStars()} / ${LV.length*3}`;}
 const totalStars=()=>Object.values(prog.stars).reduce((a,b)=>a+b,0);
-
-/* ---------- save code: the stars as a short code the child can take to another computer ---------- */
-/* 3 version bits + 2 bits per island, 5 bits per character, last character is a checksum. No 0/O or 1/I. */
-const CODE_ABC="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-const codeSum=v=>v.reduce((a,x,i)=>a+x*(i+1),0)%32;
-function makeCode(){
-  let bits="000";for(let n=1;n<=LV.length;n++)bits+=starsOf(n).toString(2).padStart(2,"0");
-  while(bits.length%5)bits+="0";
-  const v=[];for(let i=0;i<bits.length;i+=5)v.push(parseInt(bits.slice(i,i+5),2));
-  v.push(codeSum(v));
-  const s=v.map(x=>CODE_ABC[x]).join(""),h=Math.ceil(s.length/2);
-  return s.slice(0,h)+"-"+s.slice(h);
-}
-function readCode(txt){
-  const s=String(txt).toUpperCase().replace(/[\s-]/g,"");
-  if(s.length!==Math.ceil((3+2*LV.length)/5)+1)return null;
-  const v=Array.from(s,c=>CODE_ABC.indexOf(c));
-  if(v.includes(-1))return null;
-  const chk=v.pop();
-  if(codeSum(v)!==chk)return null;
-  const bits=v.map(x=>x.toString(2).padStart(5,"0")).join("");
-  if(bits.slice(0,3)!=="000")return null;
-  const stars={};for(let n=1;n<=LV.length;n++){const k=parseInt(bits.substr(1+2*n,2),2);if(k)stars[n]=k;}
-  return stars;
-}
-
-/* ---------- results to the teacher's Google Sheet (only when the child has set flokkur og nummar) ---------- */
-const SHEET_URL="https://script.google.com/macros/s/AKfycbz_SWV2-SebVnAWuLIhbZ0EGWY2pQuMsGgGYQWKfGTBWbNV1Ak5KoruKrDAfb4Pr7gkBw/exec"; // the Apps Script web-app address (…/exec); empty = send nothing and hide the field
-const WHO_OK=/^[A-Za-z0-9ÆØÁÍÓÚÝÐæøáíóúýð -]{1,20}$/;
-function report(n,stars,acc,wpm){
-  if(!SHEET_URL||!prog.who)return;
-  const body=JSON.stringify({who:prog.who,oyggj:n,stjornur:stars,rattleiki:acc,ferd:wpm});
-  try{fetch(SHEET_URL,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body}).catch(()=>{});}catch(_){}
+// an island stays open while any later island has stars, so striking one island does not lock the rest
+const unlocked=n=>n===1||LV.some(lv=>lv.n>=n-1&&starsOf(lv.n)>0);
+const currentLevel=()=>{for(let n=1;n<=LV.length;n++)if(!starsOf(n))return n;return LV.length+1;};
+function updateTotal(){
+  $("#star-total").textContent=`${totalStars()} / ${LV.length*3}`;
+  $("#acct-name").textContent=prog.who||(SHEET_URL?"Rita inn":"Byrja umaftur");
 }
 const starHTML=(k,cls="stars")=>`<span class="${cls}" aria-label="${k} av 3 stjørnum">${[1,2,3].map(i=>`<span class="${i<=k?"on":""}">★</span>`).join("")}</span>`;
 
 /* ---------- puffin ---------- */
 const PUFFIN=`<svg class="puffin" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><ellipse cx="55" cy="104" rx="34" ry="7" fill="#0002"/><path d="M37 87c-7-20-3-50 18-57 15-5 29 2 35 18l-3 34c-12 15-37 19-50 5Z" fill="#172b35"/><path d="M57 51c-12 11-14 33-9 42 10 8 23 6 32-1 6-9 6-26-1-39Z" fill="#fffdf4"/><path d="M43 45c-4-15 1-30 13-34 14-5 26 5 27 19l-8 22Z" fill="#172b35"/><path d="M77 39 108 47 78 57 72 48Z" fill="#f68234" stroke="#a24420" stroke-width="2"/><path d="M79 40 94 45 79 48Z" fill="#f9d679"/><circle cx="69" cy="34" r="6" fill="#fff"/><circle cx="70" cy="34" r="2.3" fill="#10232b"/><path d="M47 94 38 109M47 94l-14 12M71 94l1 15m0-15 10 13" stroke="#ee7933" stroke-width="5" stroke-linecap="round"/></svg>`;
 
-/* ---------- map ---------- */
+/* ---------- signing in: the stars are kept in the teacher's Google Sheet under name + four digits ---------- */
+const SHEET_URL="https://script.google.com/macros/s/AKfycbz_SWV2-SebVnAWuLIhbZ0EGWY2pQuMsGgGYQWKfGTBWbNV1Ak5KoruKrDAfb4Pr7gkBw/exec"; // the Apps Script web app (…/exec); empty = no signing in, progress stays in this browser
+const WHO_OK=/^[A-Z0-9ÆØÁÍÓÚÝÐ -]{1,20}$/;
+const cleanWho=v=>String(v).trim().replace(/\s+/g," ").toLocaleUpperCase("fo");
+async function api(body){
+  const r=await fetch(SHEET_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)});
+  return r.json();
+}
+const starList=()=>LV.map(lv=>starsOf(lv.n));
+function takeStars(list,keepMore){ // the sheet's answer → prog.stars; keepMore keeps stars not sent yet
+  const s={};list.forEach((k,i)=>{k=Math.max(k,keepMore?starsOf(i+1):0);if(k)s[i+1]=k;});
+  prog.stars=s;save();updateTotal();
+}
+function report(n,stars,acc,wpm){
+  if(!SHEET_URL||!prog.who)return;
+  api({act:"spælt",who:prog.who,pin:prog.pin,oyggj:n,stjornur:stars,rattleiki:acc,ferd:wpm}).then(a=>{if(a.ok)takeStars(a.stars,true);}).catch(()=>{});
+}
+
+/* ---------- map: the islands in a ring on a sea that fills the screen ---------- */
+const LAND=ISLANDS.map(s=>s.replace(/<rect x="-400"[^>]*\/>/g,"").replace(/<rect y="86"[^>]*\/>/g,"")); // no sky, no sea strip
+const FX=["lundi","batur","fuglar","hvalur","regnbogi","ljos"]; // what happens when an island is opened, by island picture
+const BOAT=`<svg viewBox="0 0 64 48" aria-hidden="true"><path d="M31 4v31" stroke="#5a3b22" stroke-width="2"/><path d="M33 6l18 25H33Z" fill="#fffdf4"/><path d="M29 11 15 31h14Z" fill="#e5463d"/><path d="M5 35h54l-9 10H14Z" fill="#8c4a2f"/></svg>`;
+const GULL=`<svg viewBox="0 0 24 10" aria-hidden="true"><path d="M1 8q5-7 11 0q6-7 11 0" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`;
+const WHALE=`<svg viewBox="0 0 80 34" aria-hidden="true"><path d="M4 26q14-16 42-12q16 2 24 10q-30 8-66 2Z" fill="#203c55"/><path d="M66 22q6-10 12-12q-2 8-8 14Z" fill="#203c55"/><circle cx="20" cy="22" r="1.6" fill="#fff"/></svg>`;
+const SPOUT=`<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 38V18M20 18q-8-10-16-6M20 18q8-10 16-6M20 18V4" fill="none" stroke="#e6f6fb" stroke-width="3" stroke-linecap="round"/></svg>`;
+const RAINBOW=`<svg viewBox="0 0 100 50" aria-hidden="true"><g fill="none" stroke-width="5"><path d="M5 50a45 45 0 0 1 90 0" stroke="#ec4b40"/><path d="M11 50a39 39 0 0 1 78 0" stroke="#f2b61f"/><path d="M17 50a33 33 0 0 1 66 0" stroke="#3fb96a"/><path d="M23 50a27 27 0 0 1 54 0" stroke="#3f86e0"/></g></svg>`;
+const BEAM=`<svg viewBox="0 0 120 40" aria-hidden="true"><path d="M0 20 120 0v40Z" fill="#ffe7a1"/></svg>`;
+const calm=matchMedia("(prefers-reduced-motion:reduce)");
+let ringWide=true,opening=false;
+const ringAngle=n=>105+(n-1)*22; // degrees, clockwise from the right; island 1 sits bottom left
+function ringAt(n){const a=ringAngle(n)*Math.PI/180;return[50+(ringWide?41:38)*Math.cos(a),51+(ringWide?37:39)*Math.sin(a)];}
 function renderMap(){
-  stopTyping();
-  const cur=currentLevel(),done=cur>LV.length;
-  const target=done?LV.length:cur;
-  app.innerHTML=`<section class="map-hero"><div class="map-hero-inner"><div><p class="kicker">Lær at skriva við øllum fingrunum</p><h1>Oyggj fyri <em>oyggj.</em></h1><p class="lead">Á hvørjari oyggj lærir tú tveir nýggjar knappar. Fá eina stjørnu, so opnast næsta oyggin.</p></div>
-  <button class="go-btn" type="button" id="go">${done?"Skriva úr lesibókunum":`Oyggj ${target}: ${esc(LV[target-1].title)}`} <span aria-hidden="true">→</span></button></div></section><div class="map-sea"></div>  <section class="route" aria-label="Oyggjaleiðin"><svg class="route-line" aria-hidden="true"></svg>${LV.map(lv=>{
-    const n=lv.n,open=unlocked(n),isCur=n===cur;
-    return `<button class="node ${n%2?"flip":""} ${isCur?"current":""}" type="button" data-level="${n}" ${open?"":"disabled"} aria-label="Oyggj ${n}: ${esc(lv.title)}${open?"":" (stongd)"}"><span class="node-art">${ISLANDS[(n-1)%ISLANDS.length]}<span class="node-num">${n}</span>${open?"":`<span class="node-lock" aria-hidden="true">🔒</span>`}${isCur?`<span class="puffin-here">${PUFFIN}</span>`:""}</span><span class="node-text"><strong>${esc(lv.title)}</strong><span class="sub">${n<=12?"Nýggir knappar: "+lv.keys.toUpperCase().split("").join(" og "):n===13?"Nýggir knappar: , og .":n===14?"á í ó ú ý":n===15?"Shift":"Skjaldur og yrkingar"}</span>${starHTML(starsOf(n))}</span></button>`;}).join("")}</section>`;
+  stopTyping();opening=false;document.body.classList.add("on-map");
+  const cur=currentLevel(),done=cur>LV.length,target=done?LV.length:cur;
+  const top=$(".top").offsetHeight;document.documentElement.style.setProperty("--top-h",top+"px");
+  ringWide=innerWidth>=Math.max(560,innerHeight-top)*1.1;
+  app.innerHTML=`<section class="sea" aria-label="Oyggjaleiðin"><svg class="sea-route" aria-hidden="true"></svg>
+  <div class="sea-deco" aria-hidden="true"><span class="boat">${BOAT}</span><span class="gulls g1">${GULL}${GULL}</span><span class="gulls g2">${GULL}</span></div>
+  <div class="sea-center"><p class="kicker">Lær at skriva við øllum fingrunum</p><h1>Oyggj fyri <em>oyggj.</em></h1><p class="lead">Á hvørjari oyggj lærir tú nýggjar knappar. Fá eina stjørnu, so opnast næsta oyggin.</p>
+  <button class="go-btn" type="button" id="go">${done?"Skriva úr lesibókunum":`Oyggj ${target}: ${esc(LV[target-1].title)}`} <span aria-hidden="true">→</span></button>
+  ${SHEET_URL&&!prog.who?`<button class="sign-nudge" type="button" id="nudge">Rita inn, so verður spælið goymt</button>`:""}</div>
+  ${LV.map(lv=>{const n=lv.n,open=unlocked(n),[x,y]=ringAt(n);
+    return `<button class="isl${open?"":" locked"}${n===cur?" current":""}${Math.floor((n-1)/LAND.length)%2?" flipx":""}" type="button" data-level="${n}" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--d:-${(n*.7%6).toFixed(1)}s" aria-label="Oyggj ${n}: ${esc(lv.title)}${open?"":" (stongd)"}"><span class="isl-art"><span class="isl-land">${LAND[(n-1)%LAND.length]}</span><span class="isl-num">${n}</span>${open?"":`<span class="isl-lock" aria-hidden="true">🔒</span>`}${n===cur?`<span class="puffin-here">${PUFFIN}</span>`:""}</span><span class="isl-name">${esc(lv.title)}</span>${starHTML(starsOf(n))}</button>`;}).join("")}
+  <p class="sea-credit">Tekstir úr Lesibók til 2. og 3. skúlaár (Føroya Skúlabókagrunnur 1983 og 1981)</p></section>`;
   $("#go").addEventListener("click",()=>startLevel(target));
-  app.querySelectorAll(".node:not(:disabled)").forEach(b=>b.addEventListener("click",()=>startLevel(Number(b.dataset.level))));
-  drawRoute();
-  const curNode=app.querySelector(".node.current");
-  updateTotal();
-  return curNode;
+  if($("#nudge"))$("#nudge").addEventListener("click",openAcct);
+  app.querySelectorAll(".isl").forEach(b=>b.addEventListener("click",()=>openIsland(b)));
+  drawRoute();updateTotal();
 }
 function drawRoute(){
-  const route=$(".route"),svg=$(".route-line",route);if(!route)return;
-  const r=route.getBoundingClientRect();
-  const pts=[...route.querySelectorAll(".node-art")].map(el=>{const b=el.getBoundingClientRect();return[b.left-r.left+b.width/2,b.top-r.top+b.height/2];});
-  svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);
-  let d="";pts.forEach((p,i)=>{if(!i){d=`M${p[0]} ${p[1]}`;return;}const q=pts[i-1],my=(q[1]+p[1])/2;d+=` C${q[0]} ${my} ${p[0]} ${my} ${p[0]} ${p[1]}`;});
-  const doneUpTo=Math.max(0,currentLevel()-1);
-  let dd="";pts.slice(0,doneUpTo+1).forEach((p,i,arr)=>{if(!i){dd=`M${p[0]} ${p[1]}`;return;}const q=arr[i-1],my=(q[1]+p[1])/2;dd+=` C${q[0]} ${my} ${p[0]} ${my} ${p[0]} ${p[1]}`;});
-  svg.innerHTML=`<path d="${d}" fill="none" stroke="#9fc3d2" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>${doneUpTo?`<path d="${dd}" fill="none" stroke="#f2b61f" stroke-width="5" stroke-dasharray="2 12" stroke-linecap="round"/>`:""}`;
+  const sea=$(".sea");if(!sea)return;
+  const svg=$(".sea-route",sea),W=sea.clientWidth,H=sea.clientHeight;
+  const rx=(ringWide?.41:.38)*W,ry=(ringWide?.37:.39)*H,cx=W/2,cy=.51*H;
+  const arc=(a0,a1)=>{let d="";for(let a=a0;a<=a1+.01;a+=2){const r=a*Math.PI/180;d+=`${d?"L":"M"}${(cx+rx*Math.cos(r)).toFixed(1)} ${(cy+ry*Math.sin(r)).toFixed(1)}`;}return d;};
+  const first=ringAngle(1),last=ringAngle(LV.length),doneTo=ringAngle(Math.min(currentLevel(),LV.length));
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.innerHTML=`<path d="${arc(first,last)}" fill="none" stroke="#cfe9f066" stroke-width="4" stroke-dasharray="2 14" stroke-linecap="round"/>${doneTo>first?`<path d="${arc(first,doneTo)}" fill="none" stroke="#ffd074" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>`:""}`;
 }
-window.addEventListener("resize",()=>{if($(".route"))drawRoute();});
+let resizeT;
+window.addEventListener("resize",()=>{clearTimeout(resizeT);resizeT=setTimeout(()=>{if($(".sea")&&!opening)renderMap();},150);});
+function openIsland(b){
+  if(opening)return;
+  if(b.classList.contains("locked")){b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake");return;}
+  const n=Number(b.dataset.level);
+  if(calm.matches){startLevel(n);return;}
+  opening=true;b.classList.add("opening");playFx(b.style,FX[(n-1)%FX.length]);
+  setTimeout(()=>{if(opening&&$(".sea"))startLevel(n);},1000);
+}
+const FX_ART={lundi:()=>PUFFIN,batur:()=>BOAT,fuglar:()=>GULL+GULL+GULL,hvalur:()=>SPOUT+WHALE,regnbogi:()=>RAINBOW,ljos:()=>BEAM};
+function playFx(at,kind,ambient){
+  const sea=$(".sea");if(!sea)return;
+  const fx=document.createElement("span");
+  fx.className=`fx fx-${kind}${ambient?" ambient":""}`;fx.setAttribute("aria-hidden","true");
+  fx.style.left=at.left;fx.style.top=at.top;fx.innerHTML=FX_ART[kind]();
+  sea.appendChild(fx);setTimeout(()=>fx.remove(),ambient?3200:1200);
+}
+// now and then a whale comes up in a corner of the sea
+const WHALE_SPOTS=[[7,12],[93,14],[6,90],[94,88]];
+setInterval(()=>{if(!$(".sea")||calm.matches||document.hidden)return;const[x,y]=rnd(WHALE_SPOTS);playFx({left:x+"%",top:y+"%"},"hvalur",true);},11000);
 
 /* ---------- level ---------- */
 let L=null; // current level state
@@ -357,7 +446,7 @@ function handsHTML(){
   return `<div class="hands" aria-hidden="true">${hand("l")}${hand("r")}</div>`;
 }
 function startLevel(n){
-  stopTyping();
+  stopTyping();document.body.classList.remove("on-map");
   L={n,rounds:makeRounds(n),r:0,pos:0,errors:0,typed:0,t0:0,tActive:0,step:0,missAt:new Set(),hintTimer:null};
   const lv=LV[n-1];
   app.innerHTML=`<section class="level"><div class="level-bar"><button class="back" type="button" id="back">← Oyggjaleiðin</button><div class="level-title"><small>Oyggj ${n} av ${LV.length}</small><strong>${esc(lv.title)}</strong></div><div class="dots" id="dots" aria-hidden="true"></div></div><div class="stage" id="stage"></div>
@@ -474,7 +563,7 @@ function levelDone(){
 /* ---------- input ---------- */
 let typingOn=false;
 function onKey(e){
-  if(!L||$("#code-dlg").open)return;
+  if(!L||$("#acct-dlg").open)return;
   if(e.ctrlKey||e.metaKey)return;
   if(L.done){if(e.key==="Enter"){e.preventDefault();(document.getElementById("next")||document.getElementById("again")).click();}return;}
   if(e.key==="Dead"){ // accent dead key: count as first step of an accented letter
@@ -490,33 +579,65 @@ function onKey(e){
 function onInput(e){if(e.isComposing)return;const v=e.target.value.replace(/[´`¨^~]/g,"");e.target.value="";if(v)Array.from(v).forEach(handleChar);}
 function attachTyping(){if(typingOn)return;typingOn=true;window.addEventListener("keydown",onKey);$("#catcher").addEventListener("input",onInput);}
 function stopTyping(){if(L)clearTimeout(L.hintTimer);L=null;}
-/* ---------- code dialog ---------- */
+/* ---------- sign-in dialog ---------- */
 const setNote=(id,txt,bad)=>{const el=$(id);el.textContent=txt;el.classList.toggle("bad",!!bad);};
-function fillMine(){
-  const el=$("#code-mine");el.hidden=!totalStars();
-  if(!el.hidden)el.innerHTML=`Tín kota<b>${makeCode()}</b><small>Skriva kotuna upp. Við henni kanst tú halda fram á eini aðrari teldu.</small>`;
+function fillAcct(){
+  const inside=!!prog.who;
+  $("#acct-in").hidden=inside||!SHEET_URL;$("#acct-me").hidden=!inside;
+  if(inside)$("#me-name").textContent=prog.who;
+  const played=LV.filter(lv=>starsOf(lv.n));
+  $("#acct-reset").hidden=!played.length;
+  $("#reset-list").innerHTML=played.map(lv=>`<li><span class="rl-n">${lv.n}</span><span class="rl-t">${esc(lv.title)}</span>${starHTML(starsOf(lv.n))}<button class="strika" type="button" data-strika="${lv.n}">Strika</button></li>`).join("");
 }
-$("#code-open").addEventListener("click",()=>{
-  fillMine();$("#code-in").value="";$("#who-in").value=prog.who||"";
-  setNote("#code-note","");setNote("#who-note","");
-  $("#who-form").hidden=!SHEET_URL;
-  $("#code-dlg").showModal();
-});
-$("#code-form").addEventListener("submit",e=>{
+function openAcct(){
+  fillAcct();["#login-note","#me-note","#reset-note"].forEach(id=>setNote(id,""));
+  $("#pin-in").value="";
+  $("#acct-dlg").showModal();
+  if(!prog.who&&SHEET_URL)$("#who-in").focus();
+}
+$("#acct-open").addEventListener("click",openAcct);
+$("#login-form").addEventListener("submit",async e=>{
   e.preventDefault();
-  const stars=readCode($("#code-in").value);
-  if(!stars){setNote("#code-note","Kotan riggar ikki. Kanna hana og royn aftur.",true);$("#code-in").focus();return;}
-  for(const n in stars)prog.stars[n]=Math.max(starsOf(n),stars[n]); // never take stars away
-  save();updateTotal();fillMine();if(!L)renderMap();
-  setNote("#code-note","Tað riggaði! Oyggjarnar eru komnar aftur.");
+  const who=cleanWho($("#who-in").value),pin=$("#pin-in").value.trim();
+  if(!WHO_OK.test(who)){setNote("#login-note","Skriva navn og flokk við bókstavum og tølum, t.d. Anna 3B.",true);$("#who-in").focus();return;}
+  if(!/^[0-9]{4}$/.test(pin)){setNote("#login-note","Skriva fýra tøl, t.d. 2580.",true);$("#pin-in").focus();return;}
+  const btn=$("#login-btn");btn.disabled=true;setNote("#login-note","Bíða ein løtu …");
+  try{
+    const a=await api({act:"login",who,pin,stars:starList()}); // stars are only used when the name is new
+    if(!a.ok){setNote("#login-note",a.villa==="tøl"?"Tølini passa ikki við hetta navnið. Royn aftur.":"Tað riggaði ikki. Kanna navn og tøl.",true);return;}
+    prog.who=who;prog.pin=pin;if(!a.nytt)prog.best={};
+    takeStars(a.stars,false);fillAcct();if(!L)renderMap();
+    setNote("#me-note",a.nytt?"Nýtt spæl er gjørt. Minst til tíni fýra tøl!":"Vælkomin aftur! Tú heldur fram, har tú slepti.");
+  }catch(_){setNote("#login-note","Kundi ikki fáa samband. Er teldan á netinum?",true);}
+  finally{btn.disabled=false;}
 });
-$("#who-form").addEventListener("submit",e=>{
-  e.preventDefault();
-  const v=$("#who-in").value.trim().replace(/\s+/g," ").toLocaleUpperCase("fo");
-  if(v&&!WHO_OK.test(v)){setNote("#who-note","Skriva bert bókstavir og tøl, t.d. 3B-14.",true);return;}
-  prog.who=v;save();$("#who-in").value=v;
-  setNote("#who-note",v?"Goymt! Nú sær lærarin tíni úrslit.":"Strikað.");
+$("#logout").addEventListener("click",()=>{
+  delete prog.who;delete prog.pin;prog.stars={};prog.best={};save();updateTotal();
+  $("#who-in").value="";fillAcct();if(!L)renderMap();setNote("#login-note","Nú er ritað út.");
 });
+// "Strika" asks once more before it strikes: the first click turns the button red
+let sureT;
+function strikaClick(btn,n){
+  if(!btn.classList.contains("sure")){
+    document.querySelectorAll(".strika.sure").forEach(b=>{b.classList.remove("sure");b.textContent=b.dataset.label;});
+    btn.dataset.label=btn.textContent;btn.classList.add("sure");btn.textContent="Trýst aftur";
+    clearTimeout(sureT);sureT=setTimeout(()=>{btn.classList.remove("sure");btn.textContent=btn.dataset.label;},5000);
+    return;
+  }
+  clearTimeout(sureT);strika(n);
+}
+async function strika(n){ // n = 0: the whole game
+  if(n){delete prog.stars[n];delete prog.best[n];}else{prog.stars={};prog.best={};}
+  save();updateTotal();fillAcct();if(!L)renderMap();
+  setNote("#reset-note",n?`Oyggj ${n} er strikað.`:"Alt spælið er strikað.");
+  if(!SHEET_URL||!prog.who)return;
+  try{const a=await api({act:"strika",who:prog.who,pin:prog.pin,oyggj:n});if(a.ok){takeStars(a.stars,false);fillAcct();if(!L)renderMap();}}
+  catch(_){setNote("#reset-note","Strikað á hesi teldu, men arkið fekk tað ikki. Royn aftur seinni.",true);}
+}
+$("#reset-list").addEventListener("click",e=>{const b=e.target.closest("[data-strika]");if(b)strikaClick(b,Number(b.dataset.strika));});
+$("#reset-all").addEventListener("click",e=>strikaClick(e.currentTarget,0));
+// fetch this child's stars from the sheet, in case they played on another computer
+if(SHEET_URL&&prog.who)api({act:"login",who:prog.who,pin:prog.pin}).then(a=>{if(a.ok){takeStars(a.stars,true);if($(".sea")&&!opening)renderMap();}}).catch(()=>{});
 $("#home").addEventListener("click",renderMap);
 updateTotal();
 renderMap();
