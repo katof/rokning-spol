@@ -611,6 +611,8 @@ const SOUND_DIR="ljod/",SOUND_EXTS=["webm","m4a","ogg","mp3","wav"]; // the reco
 const SOUND_ID={a:"a","á":"aa",b:"b",d:"d","ð":"dd",e:"e",f:"f",g:"g",h:"h",i:"i","í":"ii",j:"j",k:"k",l:"l",m:"m",n:"n",o:"o","ó":"oo",p:"p",r:"r",s:"s",t:"t",u:"u","ú":"uu",v:"v",y:"y","ý":"yy","æ":"ae","ø":"oe"," ":"millumrum",",":"komma",".":"punktum","´":"aseting","⇧":"shift"};
 const SIGN_NAME={" ":"Millumrúm",",":"Komma",".":"Punktum","´":"Ásetingartekin","⇧":"Shift"}; // these have a name, no sound
 const LETTERS=Object.keys(SOUND_ID).filter(c=>!SIGN_NAME[c]);
+const VOWELS=new Set("aáeiíoóuúyýæø"); // these have a long sound (ljod-<id>) and a short one (ljod-<id>-stutt)
+const SOUND_LABEL={navn:"navnið",ljod:"ljóðið",langt:"langa ljóðið",stutt:"stutta ljóðið"};
 const SPEAKER=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
 let soundsReady=false,soundExt=null,voice=null,voiceRun=0;
 (async()=>{for(const x of SOUND_EXTS){try{if((await fetch(`${SOUND_DIR}navn-a.${x}`,{method:"HEAD"})).ok){soundsReady=true;soundExt=x;return;}}catch(_){}}})();
@@ -627,14 +629,15 @@ function playFile(file){ // resolves false when no recording is found
   });
 }
 function stopVoice(){voiceRun++;if(voice){voice.pause();voice=null;}}
-async function say(ch,what){ // what: "navn", "ljod" or "bæði"
+async function say(ch,what){ // what: "navn", "ljod" (vowels: "langt"/"stutt") or "bæði" = all of them
   const id=SOUND_ID[ch];if(!id)return true;
   stopVoice();const run=voiceRun;
-  const parts=SIGN_NAME[ch]?["navn"]:what==="bæði"?["navn","ljod"]:[what];
+  const parts=SIGN_NAME[ch]?["navn"]:what==="bæði"?(VOWELS.has(ch)?["navn","langt","stutt"]:["navn","ljod"]):[what];
+  const file=part=>part==="navn"?`navn-${id}`:part==="stutt"?`ljod-${id}-stutt`:`ljod-${id}`;
   for(let i=0;i<parts.length;i++){
     if(i)await new Promise(r=>setTimeout(r,300));
     if(run!==voiceRun)return true;
-    if(!await playFile(`${parts[i]}-${id}`))return false;
+    if(!await playFile(file(parts[i])))return false;
   }
   return true;
 }
@@ -661,10 +664,11 @@ function renderLearn(){
 const setTab=m=>app.querySelectorAll(".learn-tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.mode===m));
 function showKanna(){
   LEARN={mode:"kanna"};setTab("kanna");stopVoice();showKeys([]);
-  $("#stage").innerHTML=`<div class="learn-card" id="lcard"><div class="learn-big" id="lbig">?</div><div class="learn-info"><p class="learn-name" id="lname">Trýst á ein bókstav</p><p class="learn-finger" id="lfinger">Trýst á ein knapp á knappaborðinum, og hoyr, hvussu bókstavurin eitur, og hvussu hann ljóðar.</p><div class="learn-btns" id="lbtns" hidden><button class="press" type="button" id="say-name">${SPEAKER} Navnið</button><button class="press ghost" type="button" id="say-sound">${SPEAKER} Ljóðið</button></div><p class="learn-note" id="lnote" role="status">${soundsReady?"":NO_SOUND}</p></div></div>`;
+  $("#stage").innerHTML=`<div class="learn-card" id="lcard"><div class="learn-big" id="lbig">?</div><div class="learn-info"><p class="learn-name" id="lname">Trýst á ein bókstav</p><p class="learn-finger" id="lfinger">Trýst á ein knapp á knappaborðinum, og hoyr, hvussu bókstavurin eitur, og hvussu hann ljóðar.</p><div class="learn-btns" id="lbtns" hidden><button class="press" type="button" id="say-name">${SPEAKER} Navnið</button><button class="press ghost" type="button" id="say-sound">${SPEAKER} Ljóðið</button><button class="press ghost" type="button" id="say-short">${SPEAKER} Stutta ljóðið</button></div><p class="learn-note" id="lnote" role="status">${soundsReady?"":NO_SOUND}</p></div></div>`;
   const sayBtn=(what)=>e=>{e.currentTarget.blur();if(LEARN.ch)say(LEARN.ch,what).then(ok=>{if(!ok)$("#lnote").textContent=NO_SOUND;});};
   $("#say-name").addEventListener("click",sayBtn("navn"));
-  $("#say-sound").addEventListener("click",sayBtn("ljod"));
+  $("#say-sound").addEventListener("click",e=>sayBtn(VOWELS.has(LEARN.ch)?"langt":"ljod")(e));
+  $("#say-short").addEventListener("click",sayBtn("stutt"));
 }
 function showLetter(ch){
   if(!SOUND_ID[ch]){$("#lnote").textContent="Hesin knappurin er ikki við í spælinum.";return;}
@@ -672,19 +676,20 @@ function showLetter(ch){
   $("#lcard").dataset.f=f;$("#lbig").textContent=bigOf(ch);
   $("#lname").textContent=SIGN_NAME[ch]||`Bókstavurin ${ch.toLocaleUpperCase("fo")}`;
   $("#lfinger").textContent=base?`Fyrst ´ við ${FINGER_NAMES.rp}, so ${base.toLocaleUpperCase("fo")} við ${FINGER_NAMES[f]}.`:ch==="⇧"?"Lítlifingur á hinari hondini.":FINGER_NAMES[f][0].toLocaleUpperCase("fo")+FINGER_NAMES[f].slice(1)+".";
-  $("#lbtns").hidden=false;$("#say-sound").hidden=!!SIGN_NAME[ch];
+  $("#lbtns").hidden=false;$("#say-sound").hidden=!!SIGN_NAME[ch];$("#say-short").hidden=!VOWELS.has(ch);
+  $("#say-sound").innerHTML=`${SPEAKER} ${VOWELS.has(ch)?"Langa ljóðið":"Ljóðið"}`;
   showKeys(keysOf(ch));
   if(soundsReady)say(ch,"bæði").then(ok=>{$("#lnote").textContent=ok?"":NO_SOUND;});
 }
 function startFinn(){
   setTab("finn");stopVoice();showKeys([]);
   if(!soundsReady){LEARN={mode:"finn"};$("#stage").innerHTML=`<div class="finn"><p class="finn-q">Hoyr og finn</p><p class="learn-note">${NO_SOUND}</p></div>`;return;}
-  LEARN={mode:"finn",i:0,score:0,q:shuffle(LETTERS).slice(0,10).map(ch=>({ch,what:Math.random()<.5?"navn":"ljod",tries:0}))};
+  LEARN={mode:"finn",i:0,score:0,q:shuffle(LETTERS).slice(0,10).map(ch=>({ch,what:rnd(VOWELS.has(ch)?["navn","langt","stutt"]:["navn","ljod"]),tries:0}))};
   finnRound();
 }
 function finnRound(){
   const q=LEARN.q[LEARN.i];LEARN.wait=false;showKeys([]);
-  $("#stage").innerHTML=`<div class="finn"><div class="round-label"><span>Umfar ${LEARN.i+1} av ${LEARN.q.length} · ${q.what==="navn"?"Hoyr navnið":"Hoyr ljóðið"}</span><span class="acc">${LEARN.score?`Rætt beinanvegin: ${LEARN.score}`:""}</span></div><button class="finn-play" type="button" id="finn-play" aria-label="Hoyr aftur">${SPEAKER}</button><p class="finn-q">Trýst á bókstavin, tú hoyrir.</p><p class="finn-a" id="finn-a" role="status"></p></div>`;
+  $("#stage").innerHTML=`<div class="finn"><div class="round-label"><span>Umfar ${LEARN.i+1} av ${LEARN.q.length} · Hoyr ${SOUND_LABEL[q.what]}</span><span class="acc">${LEARN.score?`Rætt beinanvegin: ${LEARN.score}`:""}</span></div><button class="finn-play" type="button" id="finn-play" aria-label="Hoyr aftur">${SPEAKER}</button><p class="finn-q">Trýst á bókstavin, tú hoyrir.</p><p class="finn-a" id="finn-a" role="status"></p></div>`;
   const play=()=>say(q.ch,q.what).then(ok=>{if(!ok)finnAnswer("bad","Hetta ljóðið er ikki upptikið enn.");});
   $("#finn-play").addEventListener("click",e=>{e.currentTarget.blur();play();});
   play();
