@@ -367,12 +367,13 @@ function makeRounds(n){
 /* ---------- progress ---------- */
 // Who is signed in and their stars live only in this window (sessionStorage): a new window or another
 // browser starts empty, and the stars come back by signing in. Only the hint setting is kept per browser.
-const KEY="oyggjaleidin-v1",PREF="oyggjaleidin-hjalp";
+const KEY="oyggjaleidin-v1",PREF="oyggjaleidin-hjalp",CLICKS="oyggjaleidin-klikk";
 let prog={stars:{},best:{},hints:true};
 try{prog={...prog,...JSON.parse(sessionStorage.getItem(KEY)||"{}")};}catch(_){}
-try{const h=localStorage.getItem(PREF);if(h!==null)prog.hints=h==="1";localStorage.removeItem(KEY);}catch(_){} // progress used to be kept per browser
+prog.clicks=true; // key clicks are on until turned off
+try{const h=localStorage.getItem(PREF);if(h!==null)prog.hints=h==="1";prog.clicks=localStorage.getItem(CLICKS)!=="0";localStorage.removeItem(KEY);}catch(_){} // progress used to be kept per browser
 if(!prog.pin)delete prog.who; // the old "flokkur og nummar" field had no four digits
-const save=()=>{try{sessionStorage.setItem(KEY,JSON.stringify(prog));localStorage.setItem(PREF,prog.hints?"1":"0");}catch(_){}};
+const save=()=>{try{sessionStorage.setItem(KEY,JSON.stringify(prog));localStorage.setItem(PREF,prog.hints?"1":"0");localStorage.setItem(CLICKS,prog.clicks?"1":"0");}catch(_){}};
 const starsOf=n=>prog.stars[n]||0;
 const totalStars=()=>Object.values(prog.stars).reduce((a,b)=>a+b,0);
 // an island stays open while any later island has stars, so striking one island does not lock the rest
@@ -495,10 +496,11 @@ function startLevel(n){
   const lv=LV[n-1];
   app.innerHTML=`<section class="level"><div class="level-bar"><button class="back" type="button" id="back">← Oyggjaleiðin</button><div class="level-title"><small>Oyggj ${n} av ${LV.length}</small><strong>${esc(lv.title)}</strong></div><div class="dots" id="dots" aria-hidden="true"></div></div><div class="stage" id="stage"></div>
   <div class="kb-wrap">${keyboardHTML(n)}${handsHTML()}</div>
-  <div class="settings"><label><input type="checkbox" id="hints" ${prog.hints?"checked":""}> Vís hjálp á knappaborðinum</label></div>
+  <div class="settings"><label><input type="checkbox" id="hints" ${prog.hints?"checked":""}> Vís hjálp á knappaborðinum</label><label><input type="checkbox" id="clicks" ${prog.clicks?"checked":""}> Knappaljóð, tá ið tú skrivar</label></div>
   <p class="no-keyboard-note" id="nokb" hidden>Spælið er gjørt til eitt veruligt knappaborð. Á fartelefon ella teldli uttan knappaborð kanst tú trýsta á tekstin fyri at fáa skjáknappaborðið fram.</p></section>`;
   $("#back").addEventListener("click",renderMap);
   $("#hints").addEventListener("change",e=>{prog.hints=e.target.checked;save();e.target.blur();guide();});
+  $("#clicks").addEventListener("change",e=>{prog.clicks=e.target.checked;save();e.target.blur();if(prog.clicks)keyClick(true);});
   if(matchMedia("(pointer:coarse)").matches)$("#nokb").hidden=false;
   const newKeys=n<=12?Array.from(lv.keys):n===13?[",","."]:n===14?["´"]:n===15?["⇧"]:[];
   if(newKeys.length){
@@ -555,6 +557,29 @@ function guide(){
   else{hide();$("#hint").innerHTML="";L.hintTimer=setTimeout(()=>{show();$("#hint").innerHTML=txt;},1600);}
 }
 function flashKey(key){const el=[...document.querySelectorAll("#kb .k")].find(k=>k.dataset.k===key);if(el){el.classList.add("bad");setTimeout(()=>el.classList.remove("bad"),260);}}
+/* key clicks while typing, made in the browser (no sound files); "Knappaljóð" under the keyboard turns them off */
+let clickCtx=null,clickNoise=null;
+function keyClick(ok){ // ok: a soft, bright tick; wrong key: a duller, deeper one
+  if(!prog.clicks)return;
+  try{
+    if(!clickCtx){
+      const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+      clickCtx=new C();
+      const n=Math.round(clickCtx.sampleRate*.03);clickNoise=clickCtx.createBuffer(1,n,clickCtx.sampleRate);
+      const d=clickNoise.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,6);
+    }
+    if(clickCtx.state!=="running")clickCtx.resume();
+    const c=clickCtx,t=c.currentTime,out=c.createGain();out.gain.value=ok?.45:.4;out.connect(c.destination);
+    const tick=c.createBufferSource(),band=c.createBiquadFilter();
+    tick.buffer=clickNoise;tick.playbackRate.value=ok?.9+Math.random()*.2:.55; // a little variation, like a real keyboard
+    band.type="bandpass";band.frequency.value=ok?2600+Math.random()*700:800;band.Q.value=ok?1.1:.7;
+    tick.connect(band).connect(out);tick.start(t);
+    const thock=c.createOscillator(),body=c.createGain(); // the soft "body" of the key going down
+    thock.frequency.setValueAtTime(ok?190:120,t);thock.frequency.exponentialRampToValueAtTime(ok?90:60,t+.05);
+    body.gain.setValueAtTime(ok?.22:.3,t);body.gain.exponentialRampToValueAtTime(.001,t+(ok?.05:.09));
+    thock.connect(body).connect(out);thock.start(t);thock.stop(t+.1);
+  }catch(_){}
+}
 function handleChar(ch){
   if(!L)return;
   if(L.waitStart){if(ch===" ")beginRound();return;}
@@ -565,11 +590,13 @@ function handleChar(ch){
   const same=caseless?ch.toLocaleLowerCase("fo")===want.toLocaleLowerCase("fo"):ch===want;
   L.typed++;
   if(same){
+    keyClick(true);
     L.pos++;L.step=0;L.lastWrong=false;
     paintLine();
     if(L.pos>=L.text.length){roundDone();return;}
     guide();
   }else{
+    keyClick(false);
     L.errors++;L.missAt.add(L.pos);L.lastWrong=true;L.step=0;
     const span=$("#line").children[L.pos];span.classList.remove("shake");void span.offsetWidth;span.classList.add("shake");
     flashKey(ch===" "?" ":(ACCENT[ch.toLocaleLowerCase("fo")]||ch.toLocaleLowerCase("fo")));
