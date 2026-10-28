@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12375d">
+<title>10 fingra · Oyggjaleiðin</title>
+<meta name="description" content="Lær at skriva við 10 fingrum – oyggj fyri oyggj, tveir nýggir knappar í senn, við tekstum úr gomlu lesibókunum.">
+<style>
+:root{
+  color-scheme:light;
+  --ink:#172a3e;--navy:#12375d;--navy-2:#0c2948;--blue:#245de0;--red:#e5463d;--paper:#fffdf8;--cream:#f5f2ea;--line:#d9e0e0;--muted:#5b6875;--gold:#f6b93b;--good:#13805e;
+  --f-pinky:#3fb96a;--f-ring:#f2b61f;--f-middle:#3f86e0;--f-index:#ec4b40;--f-thumb:#9c8d80;
+  --sans:"Segoe UI",Inter,ui-sans-serif,system-ui,-apple-system,Arial,sans-serif;--serif:Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);min-height:100vh}
+button{font:inherit;cursor:pointer}
+[hidden]{display:none!important}
+button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,48px);background:var(--paper);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;color:var(--ink);text-decoration:none;border:0;background:none;padding:0}
+.brand-mark{display:grid;grid-template-columns:repeat(5,5px);gap:3px;align-items:end;height:30px;padding:6px 8px;border:2px solid var(--navy);border-radius:9px}
+.brand-mark i{display:block;width:5px;border-radius:3px}
+.brand strong{display:block;font-size:20px;font-weight:900;letter-spacing:-.04em;line-height:1}
+.brand small{display:block;margin-top:4px;color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}
+.star-total{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:99px;background:#fff;font-weight:800;font-size:14px}
+.star-total b{color:var(--gold);font-size:18px}
+
+/* map */
+.map-hero{position:relative;overflow:hidden;padding:clamp(28px,5vw,56px) clamp(16px,4vw,48px) 0;background:linear-gradient(#12375d,#1c517a 70%,#2e6f98);color:#fff}
+.map-hero-inner{max-width:980px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:20px;padding-bottom:30px}
+.kicker{margin:0 0 10px;font-size:11px;font-weight:900;letter-spacing:.17em;text-transform:uppercase;color:#9fd1e6}
+.map-hero h1{margin:0;font:700 clamp(36px,5.4vw,64px)/1 var(--serif);letter-spacing:-.04em}
+.map-hero h1 em{font-style:normal;color:#ffd074}
+.map-hero p.lead{max-width:520px;margin:14px 0 0;color:#d6e6ef;font-size:17px;line-height:1.55}
+.go-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 24px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:850;font-size:17px;box-shadow:0 6px 0 #a92c25;transition:transform .15s,box-shadow .15s}
+.go-btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #a92c25}
+.go-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #a92c25}
+.go-btn small{display:block;font-size:12px;font-weight:700;opacity:.85}
+.map-sea{height:26px;background:repeating-linear-gradient(90deg,#cfe9f022 0 40px,transparent 40px 90px),#2e6f98}
+.route{position:relative;max-width:760px;margin:0 auto;padding:30px 16px 80px}
+.route-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.node{position:relative;display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:16px;width:min(420px,100%);margin:0 0 26px;padding:0;border:0;background:none;text-align:left;color:var(--ink)}
+.node:not(.flip){text-align:right}.node.flip{margin-left:auto;flex-direction:row}
+.node-art{position:relative;flex:0 0 auto;width:178px;height:92px;border-radius:16px;overflow:hidden;border:3px solid #fff;box-shadow:0 6px 0 #d6dfdf,0 0 0 1px #cbd7d9;background:#e4f1f5;transition:transform .2s}
+.node-art svg{display:block;width:100%;height:100%}
+.node:not(:disabled):hover .node-art{transform:translateY(-4px) rotate(-1deg)}
+.node-num{position:absolute;top:7px;left:8px;display:grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:99px;background:var(--navy);color:#fff;font-size:13px;font-weight:900}
+.node-text{flex:1 1 auto}.node-text strong{display:block;font:700 21px/1.15 var(--serif)}
+.node-text .sub{display:block;margin-top:4px;color:var(--muted);font-size:13px;font-weight:700}
+.stars{display:inline-flex;gap:2px;margin-top:6px;font-size:18px;letter-spacing:1px;color:#cfd6d8}
+.stars .on{color:var(--gold)}
+.node:disabled{cursor:default}
+.node:disabled .node-art{filter:grayscale(1) brightness(1.08);opacity:.55;box-shadow:0 6px 0 #e1e5e4}
+.node:disabled .node-text{opacity:.5}
+.node-lock{position:absolute;right:8px;top:7px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;color:var(--muted);font-size:14px}
+.node.current .node-art{border-color:#ffd074;box-shadow:0 6px 0 #e3b84d,0 0 0 6px #ffd07455;animation:glow 2.4s ease-in-out infinite}
+.node .puffin-here{position:absolute;bottom:-6px;right:-14px;width:62px;height:62px;filter:drop-shadow(0 3px 2px #0003)}
+.node:not(.flip) .puffin-here{right:auto;left:-14px;transform:scaleX(-1)}
+@keyframes glow{50%{box-shadow:0 6px 0 #e3b84d,0 0 0 11px #ffd07433}}
+
+/* level */
+.level{max-width:1080px;margin:0 auto;padding:18px clamp(14px,3vw,32px) 40px}
+.level-bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.back{border:0;background:none;color:var(--blue);font-weight:800;font-size:15px;padding:6px 0}
+.level-title{text-align:center}
+.level-title small{display:block;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.level-title strong{font:700 24px/1.2 var(--serif)}
+.dots{display:flex;gap:6px}
+.dots i{width:12px;height:12px;border-radius:50%;background:#d5dee0}
+.dots i.done{background:var(--good)}
+.dots i.now{background:var(--blue);box-shadow:0 0 0 4px #245de033}
+.stage{margin-top:18px;padding:clamp(20px,3vw,34px);border:1px solid #d3dedf;border-radius:20px;background:var(--paper);box-shadow:0 10px 0 #dde5e4}
+.round-label{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px;color:var(--muted);font-size:13px;font-weight:800}
+.round-label .acc{color:var(--good)}
+.text-line{min-height:1.5em;font:600 clamp(28px,4.2vw,46px)/1.45 var(--sans);letter-spacing:.02em;word-break:break-word;color:#9aa8b3}
+.text-line .c{position:relative;border-radius:5px}
+.text-line .c.ok{color:var(--good)}
+.text-line .c.miss{color:#c0392b}
+.text-line .c.now{color:var(--navy);background:#e3ecff;box-shadow:inset 0 -4px 0 var(--blue)}
+.text-line .c.now.sp::after{content:"␣";position:absolute;left:0;right:0;bottom:-2px;text-align:center;font-size:.55em;color:var(--blue)}
+.text-line .c.shake{animation:shake .25s}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.hint-line{min-height:24px;margin:14px 0 0;color:var(--muted);font-size:16px;font-weight:700}
+.hint-line b{color:var(--navy)}
+.source{margin:6px 0 0;color:var(--muted);font-size:13px;font-style:italic}
+
+/* keyboard */
+.kb-wrap{margin-top:22px}
+.kb{--u:clamp(19px,4.6vw,52px);display:flex;flex-direction:column;gap:calc(var(--u)*.1);width:max-content;max-width:100%;margin:0 auto;padding:calc(var(--u)*.22);border-radius:calc(var(--u)*.3);background:#d6dde0;box-shadow:inset 0 2px 0 #fff8,0 6px 0 #c2cbcf}
+.kb-row{display:flex;gap:calc(var(--u)*.1)}.kb-row:last-child{justify-content:center}
+.k{position:relative;display:flex;align-items:center;justify-content:center;width:calc(var(--u)*var(--w,1) + var(--u)*.1*(var(--w,1) - 1));height:var(--u);border-radius:calc(var(--u)*.16);background:#fbfbf8;color:#2b3b4a;font-size:calc(var(--u)*.36);font-weight:700;box-shadow:0 calc(var(--u)*.07) 0 #aab5bb;transition:background .12s,transform .12s,color .12s;user-select:none}
+.k.mod{color:#7d8a94;font-size:calc(var(--u)*.24);font-weight:700}
+.k.dim{color:#c3ccd2}
+.k.learned{box-shadow:0 calc(var(--u)*.07) 0 #aab5bb,inset 0 calc(var(--u)*-.09) 0 var(--fc)}
+.k.next{background:var(--fc);color:#fff;transform:translateY(-2px);box-shadow:0 calc(var(--u)*.07) 0 #0003,0 0 0 calc(var(--u)*.07) #fff,0 0 0 calc(var(--u)*.14) var(--fc)}
+.k.bad{background:#ffd9d5!important;color:#b8322b!important}
+.k.bump::after{content:"";position:absolute;bottom:calc(var(--u)*.16);width:calc(var(--u)*.26);height:2px;border-radius:2px;background:currentColor;opacity:.7}
+.k.enter{height:calc(var(--u)*2.1);margin-bottom:calc(var(--u)*-1.1);z-index:1}
+.k.space{font-size:calc(var(--u)*.24);color:#7d8a94}
+.kb.hint-off .k.next{background:#fbfbf8;color:#2b3b4a;transform:none;box-shadow:0 calc(var(--u)*.07) 0 #aab5bb}
+[data-f="lp"]{--fc:var(--f-pinky)}[data-f="lr"]{--fc:var(--f-ring)}[data-f="lm"]{--fc:var(--f-middle)}[data-f="li"]{--fc:var(--f-index)}
+[data-f="rp"]{--fc:var(--f-pinky)}[data-f="rr"]{--fc:var(--f-ring)}[data-f="rm"]{--fc:var(--f-middle)}[data-f="ri"]{--fc:var(--f-index)}[data-f="th"]{--fc:var(--f-thumb)}
+.hands{display:flex;justify-content:center;gap:clamp(20px,8vw,120px);margin-top:18px}
+.hands svg{width:clamp(110px,18vw,170px);height:auto;overflow:visible}
+.hands .fg{fill:#eef1f2;stroke:#2b3b4a;stroke-width:3;transition:fill .15s,transform .15s}
+.hands .fg.on{fill:var(--fc);transform:translateY(-6px)}
+.hands .palm{fill:#fff6e6;stroke:#2b3b4a;stroke-width:3}
+.no-keyboard-note{margin:16px auto 0;max-width:560px;padding:10px 14px;border-radius:10px;background:#fff4dd;color:#7a5a12;font-size:14px;text-align:center}
+
+/* intro + result panels */
+.panel{text-align:center;padding:10px 0 6px}
+.panel h2{margin:0;font:700 clamp(28px,4vw,40px)/1.15 var(--serif);letter-spacing:-.02em}
+.panel p{max-width:560px;margin:12px auto 0;color:var(--muted);font-size:17px;line-height:1.55}
+.newkeys{display:flex;justify-content:center;flex-wrap:wrap;gap:22px;margin:24px 0 6px}
+.newkey{display:flex;flex-direction:column;align-items:center;gap:10px}
+.newkey .cap{display:grid;place-items:center;width:84px;height:84px;border-radius:16px;background:var(--fc);color:#fff;font:800 42px/1 var(--sans);box-shadow:0 7px 0 #0002}
+.newkey span{font-weight:800;font-size:14px;color:var(--ink)}
+.press{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:13px 22px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:850;font-size:16px;box-shadow:0 5px 0 #071d33}
+.press kbd{padding:3px 8px;border-radius:6px;background:#ffffff26;font:inherit;font-size:13px}
+.press.ghost{background:#fff;color:var(--navy);border:2px solid #c7d4dc;box-shadow:0 5px 0 #dbe3e6}
+.big-stars{display:flex;justify-content:center;gap:10px;margin:18px 0 4px;font-size:64px;line-height:1;color:#d8dfe1}
+.big-stars .on{color:var(--gold);animation:pop .45s backwards}
+.big-stars .on:nth-child(2){animation-delay:.18s}.big-stars .on:nth-child(3){animation-delay:.36s}
+@keyframes pop{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.15)}}
+.result-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:16px}
+.result-stats div{min-width:150px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.result-stats b{display:block;font:700 28px/1.1 var(--serif);color:var(--navy)}
+.result-stats span{color:var(--muted);font-size:13px;font-weight:700}
+.panel .puffin{width:96px;height:96px;margin:0 auto}
+.panel-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.settings{display:flex;justify-content:center;gap:16px;margin-top:16px;color:var(--muted);font-size:13px;font-weight:700}
+.settings label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.footer{padding:24px;color:var(--muted);font-size:12px;text-align:center}
+
+/* save code dialog, opened from the "Kota" button in the header */
+.top-right{display:flex;align-items:center;gap:6px}
+.code-btn{padding:8px 12px;border:0;border-radius:99px;background:none;color:var(--muted);font-size:13px;font-weight:800}
+.code-btn:hover{background:#eef2f2;color:var(--navy)}
+.code-dlg{width:min(420px,calc(100% - 32px));padding:24px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 20px 60px #0c294855}
+.code-dlg::backdrop{background:#0c294866}
+.code-dlg h2{margin:0 0 16px;font:700 26px/1.1 var(--serif)}
+.code-x{position:absolute;top:12px;right:12px;margin:0}
+.code-x button{width:36px;height:36px;border:0;border-radius:50%;background:none;color:var(--muted);font-size:24px;line-height:1}
+.code-x button:hover{background:#eef2f2;color:var(--navy)}
+.code-mine{margin:0 0 18px;padding:12px 16px;border:2px dashed #c7d4dc;border-radius:14px;background:#fff;color:var(--muted);font-size:13px;font-weight:800}
+.code-mine b{display:block;margin-top:6px;color:var(--navy);font:800 26px/1 ui-monospace,Consolas,monospace;letter-spacing:.08em}
+.code-mine small{display:block;margin-top:8px;font-size:13px;font-weight:700}
+.code-form+.code-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.code-form label{display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:800}
+.code-row{display:flex;gap:8px}
+.code-row input{flex:1;min-width:0;padding:9px 12px;border:2px solid #c7d4dc;border-radius:10px;background:#fff;color:var(--navy);font:800 18px/1.2 ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase}
+.code-row input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.code-row .press{margin:0;padding:9px 16px;box-shadow:0 4px 0 #071d33}
+.code-note{min-height:18px;margin:6px 0 0;color:var(--good);font-size:13px;font-weight:800}
+.code-note.bad{color:#c0392b}
+@media(max-width:640px){
+  .node{gap:10px}.node-art{width:140px;height:74px}.node-text strong{font-size:18px}
+  .level-title strong{font-size:19px}.dots i{width:9px;height:9px}
+  .newkey .cap{width:66px;height:66px;font-size:32px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="brand" type="button" id="home" aria-label="Til oyggjaleiðina">
+    <span class="brand-mark" aria-hidden="true"><i style="height:14px;background:var(--f-pinky)"></i><i style="height:20px;background:var(--f-ring)"></i><i style="height:24px;background:var(--f-middle)"></i><i style="height:18px;background:var(--f-index)"></i><i style="height:10px;background:var(--f-thumb)"></i></span>
+    <span><strong>10 fingra</strong><small>Oyggjaleiðin</small></span>
+  </button>
+  <span class="top-right"><button class="code-btn" type="button" id="code-open">Kota</button><span class="star-total" aria-live="polite"><b aria-hidden="true">★</b><span id="star-total">0</span></span></span>
+</header>
+<main id="app"></main>
+<dialog class="code-dlg" id="code-dlg" aria-labelledby="code-dlg-h">
+  <form class="code-x" method="dialog"><button type="submit" aria-label="Lat aftur">×</button></form>
+  <h2 id="code-dlg-h">Kota</h2>
+  <p class="code-mine" id="code-mine" hidden></p>
+  <form class="code-form" id="code-form" novalidate><label for="code-in">Hevur tú eina kotu frá eini aðrari teldu?</label><span class="code-row"><input id="code-in" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14"><button class="press" type="submit">Heinta</button></span><p class="code-note" id="code-note" role="status"></p></form>
+  <form class="code-form" id="who-form" novalidate hidden><label for="who-in">Flokkur og nummar (t.d. 3B-14)</label><span class="code-row"><input id="who-in" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20"><button class="press" type="submit">Goym</button></span><p class="code-note" id="who-note" role="status"></p></form>
+</dialog>
+<input id="catcher" class="sr" aria-hidden="true" tabindex="-1" autocomplete="off" autocapitalize="off" spellcheck="false">
+<footer class="footer">10 fingra · Oyggjaleiðin · Tekstir úr Lesibók til 2. og 3. skúlaár (Føroya Skúlabókagrunnur 1983 og 1981)</footer>
+<script>
+const DATA={"levels":[{"title":"F og J","keys":"fj","words":[],"lines":[]},{"title":"D og K","keys":"dk","words":[],"lines":[]},{"title":"S og L","keys":"sl","words":[],"lines":[]},{"title":"A og Æ","keys":"aæ","words":["skal","ja","alla","als","kassa","dal","læa","fjall","lakka","fall","flaka","fæ","las","la","sæl","ka","kalla","skald","læsa","sakk","falla","sæla","skak"],"lines":[]},{"title":"G og H","keys":"gh","words":["dag","halda","haga","lag","hasa","hjall","hala","gæs","gala","gakk","sjagg","halga","kaga","flagsa","haha","gjalda","gal","haka","jagla","dahl"],"lines":[]},{"title":"E og I","keys":"ei","words":["eg","ikki","seg","fekk","siga","illa","gekk","li","ella","eiga","liggja","leggja","haldi","hesa","sig","ei","sild","kaffi","eigi","fiska","hekk","seks","ill","fisk","egg","lesa","selja","legg","sigla","eld","sigi","lagi","hesi","sleikja","hasi","liggi","gleddi","skil","heilsa","degi","segl","gil","hi","fiski","deildi","skeggi","fjalli","heila","eldi","side","leik","leiga","sess","eggi","skegg","geil","ge","hæli","kaldi","leika","skikka","hei","hel","dia","fell","feldi","halgidag","elski","lek","leiddi","hilda","ilsliga","sælges","felag","leka","skilja","heks","helli","heil","skilji"],"lines":[]},{"title":"R og U","keys":"ru","words":["er","sær","har","eru","fara","her","skuldi","gera","sigur","heldur","fer","allar","eigur","skulu","eri","liggur","skuldu","allir","far","aldri","ger","dugir","hildu","fleiri","rura","fær","hugdu","hugdi","dugdi","dagar","kulda","fuglur","hugsar","drekka","hagar","ull","hugsa","fari","gull","dukku","huga","leggur","dagur","siglir","illur","elskar","dukka","fiskar","flugu","dugi","skera","gulu","ær","rekur","hugsi","fluga","skar","full","læra","raskur","lærdi","serliga","reka","æra","higar","lukku","gelur","hug","eldri","dukkur","dugdu","kri","heilar","ræddur","lukka","gullegg","gul","kæra","gulli","draga"],"lines":["rura rura rilla","halleluja halleluja"]},{"title":"T og N","keys":"tn","words":["at","hann","ein","til","aftur","eftir","eitt","tær","teir","eina","hana","inn","enn","henni","einki","hetta","eisini","hin","dagin","teg","undir","alt","helt","kettan","inni","sat","tit","langt","eingin","teirra","kann","uttan","ert","setti","genta","nei","hans","tann","kundi","situr","sagt","hennara","skalt","ganga","hansara","leingi","læt","sita","sindur","heilt","allan","farin","eta","finna","lata","taka","stendur","tekur","henda","fegin","enda","æt","nærri","eini","rennandi","kanst","hatta","rann","ketta","dansa","grætur","landi","hitt","helst","lat","kunnu","land","annar","litli","fann"],"lines":["rura rura rilla","kettlingurin liggur har","eingin at herja","eingil talar teirra til","kann eingin eiga sær","hann eitur nalli","dunnan saknar ikki ungan","at skera akurin","lina sandell j","ikki eg festa teg kann","hann æt litli gutti","alt hetta dugdu hinir einglarnir","halleluja halleluja","inn eina hetta","hana ella undir","nakrar endingar"]},{"title":"O og M","keys":"om","words":["og","so","hon","sum","men","um","kom","mær","honum","teimum","heim","kemur","einum","koma","mamman","fram","meg","mamma","oman","konan","okkum","gott","drongur","saman","komu","rottan","komin","millum","mammu","mundi","heima","kongurin","kongur","sama","okkurt","gamla","longur","holuni","meira","omma","onnur","man","hesum","ofta","morgin","kortini","morgun","holu","meir","gomul","summar","kona","gongur","onga","okkara","fimm","komi","mat","flog","mest","holuna","onkur","ongan","drong","hond","mann","hondina","somu","haganum","minni","morgunin","hol","gamalt","menn","hinum","korn","ommu","gamal","mugu"],"lines":["men eg fekk ikki ilt","mamman situr og treskir korn","og ein summardag","rura rura rilla","stundum letur hann illa","men so kom ein hundur","og so kom ein kona","so kemur mamma inn","hon fiskar ternumurtar","kettlingurin liggur har","tikin hon og etin er","so fann hann ein orm","dunnan er eitt gamalt sjagg","eingin at herja","og mamman er ikki heima","og dunnurnar undrast","men dreingirnir allir","gomorin gomorin","men jesus er guds sonur","eingil talar teirra til","ge setti meg a aeina","fini fin sumeitid harjar","krumm krumm krumm","dimmist millum fanna","hann lætta summardans","kann eingin eiga sær","hann eitur nalli","hon situr har enn","hann er um at fanga hana","marius johannesen","nær kemur hann aftur","hon skiftir lit","minst til at signa teg","dunnan saknar ikki ungan","kona hansara æt marin malena","so fattur sum ein kongur","eg orki einki longur","er sum ein treiskur hestur","stutt eftir kom geitarmamman heim"]},{"title":"V og Ø","keys":"vø","words":["var","av","vit","hevur","vera","væl","hava","hvussu","øll","hvat","havi","vildi","vil","hvar","høvdu","revurin","øllum","gjørdi","løtu","hvør","hvørt","visti","gav","villu","sova","veit","vita","geva","hvønn","vilt","gjørt","hvørjum","svav","vitja","tveir","vakurt","vøkur","tvær","ov","hvørja","gjøgnum","veitst","høvdinum","mjav","veturin","svong","svøvni","gjørdist","svimja","veg","vilja","kvikur","søgan","stavin","havt","høgt","von","kvøld","skalv","vildu","vendi","vatn","gjørdu","vakra","søgdu","stjørnan","vistu","vaks","navn","kjøt","hav","ravnurin","føddur","nøkrum","hvarv","lova","verandi","vegnum","fjøruna","stovu"],"lines":["men eg fekk ikki ilt","mamman situr og treskir korn","har er einki døkt","har er einki sløkt","og ein summardag","hon skuldi fara at vitja eina vinkonu","rura rura rilla","stundum letur hann illa","men so kom ein hundur","og so kom ein kona","mjav mjav mjav","mamman veittrar til teirra","so kemur mamma inn","hon fiskar ternumurtar","hann vil heldur sigla","geva teimum at eta","kettlingurin liggur har","tikin hon og etin er","anna og lisa eru vinkonur","so fann hann ein orm","hønan skrukkar og hanin gelur","dagin fram at einari tjørn","men hon veit einki","kvagg kvagg kvagg","dunnan er eitt gamalt sjagg","grøs og allar urtir tiga","hann so gjørdi","eingin at herja","og mamman er ikki heima","tungan hvør sum tala kann","men kettan vildi ikki lurta eftir henni","ein dagin kom ein vinkona at vitja hana","konan so gjørdi","næstir grannar eru ofta verstir","og dunnurnar undrast","løgin fuglur er","men gæsnar liggja kvirrar","men dreingirnir allir","og ger døkkan hvønn ein dal","har fann hann ein tjaldursunga sum sat undir einum steini og skalv"]},{"title":"B og Y","keys":"by","words":["tey","fyri","burtur","bara","yvir","børnini","bar","abbi","bert","beint","ber","fyrr","børn","systur","hoyrdi","abba","best","eyga","bangin","hoyra","sjey","fleyg","betur","tygum","barn","beinini","fyrst","fyrsta","eyguni","betri","hoyrt","bønum","eygu","bera","tvey","burturi","bjørnin","syngja","gloymt","tykkum","systir","hyggur","besta","fyrstu","royna","myrkt","bygd","bygdini","berginum","beiggi","barni","nyttu","yviri","droymdi","borg","neyvan","synd","bøin","bø","trygt","dyrnar","hoyrir","hygg","bleiv","ynski","lambinum","hyggja","bilsin","goyma","borgina","gloymdi","føroyskt","seyma","hoyggj","fyrsti","hoyrdu","hoyrist","yrkti","bant","bein"],"lines":["men eg fekk ikki ilt","rura rura barni","mamman situr og treskir korn","har er einki døkt","har er einki sløkt","har er bara høgt","og ein summardag","hon skuldi fara at vitja eina vinkonu","rura rura rilla","stundum letur hann illa","men so kom ein hundur","og so kom ein kona","mjav mjav mjav","mamman veittrar til teirra","so kemur mamma inn","saft kakao lagkøku og bollar","so kom høgni oman at hyggja eftir ungunum","hon fiskar ternumurtar","hann vil heldur sigla","so fara tey heim","streymurin rekur so hart","eg gangi ørindi fyri hana og eg beri henni vatn","systur hansara","geva teimum at eta","kettlingurin liggur har","tikin hon og etin er","anna og lisa eru vinkonur","misti burtur ongul og stein","ikki fekst eitt fiskabein","til abba og ommu","so fann hann ein orm","hønan skrukkar og hanin gelur","men sanna situr og roytir lundar","hugsar um brøgd og gamlar søgur","dagin fram at einari tjørn","men hon veit einki","kvagg kvagg kvagg","dunnan er eitt gamalt sjagg","grøs og allar urtir tiga","hann so gjørdi"]},{"title":"P og Ð","keys":"pð","words":["tað","við","segði","ið","hevði","upp","verður","niður","varð","bæði","verið","uppi","spurdi","ferð","einaferð","spæla","verða","avstað","hugsaði","meðan","legði","maðurin","maður","glað","fingið","sæð","nakað","bað","svaraði","kvøldið","niðan","sleppa","annað","barnið","øðrum","rossið","soleiðis","niðri","gleði","ætlaði","vaknaði","prestur","slapp","faðir","mikið","spældi","verðini","klæði","glaður","drypp","sovnaði","doyði","spældu","etið","summarið","givið","keypa","lambið","grasið","spyr","beyð","høvdið","plagdi","leið","leyp","døgurða","tikið","ferðir","stað","spælir","vorðið","træið","biðja","skundaði","aðra","verði","ferðast","verð","glaðir","lovaði"],"lines":["eg skuldi fara við teimum men eg gleið og datt so langur sum eg var","tað hevði verið verri","men eg fekk ikki ilt","rura rura barni","mamman situr og treskir korn","vil ikki barnið tiga","so skal barnið tiga","tað var svart alt sum tað var","har er einki døkt","har er einki sløkt","har er bara høgt","alt ið bar og ber","sum ein dreymaverð","maðurin vildi hana fanga","men hon legði aftur at at hon","og ein summardag","fara vit at ferðast","hon skuldi fara at vitja eina vinkonu","tað er rætta lagið","so sum tað skal","soleiðis skulu vit ganga","rura rura rilla","stundum letur hann illa","men so kom ein hundur","so kom ein maður","og so kom ein kona","mjav mjav mjav","lepp lepp lepp","mamman veittrar til teirra","so kemur mamma inn","lina og hanus hava føðingardag","saft kakao lagkøku og bollar","so kom høgni oman at hyggja eftir ungunum","hon fiskar ternumurtar","hann vil heldur sigla","hann heldur at tað er stuttligari at sigla","so fara tey heim","hann hevur verið og leitað eftir tundurkøssum","streymurin rekur so hart","per skal blunda"]},{"title":"Komma og punktum","keys":",.","words":["og","at","hann","so","hon","var","tað","er","við","eg","sum","men","ikki","ein","til","segði","um","ið","hevði","av","tey","sær","fyri","kom","har","aftur","eftir","seg","eitt","tær","teir","upp","eina","mær","vit","hevur","vera","honum","hana","eru","inn","enn","teimum","henni","einki","hetta","væl","skal","fara","her","heim","eisini","hin","hava","skuldi","hvussu","kemur","dagin","einum","teg","fekk","koma","gera","øll","hvat","dag","undir","alt","mamman","sigur","heldur","helt","fram","burtur","meg","ja","verður","bara","mamma","oman"],"lines":["eg skuldi fara við teimum, men eg gleið og datt so langur, sum eg var.","tað hevði verið verri.","rura, rura barni,","mamman situr og treskir korn,","vil ikki barnið tiga,","so skal barnið tiga.","tað var svart, alt sum tað var.","har er einki døkt,","har er einki sløkt,","har er bara høgt.","alt, ið bar og ber,","sum ein dreymaverð.","men hon legði aftur at, at hon","hon skuldi fara at vitja eina vinkonu.","vinstra, høgra","vinstra, høgra,","so sum tað skal,","soleiðis skulu vit ganga.","rura, rura, rilla,","stundum letur hann illa.","men so kom ein hundur.","so kom ein maður.","og so kom ein kona.","mjav, mjav, mjav,","lepp, lepp, lepp,","mamman veittrar til teirra.","so kemur mamma inn.","lina og hanus hava føðingardag.","saft, kakao, lagkøku og bollar.","so kom høgni oman at hyggja eftir ungunum.","hon fiskar ternumurtar.","hann vil heldur sigla.","hann heldur, at tað er stuttligari at sigla.","so fara tey heim.","hann hevur verið og leitað eftir tundurkøssum."]},{"title":"Ásetingar","keys":"áíóúý","words":["tá","tí","tú","nú","fór","hjá","út","vóru","frá","úr","mín","fáa","sá","fóru","altíð","pápi","nógv","lítla","tók","lítil","lá","úti","sólin","krákan","átti","lítli","tó","sínum","lítið","stóð","hví","síni","sína","mátti","pápin","tín","hús","jú","síggja","sín","góður","sjálvur","skjótt","úlvurin","góð","krá","ár","lítlu","bóndin","góðan","nátt","tíð","stóran","ongantíð","má","músin","báðir","títt","dún","líka","ógvuliga","ímóti","stórur","sótu","jól","rópti","móti","mús","stóra","gráta","úlvarnir","pápa","sjálv","ríða","fátæk","fólk","skínur","mítt","náttina","át"],"lines":["per átti ein hund, sum æt snar.","per var so góður við snar, at hann vildi ikki selja hann.","per og snar vóru ein dagin burtur í haga.","tá fall snar fyri bakka og doyði.","so átti per ongan hund.","vilt tú, vilt tú, vilt tú","fara við mær heim í á.","jú men, jú men,","jú men, jú men, jú men,","lítla sílið sært tú tá.","í gjár vóru teir á fjalli fyri handan dal.","eg mundi dottið í eina djúpa grøv.","eg bara dálkaði meg eitt sindur.","abbi fletti fýra lomb.","og lítli beiggi fekk allar bløðrurnar.","krýtin stendur í jarni,","pápin blæsur í lúðurhorn,","systirin seymar klæði upp á barnið","í morgun sá eg eitt lítið lamb, sum stóð langt uppi í bønum.","tað jarmaði illa, tí mamman var ikki hjá tí.","so fór eg at leita eftir mammuni.","men eg fann hana ikki, tí hon var ikki har.","so fór eg oman til hús at siga tað fyri pápa.","tey runnu heilt út um rættina.","eru sum ein vág","djúp og rein og blá.","livandi og blá","spegla sær í á."]},{"title":"Stórir stavir","keys":"","words":["og","at","hann","so","hon","var","tað","er","við","eg","sum","men","tá","ikki","ein","til","segði","um","tí","tú","ið","nú","hevði","av","tey","sær","fyri","fór","kom","har","aftur","eftir","seg","eitt","tær","teir","upp","eina","mær","hjá","út","vit","hevur","vera","honum","vóru","hana","eru","frá","inn","enn","teimum","henni","einki","hetta","væl","úr","skal","fara","mín","her","heim","eisini","hin","hava","skuldi","hvussu","kemur","dagin","einum","teg","fekk","fáa","koma","gera","øll","hvat","dag","sá","undir"],"lines":["Per átti ein hund, sum æt Snar.","Per var so góður við Snar, at hann vildi ikki selja hann.","Per og Snar vóru ein dagin burtur í haga.","Tá fall Snar fyri bakka og doyði.","So átti Per ongan hund.","Jú men, jú men,","Í gjár vóru teir á fjalli fyri handan Dal.","Eg mundi dottið í eina djúpa grøv.","Tað hevði verið verri.","Men eg fekk ikki ilt","Abbi fletti fýra lomb.","Og lítli beiggi fekk allar bløðrurnar.","Rura, rura barni,","Tað var svart, alt sum tað var.","Tað jarmaði illa, tí mamman var ikki hjá tí.","So fór eg at leita eftir mammuni.","Men eg fann hana ikki, tí hon var ikki har.","Tey runnu heilt út um rættina.","Har er einki døkt,","Livandi og blá","Alt, ið bar og ber,","Sig mær, lítli mín, hvar fert tú í dag Eg fari at vitja abba mín","So, fert tú at vitja hann","Ger so væl at heilsa honum frá mær","Eg havi nakað stuttligt at siga tær. Jú, eg skal koma","Maðurin og konan fóru út at ganga","Maðurin vildi hana fanga","Ternan varð tí sitandi á tanga.","Tá var Kristjan keddur.","Men hon legði aftur at, at hon","Dukka mín er blá,","Og ein summardag","Karin fór oman eftir vegnum á súkklu."]},{"title":"Lesibókin","keys":"","words":["og","at","hann","so","hon","var","tað","er","við","eg","sum","men","tá","ikki","ein","til","segði","um","tí","tú","ið","nú","hevði","av","tey","sær","fyri","fór","kom","har","aftur","eftir","seg","eitt","tær","teir","upp","eina","mær","hjá","út","vit","hevur","vera","honum","vóru","hana","eru","frá","inn","enn","teimum","henni","einki","hetta","væl","úr","skal","fara","mín","her","heim","eisini","hin","hava","skuldi","hvussu","kemur","dagin","einum","teg","fekk","fáa","koma","gera","øll","hvat","dag","sá","undir"],"lines":["Per átti ein hund, sum æt Snar.","Per var so góður við Snar, at hann vildi ikki selja hann.","Per og Snar vóru ein dagin burtur í haga.","Tá fall Snar fyri bakka og doyði.","So átti Per ongan hund.","Jú men, jú men,","Í gjár vóru teir á fjalli fyri handan Dal.","Eg skuldi fara við teimum, men eg gleið og datt so langur, sum eg var.","Eg mundi dottið í eina djúpa grøv.","Tað hevði verið verri.","Men eg fekk ikki ilt","Abbi fletti fýra lomb.","Og lítli beiggi fekk allar bløðrurnar.","Rura, rura barni,","Í morgun sá eg eitt lítið lamb, sum stóð langt uppi í bønum.","Tað var svart, alt sum tað var.","Tað jarmaði illa, tí mamman var ikki hjá tí.","So fór eg at leita eftir mammuni.","Men eg fann hana ikki, tí hon var ikki har.","So fór eg oman til hús at siga tað fyri pápa.","Tey runnu heilt út um rættina.","Har er einki døkt,","Livandi og blá","Alt, ið bar og ber,","Sig mær, lítli mín, hvar fert tú í dag Eg fari at vitja abba mín","So, fert tú at vitja hann","Ger so væl at heilsa honum frá mær","Eg havi nakað stuttligt at siga tær. Jú, eg skal koma","Maðurin og konan fóru út at ganga","Maðurin vildi hana fanga","Ternan varð tí sitandi á tanga.","Kristjan fór at hjálpa mammu síni at vaska upp","Men skálin var hál um at halda, og hondin var so lítil.","Kristjan misti skálina á gólvið, og hon fór í sorl.","Tá var Kristjan keddur.","Mamman kom leypandi frá telefonini, og hon var eisini hørm.","Men hon legði aftur at, at hon","Dukka mín er blá,","Og ein summardag","Karin fór oman eftir vegnum á súkklu."]}],"names":["jákup","anna","randi","marin","óli","jóli","gutti","snar","gud","djurhuus","hanus","mikkjal","nalli","kráku","guds","surr","magnus","hansen","upplesarin","gutta","lina","sofía","surra","zacharias","heinesen","páll","hanna","jesus","betlehem","per","føroyum","símun","lesibók","sjeyár","ása","babylon","viggo","svarti","gula","óla"],"stanzas":[{"s":"vilt tú, vilt tú, vilt tú fara við mær heim í á. Jú men, jú men, jú men, jú men, jú men, lítla sílið sært tú tá.","t":"Vilt tú, vilt tú","a":"Johan Kallsoy"},{"s":"Eygu tíni tvá eru sum ein vág djúp og rein og blá.","t":"Eygu tíni","a":"Hans A. Djurhuus"},{"s":"har er einki sløkt, har er bara høgt.","t":"Eygu tíni","a":"Hans A. Djurhuus"},{"s":"Livandi og blá eygu tíni tvá spegla sær í á.","t":"Eygu tíni","a":"Hans A. Djurhuus"},{"s":"Alt, ið bar og ber, goymt í teimum er sum ein dreymaverð.","t":"Eygu tíni","a":"Hans A. Djurhuus"},{"s":"Dukka mín er blá, hestur mín er svartur, ketta mín er grá, máni mín er bjartur, gyllir hvørja á.","t":"Dukka mín","a":"Hans A. Djurhuus"},{"s":"tá skal dukkan berast, tá er systir glað.","t":"Dukka mín","a":"Hans A. Djurhuus"},{"s":"Rura, rura, rilla, mamma tín eitur Billa; pápi tín er ein góður maður, stundum letur hann illa.","t":"Rura, rura, rilla","a":"Gamalt skjaldur"},{"s":"Tá ið tey hava fingið sær drekkamunn, fara tey út at spæla.","t":"Hanna og Hans","a":"Born í Vestmanna skúla"},{"s":"Hoyr, lítli mín, hví grætur tú? So, ert tú aftur dottin nú og dálkaður at skinni? Tú skuldi sitið inni!","t":"Lítli mín","a":"Louis Zachariasen"},{"s":"Nei, mamma, tað var ikki eg, men dreingirnir, ið koyrdu meg. Teir rendu meg í díkið og flentu so í kíki.","t":"Lítli mín","a":"Louis Zachariasen"},{"s":"Ja, tú, sum altíð gráta má, teg gera teir seg fyrst inn á. Gakk út, ver líka kátur og slá alt upp í látur.","t":"Lítli mín","a":"Louis Zachariasen"},{"s":"Góðan morgun, ketta mín, ikki sá eg kettling tín. Kettlingurin liggur har undir brík og spælir sær.","t":"Morgunheilsa","a":"Hans A. Djurhuus"},{"s":"Góðan morgun, ketta mín, hví ert tú so reyð um trýn? Eina rottu sá eg her, tikin hon og etin er.","t":"Morgunheilsa","a":"Hans A. Djurhuus"},{"s":"mýs og rottur fangi eg, venji kettling mín, at hann rottukattur verða kann.","t":"Morgunheilsa","a":"Hans A. Djurhuus"},{"s":"Dansa fyri handan á, sum ein lítil dukka má, tú ert føgur, fríð og fín silkiserk og hermalín.","t":"Dansa","a":"Hans A. Djurhuus"},{"s":"Dansa, dansa, dukka mín tú skalt fáa gull í skrín silvurband um ljósan lokk, gyltan skógv og silkisokk.","t":"Dansa","a":"Hans A. Djurhuus"},{"s":"Dansa til og dansa frá, dansa fyri handan á silkiserk og hermalín, dansa, dansa, dukka mín.","t":"Dansa","a":"Hans A. Djurhuus"},{"s":"fáa sær upp í kannu, tjó, hala og nýra, rassin og svíra brenna skulu vit krákubeinið í eldi okkara í kvøld.","t":"Rógva út á Krabbaskel","a":"Gamalt skjaldur"},{"s":"Hønan skrukkar, og hanin gelur -","t":"Hønan skrukkar","a":"Hans A. Djurhuus"},{"s":"kettan róma úr kova stjelur. Men Guðrun gamla á mylnu melur.","t":"Hønan skrukkar","a":"Hans A. Djurhuus"},{"s":"Brúni í túni situr og blundar, droymir um leik millum aðrar hundar. Men Sanna situr og roytir lundar.","t":"Hønan skrukkar","a":"Hans A. Djurhuus"},{"s":"Sólin skínur, og mjúkt er fleyrið -","t":"Hønan skrukkar","a":"Hans A. Djurhuus"},{"s":"glitrar og skyggir í turrum eyri. Janus kemur úr fjøru við steyri.","t":"Hønan skrukkar","a":"Hans A. Djurhuus"},{"s":"Úti á firðinum bátur rekur. Maður heldur men lítið tekur. Oyst verður ofta, tí illa lekur.","t":"Hønan skrukkar","a":"Hans A. Djurhuus"},{"s":"Pætur situr á breyt og kvøður, hugsar um brøgd og gamlar søgur. Grønt er fjallið og grønur bøur.","t":"Hønan skrukkar","a":"Hans A. Djurhuus"},{"s":"Húsvætti inni ferðast ei minni.","t":"Heygsmaður","a":"Hans A. Djurhuus"},{"s":"Alt tað, ið flýgur, setist og nígur.","t":"Heygsmaður","a":"Hans A. Djurhuus"},{"s":"Haran sigur ikki stórt, summardáin eiðasørt. Grøs og allar urtir tiga, gleða seg, men einki siga.","t":"Másin sigur","a":"Hans A. Djurhuus"},{"s":"Jú, heim teirra eru tey svørtu ský! Nú detta teir tungt yvir bygd og bý.","t":"Tað regnar, tað regnar","a":"M. Moberg, Alexandur Kristiansen týddi"},{"s":"Og grasið tað verður so vátt, so vátt, men blómurnar kenna sær nýggjan mátt.","t":"Tað regnar, tað regnar","a":"M. Moberg, Alexandur Kristiansen týddi"},{"s":"Tá skýggini hvørva, gerst luftin blá. Og so skínur sólin á gras og strá.","t":"Tað regnar, tað regnar","a":"M. Moberg, Alexandur Kristiansen týddi"},{"s":"M. Moberg Alexandur Kristiansen týddi","t":"Tað regnar, tað regnar","a":"M. Moberg, Alexandur Kristiansen týddi"},{"s":"Rukkulakkin fór sær oman eftir á: Hví vaska tit ikki meg sum onnur indur smá? Tá ið hann kom á kirkjubakkan -","t":"Rukkulakkin","a":"Gamalt skjaldur"},{"s":"hopp, hopp, hopp segði rukkulakkin tá.","t":"Rukkulakkin","a":"Gamalt skjaldur"},{"s":"Lukka fatti barnið, mær er fingið at goyma. Pápin er á skóginum burtur, og mamman er ikki heima.","t":"Lukka fatti barnið","a":"Gamalt skjaldur"},{"s":"Lukka fatti barnið komi tí gott til handa. Tungan hvør, sum tala kann, biði gott fyri lítla barninum standa.","t":"Lukka fatti barnið","a":"Gamalt skjaldur"},{"s":"Og tá ið stúgvurin keyptur er, hava vit verið um víðu verð.","t":"Kom nú, lítli mín","a":"Hans A. Djurhuus"},{"s":"Eg eigi ein borðbát, sum eg sjálvur havi gjørt í ósanum hann smágrót og eyr hevur ført.","t":"Báturin","a":"Hans A. Djurhuus"},{"s":"Og dunnurnar undrast, siga: \"Løgin fuglur er,\" men gæsnar liggja kvirrar, síggja neyvan, hvar hann fer.","t":"Báturin","a":"Hans A. Djurhuus"},{"s":"Men dreingirnir allir vildu fegin bátin átt, vildu tikið hann frá mær onkra myrka heystarnátt.","t":"Báturin","a":"Hans A. Djurhuus"},{"s":"Tí goymi eg bátin undir væðingini væl, tá ið skýmingin kemur og ger døkkan hvønn ein dal.","t":"Báturin","a":"Hans A. Djurhuus"},{"s":"Mín gleði er báturin, hvør penta er mín; har er eyskar og kleppur og útróðrarskrín.","t":"Báturin","a":"Hans A. Djurhuus"},{"s":"GE SETTI MEG A AEINA TÚGVU ATASPINN UMER TIL EIN HTUGV -","t":"Eg setti meg á eina túgvu","a":"Gamalt skjaldur"},{"s":"FINI, FIN SUMEITID HARJAR LITTIIÐ VSKAARLÐSMOELIRTIGÐIVEIG GEIRAG,, OG VIÐ ILLUM SKAL TAÐ VERA.","t":"Eg setti meg á eina túgvu","a":"Gamalt skjaldur"},{"s":"kukkulára, segði mín hani, skrukk! segði mín høna.","t":"Mæ, mæ, segði mín ær","a":"Gamalt skjaldur"},{"s":"Drivur døgg um døkka grund, dimmist millum fanna. Oman fyri eikilund hongur silvurkanna.","t":"Silvurkannan","a":"Hans A. Djurhuus"},{"s":"Náttin hylur hørg og hól teskar undir lyngi fýra nætur fyri jól dansa frýr í ringi.","t":"Silvurkannan","a":"Hans A. Djurhuus"},{"s":"Fyrsta reyð og onnur blá, triðja grøn við brota, fjórða hvít við gulli á, hon ber gyltan sprota.","t":"Silvurkannan","a":"Hans A. Djurhuus"},{"s":"Oman fyri eikilund hongur silvurkanna, skínur yvir alla grund -","t":"Silvurkannan","a":"Hans A. Djurhuus"},{"s":"Nú sveipar summarnáttin seg eymt um hav og fjøll; nú sveimar lítli Eivin í síni dreymahøll.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Har skínur fagurt sólin, og loftið er so frítt, og smáar blómur kaga úr urtagarði blítt.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Tær blómur hevur Eivin væl sjálvur plantað sær; við sínum smáu hondum hann vælir eymt um tær.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Á bønum stendur grasið við summardáum skrýtt; í gulum sóljutyssi firvaldar flagsa títt.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Við ljósum eygum skoðar hann lætta summardans, tí allarminsta kykti so væl hann gevur ans.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Og fram við strond, har aldan so mjúkt mót kletti slær, so mangt eitt \"pena plássið\" man Eivin eiga sær.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Í hyljum leika kombikk sum silvurbyggkorn smá. Tann leikin dámar Eivin ' so sera væl at sjá.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Og vitt um vøll og haga hann hoyrir fuglaljóð; har bríksla lógv og spógvi, og tjøldur \"klippa\" fró.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Av høgum himli sólin so blitt til Eivin lær:","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Nei, betri land enn Føroyar kann eingin eiga sær!","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Nú sveipar summarnáttin seg eymt um hav og fjøll; nú sveimar lítli Eivin í síni dreymahøll.","t":"Lítli Eivin","a":"C. Holm Isaksen"},{"s":"Nú hevur tú fingið torvmold í eyguni, lítli mín, so nú kemur Hákan eftir tær.","t":"Hákan darta","a":"Gamalt skjaldur"},{"s":"Hákan darta kemur ríðandi oman brýr á hesti sínum svarta.","t":"Hákan darta","a":"Gamalt skjaldur"},{"s":"Ólavur átti sjey svín, Drepur eitt, so eru átta.","t":"Hákan darta","a":"Gamalt skjaldur"},{"s":"Minst til at biðja Faðirvár, minst til at signa teg; tá sendir Harrin eingil sín at hjálpa tær á veg.","t":"Faðirvár","a":"Hans A. Djurhuus"},{"s":"Og Harrans gøðska fylgir tær, ið hvar tín fótur fer, og eingilin við tína lið tær altíð góður er.","t":"Faðirvár","a":"Hans A. Djurhuus"},{"s":"Á songarstokki situr hann og signar svøvnin tín; hann gevur tær ein ljósan dreym og leiku fríð og fín.","t":"Faðirvár","a":"Hans A. Djurhuus"},{"s":"Og grætur tú, hann kínir tær og turkar tíni tár, tí skalt tú altíð signa teg og biðja Faðirvár.","t":"Faðirvár","a":"Hans A. Djurhuus"},{"s":"Sólin Sólin er gull, hon gyllir hvønn teig, lít móti henni, so villist tú ei.","t":"Sólin","a":"Hans A. Djurhuus"},{"s":"Hon ber tær sælu og signing í sinn. Lat hana sleppa í hjarta títt inn.","t":"Sólin","a":"Hans A. Djurhuus"},{"s":"Sólin, hon vermir teg, gevur tær mátt, eigur tú hana, er onga tíð nátt.","t":"Sólin","a":"Hans A. Djurhuus"},{"s":"Sólin, áh sólin, nú roðar hon fjøll! Vekur upp blómur og kyknini øll.","t":"Sólin","a":"Hans A. Djurhuus"},{"s":"Fevnir tey, kyssir tey, undurverk ger, vekur úr dvala alt lívið, ið er.","t":"Sólin","a":"Hans A. Djurhuus"},{"s":"Vend tær mót sólini sólin teg ól, barn mítt, tú andar og mennist í sól.","t":"Sólin","a":"Hans A. Djurhuus"},{"s":"Nú sólin vísir andlit blítt, hon fer um fjørð og sund; hon vermir arma hjarta mítt og gleðir sára lund.","t":"Nú vakni øll úr svøvni glað","a":"Jacob Hansen"},{"s":"Hon minnir meg á morgun tann, tá hann úr deyða stóð, ið sigur yvir syndum vann og yvir deyðans tjóð.","t":"Nú vakni øll úr svøvni glað","a":"Jacob Hansen"},{"s":"Ja, glaður hvør til dagsverk fer í Jesu Kristi navn'; og tá ið tað at kvøldi ber, hann førir oss í havn.","t":"Nú vakni øll úr svøvni glað","a":"Jacob Hansen"},{"s":"Skaði ger mannin vísan, men ikki ríkan.","t":"Nú vakni øll úr svøvni glað","a":"Jacob Hansen"},{"s":"Abbi tín er ríkur, og ei finst annar slíkur, hann eigur fjós og kýr. Abbi mín í smáttu býr, og hann er ikki ríkur.","t":"Abbi tín","a":"Hans A. Djurhuus"},{"s":"hvønn halgidag man prýða Hjá honum gistir prestur, og fríðka abba tín; ikki prýðir abba mín kotið gamla, víða.","t":"Abbi tín","a":"Hans A. Djurhuus"},{"s":"Abbi tín hann gongur so fattur sum ein kongur og er í góðum lag. Abbi sigur altíð tað: \"Eg orki einki longur.\"","t":"Abbi tín","a":"Hans A. Djurhuus"},{"s":"Abbi tín fær seyðir, hjá honum eingin neyð er, hann eigur altíð kjøt. Abbi eigur ikki fløt, í kova neyvan breyð er.","t":"Abbi tín","a":"Hans A. Djurhuus"},{"s":"tit eru øll so fín, og hann sigur, abbi mín er sum ein treiskur hestur.","t":"Abbi tín","a":"Hans A. Djurhuus"},{"s":"Tú kanst vera glaður, tú veitst, tann besti maður, at hann er abbi tín. Einki er um abba mín, nei, hann er eingin maður.","t":"Abbi tín","a":"Hans A. Djurhuus"},{"s":"Tó eg elski abba, ið situr nú á stabba við gamla grúgvustein. Mær í huga ikki ein kann metast javnt við abba.","t":"Abbi tín","a":"Hans A. Djurhuus"},{"s":"Eg átti mær eitt dunnupar, eitt dunnupar, ið vakurt var.","t":"Dunnuparið","a":"Hans A. Djurhuus"},{"s":"Hann bláur, hon so hvít og fín sum vetrarsnjógv og brúðarlín.","t":"Dunnuparið","a":"Hans A. Djurhuus"},{"s":"Tey vóru her, tey vóru har og untust væl eitt ár hjá mær.","t":"Dunnuparið","a":"Hans A. Djurhuus"},{"s":"Men so rann langtan teim í sál, tey tektu onnur mið og mál.","t":"Dunnuparið","a":"Hans A. Djurhuus"},{"s":"Og droymdu sær so mangan dreym og svumu eitt sinn út á streym.","t":"Dunnuparið","a":"Hans A. Djurhuus"},{"s":"Fríð bylgja teim um bringu breyt; kom maður har og bæði skeyt.","t":"Dunnuparið","a":"Hans A. Djurhuus"},{"s":"Her heima ert tú vandaleysur, á streymi ert tú frændaleysur.","t":"Dunnuparið","a":"Hans A. Djurhuus"},{"s":"Nú dagurin at enda er, og náttin komin nær, algóði Gud og faðir ver hjá mínum og hjá mær.","t":"Nú dagurin at enda er","a":"Djóni Isaksen"},{"s":"Vælsigna tey, mær standa nær, vælsigna henda stað; hjálp okkum til at fylgja tær við trúgvum sinnalag.","t":"Nú dagurin at enda er","a":"Djóni Isaksen"},{"s":"Eg ofta veikan kenni meg; men himmalfaðir mín! Styrk tú meg, o, tað biði eg, og halt meg nær til tín.","t":"Nú dagurin at enda er","a":"Djóni Isaksen"},{"s":"Tú syndarar av svøvni vek, til tín hvørt hjarta drag. Tey veiku styrk, tey sjúku lek, ger sorgarbundin glað.","t":"Nú dagurin at enda er","a":"Djóni Isaksen"},{"s":"Í Jesu navni sigi eg tær tøkk, Gud faðir mín, at tú av náði leiddi meg á rætta leið til tín.","t":"Nú dagurin at enda er","a":"Djóni Isaksen"},{"s":"Og tøkk, at tú meg hevur vart frá váða og frá neyð; tøkk fyri himmalljósið bjart, tøkk fyri dagligt breyð.","t":"Nú dagurin at enda er","a":"Djóni Isaksen"},{"s":"So hoyrist uppaftur róp. Revurin: \"Tað er konan við ánna. Nú skal eg aftur skíra barn hjá henni.\"","t":"Revur og bjørn","a":"Jakob Jakobsen"},{"s":"rúmdarmaður Var eg ein rúmdarmaður og átti mær eitt mánafar. Hvat var tað ikki vakurt at sitið uppi har","t":"Var eg ein rúmdarmaður","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"á mánanum og skoðað út yvir okkar' vøkru jørð, har barnalátur hoyrist, og summardáin grør!","t":"Var eg ein rúmdarmaður","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"Ein nekara tá sá eg, sum telgdi sær ein holabát, ein gulan drong í Kina, sum bert við pinnum át.","t":"Var eg ein rúmdarmaður","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"Og børnini í Norra eg sá tey lakka paradís. Í Grønlandi tey sótu og ótu kramarís.","t":"Var eg ein rúmdarmaður","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"Í síni fjálgu stovu í Føroyum har sat mamma mín og tøvdi einar vøttir til lítla sonin sín.","t":"Var eg ein rúmdarmaður","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"Ja, nógv er har at síggja eg hevði sæð minst túsund børn í Russlandi og Japan og trý við Hoyvíkstjørn.","t":"Var eg ein rúmdarmaður","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"Um semja altíð valdar, og øll sum systkin kenna seg, tá er her gott at búgva eg sigi fyri meg.","t":"Var eg ein rúmdarmaður","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"Eg liggi á brúnni og ynski: Gud gævi, at onkur tveitti meg aftur í havið.","t":"Eg liggi á brúnni","a":"Alexandur Kristiansen"},{"s":"Eg svam her so fríur á plinki og miði. Hví lætst tú meg ikki svimja í friði?","t":"Eg liggi á brúnni","a":"Alexandur Kristiansen"},{"s":"Eg sprakli meg øran í svárari pínu; vælsignaða, krøk meg av lokkudorg tíni.","t":"Eg liggi á brúnni","a":"Alexandur Kristiansen"},{"s":"stjørnurnar \"Eg vil telja stjørnurnar, nú ið friður valdar. Men tað er so torført at fáa allar taldar.\"","t":"Eg vil telja stjørnurnar","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"\"Eg má brúka fingrarnar at telja tær, eg síggi.\" Men á sínum hondum hevur li bara tíggju.","t":"Eg vil telja stjørnurnar","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"\"Beinini! Ja, burtur við bæði skógv og hosu! Eg má telja tærnar við!\" Sigur hann og brosar.","t":"Eg vil telja stjørnurnar","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"\"Enn er ikki nóg mikið,\" sigur hann og gánar. \"Tað er nógv, nógv lættari, um eg taldi mánar.\"","t":"Eg vil telja stjørnurnar","a":"Halfdan Rasmussen, Alexandur Kristiansen týddi"},{"s":"glað í dag Á, sum eg eri glað í dag, tí fari eg at trampa og syngja, flenna líka til eg fái láturkrampa.","t":"Á, sum eg eri glað í dag","a":"Alexandur Kristiansen"},{"s":"Eg trampi, tralli alla nátt, so eingi fáa sovnað og trampi eg nóg harðliga, fer jørðin helst at klovna.","t":"Á, sum eg eri glað í dag","a":"Alexandur Kristiansen"},{"s":"Tel upp í eitt og tel upp í tvey. Maður og konatey hvurvu um heyg.","t":"Tel upp í eitt","a":"Alexandur Kristiansen"},{"s":"Tel upp í trý og fýra, er lætt. Eg havi enn einki frá teimum frætt.","t":"Tel upp í eitt","a":"Alexandur Kristiansen"},{"s":"Tel upp í fimm og tel upp í seks. Hann var eitt trøll, og hon sjálv var ein heks.","t":"Tel upp í eitt","a":"Alexandur Kristiansen"},{"s":"mín sann! Heksin hon fekk sær ein risa til mann.","t":"Tel upp í eitt","a":"Alexandur Kristiansen"},{"s":"So halgatrý og so halgasjey. Einsamalt trøllið kom aftur um heyg.","t":"Tel upp í eitt","a":"Alexandur Kristiansen"},{"s":"Ein genta fór í bøin at skera akurin.","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"Tá kom ein drongur ríðandi á ja, ríðandi og segði: \"Statt nú still!\"","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"\"Og hví skal eg ei skera meir, men standa púra still? Í kvøld, tá ið eg komi heim,","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"á ja, komi heim tá verður mamma ill.\"","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"\"So bint tær bert ein lítlan klút um tína tá so fast og sig bert, at tú skart teg so,","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"\"Tú lærir meg at lúgva, tað er ljótt, tað haldi eg. Nógv heldur vil eg siga,","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"á ja, siga - ein drongur elskar meg.\"","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"Ein genta fór í bøin at skera akurin. Tá kom ein drongur ríðandi","t":"Ein genta fór í bøin","a":"Andreas Andreasen týddi"},{"s":"Pápi mín, pápi mín upp um ups seg lesti. \"Lít tú trygt á pápa tín,\" sigur altíð pápi mín.","t":"Pápi mín","a":"Hans A. Djurhuus"},{"s":"Rógva út á Balta, veiða fiskin salta, vitja eina løtu rognkelsi og skøtu.","t":"Rógva út","a":"Hans A. Djurhuus"},{"s":"Síggja fimar seiðir halda havsins leiðir, krøktir báðir halta. skrubbu eftir sandi Rognkelsi og seiðir glíða móti landi.","t":"Rógva út","a":"Hans A. Djurhuus"},{"s":"Meðan árar knarra, hoyra rytur karra, hoyra ternur kria, gita, hvat tær siga.","t":"Rógva út","a":"Hans A. Djurhuus"},{"s":"Her kemur prinsessan av Morgunlandi við vári og summarsóma, í hennara fylgi er sunnanandi og ljósar nætur at hóma.","t":"Prinsessan av Morgunlandi","a":"Hans A. Djurhuus"},{"s":"Á kvøldi eg siti her heima hjá mær. Í loftið eg líti at stjørnunum har.","t":"Ynskissangur","a":"Lennart Hellsing, Andreas Andreasen týddi"},{"s":"Eg stjørnuskot síggi í rúmdini blá'. Eg blundi og fari at ynskja mær tá:","t":"Ynskissangur","a":"Lennart Hellsing, Andreas Andreasen týddi"},{"s":"Eg ynski mær troyggju, nú avkavað er, á skíðum at standa við fullari ferð.","t":"Ynskissangur","a":"Lennart Hellsing, Andreas Andreasen týddi"},{"s":"Eg ynski mær silvur, eg ynski mær gull og setningar styttri, nú sólin er full.","t":"Ynskissangur","a":"Lennart Hellsing, Andreas Andreasen týddi"},{"s":"Ein hvítur eingil av himni vitjar børnini smáu. Í rósubáti hann situr og siglir í rúmdini bláu.","t":"Eingilin","a":"Hans A. Djurhuus"},{"s":"Hann lendir á gluggakarmi, tá tólvti tími er sligin, og inn í kamar títt kvirra verður rósubáturin drigin.","t":"Eingilin","a":"Hans A. Djurhuus"},{"s":"Tá angar av himneskum rósum úr ævinnar urtagarði. Av lívsins rósu og deyðans er gjørt hetta rósufarið.","t":"Eingilin","a":"Hans A. Djurhuus"},{"s":"Eingilin blíðar dreymar ber teimum sovandi smáu, so fer hann í rósubátin og hvørvur í rúmdini bláu.","t":"Eingilin","a":"Hans A. Djurhuus"},{"s":"Eg eri jólamaðurin við stórum, gráum skeggi, í koti og svørtum knæbuksum, eg búgvi í hulduheyggi.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Tá komið er út í atventu, og jólini nærkast í hvørjum, hugsi eg bara um jólagávur til dreingir og gentur í Føroyum.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Eg veit, tey sita og gleða seg bæði á bygd og í býnum; nógvar verða gávurnar, tí hvørt má halda á sínum.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Tí má eg vera í góðari tíð at savna saman tað, sum vakurt er at líta á, og barnahjørtu ger glað.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Her eru dukkur og dukkustovur, hestar, bilar og bátar, ein so vakur flúgvari og nógvir tinsoldátar.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Her eru dunnur og gæs og høsn, seyðir, lomb og kýr, her er vakur snurritoppur, syngur, meðan hann snýr.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Her eru dýr í hópatali, fuglar og smáir fiskar, ein so fittur hundahvølpur og ein lítil kiska.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Her eru føgur silkibond, gul og reyð og blá, brosjur, nálir og fingurringar, armbandsur so smá.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Her eru vakrar látipípur, duga væl at láta; vakrast tó av øllum er dukkan, sum kann gráta.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Her er alt, sum børnum dámar, tað er ikki um at tosa.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Lat so bara jólini koma: nú havi eg fullan posa.","t":"Jólamaðurin","a":"Marius Johannesen"},{"s":"Kirkjuklokkan ringir jólafrið um bygd og bý. Kirkjuklokkan ringir boðar sæla tíð.","t":"Kirkjuklokkan ringir","a":"Steingrím Niclasen"},{"s":"Klokkuljóðið aldar gjøgnum loftið klárt og blátt. Klokkuljóðið aldar inn um hjartagátt.","t":"Kirkjuklokkan ringir","a":"Steingrím Niclasen"},{"s":"Jólaboð frá himni kirkjuklokkuljóðið ber. Jólaboð frá himni mikið undur er.","t":"Kirkjuklokkan ringir","a":"Steingrím Niclasen"},{"s":"Yvir Føroya fløtur berast hesi sælu boð. Yvir Føroya fløtur spenna einglar flog.","t":"Kirkjuklokkan ringir","a":"Steingrím Niclasen"},{"s":"Kirkjuklokkan ringir, steðgið, hoyrið - lýðið á. Kirkjuklokkan ringir jól til stór og smá.","t":"Kirkjuklokkan ringir","a":"Steingrím Niclasen"},{"s":"Eitt barn er føtt í Betlehem, tí gleðir seg Jerúsalem. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Ein fátæk kona mamma er, hon lítið barn í fangi ber. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Tann kona var av Dávids rót, og barnið er vár sálarbót. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Í sveipi har tann Drottur lá, Guds eyga honum hvíldi á. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Tó høllin ei var stór og von, hon goymdi himins kongason. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Og máttur hans so víða røkk, hvørt trælaband tá sundur støkk. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Av hjarta syngja vit nú glað. Guds dýrd vit síggja jóladag. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Við songinum vit byggja brú frá jørðini at himnabú. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"So ganga vit við Harrans lið, og jólagleðin heldur við. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Vár Jesus! Nú og alla tíð, tær veri lov for jól so blíð. Halleluja, halleluja!","t":"Eitt barn er føtt","a":"Grundtvig, Símun av Skarði týddi"},{"s":"Tá var Anna óð. Men hon var grumm og sló, tá Snar hann lyfti beinið upp har beint, sum prestur stóð.","t":"Lítli Snar","a":"Mourits Mohr"},{"s":"Men fjálgt er innan tjøld, og verðin hon er køld, og nú er eingin dagur meir, men myrkur, regn og kvøld!","t":"Lítli Snar","a":"Mourits Mohr"},{"s":"Aldri aftur í verðini skal Snar vera ljótur og gera fortreð. Ikki bíta kettuna -","t":"Lítli Snar","a":"Mourits Mohr"},{"s":"Vestan fyri Mykines har flýgur ein vøkur súla, sveimar yvir hav og fles, meðan børnini eru í skúla.","t":"Vestan fyri Mykines","a":"Marita Dalsgaard"},{"s":"Tá ið hon sær eina sild, hon stoytir seg undir kav, flýgur við henni í búkinum yvir tað bláa hav.","t":"Vestan fyri Mykines","a":"Marita Dalsgaard"},{"s":"Tá hon móð at flúgva er, til ungan hon kemur heim, setir seg á rókina so hvít og fín og rein.","t":"Vestan fyri Mykines","a":"Marita Dalsgaard"},{"s":"Undir einum lítlum træi situr neyðars dukkan Fía. Nú er nátt, og ringt er lagið;","t":"Dukkan Fía","a":"Hjørdis Johansen"},{"s":"Bíða eftir mammu síni, sum nú púra hevur gloymt, at hon altíð plagar at balla Fíu undir hennar' dýnu.","t":"Dukkan Fía","a":"Hjørdis Johansen"},{"s":"Yvir býnum er nú friður; Fía følir seg so váta, tí tað regnar -","t":"Dukkan Fía","a":"Hjørdis Johansen"},{"s":"oysir niður, og hon vil so illa gráta.","t":"Dukkan Fía","a":"Hjørdis Johansen"},{"s":"Á morgni árla vit Gudi lova, sum lærdi okkum so trygt at sova í Jesu navni um náttartíð sum børn á armi hjá móður blíð.","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"Á morgni árla av gulli lýsir, og hugin gleðina inni hýsir; er sælur dagur, um tárið rann, tá til Guds æru tú livdi hann.","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"Vanlig smá orð til lesivenjing er men teir nú sum eitt","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"um ein ikki tað til fyri var sær segði við tey hevði hon hann eftir","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"væl hjá yvir har mær fekk tær frá tá ið seg vóru aftur","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"kom fara lítla enn vera eisini","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"gera hava heldur hana ella undir bara siga honum heim henni sigur skal einki altíð fóru høvdu teimum koma einum","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"oman hevur skuldi ferð heilt longur pápi niður sindur uppi dagin hvussu bæði kemur hennara vita okkum hansara","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"gekk komin burtur havi eigur skuldu inni legði teirra sama sínum ferðir","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"hvar vildi fingið nakað øllum børnini ganga setti hugsaði","t":"Á morgni árla","a":"A. C. Evensen"},{"s":"Nakrar endingar: -urin -urin -aði -arnir -arnir -aðu -arnar -arnar -aður -urnar","t":"Á morgni árla","a":"A. C. Evensen"}],"sayings":["Alt bøtist aftur uttan mannskaði.","At hava tað, ið annar eigur, tað man lukkast valla.","Tungt er at leggja ást við hann, ið onga leggur ímóti.","Ungur nemur, gamal fremur.","Barnið dugir hvørki at lúgva ella loyna.","Gott er at verja borg, tá ið eingin søkir.","Fjálgur er móður andi.","Hann má lúta, ið minni már.","Allir ganga á garð, har hann er lægstur.","Gjørd gerð fær onga vend.","Ofta verður stórur eldur av lítlum neista.","Tung er takkarleys gerð.","Tveir hundar um eitt bein semjast sjáldan.","Betur er lítið leivt enn ov mikið etið.","Betri eru smáir fiskar enn tómir diskar.","Hann, sum hjálpir í neyð, hjálpir tvær ferðir.","Gott er at svimja, tá ið annar heldur høvdinum uppi.","Har, ein skriðan er lopin, er onnur væntandi.","Royndur maður er góður at gista.","Sit vininum nær, men sit ikki av hans lær."]};
+const ISLANDS=["<svg viewBox=\"0 0 240 110\" preserveAspectRatio=\"xMidYMax meet\" focusable=\"false\"><defs>\n<linearGradient id=\"skyst1\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"-60\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#dcEEF4\"/><stop offset=\"1\" stop-color=\"#f7fbfa\"/></linearGradient>\n<linearGradient id=\"seast1\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"86\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#4f93ad\"/><stop offset=\"1\" stop-color=\"#245a7a\"/></linearGradient>\n<linearGradient id=\"grassst1\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#8cc06a\"/><stop offset=\".55\" stop-color=\"#5f9c4c\"/><stop offset=\"1\" stop-color=\"#447c3c\"/></linearGradient>\n<pattern id=\"rockst1\" width=\"40\" height=\"7\" patternUnits=\"userSpaceOnUse\"><rect width=\"40\" height=\"7\" fill=\"#57524b\"/><rect y=\"5\" width=\"40\" height=\"2\" fill=\"#3c3934\"/><path d=\"M0 2.5h14M22 3h12\" stroke=\"#6c665d\" stroke-width=\"1\"/></pattern>\n</defs><rect x=\"-400\" y=\"-60\" width=\"1040\" height=\"170\" fill=\"url(#skyst1)\"/><rect x=\"-400\" y=\"86\" width=\"1040\" height=\"24\" fill=\"url(#seast1)\"/><rect y=\"86\" width=\"240\" height=\"24\" fill=\"url(#seast1)\"/><path d=\"M14 95h26M70 100h34M150 94h30M190 103h24M40 106h20\" stroke=\"#cfe9f0\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".55\"/><path d=\"M8 86 L40 76 L100 52 L176 18 L190 22 L198 86Z\" fill=\"url(#rockst1)\"/><path d=\"M8 86 L40 76 L100 52 L176 18 L184 20 L172 40 Q150 54 130 70 L118 86Z\" fill=\"url(#grassst1)\"/><path d=\"M176 44q8 2 16 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M178 62q7 2 15 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M206 86 L208 56 L213 50 L219 56 L221 86Z\" fill=\"url(#rockst1)\"/><path d=\"M207.5 57 L213 49.5 L219.5 56 Q213 53.5 207.5 57Z\" fill=\"#6fa356\"/><path d=\"M116 86h84M204 86h20\" fill=\"none\" stroke=\"#f4fbfc\" stroke-width=\"2.4\" stroke-linecap=\"round\" opacity=\".9\"/><path d=\"M56 30q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M70 24q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M196 34q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>", "<svg viewBox=\"0 0 240 110\" preserveAspectRatio=\"xMidYMax meet\" focusable=\"false\"><defs>\n<linearGradient id=\"skyst2\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"-60\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#dcEEF4\"/><stop offset=\"1\" stop-color=\"#f7fbfa\"/></linearGradient>\n<linearGradient id=\"seast2\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"86\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#4f93ad\"/><stop offset=\"1\" stop-color=\"#245a7a\"/></linearGradient>\n<linearGradient id=\"grassst2\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#8cc06a\"/><stop offset=\".55\" stop-color=\"#5f9c4c\"/><stop offset=\"1\" stop-color=\"#447c3c\"/></linearGradient>\n<pattern id=\"rockst2\" width=\"40\" height=\"7\" patternUnits=\"userSpaceOnUse\"><rect width=\"40\" height=\"7\" fill=\"#57524b\"/><rect y=\"5\" width=\"40\" height=\"2\" fill=\"#3c3934\"/><path d=\"M0 2.5h14M22 3h12\" stroke=\"#6c665d\" stroke-width=\"1\"/></pattern>\n</defs><rect x=\"-400\" y=\"-60\" width=\"1040\" height=\"170\" fill=\"url(#skyst2)\"/><rect x=\"-400\" y=\"86\" width=\"1040\" height=\"24\" fill=\"url(#seast2)\"/><rect y=\"86\" width=\"240\" height=\"24\" fill=\"url(#seast2)\"/><path d=\"M14 95h26M70 100h34M150 94h30M190 103h24M40 106h20\" stroke=\"#cfe9f0\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".55\"/><path d=\"M12 86 L28 72 L92 68 L122 58 L160 16 L174 18 L202 52 L216 86Z\" fill=\"url(#rockst2)\"/><path d=\"M12 86 L28 72 L92 68 L122 58 L160 16 L170 17 L170 34 L152 66 L132 86Z\" fill=\"url(#grassst2)\"/><path d=\"M182 50q9 2 18-1\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M190 68q8 2 16 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><g><rect x=\"44\" y=\"61\" width=\"13\" height=\"8\" fill=\"#c8402f\"/><path d=\"M42 62 L50.5 55 L59 62Z\" fill=\"#4e8a3e\"/><rect x=\"62\" y=\"62\" width=\"11\" height=\"7\" fill=\"#1d2b33\"/><path d=\"M60.5 63 L67.5 57 L74.5 63Z\" fill=\"#4e8a3e\"/><rect x=\"78\" y=\"60\" width=\"9\" height=\"9\" fill=\"#fbf7ee\"/><path d=\"M77 61 L82.5 54 L88 61Z\" fill=\"#1d2b33\"/><rect x=\"81\" y=\"50\" width=\"3\" height=\"5\" fill=\"#fbf7ee\"/></g><path d=\"M20 86h40M130 86h88\" fill=\"none\" stroke=\"#f4fbfc\" stroke-width=\"2.4\" stroke-linecap=\"round\" opacity=\".9\"/><path d=\"M106 26q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M118 20q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>", "<svg viewBox=\"0 0 240 110\" preserveAspectRatio=\"xMidYMax meet\" focusable=\"false\"><defs>\n<linearGradient id=\"skyst3\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"-60\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#dcEEF4\"/><stop offset=\"1\" stop-color=\"#f7fbfa\"/></linearGradient>\n<linearGradient id=\"seast3\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"86\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#4f93ad\"/><stop offset=\"1\" stop-color=\"#245a7a\"/></linearGradient>\n<linearGradient id=\"grassst3\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#8cc06a\"/><stop offset=\".55\" stop-color=\"#5f9c4c\"/><stop offset=\"1\" stop-color=\"#447c3c\"/></linearGradient>\n<pattern id=\"rockst3\" width=\"40\" height=\"7\" patternUnits=\"userSpaceOnUse\"><rect width=\"40\" height=\"7\" fill=\"#57524b\"/><rect y=\"5\" width=\"40\" height=\"2\" fill=\"#3c3934\"/><path d=\"M0 2.5h14M22 3h12\" stroke=\"#6c665d\" stroke-width=\"1\"/></pattern>\n</defs><rect x=\"-400\" y=\"-60\" width=\"1040\" height=\"170\" fill=\"url(#skyst3)\"/><rect x=\"-400\" y=\"86\" width=\"1040\" height=\"24\" fill=\"url(#seast3)\"/><rect y=\"86\" width=\"240\" height=\"24\" fill=\"url(#seast3)\"/><path d=\"M14 95h26M70 100h34M150 94h30M190 103h24M40 106h20\" stroke=\"#cfe9f0\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".55\"/><path d=\"M18 86 L48 62 L64 30 L74 46 L90 12 L100 38 L114 22 L126 50 L142 36 L170 70 L198 86Z\" fill=\"url(#rockst3)\"/><path d=\"M18 86 L48 62 L58 46 L62 58 L70 86Z\" fill=\"url(#grassst3)\"/><path d=\"M126 50 L142 36 L170 70 L198 86 L160 86 Q150 70 138 60Z\" fill=\"url(#grassst3)\" opacity=\".95\"/><path d=\"M74 52q6 1 12-1\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M92 40q5 2 10 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M98 60q8 2 16 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M66 70q8 2 18 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M60 86h104\" fill=\"none\" stroke=\"#f4fbfc\" stroke-width=\"2.4\" stroke-linecap=\"round\" opacity=\".9\"/><path d=\"M166 26q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M178 32q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M36 34q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>", "<svg viewBox=\"0 0 240 110\" preserveAspectRatio=\"xMidYMax meet\" focusable=\"false\"><defs>\n<linearGradient id=\"skyst4\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"-60\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#dcEEF4\"/><stop offset=\"1\" stop-color=\"#f7fbfa\"/></linearGradient>\n<linearGradient id=\"seast4\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"86\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#4f93ad\"/><stop offset=\"1\" stop-color=\"#245a7a\"/></linearGradient>\n<linearGradient id=\"grassst4\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#8cc06a\"/><stop offset=\".55\" stop-color=\"#5f9c4c\"/><stop offset=\"1\" stop-color=\"#447c3c\"/></linearGradient>\n<pattern id=\"rockst4\" width=\"40\" height=\"7\" patternUnits=\"userSpaceOnUse\"><rect width=\"40\" height=\"7\" fill=\"#57524b\"/><rect y=\"5\" width=\"40\" height=\"2\" fill=\"#3c3934\"/><path d=\"M0 2.5h14M22 3h12\" stroke=\"#6c665d\" stroke-width=\"1\"/></pattern>\n</defs><rect x=\"-400\" y=\"-60\" width=\"1040\" height=\"170\" fill=\"url(#skyst4)\"/><rect x=\"-400\" y=\"86\" width=\"1040\" height=\"24\" fill=\"url(#seast4)\"/><rect y=\"86\" width=\"240\" height=\"24\" fill=\"url(#seast4)\"/><path d=\"M14 95h26M70 100h34M150 94h30M190 103h24M40 106h20\" stroke=\"#cfe9f0\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".55\"/><path d=\"M10 86 L22 60 L80 40 L150 42 L200 58 L226 86Z\" fill=\"url(#rockst4)\"/><path d=\"M10 86 L22 60 L80 40 L150 42 L198 58 L172 62 Q120 60 62 70 L40 86Z\" fill=\"url(#grassst4)\"/><path d=\"M176 87 Q178 70 190 68 Q202 70 204 87Z\" fill=\"url(#seast4)\"/><path d=\"M86 76q10 2 22 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M130 70q9 2 20 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M40 86h134M206 86h20\" fill=\"none\" stroke=\"#f4fbfc\" stroke-width=\"2.4\" stroke-linecap=\"round\" opacity=\".9\"/><path d=\"M116 22q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M128 16q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>", "<svg viewBox=\"0 0 240 110\" preserveAspectRatio=\"xMidYMax meet\" focusable=\"false\"><defs>\n<linearGradient id=\"skyst5\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"-60\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#dcEEF4\"/><stop offset=\"1\" stop-color=\"#f7fbfa\"/></linearGradient>\n<linearGradient id=\"seast5\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"86\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#4f93ad\"/><stop offset=\"1\" stop-color=\"#245a7a\"/></linearGradient>\n<linearGradient id=\"grassst5\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#8cc06a\"/><stop offset=\".55\" stop-color=\"#5f9c4c\"/><stop offset=\"1\" stop-color=\"#447c3c\"/></linearGradient>\n<pattern id=\"rockst5\" width=\"40\" height=\"7\" patternUnits=\"userSpaceOnUse\"><rect width=\"40\" height=\"7\" fill=\"#57524b\"/><rect y=\"5\" width=\"40\" height=\"2\" fill=\"#3c3934\"/><path d=\"M0 2.5h14M22 3h12\" stroke=\"#6c665d\" stroke-width=\"1\"/></pattern>\n</defs><rect x=\"-400\" y=\"-60\" width=\"1040\" height=\"170\" fill=\"url(#skyst5)\"/><rect x=\"-400\" y=\"86\" width=\"1040\" height=\"24\" fill=\"url(#seast5)\"/><rect y=\"86\" width=\"240\" height=\"24\" fill=\"url(#seast5)\"/><path d=\"M14 95h26M70 100h34M150 94h30M190 103h24M40 106h20\" stroke=\"#cfe9f0\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".55\"/><path d=\"M6 86 L18 50 L70 30 L130 34 L190 26 L230 50 L236 86Z\" fill=\"url(#rockst5)\"/><path d=\"M6 86 L18 50 L70 30 L130 34 L190 26 L226 48 L200 52 Q130 46 64 58 L28 86Z\" fill=\"url(#grassst5)\"/><path d=\"M70 70q12 2 26 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M150 66q10 2 22 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M180 76q9 2 20 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M128 50 C127 62 131 72 129 86\" fill=\"none\" stroke=\"#f4fbfc\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M128 50 C127 62 131 72 129 86\" fill=\"none\" stroke=\"#bfe3ee\" stroke-width=\"1\" stroke-linecap=\"round\"/><ellipse cx=\"129\" cy=\"86\" rx=\"8\" ry=\"2.6\" fill=\"#f4fbfc\" opacity=\".8\"/><path d=\"M28 86h206\" fill=\"none\" stroke=\"#f4fbfc\" stroke-width=\"2.4\" stroke-linecap=\"round\" opacity=\".9\"/><path d=\"M56 18q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M206 18q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>", "<svg viewBox=\"0 0 240 110\" preserveAspectRatio=\"xMidYMax meet\" focusable=\"false\"><defs>\n<linearGradient id=\"skyst6\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"-60\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#dcEEF4\"/><stop offset=\"1\" stop-color=\"#f7fbfa\"/></linearGradient>\n<linearGradient id=\"seast6\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"86\" x2=\"0\" y2=\"110\"><stop offset=\"0\" stop-color=\"#4f93ad\"/><stop offset=\"1\" stop-color=\"#245a7a\"/></linearGradient>\n<linearGradient id=\"grassst6\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#8cc06a\"/><stop offset=\".55\" stop-color=\"#5f9c4c\"/><stop offset=\"1\" stop-color=\"#447c3c\"/></linearGradient>\n<pattern id=\"rockst6\" width=\"40\" height=\"7\" patternUnits=\"userSpaceOnUse\"><rect width=\"40\" height=\"7\" fill=\"#57524b\"/><rect y=\"5\" width=\"40\" height=\"2\" fill=\"#3c3934\"/><path d=\"M0 2.5h14M22 3h12\" stroke=\"#6c665d\" stroke-width=\"1\"/></pattern>\n</defs><rect x=\"-400\" y=\"-60\" width=\"1040\" height=\"170\" fill=\"url(#skyst6)\"/><rect x=\"-400\" y=\"86\" width=\"1040\" height=\"24\" fill=\"url(#seast6)\"/><rect y=\"86\" width=\"240\" height=\"24\" fill=\"url(#seast6)\"/><path d=\"M14 95h26M70 100h34M150 94h30M190 103h24M40 106h20\" stroke=\"#cfe9f0\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".55\"/><path d=\"M28 86 L42 56 L100 38 L152 44 L192 86Z\" fill=\"url(#rockst6)\"/><path d=\"M28 86 L42 56 L100 38 L152 44 L162 56 Q112 56 72 66 L56 86Z\" fill=\"url(#grassst6)\"/><path d=\"M120 70q10 2 22 0\" fill=\"none\" stroke=\"#6fa356\" stroke-width=\"1.6\" stroke-linecap=\"round\" opacity=\".85\"/><path d=\"M128 40 L170 30 L170 46Z\" fill=\"#ffe7a1\" opacity=\".55\"/><rect x=\"118\" y=\"22\" width=\"9\" height=\"22\" fill=\"#fbf7ee\"/><rect x=\"118\" y=\"30\" width=\"9\" height=\"4\" fill=\"#d24a3a\"/><rect x=\"116.5\" y=\"18\" width=\"12\" height=\"5\" fill=\"#1d2b33\"/><rect x=\"119\" y=\"19\" width=\"7\" height=\"3\" fill=\"#ffd36a\"/><path d=\"M56 86h138\" fill=\"none\" stroke=\"#f4fbfc\" stroke-width=\"2.4\" stroke-linecap=\"round\" opacity=\".9\"/><path d=\"M66 22q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M78 16q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M196 28q2-2.6 4 0q2-2.6 4 0\" fill=\"none\" stroke=\"#28445a\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>"];
+(()=>{
+"use strict";
+const $=(s,el=document)=>el.querySelector(s);
+const app=$("#app");
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ---------- keyboard model (Faroese / Nordic ISO) ---------- */
+const FINGER_NAMES={lp:"vinstri lítlifingur",lr:"vinstri ringfingur",lm:"vinstri langifingur",li:"vinstri peikifingur",ri:"høgri peikifingur",rm:"høgri langifingur",rr:"høgri ringfingur",rp:"høgri lítlifingur",th:"tummilin"};
+const ROWS=[
+  [["½","lp"],["1","lp"],["2","lr"],["3","lm"],["4","li"],["5","li"],["6","ri"],["7","ri"],["8","rm"],["9","rr"],["0","rp"],["+","rp"],["´","rp"],["⌫","rp",2,"mod"]],
+  [["⇥","lp",1.5,"mod"],["q","lp"],["w","lr"],["e","lm"],["r","li"],["t","li"],["y","ri"],["u","ri"],["i","rm"],["o","rr"],["p","rp"],["å","rp"],["ð","rp"],["⏎","rp",1.5,"mod enter"]],
+  [["⇪","lp",1.5,"mod"],["a","lp"],["s","lr"],["d","lm"],["f","li","1","bump"],["g","li"],["h","ri"],["j","ri","1","bump"],["k","rm"],["l","rr"],["æ","rp"],["ø","rp"],["'","rp"]],
+  [["⇧","lp",1.25,"mod shiftL"],["<","lp"],["z","lp"],["x","lr"],["c","lm"],["v","li"],["b","li"],["n","ri"],["m","ri"],[",","rm"],[".","rr"],["-","rp"],["⇧","rp",2.75,"mod shiftR"]],
+  [["Ctrl","lp",1.5,"mod"],["Alt","th",1.25,"mod"],["millumrúm","th",6.6,"space"],["Alt Gr","th",1.25,"mod"],["Ctrl","rp",1.5,"mod"]]
+];
+const KEYF={};ROWS.flat().forEach(([l,f])=>{if(l.length===1)KEYF[l]=f;});KEYF[" "]="th";
+const ACCENT={"á":"a","í":"i","ó":"o","ú":"u","ý":"y","é":"e"};
+const LEFT=new Set(["lp","lr","lm","li"]);
+/* What must be pressed for a character: list of {key,finger} */
+function stepsFor(ch){
+  if(ch===" ")return[{key:" ",f:"th"}];
+  const low=ch.toLocaleLowerCase("fo"),upper=ch!==low;
+  const base=ACCENT[low]||low;
+  const f=KEYF[base]||"";
+  const out=[];
+  if(ACCENT[low])out.push({key:"´",f:"rp",dead:true});
+  if(upper)out.push({key:LEFT.has(f)?"shiftR":"shiftL",f:LEFT.has(f)?"rp":"lp"});
+  out.push({key:base,f});
+  return out;
+}
+
+/* ---------- levels ---------- */
+const LV=DATA.levels.map((lv,i)=>({...lv,n:i+1}));
+const EXTRA={1:"Legg peikifingrarnar á F og J. Kenn tú knøttarnar? Hinir fingrarnir leggja seg við síðuna av.",13:"Komma og punktum liggja beint niðanfyri K og L.",14:"Fyrst ´ við høgra lítlafingri – so bókstavin. Knappurin við ´ er ovast til høgru.",15:"Halt Shift við lítlafingrinum á hinari hondini, og trýst so bókstavin.",16:"Nú skrivar tú heil skjaldur og yrkingar úr gomlu lesibókunum."};
+function knownUpTo(n){let s="";for(let i=0;i<n;i++)s+=LV[i].keys;return Array.from(s.replace(/[áíóúý]/g,""));}
+function group(chars,len){let s="";for(let i=0;i<len;i++)s+=rnd(chars);return s;}
+function clip(parts,max){const out=[];let len=0;for(const p of parts){if(len+p.length>max&&out.length)break;out.push(p);len+=p.length+1;}return out.join(" ");}
+function makeRounds(n){
+  const lv=LV[n-1],nw=Array.from(lv.keys),known=knownUpTo(n),letters=known.filter(c=>/\p{L}/u.test(c));
+  const rounds=[];
+  const drill=()=>{const[a,b]=nw;return clip(shuffle([a+a+a,b+b+b,a+b+a,b+a+b,a+b,b+a,a+a+b,b+b+a,a+b+b,b+a+a]),34);};
+  const mix=(len=40)=>{const parts=[];for(let i=0;i<14;i++){const w=[];const L=2+Math.floor(Math.random()*3);for(let j=0;j<L;j++)w.push(Math.random()<.5?rnd(nw):rnd(letters));parts.push(w.join(""));}return clip(parts,len);};
+  const words=(len=44,list=lv.words)=>clip(shuffle(list.slice(0,40)),len);
+  const line=()=>rnd(lv.lines);
+  if(n<=12){
+    rounds.push({name:"Nýggju knapparnir",text:drill(),hint:true});
+    rounds.push({name:"Blanda",text:mix(),hint:true});
+    rounds.push(lv.words.length>=6?{name:"Orð úr lesibókunum",text:words(),hint:"slow"}:{name:"Blanda aftur",text:mix(46),hint:"slow"});
+    rounds.push(lv.lines.length?{name:"Ein reglu úr lesibókunum",text:line(),hint:"slow",src:true}:lv.words.length>=6?{name:"Fleiri orð",text:words(48),hint:"slow"}:{name:"Allir knapparnir",text:clip(Array.from({length:12},()=>group(letters,2+Math.floor(Math.random()*3))),46),hint:"slow"});
+  }else if(n===13){
+    const ws=shuffle(DATA.levels[11].words.slice(0,40));
+    const punct=()=>{let s="";for(let i=0;i<7;i++){s+=ws[i]+(i%3===2?". ":i%2?", ":" ");}return s.trim().replace(/[ ,]+$/,"")+".";};
+    rounds.push({name:"Komma og punktum",text:", . , . ,, .. , . ,. .,",hint:true});
+    rounds.push({name:"Orð við komma",text:punct(),hint:true});
+    rounds.push({name:"Ein setningur",text:line(),hint:"slow",src:true});
+    rounds.push({name:"Ein setningur aftur",text:line(),hint:"slow",src:true});
+  }else if(n===14){
+    rounds.push({name:"´ og so bókstavurin",text:"á á í í ó ó ú ú ý ý á í ó ú ý",hint:true});
+    rounds.push({name:"Orð við ásetingum",text:words(40),hint:true});
+    rounds.push({name:"Fleiri orð",text:words(46),hint:"slow"});
+    rounds.push({name:"Ein setningur",text:line(),hint:"slow",src:true});
+  }else if(n===15){
+    const names=shuffle(DATA.names.slice(0,30)).map(w=>w[0].toLocaleUpperCase("fo")+w.slice(1));
+    rounds.push({name:"Stórir stavir",text:clip(names,38),hint:true});
+    rounds.push({name:"Fleiri nøvn",text:clip(names.slice(6),42),hint:true});
+    rounds.push({name:"Ein setningur",text:line(),hint:"slow",src:true});
+    rounds.push({name:"Ein setningur aftur",text:line(),hint:"slow",src:true});
+  }else{
+    shuffle(DATA.stanzas).slice(0,3).forEach(s=>rounds.push({name:`${s.t} · ${s.a}`,text:s.s,hint:"slow",src:s}));
+    rounds.push({name:"Orðatak",text:rnd(DATA.sayings),hint:"slow"});
+  }
+  return rounds;
+}
+
+/* ---------- progress ---------- */
+const KEY="oyggjaleidin-v1";
+let prog={stars:{},best:{},hints:true};
+try{prog={...prog,...JSON.parse(localStorage.getItem(KEY)||"{}")};}catch(_){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(prog));}catch(_){}};
+const starsOf=n=>prog.stars[n]||0;
+const unlocked=n=>n===1||starsOf(n-1)>0;
+const currentLevel=()=>{for(let n=1;n<=LV.length;n++)if(!starsOf(n))return n;return LV.length+1;};
+function updateTotal(){$("#star-total").textContent=`${totalStars()} / ${LV.length*3}`;}
+const totalStars=()=>Object.values(prog.stars).reduce((a,b)=>a+b,0);
+
+/* ---------- save code: the stars as a short code the child can take to another computer ---------- */
+/* 3 version bits + 2 bits per island, 5 bits per character, last character is a checksum. No 0/O or 1/I. */
+const CODE_ABC="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const codeSum=v=>v.reduce((a,x,i)=>a+x*(i+1),0)%32;
+function makeCode(){
+  let bits="000";for(let n=1;n<=LV.length;n++)bits+=starsOf(n).toString(2).padStart(2,"0");
+  while(bits.length%5)bits+="0";
+  const v=[];for(let i=0;i<bits.length;i+=5)v.push(parseInt(bits.slice(i,i+5),2));
+  v.push(codeSum(v));
+  const s=v.map(x=>CODE_ABC[x]).join(""),h=Math.ceil(s.length/2);
+  return s.slice(0,h)+"-"+s.slice(h);
+}
+function readCode(txt){
+  const s=String(txt).toUpperCase().replace(/[\s-]/g,"");
+  if(s.length!==Math.ceil((3+2*LV.length)/5)+1)return null;
+  const v=Array.from(s,c=>CODE_ABC.indexOf(c));
+  if(v.includes(-1))return null;
+  const chk=v.pop();
+  if(codeSum(v)!==chk)return null;
+  const bits=v.map(x=>x.toString(2).padStart(5,"0")).join("");
+  if(bits.slice(0,3)!=="000")return null;
+  const stars={};for(let n=1;n<=LV.length;n++){const k=parseInt(bits.substr(1+2*n,2),2);if(k)stars[n]=k;}
+  return stars;
+}
+
+/* ---------- results to the teacher's Google Sheet (only when the child has set flokkur og nummar) ---------- */
+const SHEET_URL="https://script.google.com/macros/s/AKfycbz_SWV2-SebVnAWuLIhbZ0EGWY2pQuMsGgGYQWKfGTBWbNV1Ak5KoruKrDAfb4Pr7gkBw/exec"; // the Apps Script web-app address (…/exec); empty = send nothing and hide the field
+const WHO_OK=/^[A-Za-z0-9ÆØÁÍÓÚÝÐæøáíóúýð -]{1,20}$/;
+function report(n,stars,acc,wpm){
+  if(!SHEET_URL||!prog.who)return;
+  const body=JSON.stringify({who:prog.who,oyggj:n,stjornur:stars,rattleiki:acc,ferd:wpm});
+  try{fetch(SHEET_URL,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body}).catch(()=>{});}catch(_){}
+}
+const starHTML=(k,cls="stars")=>`<span class="${cls}" aria-label="${k} av 3 stjørnum">${[1,2,3].map(i=>`<span class="${i<=k?"on":""}">★</span>`).join("")}</span>`;
+
+/* ---------- puffin ---------- */
+const PUFFIN=`<svg class="puffin" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><ellipse cx="55" cy="104" rx="34" ry="7" fill="#0002"/><path d="M37 87c-7-20-3-50 18-57 15-5 29 2 35 18l-3 34c-12 15-37 19-50 5Z" fill="#172b35"/><path d="M57 51c-12 11-14 33-9 42 10 8 23 6 32-1 6-9 6-26-1-39Z" fill="#fffdf4"/><path d="M43 45c-4-15 1-30 13-34 14-5 26 5 27 19l-8 22Z" fill="#172b35"/><path d="M77 39 108 47 78 57 72 48Z" fill="#f68234" stroke="#a24420" stroke-width="2"/><path d="M79 40 94 45 79 48Z" fill="#f9d679"/><circle cx="69" cy="34" r="6" fill="#fff"/><circle cx="70" cy="34" r="2.3" fill="#10232b"/><path d="M47 94 38 109M47 94l-14 12M71 94l1 15m0-15 10 13" stroke="#ee7933" stroke-width="5" stroke-linecap="round"/></svg>`;
+
+/* ---------- map ---------- */
+function renderMap(){
+  stopTyping();
+  const cur=currentLevel(),done=cur>LV.length;
+  const target=done?LV.length:cur;
+  app.innerHTML=`<section class="map-hero"><div class="map-hero-inner"><div><p class="kicker">Lær at skriva við øllum fingrunum</p><h1>Oyggj fyri <em>oyggj.</em></h1><p class="lead">Á hvørjari oyggj lærir tú tveir nýggjar knappar. Fá eina stjørnu, so opnast næsta oyggin.</p></div>
+  <button class="go-btn" type="button" id="go">${done?"Skriva úr lesibókunum":`Oyggj ${target}: ${esc(LV[target-1].title)}`} <span aria-hidden="true">→</span></button></div></section><div class="map-sea"></div>  <section class="route" aria-label="Oyggjaleiðin"><svg class="route-line" aria-hidden="true"></svg>${LV.map(lv=>{
+    const n=lv.n,open=unlocked(n),isCur=n===cur;
+    return `<button class="node ${n%2?"flip":""} ${isCur?"current":""}" type="button" data-level="${n}" ${open?"":"disabled"} aria-label="Oyggj ${n}: ${esc(lv.title)}${open?"":" (stongd)"}"><span class="node-art">${ISLANDS[(n-1)%ISLANDS.length]}<span class="node-num">${n}</span>${open?"":`<span class="node-lock" aria-hidden="true">🔒</span>`}${isCur?`<span class="puffin-here">${PUFFIN}</span>`:""}</span><span class="node-text"><strong>${esc(lv.title)}</strong><span class="sub">${n<=12?"Nýggir knappar: "+lv.keys.toUpperCase().split("").join(" og "):n===13?"Nýggir knappar: , og .":n===14?"á í ó ú ý":n===15?"Shift":"Skjaldur og yrkingar"}</span>${starHTML(starsOf(n))}</span></button>`;}).join("")}</section>`;
+  $("#go").addEventListener("click",()=>startLevel(target));
+  app.querySelectorAll(".node:not(:disabled)").forEach(b=>b.addEventListener("click",()=>startLevel(Number(b.dataset.level))));
+  drawRoute();
+  const curNode=app.querySelector(".node.current");
+  updateTotal();
+  return curNode;
+}
+function drawRoute(){
+  const route=$(".route"),svg=$(".route-line",route);if(!route)return;
+  const r=route.getBoundingClientRect();
+  const pts=[...route.querySelectorAll(".node-art")].map(el=>{const b=el.getBoundingClientRect();return[b.left-r.left+b.width/2,b.top-r.top+b.height/2];});
+  svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);
+  let d="";pts.forEach((p,i)=>{if(!i){d=`M${p[0]} ${p[1]}`;return;}const q=pts[i-1],my=(q[1]+p[1])/2;d+=` C${q[0]} ${my} ${p[0]} ${my} ${p[0]} ${p[1]}`;});
+  const doneUpTo=Math.max(0,currentLevel()-1);
+  let dd="";pts.slice(0,doneUpTo+1).forEach((p,i,arr)=>{if(!i){dd=`M${p[0]} ${p[1]}`;return;}const q=arr[i-1],my=(q[1]+p[1])/2;dd+=` C${q[0]} ${my} ${p[0]} ${my} ${p[0]} ${p[1]}`;});
+  svg.innerHTML=`<path d="${d}" fill="none" stroke="#9fc3d2" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>${doneUpTo?`<path d="${dd}" fill="none" stroke="#f2b61f" stroke-width="5" stroke-dasharray="2 12" stroke-linecap="round"/>`:""}`;
+}
+window.addEventListener("resize",()=>{if($(".route"))drawRoute();});
+
+/* ---------- level ---------- */
+let L=null; // current level state
+function keyboardHTML(n){
+  const known=new Set(n>=13?[...knownUpTo(Math.min(n,LV.length)),",",".","´"]:knownUpTo(n));
+  return `<div class="kb" id="kb" aria-hidden="true">${ROWS.map(row=>`<div class="kb-row">${row.map(([label,f,w,cls])=>{
+    const id=cls&&cls.includes("shiftL")?"shiftL":cls&&cls.includes("shiftR")?"shiftR":cls&&cls.includes("space")?" ":label;
+    const learned=id===" "||known.has(label)||(n>=15&&id.startsWith("shift"));
+    const isMod=cls&&cls.includes("mod");
+    return `<span class="k ${cls||""} ${learned?"learned":isMod||cls==="space"?"":"dim"}" data-f="${f}" data-k="${esc(id)}" style="--w:${w||1}">${esc(label.length===1?label.toLocaleUpperCase("fo"):label)}</span>`;}).join("")}</div>`).join("")}</div>`;
+}
+function handsHTML(){
+  const hand=(side)=>{const m=side==="r";const fingers=[["p",18,46,58],["r",44,22,82],["m",72,10,94],["i",100,26,78]];
+    return `<svg viewBox="0 0 170 170"><g ${m?'transform="translate(170 0) scale(-1 1)"':""}>${fingers.map(([f,x,y,h])=>`<rect class="fg" data-f="${side}${f}" x="${x}" y="${y}" width="24" height="${h}" rx="12"/>`).join("")}<rect class="fg" data-f="th" x="128" y="92" width="24" height="56" rx="12" transform="rotate(-32 140 120)"/><path class="palm" d="M14 96c0 30 10 52 30 62h70c18-10 24-30 20-56-2-10-12-14-24-14H30c-10 0-16 2-16 8Z"/></g></svg>`;};
+  return `<div class="hands" aria-hidden="true">${hand("l")}${hand("r")}</div>`;
+}
+function startLevel(n){
+  stopTyping();
+  L={n,rounds:makeRounds(n),r:0,pos:0,errors:0,typed:0,t0:0,tActive:0,step:0,missAt:new Set(),hintTimer:null};
+  const lv=LV[n-1];
+  app.innerHTML=`<section class="level"><div class="level-bar"><button class="back" type="button" id="back">← Oyggjaleiðin</button><div class="level-title"><small>Oyggj ${n} av ${LV.length}</small><strong>${esc(lv.title)}</strong></div><div class="dots" id="dots" aria-hidden="true"></div></div><div class="stage" id="stage"></div>
+  <div class="kb-wrap">${keyboardHTML(n)}${handsHTML()}</div>
+  <div class="settings"><label><input type="checkbox" id="hints" ${prog.hints?"checked":""}> Vís hjálp á knappaborðinum</label></div>
+  <p class="no-keyboard-note" id="nokb" hidden>Spælið er gjørt til eitt veruligt knappaborð. Á fartelefon ella teldli uttan knappaborð kanst tú trýsta á tekstin fyri at fáa skjáknappaborðið fram.</p></section>`;
+  $("#back").addEventListener("click",renderMap);
+  $("#hints").addEventListener("change",e=>{prog.hints=e.target.checked;save();e.target.blur();guide();});
+  if(matchMedia("(pointer:coarse)").matches)$("#nokb").hidden=false;
+  const newKeys=n<=12?Array.from(lv.keys):n===13?[",","."]:n===14?["´"]:n===15?["⇧"]:[];
+  if(newKeys.length){
+    $("#stage").innerHTML=`<div class="panel"><p class="kicker" style="color:var(--blue)">Nýggir knappar</p><h2>${esc(lv.title)}</h2><div class="newkeys">${newKeys.map(k=>{const f=k==="⇧"?"lp":KEYF[k]||"rp";return `<div class="newkey" data-f="${f}"><span class="cap">${esc(k.toLocaleUpperCase("fo"))}</span><span>${FINGER_NAMES[f]}</span></div>`;}).join("")}</div><p>${esc(EXTRA[n]||"Finn knappin við fingrinum, og hygg so at skerminum – ikki at fingrunum.")}</p><button class="press" type="button" id="begin">Byrja <kbd>millumrúm</kbd></button></div>`;
+    showKeys(newKeys);
+    $("#begin").addEventListener("click",beginRound);
+    L.waitStart=true;
+  }else beginRound();
+  dots();
+  attachTyping();
+}
+function showKeys(keys){
+  const kb=$("#kb");if(!kb)return;kb.classList.remove("hint-off");
+  kb.querySelectorAll(".k").forEach(k=>k.classList.toggle("next",keys.some(c=>c==="⇧"?k.dataset.k==="shiftL"||k.dataset.k==="shiftR":k.dataset.k===c)));
+  const fs=new Set(keys.map(c=>c==="⇧"?"lp":KEYF[c]));
+  document.querySelectorAll(".hands .fg").forEach(el=>el.classList.toggle("on",fs.has(el.dataset.f)));
+}
+function dots(){const d=$("#dots");if(!d)return;d.innerHTML=L.rounds.map((_,i)=>`<i class="${i<L.r?"done":i===L.r&&!L.waitStart?"now":""}"></i>`).join("");}
+function beginRound(){
+  L.waitStart=false;L.pos=0;L.step=0;L.missAt=new Set();
+  const round=L.rounds[L.r];
+  L.text=Array.from(round.text);
+  const src=round.src&&typeof round.src==="object"?`<p class="source">${esc(round.src.t)} · ${esc(round.src.a)}</p>`:round.src?`<p class="source">Úr gomlu lesibókunum</p>`:"";
+  $("#stage").innerHTML=`<div class="round-label"><span>Umfar ${L.r+1} av ${L.rounds.length} · ${esc(round.name)}</span><span class="acc" id="acc"></span></div><div class="text-line" id="line" aria-live="off">${L.text.map((c,i)=>`<span class="c${c===" "?" sp":""}" data-i="${i}">${c===" "?" ":esc(c)}</span>`).join("")}</div><p class="hint-line" id="hint"></p>${src}`;
+  $("#line").addEventListener("click",()=>$("#catcher").focus());
+  dots();paintLine();guide();
+  if(matchMedia("(pointer:coarse)").matches)$("#catcher").focus({preventScroll:true});
+}
+function paintLine(){
+  const spans=$("#line").children;
+  for(let i=0;i<spans.length;i++){const s=spans[i];s.classList.toggle("ok",i<L.pos&&!L.missAt.has(i));s.classList.toggle("miss",i<L.pos&&L.missAt.has(i));s.classList.toggle("now",i===L.pos);}
+  const acc=L.typed?Math.round((L.typed-L.errors)/L.typed*100):100;
+  $("#acc").textContent=L.typed?`Rættleiki ${acc}%`:"";
+}
+function guide(){
+  const kb=$("#kb");if(!kb||!L||L.waitStart||L.pos>=L.text.length)return;
+  const ch=L.text[L.pos],steps=stepsFor(ch);
+  const active=steps.slice(L.step);
+  const round=L.rounds[L.r];
+  clearTimeout(L.hintTimer);
+  const show=()=>{
+    kb.classList.remove("hint-off");
+    kb.querySelectorAll(".k").forEach(k=>k.classList.toggle("next",active.some(s=>s.key===k.dataset.k)));
+    const fs=new Set(active.map(s=>s.f));
+    document.querySelectorAll(".hands .fg").forEach(el=>el.classList.toggle("on",fs.has(el.dataset.f)));
+  };
+  const hide=()=>{kb.querySelectorAll(".k.next").forEach(k=>k.classList.remove("next"));document.querySelectorAll(".hands .fg.on").forEach(el=>el.classList.remove("on"));};
+  const label=ch===" "?"millumrúm":ch;
+  const last=active[active.length-1];
+  const txt=active[0]&&active[0].dead?`Fyrst <b>´</b> við ${FINGER_NAMES.rp}, so <b>${esc(ACCENT[ch.toLocaleLowerCase("fo")])}</b>.`:active.length>1?`Halt <b>Shift</b> við ${FINGER_NAMES[active[0].f]} og trýst <b>${esc(label.toLocaleLowerCase("fo"))}</b> við ${FINGER_NAMES[last.f]}.`:`<b>${esc(label)}</b> · ${FINGER_NAMES[last.f]||""}`;
+  if(!prog.hints){hide();$("#hint").innerHTML="";return;}
+  if(round.hint===true||L.lastWrong){show();$("#hint").innerHTML=txt;}
+  else{hide();$("#hint").innerHTML="";L.hintTimer=setTimeout(()=>{show();$("#hint").innerHTML=txt;},1600);}
+}
+function flashKey(key){const el=[...document.querySelectorAll("#kb .k")].find(k=>k.dataset.k===key);if(el){el.classList.add("bad");setTimeout(()=>el.classList.remove("bad"),260);}}
+function handleChar(ch){
+  if(!L)return;
+  if(L.waitStart){if(ch===" ")beginRound();return;}
+  if(L.pos>=L.text.length)return;
+  if(!L.t0)L.t0=performance.now();
+  const want=L.text[L.pos];
+  const caseless=L.n<15;
+  const same=caseless?ch.toLocaleLowerCase("fo")===want.toLocaleLowerCase("fo"):ch===want;
+  L.typed++;
+  if(same){
+    L.pos++;L.step=0;L.lastWrong=false;
+    paintLine();
+    if(L.pos>=L.text.length){roundDone();return;}
+    guide();
+  }else{
+    L.errors++;L.missAt.add(L.pos);L.lastWrong=true;L.step=0;
+    const span=$("#line").children[L.pos];span.classList.remove("shake");void span.offsetWidth;span.classList.add("shake");
+    flashKey(ch===" "?" ":(ACCENT[ch.toLocaleLowerCase("fo")]||ch.toLocaleLowerCase("fo")));
+    paintLine();guide();
+  }
+}
+function roundDone(){
+  clearTimeout(L.hintTimer);
+  L.r++;
+  if(L.r<L.rounds.length){dots();setTimeout(beginRound,350);return;}
+  levelDone();
+}
+function levelDone(){
+  const mins=Math.max(.05,(performance.now()-L.t0)/60000);
+  const chars=L.rounds.reduce((a,r)=>a+Array.from(r.text).length,0);
+  const acc=L.typed?Math.round((L.typed-L.errors)/L.typed*100):100;
+  const wpm=Math.round(chars/5/mins);
+  const stars=acc>=97?3:acc>=90?2:acc>=80?1:0;
+  const n=L.n;
+  if(stars>starsOf(n)){prog.stars[n]=stars;}
+  prog.best[n]=Math.max(prog.best[n]||0,acc);save();updateTotal();
+  report(n,stars,acc,wpm);
+  const next=n<LV.length&&unlocked(n+1)?n+1:null;
+  const msg=stars===3?"Frálíkt! Næstan eingi mistøk.":stars===2?"Sera væl gjørt!":stars===1?"Tú klárdi tað! Royn aftur fyri fleiri stjørnur – ella far víðari.":"Nærum! Tú mást hava 80% rætt fyri at sleppa víðari. Tak tað rólig – rættleiki kemur undan ferð.";
+  L.done=true;L.nextLevel=next;
+  $("#stage").innerHTML=`<div class="panel">${PUFFIN}<h2>${stars?"Oyggin er tín!":"Royn eina ferð enn"}</h2>${starHTML(stars,"big-stars")}<p>${msg}</p><div class="result-stats"><div><b>${acc}%</b><span>rættleiki</span></div><div><b>${wpm}</b><span>orð um minuttin</span></div></div><div class="panel-actions">${next&&stars?`<button class="press" type="button" id="next">Næsta oyggj <kbd>Enter</kbd></button>`:""}<button class="press ${next&&stars?"ghost":""}" type="button" id="again">Royn aftur ${next&&stars?"":"<kbd>Enter</kbd>"}</button><button class="press ghost" type="button" id="map">Oyggjaleiðin</button></div></div>`;
+  dots();
+  document.querySelectorAll("#kb .k.next,.hands .fg.on").forEach(el=>el.classList.remove("next","on"));
+  $("#hint")&&($("#hint").innerHTML="");
+  $("#again").addEventListener("click",()=>startLevel(n));
+  $("#map").addEventListener("click",renderMap);
+  if($("#next"))$("#next").addEventListener("click",()=>startLevel(next));
+  if(n===LV.length&&stars)$("#again").textContent="Skriva fleiri skjaldur";
+}
+
+/* ---------- input ---------- */
+let typingOn=false;
+function onKey(e){
+  if(!L||$("#code-dlg").open)return;
+  if(e.ctrlKey||e.metaKey)return;
+  if(L.done){if(e.key==="Enter"){e.preventDefault();(document.getElementById("next")||document.getElementById("again")).click();}return;}
+  if(e.key==="Dead"){ // accent dead key: count as first step of an accented letter
+    const want=L.text&&L.text[L.pos];
+    if(want&&ACCENT[want.toLocaleLowerCase("fo")]){L.step=1;guide();}
+    return;
+  }
+  if(e.key==="Enter"&&L.waitStart){e.preventDefault();beginRound();return;}
+  if(e.key.length!==1||e.altKey&&!e.getModifierState("AltGraph"))return;
+  e.preventDefault();
+  handleChar(e.key);
+}
+function onInput(e){if(e.isComposing)return;const v=e.target.value.replace(/[´`¨^~]/g,"");e.target.value="";if(v)Array.from(v).forEach(handleChar);}
+function attachTyping(){if(typingOn)return;typingOn=true;window.addEventListener("keydown",onKey);$("#catcher").addEventListener("input",onInput);}
+function stopTyping(){if(L)clearTimeout(L.hintTimer);L=null;}
+/* ---------- code dialog ---------- */
+const setNote=(id,txt,bad)=>{const el=$(id);el.textContent=txt;el.classList.toggle("bad",!!bad);};
+function fillMine(){
+  const el=$("#code-mine");el.hidden=!totalStars();
+  if(!el.hidden)el.innerHTML=`Tín kota<b>${makeCode()}</b><small>Skriva kotuna upp. Við henni kanst tú halda fram á eini aðrari teldu.</small>`;
+}
+$("#code-open").addEventListener("click",()=>{
+  fillMine();$("#code-in").value="";$("#who-in").value=prog.who||"";
+  setNote("#code-note","");setNote("#who-note","");
+  $("#who-form").hidden=!SHEET_URL;
+  $("#code-dlg").showModal();
+});
+$("#code-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const stars=readCode($("#code-in").value);
+  if(!stars){setNote("#code-note","Kotan riggar ikki. Kanna hana og royn aftur.",true);$("#code-in").focus();return;}
+  for(const n in stars)prog.stars[n]=Math.max(starsOf(n),stars[n]); // never take stars away
+  save();updateTotal();fillMine();if(!L)renderMap();
+  setNote("#code-note","Tað riggaði! Oyggjarnar eru komnar aftur.");
+});
+$("#who-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const v=$("#who-in").value.trim().replace(/\s+/g," ").toLocaleUpperCase("fo");
+  if(v&&!WHO_OK.test(v)){setNote("#who-note","Skriva bert bókstavir og tøl, t.d. 3B-14.",true);return;}
+  prog.who=v;save();$("#who-in").value=v;
+  setNote("#who-note",v?"Goymt! Nú sær lærarin tíni úrslit.":"Strikað.");
+});
+$("#home").addEventListener("click",renderMap);
+updateTotal();
+renderMap();
+})();
+</script>
+</body>
+</html>

@@ -11,6 +11,7 @@ Forsíðurnar (hubbarnir) liggja á Snar; her liggur tað, sum Snar letur upp í
 | `karin-kvant/` | Fimm alisfrøðispøl til filmarnar við Karin Kvant (bygg eitt atom, lita kvarkarnar, aldumaskinan, mammutbeinið, sólskipanin), felags `karin.css` og `karin.js`. | https://katof.github.io/rokning-spol/karin-kvant/bygg-eitt-atom.html … |
 | `jol/` | Jól 2026: hubbin til læraran og tríggir jólakalendarar (grunddeild, miðdeild, hádeild), 14 lúkur hvør, 1.–18. desember. | https://katof.github.io/rokning-spol/jol/ |
 | `ambod/` | Amboð til at gera tilfar. `upptokuambod.html`: skriva ein lista við orðum ella setningum, tak tey upp eitt í senn við mikrofonini og tak tey niður sum zip við ljóðfílum (fílunøvn uttan føroyskar stavir, ella `navn = tekstur`). | https://katof.github.io/rokning-spol/ambod/upptokuambod.html |
+| `10-fingra/` | «10 fingra · Oyggjaleiðin» – lær at skriva við 10 fingrum, 16 oyggjar við tekstum úr gomlu lesibókunum. Framgongdin verður goymd í kaganum og sum kota; úrslitini fara til Google Sheet'ið «Blindskrift», um barnið hevur skrivað flokk og nummar. | https://katof.github.io/rokning-spol/10-fingra/ |
 
 ## Jól 2026
 
