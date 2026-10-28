@@ -198,6 +198,8 @@ body.on-map .footer{display:none}
 .acct-form .press,#logout{margin-top:16px}
 .acct-note{min-height:18px;margin:10px 0 0;color:var(--good);font-size:14px;font-weight:800}
 .acct-note.bad{color:#c0392b}
+.sign-skip{display:block;margin:6px 0 0;padding:4px 0;border:0;background:none;color:var(--blue);font-size:14px;font-weight:800;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.sign-skip small{color:var(--muted);font-weight:700;text-decoration:none}
 #acct-reset{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
 .reset-list{max-height:38vh;margin:0;padding:0;overflow:auto;list-style:none}
 .reset-list li{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #edf0ef;font-size:14px;font-weight:800}
@@ -227,12 +229,13 @@ body.on-map .footer{display:none}
   <form class="acct-x" method="dialog"><button type="submit" aria-label="Lat aftur">×</button></form>
   <section id="acct-in">
     <h2 id="acct-h">Rita inn</h2>
-    <p class="acct-help">So verður spælið goymt, og tú kanst halda fram á hvørji teldu sum helst. Fyrstu ferð velur tú fýra tøl. Minst til tey!</p>
+    <p class="acct-help">So verður spælið goymt, og tú kanst halda fram, har tú slepti, á hvørji teldu sum helst. Fyrstu ferð velur tú fýra tøl. Minst til tey!</p>
     <form class="acct-form" id="login-form" novalidate>
       <label for="who-in">Navn og flokkur</label><input id="who-in" type="text" placeholder="t.d. Anna 3B" maxlength="20" autocomplete="off" spellcheck="false">
       <label for="pin-in">Fýra tøl</label><input id="pin-in" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
       <button class="press" type="submit" id="login-btn">Rita inn</button>
       <p class="acct-note" id="login-note" role="status"></p>
+      <button class="sign-skip" type="button" id="skip-login">Spæl uttan at rita inn <small>(spælið verður ikki goymt)</small></button>
     </form>
   </section>
   <section id="acct-me" hidden>
@@ -331,11 +334,14 @@ function makeRounds(n){
 }
 
 /* ---------- progress ---------- */
-const KEY="oyggjaleidin-v1";
+// Who is signed in and their stars live only in this window (sessionStorage): a new window or another
+// browser starts empty, and the stars come back by signing in. Only the hint setting is kept per browser.
+const KEY="oyggjaleidin-v1",PREF="oyggjaleidin-hjalp";
 let prog={stars:{},best:{},hints:true};
-try{prog={...prog,...JSON.parse(localStorage.getItem(KEY)||"{}")};}catch(_){}
+try{prog={...prog,...JSON.parse(sessionStorage.getItem(KEY)||"{}")};}catch(_){}
+try{const h=localStorage.getItem(PREF);if(h!==null)prog.hints=h==="1";localStorage.removeItem(KEY);}catch(_){} // progress used to be kept per browser
 if(!prog.pin)delete prog.who; // the old "flokkur og nummar" field had no four digits
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(prog));}catch(_){}};
+const save=()=>{try{sessionStorage.setItem(KEY,JSON.stringify(prog));localStorage.setItem(PREF,prog.hints?"1":"0");}catch(_){}};
 const starsOf=n=>prog.stars[n]||0;
 const totalStars=()=>Object.values(prog.stars).reduce((a,b)=>a+b,0);
 // an island stays open while any later island has stars, so striking one island does not lock the rest
@@ -638,9 +644,11 @@ $("#reset-list").addEventListener("click",e=>{const b=e.target.closest("[data-st
 $("#reset-all").addEventListener("click",e=>strikaClick(e.currentTarget,0));
 // fetch this child's stars from the sheet, in case they played on another computer
 if(SHEET_URL&&prog.who)api({act:"login",who:prog.who,pin:prog.pin}).then(a=>{if(a.ok){takeStars(a.stars,true);if($(".sea")&&!opening)renderMap();}}).catch(()=>{});
+$("#skip-login").addEventListener("click",()=>$("#acct-dlg").close());
 $("#home").addEventListener("click",renderMap);
 updateTotal();
 renderMap();
+if(SHEET_URL&&!prog.who)openAcct(); // a new window starts by asking who is playing
 })();
 </script>
 </body>
