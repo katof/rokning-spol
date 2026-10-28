@@ -610,6 +610,7 @@ function levelDone(){
 const SOUND_DIR="ljod/",SOUND_EXTS=["webm","m4a","ogg","mp3","wav"]; // the recording tool makes webm (m4a on iPad)
 const SOUND_ID={a:"a","á":"aa",b:"b",d:"d","ð":"dd",e:"e",f:"f",g:"g",h:"h",i:"i","í":"ii",j:"j",k:"k",l:"l",m:"m",n:"n",o:"o","ó":"oo",p:"p",r:"r",s:"s",t:"t",u:"u","ú":"uu",v:"v",y:"y","ý":"yy","æ":"ae","ø":"oe"," ":"millumrum",",":"komma",".":"punktum","´":"aseting","⇧":"shift"};
 const SIGN_NAME={" ":"Millumrúm",",":"Komma",".":"Punktum","´":"Ásetingartekin","⇧":"Shift"}; // these have a name, no sound
+const NAME_ONLY=new Set(["ð"]); // ð has no sound of its own, so only its name is played (the user chose this)
 const LETTERS=Object.keys(SOUND_ID).filter(c=>!SIGN_NAME[c]);
 const VOWELS=new Set("aáeiíoóuúyýæø"); // these have a long sound (ljod-<id>) and a short one (ljod-<id>-stutt)
 const SOUND_LABEL={navn:"navnið",ljod:"ljóðið",langt:"langa ljóðið",stutt:"stutta ljóðið"};
@@ -663,7 +664,7 @@ function stopVoice(){voiceRun++;if(voice){voice.onended=voice.onpause=null;try{v
 async function say(ch,what){ // what: "navn", "ljod" (vowels: "langt"/"stutt") or "bæði" = all of them
   const id=SOUND_ID[ch];if(!id)return true;
   stopVoice();const run=voiceRun;
-  const parts=SIGN_NAME[ch]?["navn"]:what==="bæði"?(VOWELS.has(ch)?["navn","langt","stutt"]:["navn","ljod"]):[what];
+  const parts=SIGN_NAME[ch]||NAME_ONLY.has(ch)?["navn"]:what==="bæði"?(VOWELS.has(ch)?["navn","langt","stutt"]:["navn","ljod"]):[what];
   const file=part=>part==="navn"?`navn-${id}`:part==="stutt"?`ljod-${id}-stutt`:`ljod-${id}`;
   for(let i=0;i<parts.length;i++){
     if(i)await new Promise(r=>setTimeout(r,200));
@@ -707,7 +708,7 @@ function showLetter(ch){
   $("#lcard").dataset.f=f;$("#lbig").textContent=bigOf(ch);
   $("#lname").textContent=SIGN_NAME[ch]||`Bókstavurin ${ch.toLocaleUpperCase("fo")}`;
   $("#lfinger").textContent=base?`Fyrst ´ við ${FINGER_NAMES.rp}, so ${base.toLocaleUpperCase("fo")} við ${FINGER_NAMES[f]}.`:ch==="⇧"?"Lítlifingur á hinari hondini.":FINGER_NAMES[f][0].toLocaleUpperCase("fo")+FINGER_NAMES[f].slice(1)+".";
-  $("#lbtns").hidden=false;$("#say-sound").hidden=!!SIGN_NAME[ch];$("#say-short").hidden=!VOWELS.has(ch);
+  $("#lbtns").hidden=false;$("#say-sound").hidden=!!SIGN_NAME[ch]||NAME_ONLY.has(ch);$("#say-short").hidden=!VOWELS.has(ch);
   $("#say-sound").innerHTML=`${SPEAKER} ${VOWELS.has(ch)?"Langa ljóðið":"Ljóðið"}`;
   showKeys(keysOf(ch));
   if(soundsReady)say(ch,"bæði").then(ok=>{$("#lnote").textContent=ok?"":NO_SOUND;});
@@ -715,7 +716,7 @@ function showLetter(ch){
 function startFinn(){
   setTab("finn");stopVoice();showKeys([]);
   if(!soundsReady){LEARN={mode:"finn"};$("#stage").innerHTML=`<div class="finn"><p class="finn-q">Hoyr og finn</p><p class="learn-note">${NO_SOUND}</p></div>`;return;}
-  LEARN={mode:"finn",i:0,score:0,q:shuffle(LETTERS).slice(0,10).map(ch=>({ch,what:rnd(VOWELS.has(ch)?["navn","langt","stutt"]:["navn","ljod"]),tries:0}))};
+  LEARN={mode:"finn",i:0,score:0,q:shuffle(LETTERS).slice(0,10).map(ch=>({ch,what:rnd(VOWELS.has(ch)?["navn","langt","stutt"]:NAME_ONLY.has(ch)?["navn"]:["navn","ljod"]),tries:0}))};
   finnRound();
 }
 function finnRound(){
