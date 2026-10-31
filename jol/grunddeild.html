@@ -476,7 +476,7 @@
     <div class="jg-wrap">
       <span class="jg-mono">Til jólabókina</span>
       <h2>Jólabókin hjá flokkinum</h2>
-      <p class="jg-steyp__lead">Í nøkrum lúkum stendur „Til jólabókina“. Har gera børnini eina síðu: eina mynd, eitt orð ella ein stuttan setning. Í desember verða síðurnar til eina jólabók, sum flokkurin hevur gjørt saman.</p>
+      <p class="jg-steyp__lead">Í nøkrum lúkum stendur „Til jólabókina“. Har gera børnini eina síðu: eina mynd, eitt orð ella ein stuttan setning. Í desember savnar flokkurin síðurnar í eina jólabók.</p>
       <div class="jg-two">
         <div class="jg-box">
           <h3>Leistar at prenta</h3>
@@ -503,7 +503,7 @@
     <div class="jg-wrap">
       <span class="jg-mono">Saman á skúlanum · valfrítt</span>
       <h2>Kann ein mynd siga eina søgu?</h2>
-      <p class="jg-steyp__lead">Jólasøgan, sum ferðast: Eldri næmingar skriva eina stutta jólasøgu. Miðdeildin lesur hana upp, og tit tekna myndirnar til hana. Søgan og myndirnar verða ein lítil bók ella ein lítil framførsla.</p>
+      <p class="jg-steyp__lead">Jólasøgan, sum ferðast: Eldri næmingar skriva eina stutta jólasøgu. Miðdeildin lesur hana upp, og tit tekna myndirnar til hana. Tit kunnu savna søguna og myndirnar í eina lítla bók ella gera eina lítla framførslu.</p>
       <div class="jg-chain" aria-label="Søgan ferðast millum deildirnar">
         <div><b>Hádeildin skrivar</b><span>eina jólasøgu til yngri børn.</span></div>
         <div><b>Miðdeildin lesur upp</b><span>og ger søguna klára at lurta eftir.</span></div>
@@ -515,7 +515,7 @@
           <ol class="jg-steps">
             <li>Tosa við ein lærara í miðdeild ella hádeild. Sama avbjóðing stendur í teirra kalendara.</li>
             <li>Tá ið søgan kemur, lesa eldri næmingarnir hana upp fyri flokkinum.</li>
-            <li>Býtið søguna í fýra partar. Børnini tekna ein part hvørt, ella tvey og tvey.</li>
+            <li>Býtið søguna í fýra partar. Hvørt barn ella hvørt par teknar ein part.</li>
             <li>Leggið myndirnar í rætta raðfylgju, og lesið søguna aftur við myndunum.</li>
           </ol>
           <div class="jg-btnrow"><button class="jg-btn jg-btn--sm jg-btn--gold" type="button" data-copy="bod">Avrita boðini til hin læraran</button></div>
@@ -710,7 +710,7 @@ aldri kann eg fulltakka tær
     /* Lúka 2: Røkka brævbjálvarnir? – eitt kort í hvønn brævbjálva, síðan ja ella nei */
     2: { rounds: [{ k: 7, b: 5 }, { k: 4, b: 6 }, { k: 6, b: 6 }], play: function (r, api) {
       var left = r.k, filled = 0, stage = api.stage;
-      api.q('Legg eitt kort í hvønn brævbjálva. Trýst á ein brævbjálva, so fer eitt kort í hann. Røkka brævbjálvarnir til øll korini?');
+      api.q('Legg eitt kort í hvønn brævbjálva. Trýst á ein brævbjálva, so fer eitt kort í hann. Røkka brævbjálvarnir til øll kortini?');
       stage.innerHTML = '<div class="jg-pile" id="jgb-pile"></div><div class="jg-row" id="jgb-env"></div>' +
         '<div class="jg-ask" id="jgb-ask" hidden><span>Røkka brævbjálvarnir?</span><button class="jg-btn jg-btn--green" type="button" data-a="ja">Ja</button><button class="jg-btn jg-btn--red" type="button" data-a="nei">Nei</button></div>';
       var pile = stage.querySelector('#jgb-pile'), env = stage.querySelector('#jgb-env'), ask = stage.querySelector('#jgb-ask');

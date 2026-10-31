@@ -157,6 +157,27 @@
 @media (max-width: 960px) { .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: repeat(2, 1fr); } .jx-two { grid-template-columns: 1fr; } }
 @media (max-width: 640px) { .jx-hero__in { grid-template-columns: 1fr; } .jx-dog { width: 110px; } .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: 1fr; } .jx-filter span.jx-mono { min-width: 0; width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
+
+/* ---- Jólabókin og Jólasøgan, sum ferðast, á hubbinum (31.10.2026) ---- */
+.jx-bridge__header { margin-bottom: 18px; max-width: 75ch; }
+.jx-bridge__kicker { color: var(--green); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: .75rem; }
+.jx-bridge__cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.jx-bridge__card { padding: 18px; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; display: flex; flex-direction: column; gap: 8px; }
+.jx-bridge__card h3 { font-size: 1.08rem; }
+.jx-bridge__card p { font-size: .95rem; }
+.jol .jx-bridge__card a.jx-btn { margin-top: auto; align-self: flex-start; }
+.jx-bridge__tag { display: inline-block; color: var(--green); font-weight: 800; font-size: .78rem; }
+.jx-bridge__steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
+.jx-bridge__step { padding: 18px; background: #f3eee4; border-radius: 14px; }
+.jx-bridge__step strong { display: block; font-size: 1.03rem; }
+.jx-bridge__number { display: inline-grid; place-items: center; width: 30px; height: 30px; background: var(--ink); color: #fff; border-radius: 50%; margin-bottom: 10px; font-weight: 800; }
+.jx-bridge__links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.jx-bridge__tip { margin-top: 12px; color: var(--muted); font-size: .91rem; }
+.jx-bridge__question { padding: 12px 16px; margin-top: 14px; background: #fff8e7; border-left: 4px solid var(--gold); border-radius: 7px; }
+.jol .jx-bridge a.jx-btn, .jol .jx-cal__new a { text-decoration: none; }
+.jx-cal__new { margin-top: 6px; font-size: .9rem; color: var(--muted); }
+.jol .jx-cal__new a { font-weight: 800; color: var(--ink); border-bottom: 2px solid var(--gold); }
+@media (max-width: 760px) { .jx-bridge__cards, .jx-bridge__steps { grid-template-columns: 1fr; } }
 </style>
 <style>body { margin: 0; }</style>
 </head>
@@ -172,7 +193,7 @@
       <div>
         <span class="jx-mono">Snar · desember 2026</span>
         <h1>Jól <em>á Snar</em></h1>
-        <p class="jx-hero__lead">Lesið, lurtið, kannið og skapið í desember. Her finna tit jólakalendarar til grunddeild, miðdeild og hádeild umframt søgur, sangir, royndir, spøl og skapandi uppgávur. Fylgið einum kalendara ella veljið tilfar til undirvísingina eftir deild og lærugrein.</p>
+        <p class="jx-hero__lead">Lesið, lurtið, kannið og skapið í desember. Her finna tit tríggjar jólakalendarar, sum hvør hevur 14 lúkur. Í hvørjari lúku fáa næmingarnir ein spurning at undrast á og eina uppgávu at loysa. Savnið tað, tit skapa, í jólabókina hjá flokkinum, ella latið eina jólasøgu ferðast millum deildirnar. Tit kunnu eisini velja einstakar uppgávur eftir deild og lærugrein.</p>
         <form class="jx-search" id="jx-search" role="search" autocomplete="off">
           <svg class="jx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
           <input type="search" id="jx-q" placeholder="Leita eftir lúkum og jólatilfari, t.d. jólaljósum, Marin ella terningum …" aria-label="Leita í jólatilfarinum">
@@ -212,7 +233,7 @@
           <div class="jx-cal__body">
             <small>1.–3. flokkur</small>
             <h3>Jól í grunddeildini</h3>
-            <p>Smáar søgur, tøl, kanningar og skapandi løtur. Lærarin lesur fyri børnunum, og tey tosa saman, syngja, telja og tekna. Tey klappa eisini stavilsini í dagsins orði.</p>
+            <p>Smáar søgur, tøl, spøl og skapandi løtur. Børnini lurta, tosa, syngja, telja og tekna. Í nøkrum lúkum kunnu tey eisini gera eina síðu til jólabókina.</p>
             <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="grunddeild.html">Lat kalendaran upp</a><a class="jx-btn jx-btn--sm" href="grunddeild.html?alt=1">Sí allar lúkurnar</a></div>
           </div>
         </article>
@@ -227,7 +248,7 @@
           <div class="jx-cal__body">
             <small>4.–6. flokkur</small>
             <h3>Jól í miðdeildini</h3>
-            <p>Mál, mentan, royndir og uppgávur, sum næmingarnir loysa saman. Í hvørjari lúku eru eisini eyka uppgávur til næmingar í 5. og 6. flokki.</p>
+            <p>Mál, mentan, royndir og kanningar. Hvør lúka byrjar við einum undranarspurningi, og í summum lúkum kunnu næmingarnir gera eina síðu til jólabókina. Eyka uppgávur eru til 5. og 6. flokk.</p>
             <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="middeild.html">Lat kalendaran upp</a><a class="jx-btn jx-btn--sm" href="middeild.html?alt=1">Sí allar lúkurnar</a></div>
           </div>
         </article>
@@ -236,22 +257,74 @@
             <svg viewBox="0 0 300 150" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
               <path d="M126 70c-8-22 4-50 30-52 26-2 40 22 30 46-6 16-26 24-40 18-10-4-16-6-20-12z" fill="#fff"/>
               <ellipse cx="142" cy="46" rx="7" ry="8" fill="#fff"/><ellipse cx="164" cy="44" rx="7" ry="8" fill="#fff"/><circle cx="144" cy="48" r="2.5" fill="#141414"/><circle cx="166" cy="46" r="2.5" fill="#141414"/>
-              <path d="M134 34c4-6 12-6 18-2M158 30c4-4 12-4 18 0M150 54l-2 8 5 1M146 68c6 4 14 2 18-2"/>
+              <path d="M134 34c4-6 12-6 18-2M158 30c4-4 12-4 18 0M150 54l-2 8 5 1M146 70 Q155 60 164 70"/>
               <path d="M152 82v36M152 118l-16 26M152 118l16 26M152 92l28-10 14-16M152 92l-26 18"/>
               <path d="M194 66c0-6 5-10 9-6 3 3 0 8-3 9 4-1 8 0 8 4s-4 5-8 4c3 3 1 8-2 8s-7-4-7-8" fill="#fff" stroke-width="3"/>
               <path d="M44 40c-5-5-12 0-7 7l7 7 7-7c5-7-2-12-7-7z" fill="#ff3d8a" stroke-width="2.5"/><path d="M256 100l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#ffd60a" stroke-width="2.5"/>
-              <text x="150" y="146" text-anchor="middle" font-family="Inter, Arial" font-weight="800" font-size="12" fill="#fff" stroke="#141414" stroke-width="2.5" paint-order="stroke">EG, TÁ LÚKAN ER LÆST:</text>
+              <text x="150" y="146" text-anchor="middle" font-family="Inter, Arial" font-weight="800" font-size="12" fill="#fff" stroke="#141414" stroke-width="2.5" paint-order="stroke">EG, TÁ NÆSTA LÚKA ER LÆST:</text>
             </svg>
           </div>
           <div class="jx-cal__body">
             <small>7.–9. flokkur</small>
             <h3>Desember undir sjóneykuni</h3>
-            <p>Bókmentir, miðlar og vísindi vekja forvitni og fáa næmingarnar at seta spurningar. Hvør lúka byrjar við onkrum, sum gevur teimum hug at kanna, tulka og grundgeva fyri sínum hugsanum. Í hvørjari lúku eru læraraviðmerkingar og svar savnað í einum serligum parti, sum lærarin kann lata upp.</p>
+            <p>Bókmentir, miðlar og vísindi fáa næmingarnar at undrast, kanna, tulka og grundgeva. Í útvaldum lúkum kunnu tey savna sítt arbeiði í jólabókina. Læraraviðmerkingar og svar eru savnað í einum serligum parti.</p>
             <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="hadeild.html">Lat kalendaran upp</a><a class="jx-btn jx-btn--sm" href="hadeild.html?alt=1">Sí allar lúkurnar</a></div>
           </div>
         </article>
       </div>
       <p class="jx-cal__note">Vel „Sí allar lúkurnar“, um tú vilt kanna tilfarið og fyrireika undirvísingina frammanundan.</p>
+      <p class="jx-cal__new">Nýtt í ár: <a href="#jolabok">Jólabókin hjá flokkinum</a> · <a href="#saman">Jólasøgan, sum ferðast</a></p>
+    </div>
+  </section>
+
+  <!-- ====================================================== Jólabókin og Jólasøgan, sum ferðast -->
+  <section class="jx-section jx-bridge" id="jolabok">
+    <div class="jx-wrap">
+      <div class="jx-bridge__header">
+        <span class="jx-bridge__kicker">Skapið nakað saman</span>
+        <h2>Jólabókin hjá flokkinum</h2>
+        <p class="jx-section__lead">Í nøkrum lúkum kunnu næmingarnir tekna, skriva, kanna og savna tað, tey hava lært. Veljið síður úr arbeiðinum, og savnið tær í eina jólabók. Tað er valfrítt, og tit kunnu arbeiða við bókini, tá ið tað hóskar.</p>
+        <p>Í hvørjum kalendara eru leistar til forsíðu og síður í bókini. Tit kunnu prenta teir á A4, og einki verður goymt á Snar.</p>
+      </div>
+      <div class="jx-bridge__cards">
+        <article class="jx-bridge__card">
+          <span class="jx-bridge__tag">1.–3. flokkur</span>
+          <h3>Teknið og sigið frá</h3>
+          <p>Børnini tekna, velja orð og siga frá. Lærarin kann skriva orðini hjá teimum, sum ikki skriva enn.</p>
+          <a class="jx-btn jx-btn--sm" href="grunddeild.html#jolabok">Jólabókin í grunddeild</a>
+        </article>
+        <article class="jx-bridge__card">
+          <span class="jx-bridge__tag">4.–6. flokkur</span>
+          <h3>Skrivið og kannið</h3>
+          <p>Næmingarnir savna tekstir, tekningar, royndarúrslit og hugleiðingar í bókina.</p>
+          <a class="jx-btn jx-btn--sm" href="middeild.html#jolabok">Jólabókin í miðdeild</a>
+        </article>
+        <article class="jx-bridge__card">
+          <span class="jx-bridge__tag">7.–9. flokkur</span>
+          <h3>Tulkið og skapið</h3>
+          <p>Næmingarnir velja eitt úrval av søgum, tulkingum, kanningum og myndum, sum tey hava arbeitt við.</p>
+          <a class="jx-btn jx-btn--sm" href="hadeild.html#jolabok">Jólabókin í hádeild</a>
+        </article>
+      </div>
+      <div class="jx-bridge__question"><b>Undrast fyrst.</b> Hvør lúka byrjar við einum spurningi, sum kann fáa næmingarnar at tosa, hugsa og kanna. Spyrjið aftur eftir uppgávuna: Halda tit tað sama nú?</div>
+    </div>
+  </section>
+  <section class="jx-section jx-bridge" id="saman">
+    <div class="jx-wrap">
+      <span class="jx-bridge__kicker">Saman á skúlanum · valfrítt</span>
+      <h2>Jólasøgan, sum ferðast</h2>
+      <p class="jx-section__lead">Ein søga kann ferðast millum floksdeildirnar. Næmingarnir skriva hana, lesa hana upp og tekna myndir til hana. Saman kunnu tey gera eina myndprýdda jólabók ella eina lítla framførslu.</p>
+      <div class="jx-bridge__steps">
+        <div class="jx-bridge__step"><span class="jx-bridge__number">1</span><strong>Hádeildin skrivar</strong>Ein stutt jólasøga á 150–250 orð til yngri børn.</div>
+        <div class="jx-bridge__step"><span class="jx-bridge__number">2</span><strong>Miðdeildin lesur upp</strong>Næmingarnir venja upplestur, velja rødd og gera spurningar.</div>
+        <div class="jx-bridge__step"><span class="jx-bridge__number">3</span><strong>Grunddeildin teknar</strong>Børnini lurta og tekna myndir til søguna.</div>
+      </div>
+      <div class="jx-bridge__links">
+        <a class="jx-btn jx-btn--sm" href="hadeild.html#saman">Skriva søguna</a>
+        <a class="jx-btn jx-btn--sm" href="middeild.html#saman">Lesa søguna upp</a>
+        <a class="jx-btn jx-btn--sm" href="grunddeild.html#saman">Tekna myndirnar</a>
+      </div>
+      <p class="jx-bridge__tip">Tað er ikki neyðugt, at aðrir flokkar eru við. Í kalendarunum eru eisini uppskot til, hvussu hvør flokkur kann arbeiða sjálvstøðugt.</p>
     </div>
   </section>
 
@@ -384,7 +457,9 @@
       </div>
       <div class="jx-steps">
         <div><b>Ein lúka hvønn skúladag.</b> Ein nýggj lúka letur upp hvønn skúladag frá 1. til 18. desember. Jólafrítíðin byrjar 19. desember. Flestu uppgávurnar taka 10–15 minuttir, men nakrar taka umleið 20 minuttir.</div>
-        <div><b>Felags bygnaður.</b> Í hvørjari lúku finnur tú eitt heiti, tilfar, ein spurning til samrøðu, eina felags høvuðsuppgávu og møguleikar at arbeiða víðari. Í miðdeild eru eyka uppgávur til 5. og 6. flokk. Í hádeild eitur framhaldið „Kanna víðari“.</div>
+        <div><b>Undrast og arbeiðið víðari.</b> Hvør lúka byrjar við einum spurningi, sum vekir forvitni. Síðan arbeiða næmingarnir við innihaldinum og loysa uppgávuna. Í miðdeild eru eyka uppgávur til 5. og 6. flokk, og í hádeild kunnu tey velja „Kanna víðari“.</div>
+        <div><b>Jólabókin.</b> Í útvaldum lúkum kunnu næmingarnir skriva, tekna ella savna úrslit. Prentið A4-leistarnar í kalendarunum og savnið síðurnar í eina bók. Hetta er valfrítt.</div>
+        <div><b>Saman á skúlanum.</b> Hádeildin kann skriva eina jólasøgu, miðdeildin lesa hana upp og grunddeildin tekna myndir til hana. Hvør deild kann eisini arbeiða einsamøll.</div>
         <div><b>Vegleiðing og svar.</b> Í hvørjari lúku í grunddeild og miðdeild finnur tú partin „Til læraran“. Í hádeild eru læraraviðmerkingar og svar savnað í einum serligum parti, sum lærarin sjálvur kann lata upp.</div>
         <div><b>Arbeiðshættir.</b> Lærarin kann vísa tilfarið á stórskíggja, so flokkurin arbeiðir við tí í felag. Næmingarnir kunnu eisini loysa fleiri av uppgávunum tvey og tvey ella í smáum bólkum.</div>
         <div><b>Fyrireiking.</b> Trýstir tú á „Sí allar lúkurnar“ her á síðuni, sært tú allar lúkurnar, meðan tú hevur kalendaran opnan. Hetta valið verður ikki goymt. Inni í kalendaranum kanst tú trýsta á „Lat allar lúkur upp“. Tá verða lúkurnar verandi opnar í tínum kaga, til tú trýstir á „Lat lúkurnar aftur“. Tú kanst eisini merkja lúkur sum lidnar og brúka beinleiðis leinki til einstakar lúkur.</div>
@@ -464,6 +539,8 @@
   Array.prototype.forEach.call(root.querySelectorAll('#meira details.jx-det'), function (d) { (d.querySelector('.jx-films').getAttribute('data-films') || '').split(',').forEach(function (f) { add('Filmur', TAGC.film, f.split('|')[1] || '', d.querySelector('summary').textContent, '#meira', d); }); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-funkur a'), function (a) { add('Funka í jólabúna', TAGC.funka, a.querySelector('b').textContent, a.querySelector('span').textContent, a.getAttribute('href')); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-steps > div'), function (d) { add('Til læraran', TAGC.laer, d.querySelector('b').textContent, d.textContent.replace(d.querySelector('b').textContent, ''), '#laerari'); });
+  add('Skapa saman', TAGC.fo, 'Jólabókin hjá flokkinum', 'Prentið leistar og savnið orð, tekningar, tulkingar og kanningar í eina jólabók', '#jolabok');
+  add('Felags uppgáva', TAGC.kal, 'Jólasøgan, sum ferðast', 'Hádeildin skrivar, miðdeildin lesur upp, og grunddeildin teknar', '#saman');
   var q = root.querySelector('#jx-q'), res = root.querySelector('#jx-res'), clr = root.querySelector('#jx-q-clear');
   function mark(text, words) { var out = esc(text); words.forEach(function (w) { if (w.length < 2) return; out = out.replace(new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<mark>$1</mark>'); }); return out; }
   function search() {

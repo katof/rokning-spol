@@ -438,8 +438,8 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
             <li>eina hending, sum broytir okkurt ella skapar spenning</li>
             <li>ein enda, sum loysir støðuna – ella gevur lurtaranum okkurt at hugsa um</li>
             <li>livandi persónar, sum vilja okkurt, og sum vit síggja fyri okkum</li>
-            <li>orð og setningar, sum sjey ára gomul børn skilja, tá ið tey hoyra tey</li>
-            <li>gott føroyskt: les søguna upp, áðrenn tú heldur hana vera liðuga</li>
+            <li>orð og setningar, sum børn í grunddeildini skilja, tá ið tey hoyra søguna</li>
+            <li>gott føroyskt: les søguna upp, áðrenn tú gert hana lidna</li>
           </ul>
         </div>
         <div class="jh-tips">
@@ -738,7 +738,7 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
   function sheetsStory() {
     var p1 = '<div class="jb-sheet"><div class="jb-top"><span>Saman á skúlanum · Jólasøgan, sum ferðast</span><span>' + KAL + '</span></div>' +
       '<h1 class="jb-h">Ein jólasøga til grunddeildina</h1><p class="jb-txt">Skriva eina upprunaliga jólasøgu á umleið 150–250 orð til børn í 1.–3. flokki. Miðdeildin kann lesa hana upp, og grunddeildin kann tekna myndir til hana.</p>' +
-      '<div class="jb-box"><b>Søgan skal hava</b><ul><li>eina greiða byrjan: hvør, hvar og nær?</li><li>eina hending, sum broytir okkurt ella skapar spenning</li><li>ein enda, sum loysir støðuna – ella gevur lurtaranum okkurt at hugsa um</li><li>livandi persónar, sum vilja okkurt</li><li>orð og setningar, sum sjey ára gomul børn skilja, tá ið tey hoyra tey</li><li>gott føroyskt – les søguna upp, áðrenn tú heldur hana vera liðuga</li></ul></div>' +
+      '<div class="jb-box"><b>Søgan skal hava</b><ul><li>eina greiða byrjan: hvør, hvar og nær?</li><li>eina hending, sum broytir okkurt ella skapar spenning</li><li>ein enda, sum loysir støðuna – ella gevur lurtaranum okkurt at hugsa um</li><li>livandi persónar, sum vilja okkurt</li><li>orð og setningar, sum børn í grunddeildini skilja, tá ið tey hoyra søguna</li><li>gott føroyskt – les søguna upp, áðrenn tú gert hana lidna</li></ul></div>' +
       '<div class="jb-plan"><div class="jb-frame"><span>Byrjan</span></div><div class="jb-frame"><span>Hending</span></div><div class="jb-frame"><span>Endi</span></div></div>' +
       '<div class="jb-box"><b>Persónarnir</b>Hvør er høvuðspersónurin? Hvat vil hann ella hon? Hvat stendur í vegin?</div>' + lines(5) +
       '<div class="jb-box"><b>Áðrenn tú letur søguna frá tær</b>Les hana upp fyri einum øðrum. Hvar steðgaði lurtarin upp? Hvørji orð kunnu gerast lættari? Hvussu nógv orð hevur søgan? ______</div></div>';
@@ -765,7 +765,7 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
   /* ------------------------------------------------------------ Spenningur: nær letur næsta lúka upp? */
   var MEMES = [['Eg, meðan eg bíði eftir næstu lúku:', 'sour'], ['Eg, tá lærarin sigur „kanna víðari“:', 'happy'], ['Eg, tá eg haldi meg hava svarið – og so kemur ein nýggjur spurningur:', 'sour'], ['Eg, tá tveir avsláttir ikki geva tað, eg fyrst roknaði við:', 'sour'], ['Eg, tá søgan má vera í mesta lagi 60 orð:', 'sour'], ['Eg, tá lúkan í dag letur upp:', 'happy'], ['Eg, tá eg fái mandluna:', 'happy']];
   (function () {
-    var t0 = today(), locked = false; for (var i = 0; i < DOORS.length; i++) { if (DOORS[i].d === t0 && !unlocked(DOORS[i])) locked = true; }
+    var t0 = today(), locked = !DOORS.some(function (d) { return unlocked(d); }); for (var i = 0; i < DOORS.length; i++) { if (DOORS[i].d === t0 && !unlocked(DOORS[i])) locked = true; }
     var pick = locked ? MEMES[0] : MEMES[1 + Math.floor(Math.random() * (MEMES.length - 1))];
     root.querySelector('#jh-meme').textContent = pick[0];
     root.querySelector('#jh-stick').setAttribute('data-mood', pick[1]);
