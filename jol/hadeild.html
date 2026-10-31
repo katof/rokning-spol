@@ -152,6 +152,70 @@
 @media (max-width: 700px) { .jh-hero__in { grid-template-columns: 1fr; } .jh-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } .jh-door { min-height: 160px; } .jh-door__ic { width: 44px; height: 44px; } }
 @media (max-width: 430px) { .jh-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
+
+/* ---- Undrast · Til jólabókina · Saman á skúlanum (31.10.2026) ---------- */
+.jh-part.jh-und { position: relative; margin-bottom: 16px; padding: 14px 16px 14px 64px; border: 2px solid var(--ink); border-radius: 14px; background: var(--yellow-l); box-shadow: 3px 4px 0 var(--ink); transform: rotate(-.4deg); }
+.jh-und::before { content: "?"; position: absolute; left: 12px; top: 12px; width: 38px; height: 38px; border: 2px solid var(--ink); border-radius: 50%; background: var(--yellow); font-family: "Permanent Marker", cursive; font-size: 1.45rem; line-height: 35px; text-align: center; transform: rotate(-8deg); }
+.jol .jh-und h3, .jol .jh-bok h3 { background: var(--ink); }
+.jh-und__q { margin: 0; font-family: Caveat, "Comic Sans MS", cursive; font-weight: 700; font-size: clamp(1.4rem, 2.4vw, 1.75rem); line-height: 1.2; }
+.jh-part.jh-bok { margin-top: 4px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--pink-l); }
+.jh-bok__top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+.jh-bok__top h3 { margin-bottom: 0; }
+.jol .jh-sticker[hidden], .jol .jh-part[hidden] { display: none !important; }
+.jh-bok__h { font-weight: 800; margin: 0 0 4px; }
+.jh-bok__txt { margin: 0 0 8px; font-size: .98rem; }
+.jh-bok__byrj { margin: 0 0 10px; padding: 0; list-style: none; font-family: Caveat, cursive; font-weight: 700; font-size: 1.2rem; color: #444; }
+.jh-bok__byrj li::before { content: "✎ "; color: var(--pink); }
+.jh-tagline { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 12px; }
+.jh-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.jh-chain { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 6px 0 16px; counter-reset: jh-step; }
+.jh-chain > div { position: relative; padding: 14px 14px 14px 52px; border: 2px solid var(--ink); border-radius: 14px; background: #fff; box-shadow: 3px 3px 0 var(--ink); font-size: .96rem; }
+.jh-chain > div::before { counter-increment: jh-step; content: counter(jh-step); position: absolute; left: 12px; top: 12px; width: 30px; height: 30px; border: 2px solid var(--ink); border-radius: 50%; background: var(--yellow); font-family: "Permanent Marker", cursive; line-height: 26px; text-align: center; }
+.jh-chain > div.is-us { background: var(--pink-l); }
+.jh-chain b { display: block; }
+.jh-check { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.jh-check li { position: relative; padding-left: 30px; }
+.jh-check li::before { content: ""; position: absolute; left: 0; top: 3px; width: 18px; height: 18px; border: 2px solid var(--ink); border-radius: 4px; background: #fff; }
+.jh-booklist { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.jh-booklist a { text-decoration: none; }
+.jh-copied { background: var(--green) !important; color: #fff !important; }
+@media (max-width: 860px) { .jh-chain { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .jh-part.jh-und { padding-left: 16px; padding-top: 58px; } .jh-und::before { top: 10px; } }
+
+/* ---- Prentleistur til jólabókina (A4). Rótin liggur uttan fyri .jol, beint undir body. ---- */
+.jb-print-root { display: none; }
+@media print {
+  @page { size: A4; margin: 12mm; }
+  html.jb-printing, html.jb-printing body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+  html.jb-printing body > *:not(.jb-print-root) { display: none !important; }
+  html.jb-printing .jb-print-root { display: block !important; }
+  .jb-sheet { break-after: page; page-break-after: always; }
+  .jb-sheet:last-child { break-after: auto; page-break-after: auto; }
+}
+.jb-print-root, .jb-print-root * { box-sizing: border-box; }
+.jb-sheet { position: relative; width: 100%; height: 271mm; display: flex; flex-direction: column; gap: 4mm; font-family: Inter, "Segoe UI", Arial, sans-serif; color: #141414; overflow: hidden; }
+.jb-top { display: flex; justify-content: space-between; align-items: baseline; gap: 6mm; padding-bottom: 2mm; border-bottom: 1.5px solid #141414; font-size: 8pt; letter-spacing: .05em; text-transform: uppercase; color: #555; }
+.jb-h { margin: 2mm 26mm 0 0; font-family: "Permanent Marker", "Comic Sans MS", cursive; font-weight: 400; font-size: 24pt; line-height: 1.1; }
+.jb-h--blank { min-height: 14mm; border-bottom: 1.5px solid #141414; font-size: 11pt; font-family: Inter, Arial, sans-serif; color: #777; padding-top: 6mm; }
+.jb-txt { margin: 0; font-size: 10pt; color: #444; line-height: 1.4; }
+.jb-frame { flex: 1 1 0; min-height: 60mm; border: 2px solid #141414; border-radius: 4mm; position: relative; }
+.jb-frame--s { flex: 0 0 95mm; }
+.jb-frame span { position: absolute; left: 3mm; top: 2mm; font-size: 8pt; color: #888; text-transform: uppercase; letter-spacing: .08em; }
+.jb-frames { flex: 0 0 120mm; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 4mm; }
+.jb-frames .jb-frame { min-height: 0; }
+.jb-lines { display: flex; flex-direction: column; }
+.jb-line { height: 10mm; border-bottom: 1px solid #9a9a9a; font-family: Caveat, "Comic Sans MS", cursive; font-size: 15pt; color: #aaa; display: flex; align-items: flex-end; padding-bottom: 1mm; }
+.jb-foot { display: flex; gap: 8mm; font-size: 10pt; padding-top: 2mm; }
+.jb-foot span { flex: 1; border-bottom: 1px solid #141414; padding-bottom: 1mm; }
+.jb-doodle { position: absolute; right: 0; top: 8mm; width: 22mm; height: 22mm; }
+.jb-cover { justify-content: flex-start; }
+.jb-cover .jb-h { font-size: 44pt; text-align: center; margin: 8mm 0 0; }
+.jb-cover .jb-sub { text-align: center; font-size: 12pt; color: #444; margin: 0; }
+.jb-box { border: 1.5px solid #141414; border-radius: 3mm; padding: 3mm 4mm; font-size: 10.5pt; line-height: 1.45; }
+.jb-box b { display: block; margin-bottom: 1mm; }
+.jb-box ul { margin: 0; padding-left: 5mm; }
+.jb-plan { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; flex: 0 0 62mm; }
+.jb-plan .jb-frame { min-height: 0; }
 </style>
 <style>body { margin: 0; }</style>
 <style>html.i-rammu :is(.jg-crumb, .jm-crumb, .jh-crumb) { display: none !important; }</style>
@@ -281,11 +345,13 @@
         </div>
         <div class="jh-open__body">
           <div class="jh-open__col">
+            <div class="jh-part jh-und" id="jo-und-w"><h3 id="jo-und-h">Undrast</h3><p class="jh-und__q" id="jo-und"></p></div>
             <div class="jh-part"><div class="jh-src" id="jo-src"></div><p class="jh-tx" id="jo-tx" style="margin-top:12px"></p><div id="jo-hold"></div><div id="jo-media"></div></div>
             <div class="jh-part"><h3 id="jo-upp-h">Uppgáva</h3><ul class="jh-task" id="jo-upp"></ul><p class="jh-tx" id="jo-upp-after" style="font-size:1rem;margin-top:10px"></p><div class="jh-hint" id="jo-hint" hidden></div><div class="jh-src" id="jo-btns" style="margin-top:12px"></div></div>
           </div>
           <div class="jh-open__col">
             <div class="jh-part"><h3 id="jo-vid-h">Kanna víðari</h3><div class="jh-vid" id="jo-vid"></div></div>
+            <div class="jh-part jh-bok" id="jo-bok" hidden><div class="jh-bok__top"><h3>📖 Til jólabókina</h3><span class="jh-sticker jh-sticker--yellow" id="jo-bok-stor" hidden>Góð síða til bókina</span></div><p class="jh-bok__h" id="jo-bok-h"></p><p class="jh-bok__txt" id="jo-bok-txt"></p><ul class="jh-bok__byrj" id="jo-bok-byrj"></ul><button class="jh-btn jh-btn--sm" type="button" id="jo-bok-print">🖨 Prenta síðu til jólabókina</button></div>
             <div class="jh-part">
               <details class="jh-det" id="jo-laer-det"><summary>Til læraran – viðmerkingar og svar (trýst fyri at síggja tey)</summary><div class="jh-det__b" id="jo-laer"></div></details>
             </div>
@@ -337,6 +403,67 @@
     </div>
   </section>
 
+  <!-- ============================================ Jólabókin -->
+  <section class="jh-section" id="jolabok">
+    <div class="jh-wrap jh-section__in">
+      <div><span class="jh-sticker jh-sticker--yellow">Valfrítt</span><h2 style="margin-top:12px">Jólabókin</h2><p style="color:var(--muted)">Eitt savn av tí besta, flokkurin ger í desember.</p></div>
+      <div>
+        <p>Í seks lúkum er ein uppgáva merkt <b>«Til jólabókina»</b>. Úrslitini kunnu gerast síður í eini jólabók hjá flokkinum: eitt ørindi, ein niðurstøða úr eini kanning, ein tulking, ein myndarøð ella ein søga. Tað er ikki ætlanin, at allar lúkur skulu geva eina síðu. Veljið tað, sum tit eru stolt av.</p>
+        <div class="jh-booklist" id="jh-booklist"></div>
+        <div class="jh-btns">
+          <button class="jh-btn jh-btn--pink" type="button" id="jh-print-cover">🖨 Prenta forsíðu</button>
+          <button class="jh-btn" type="button" id="jh-print-blank">🖨 Prenta tóman leist</button>
+        </div>
+        <details class="jh-det"><summary>Til læraran – jólabókin</summary><div class="jh-det__b">Leisturin er A4 og verður prentaður svartur á hvítum. Næmingarnir skriva og tekna á pappírið, og einki verður goymt á síðuni. Bókin kann eisini gerast talgild í skúlans egnu skipan, um tit heldur vilja tað.
+
+Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður uttan hana. Ein góð mannagongd er at lata hvønn næming velja eina ella tvær síður, sum hann ella hon vil arbeiða víðari við, áðrenn bókin verður sett saman.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ Saman á skúlanum -->
+  <section class="jh-section" id="saman">
+    <div class="jh-wrap jh-section__in">
+      <div><span class="jh-sticker jh-sticker--pink">Saman á skúlanum</span><h2 style="margin-top:12px">Jólasøgan, sum ferðast</h2><p style="color:var(--muted)">Ein valfrí avbjóðing: tit skriva, miðdeildin lesur upp, grunddeildin teknar.</p></div>
+      <div>
+        <p>Tit skriva eina upprunaliga jólasøgu til børn í 1.–3. flokki. Søgan ferðast síðan víðari á skúlanum, og at enda kann hon gerast ein felags jólabók ella ein lítil framførsla.</p>
+        <div class="jh-chain">
+          <div class="is-us"><b>Hádeildin skrivar</b>Ein søga á umleið 150–250 orð, sum er góð at lesa upp fyri yngri børnum.</div>
+          <div><b>Miðdeildin lesur upp</b>Næmingarnir venja upplestur, velja, hvussu søgan skal ljóða, og gera stuttar spurningar til innihaldið.</div>
+          <div><b>Grunddeildin teknar</b>Børnini lurta eftir søguni og tekna myndir til hana.</div>
+        </div>
+        <div class="jh-tip" style="margin-bottom:12px"><b>Søgan skal hava</b>
+          <ul class="jh-check">
+            <li>eina greiða byrjan: hvør, hvar og nær?</li>
+            <li>eina hending, sum broytir okkurt ella skapar spenning</li>
+            <li>ein enda, sum loysir støðuna – ella gevur lurtaranum okkurt at hugsa um</li>
+            <li>livandi persónar, sum vilja okkurt, og sum vit síggja fyri okkum</li>
+            <li>orð og setningar, sum sjey ára gomul børn skilja, tá ið tey hoyra tey</li>
+            <li>gott føroyskt: les søguna upp, áðrenn tú heldur hana vera liðuga</li>
+          </ul>
+        </div>
+        <div class="jh-tips">
+          <div class="jh-tip"><b>Byrja við lúku 11</b>Søgan við í mesta lagi 60 orðum kann gerast kjarnin í tí longri søguni. Hvat má leggjast afturat, tá ið lurtarin er sjey ár og ikki sjeyti?</div>
+          <div class="jh-tip"><b>Skriva til eitt barn, sum lurtar</b>Hugsa um, hvat lurtarin skal síggja fyri sær. Ljóð, litir og rørslur virka betur enn langar frágreiðingar. Ein setningur, sum kemur aftur, hjálpir yngri børnum at fylgja við – og gevur tekningunum nakað at byggja á.</div>
+          <div class="jh-tip" style="background:var(--pink-l)"><b>Kanna víðari</b>Hvussu kann ein barnasøga vera hugvekjandi uttan at siga lesaranum, hvat hann skal halda? Finn eina søgu, tú kendi sum barn, og kanna, hvussu hon ger tað.</div>
+        </div>
+        <div class="jh-btns">
+          <button class="jh-btn jh-btn--pink" type="button" id="jh-print-story">🖨 Prenta skrivileist og eftirlitslista</button>
+          <button class="jh-btn" type="button" id="jh-copy-msg">📋 Avrita boðini til hinar lærararnar</button>
+        </div>
+        <details class="jh-det"><summary>Til læraran – soleiðis kanst tú skipa avbjóðingina</summary><div class="jh-det__b"><b>Tíð:</b> Umleið tríggjar lektiónir: ein til at leggja til rættis og skriva fyrstu útgávuna, ein til at lesa upp í bólkum og rætta, og ein til at gera søguna lidna.
+
+<b>Uttan aðrar flokkar:</b> Næmingarnir lesa søgurnar upp fyri hvørjum øðrum í bólkum og meta um tær við eftirlitslistanum. Tit kunnu taka søgurnar upp sum ljóðfílu, ella bólkarnir kunnu býta søgur og tekna myndir hvør til annans søgu. Ein søga kann eisini verða lisin upp fyri flokkinum sum ein lítil framførsla.
+
+<b>Við øðrum flokkum:</b> Veljið eina ella tvær søgur saman við næmingunum. Avrita boðini omanfyri og send tey til lærararnar í miðdeild og grunddeild. Jólakalendararnir hjá teimum hava sín part av avbjóðingini.
+
+<b>Fakligt:</b> søgubygnaður, persónslýsing, at skriva til ein ávísan móttakara, orðaval og munnligt mál.
+
+<b>Næmingaavrik:</b> Einki verður goymt á síðuni. Søgurnar verða skrivaðar á pappír ella í skúlans egnu skipan, og tit avgera sjálv, hvat verður víst og fyri hvørjum.</div></details>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================================ Til læraran -->
   <section class="jh-section" id="laerari">
     <div class="jh-wrap jh-section__in">
@@ -367,7 +494,7 @@
   root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
 
   var FAK = { fo: ['Føroyskt', 'var(--pink)'], da: ['Danskt', 'var(--red)'], en: ['Enskt', 'var(--blue)'], st: ['Støddfrøði', 'var(--green)'], al: ['Alisfrøði og evnafrøði', '#8338ec'], sa: ['Samfelagsfrøði', '#fb8500'], so: ['Søga og samtíð', '#6f4e37'], kr: ['Kristnikunnleiki og átrúnaður', '#0096c7'], la: ['Landafrøði', '#2a9d8f'], ml: ['Myndlist og tónleikur', '#e5383b'] };
-  var LABEL = { fo: 'Uppgáva', da: 'Opgave', en: 'Task' }, VIDLABEL = { fo: 'Kanna víðari', da: 'Undersøg mere', en: 'Go further' };
+  var LABEL = { fo: 'Uppgáva', da: 'Opgave', en: 'Task' }, VIDLABEL = { fo: 'Kanna víðari', da: 'Undersøg mere', en: 'Go further' }, UNDLABEL = { fo: 'Undrast', da: 'Undren', en: 'Wonder' };
   var MONTHS = ['januar', 'februar', 'mars', 'apríl', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
   var DAYS = ['sunnudagur', 'mánadagur', 'týsdagur', 'mikudagur', 'hósdagur', 'fríggjadagur', 'leygardagur'];
 
@@ -375,7 +502,8 @@
      d · t · fak · min · ic · lang (mál í uppgávuni) · src [[tekstur, slóð]] · tx (inngangur) · hold (tekstur á síðuni)
      upp [punkt] · uppAfter · hint · vid (kanna víðari) · laer · yt [[id, tekstur]] */
   var DOORS = [
-    { d: '2026-12-01', t: 'Hvussu ljóða føroysk jól?', fak: ['fo'], min: '10–15', ic: 'k-note', lang: 'fo',
+    { d: '2026-12-01', und: 'Kann ein gamal jólasangur framvegis siga nakað satt um, hvussu vit halda jól í dag?', bok: { h: 'Eitt ørindi um mín jólaaftan', txt: 'Skriva eitt ørindi á fýra reglur um ein jólaaftan, sum tú kennir. Brúka eina mynd av ljósi og eina av myrkri, eins og sangirnir gera. Tekna ella set eina mynd afturat.', byrj: ['Myrkt er úti, men …'] },
+      t: 'Hvussu ljóða føroysk jól?', fak: ['fo'], min: '10–15', ic: 'k-note', lang: 'fo',
       src: [['«Jólaaftan» eftir Edmund í Garði – í Kórbók 2 á Snar (PDF)', 'https://snar.fo/fileadmin/05_bokavising/korbok/korbok2/files/assets/common/downloads/K.pdf']],
       tx: 'Ein tekstur kann skapa eina heila verð við fáum orðum. Í sanginum «Jólaaftan» eftir Edmund í Garði møta vit bæði landslagi, menniskjum og jólahýri.\n\nOpna fyrst «Jólaaftan» í Kórbók 2, og les tey fimm ørindini. Tú kanst lesa tekstin uttan at lesa nótarnar. Sangurin niðanfyri er til samanberingar í «Kanna víðari».',
       upp: ['Finn tvey dømi um orð, sum knýta tekstin at einum heimligum umhvørvi.', 'Vel eina endurtøku. Hvat ger hon við tekstin?', 'Hvussu verða menniskjuni lýst í øðrum ørindi? Vís á orð, sum stuðla tínum svari.'],
@@ -383,7 +511,7 @@
       hold: 'hugnaligt',
       vid: 'Hvør talar í sanginum, og hvønn vendir røddin sær til? Kanna, um hetta broytist gjøgnum ørindini.\n\nSamanber við «Hví man alt vera so hugnaligt í kvøld!» eftir Kristin í Geil (teksturin stendur omanfyri): hvat hava sangirnir í felag, og hvørjir munir eru á teimum? Kanna serliga myndir av ljósi og myrkri.',
       laer: 'Arbeiðið snýr seg um orðaval, endurtøku, rødd og tulking. Næmingarnir skulu stuðla svarunum við tekstinum. Í 7. flokki kunnu tey arbeiða við fyrsta og øðrum ørindi.' },
-    { d: '2026-12-02', t: 'Fært tú 30 % í avsláttri, tá ið tú fyrst fært 20 % og síðan 10 %?', fak: ['st'], min: '10–15', ic: 'k-percent', lang: 'fo',
+    { d: '2026-12-02', und: 'Hví er tað so lætt at halda, at 20 % og 10 % geva 30 % – og hvør tænir á, at vit halda tað?', t: 'Fært tú 30 % í avsláttri, tá ið tú fyrst fært 20 % og síðan 10 %?', fak: ['st'], min: '10–15', ic: 'k-percent', lang: 'fo',
       src: [],
       tx: 'Ein vøra kostar 500 kr. Handilin setur hana 20 % niður. Við kassan fært tú síðan 10 % av tí nýggja prísinum í eyka avsláttri.\n\nHetta er eitt hugsað roknidømi.',
       upp: ['Rokna prísin eftir fyrsta avsláttin.', 'Rokna prísin, tú skalt gjalda við kassan.', 'Hvussu nógvar krónur sparir tú til samans?', 'Hvussu nógv prosent av upprunaprísinum hevur tú spart?'],
@@ -391,13 +519,14 @@
       vid: 'Handilin gevur í staðin 30 % í avsláttri beinanvegin. Hvussu stórur verður munurin á endaligu prísunum?',
       btns: [['Prenta roknistykki – fleiri prosentstykki', 'https://snar.fo/funkur/prenta-roknistykki-1']],
       laer: 'Svar: Fyrst 400 kr., síðan 360 kr. Samlaði avslátturin er 140 kr., svarandi til 28 %. Við 30 % avsláttri kostar vøran 350 kr. Munurin er 10 kr.\nFunkan Prenta roknistykki ger prosentuppgávur við heilum tølum í svarinum, til at venja víðari.' },
-    { d: '2026-12-03', t: 'Hvem har mandlen?', fak: ['da'], min: '10–15', ic: 'k-bowl', lang: 'da',
+    { d: '2026-12-03', und: 'Er det altid rigtigt at sige sandheden – også når det ødelægger en hyggelig tradition?', t: 'Hvem har mandlen?', fak: ['da'], min: '10–15', ic: 'k-bowl', lang: 'da',
       src: [], hold: 'mandlen',
       tx: 'I mange danske familier gemmer man en hel mandel i risalamanden juleaften. Den, der finder mandlen, får mandelgaven. Læs den nyskrevne, fiktive tekst nedenfor.',
       upp: ['Find et sted, hvor læseren ved noget, som nogle af de andre personer ved bordet ikke ved.', 'Hvorfor gemmer Freja mandlen? Find noget i teksten, som støtter dit forslag.', 'Skriv to nye replikker, som kunne afslutte scenen.'],
       vid: 'Undersøg mere: Hvordan kan den sidste sætning ændre vores opfattelse af faren?',
       laer: 'Dentur er á persónslýsing, undirtekst og munnligt danskt. Fleiri tulkingar kunnu vera væl grundaðar. Næmingarnir kunnu hava ymisk uppskot til, hví pápin skumpar tallerkin burtur. Tey skulu grundgeva við tekstinum.' },
-    { d: '2026-12-04', t: 'Hvat brúka jólaljósini?', fak: ['al'], min: '10–15', ic: 'k-bulb', lang: 'fo',
+    { d: '2026-12-04', und: '„LED-ljós brúka næstan einki.“ Hvussu kunnu vit kanna, um ein slíkur pástandur um orkunýtslu er rættur?', bok: { h: 'Hvat kostar jólaljósið?', txt: 'Set niðurstøðuna úr kanningini upp sum eina lítla upplýsingasíðu: ein talva, eitt súlurit ella ein tekning og tveir setningar við tínum ráði til ein, sum skal keypa ljósketu.', byrj: ['Okkara niðurstøða er, at …', 'Vit ráða tær at …, tí …'] },
+      t: 'Hvat brúka jólaljósini?', fak: ['al'], min: '10–15', ic: 'k-bulb', lang: 'fo',
       src: [],
       tx: 'Tvær ljósketur skulu lýsa seks tímar um dagin í 18 dagar.\n\nÍ hesum hugsaða døminum er effektin hjá ljósketu A 8 W, og effektin hjá B er 40 W. Orkunýtslan verður síðan roknað í kWh. Vit rokna við einum elprísi á 2,50 kr. fyri kWh.\n\nTølini eru gjørd til uppgávuna.',
       upp: ['Hvussu nógvar tímar lýsir hvør ketan til samans?', 'Rokna orkunýtsluna hjá báðum ketunum.', 'Rokna kostnaðin hjá báðum.', 'Hvussu nógvar ferðir so nógva orku brúkar B sum A?'],
@@ -405,26 +534,27 @@
       vid: 'Hvørjar aðrar upplýsingar hevði tú viljað havt, áðrenn tú valdi, hvørja ketu tú skuldi keypa?',
       btns: [['Jólaperur – spæl við kotur', 'https://snar.fo/funkur/jolafunkur/jolakotur']],
       laer: 'Svar: 108 tímar. A brúkar 0,864 kWh og kostar 2,16 kr. B brúkar 4,32 kWh og kostar 10,80 kr. B brúkar fimm ferðir so nógva orku. Tosa um munin á effekt og orkunýtslu.\nÍskoyti: funkan Jólaperur (knappurin niðanfyri) hevur átta smáar uppgávur, har næmingarnir skriva kotu og fáa perur at hanga og blinka. Uppgávur 4–5 snúgva seg um tíðina í blinkinum, uppgáva 7 um eina for-loop. Hetta framhaldið snýr seg um forritan og animatión; tað er ikki ein útrokning av elnýtslu.' },
-    { d: '2026-12-07', t: 'Scrooge: What is Christmas worth?', fak: ['en'], min: '10–15', ic: 'k-coins', lang: 'en',
+    { d: '2026-12-07', und: 'Can something be worth a lot without costing anything – and who decides what Christmas is worth?', t: 'Scrooge: What is Christmas worth?', fak: ['en'], min: '10–15', ic: 'k-coins', lang: 'en',
       src: [['Upprunateksturin hjá Dickens (Project Gutenberg)', 'https://www.gutenberg.org/cache/epub/24022/pg24022-images.html']], hold: 'scrooge',
       tx: 'Charles Dickens skrivaði «A Christmas Carol». Her er ein stytt endursøgn á lættari enskum, grundað á samrøðuna millum Scrooge og systurson hansara í fyrsta parti.',
       upp: ['Work in pairs. One of you speaks for Scrooge. The other speaks for his nephew.', 'Explain what your character thinks makes Christmas valuable.', 'Use one detail from the text.', 'Ask the other character one question.'],
       uppAfter: 'Finish this sentence together: They disagree about …',
       vid: 'Go further: Can something have value without having a price? Give one example and explain it.',
       laer: 'Stuðulsorð: wealth, kindness, value, price, agree, disagree. Met um, hvussu næmingarnir brúka tekstin og samskifta á enskum.' },
-    { d: '2026-12-08', t: 'Jólakvøldið í 1950 – lýst í 2004', fak: ['so'], min: '10–15', ic: 'k-church', lang: 'fo',
+    { d: '2026-12-08', und: 'Eru jólini ein siðvenja, vit arva, ella nakað, vit skapa av nýggjum hvørt ár?', bok: { h: 'Jól í 2026 – til ein lesara í 2076', txt: 'Skriva eitt stutt tekstbrot um ein jólamorgun ella eitt jólakvøld, sum tú hevur upplivað. Skriva soleiðis, at ein, sum lesur tað um 50 ár, skilur, hvussu jól vóru í 2026. Skil ímillum tað, sum hendi, og tað, sum tú kendi.', byrj: ['Í 2026 …', 'Tú, sum lesur hetta í 2076, veitst kanska ikki, at …'], stor: true },
+      t: 'Jólakvøldið í 1950 – lýst í 2004', fak: ['so'], min: '10–15', ic: 'k-church', lang: 'fo',
       src: [['Frits Johannesen: «Jólakvøld í Oyndarfjarðar kirkju 1950» (in.fo, 22. des. 2004)', 'https://in.fo/grein/j-lakv-ld-oyndarfjar-ar-kirkju-1950']],
       tx: 'Ein tekstur um fortíðina er eisini skrivaður í einari ávísari tíð.\n\nFrits Johannesen skrivaði greinina «Jólakvøld í Oyndarfjarðar kirkju 1950», sum varð útgivin 22. desember 2004. Í byrjanini lýsir hann kirkjurúmið, ljósið og fólkið.\n\nLes fyrsta frágreiðandi tekstbrotið undir yvirskriftini, fram til partin, sum byrjar við umrøðuni av altartalvuni.',
       upp: ['Hvussu nógv ár eru millum jólakvøldið, greinin lýsir, og útgávuárið?', 'Finn tvey dømi um ítøkilig viðurskifti og eitt dømi um eina meting ella kensluborna lýsing.', 'Hvat kann hetta brotið hjálpa okkum at skilja um jól fyrr?', 'Hvat kunnu vit ikki staðfesta við hesum brotinum einsamøllum?'],
       vid: 'Vel eina aðra keldu, sum tú hevði viljað samanborið við tekstin: eina mynd, eitt bræv frá umleið 1950 ella eitt kirkjuskjal. Greið frá valinum.',
       laer: 'Tíðarmunurin er 54 ár. Skiljið millum árið, sum verður lýst, og árið, tá ið teksturin varð skrivaður. Arbeiðið við kelduvirði og sjónarhorni.' },
-    { d: '2026-12-09', t: 'Sama vøra, ymisk ávirkan', fak: ['sa'], min: '10–15', ic: 'k-hoodie', lang: 'fo',
+    { d: '2026-12-09', und: 'Hvussu royna lýsingar at ávirka okkara jólahald – og leggja vit sjálv merki til tað?', t: 'Sama vøra, ymisk ávirkan', fak: ['sa'], min: '10–15', ic: 'k-hoodie', lang: 'fo',
       src: [], hold: 'lysingar',
       tx: 'Her eru tvær hugsaðar lýsingar fyri somu hettutroyggju. Prísurin er 349 kr.\n\nArbeiðið tvey og tvey.',
       upp: ['Hvat fáa tit at vita um sjálva vøruna í hvørjari lýsing?', 'Hvørjar kenslur ella ynskir roynir lýsing B at vekja? Hvat fáa vit í veruleikanum at vita við orðunum «Bert hesa vikuna»?', 'Hvønn halda tit, at hvør lýsing vendir sær til? Grundgevið.', 'Skrivið eina nýggja lýsing við í mesta lagi 25 orðum. Veljið ein ávísan málbólk.'],
       vid: 'Hvussu hevði tað ávirkað lýsingina, um hon varð borin fram av einum persóni, sum nógv ung fylgja?',
       laer: 'Arbeiðið við avsendara, málbólki, upplýsingum og sannføring. Tað er ikki givið frammanundan, hvør lýsing virkar best.' },
-    { d: '2026-12-10', t: 'Vel tína vinnarareglu', fak: ['st'], min: '10–15', ic: 'k-dice', lang: 'fo',
+    { d: '2026-12-10', und: 'Hví halda vit ofta, at nakað er sannlíkt, bara tí at tað kennist so?', t: 'Vel tína vinnarareglu', fak: ['st'], min: '10–15', ic: 'k-dice', lang: 'fo',
       src: [], hold: 'reglur',
       tx: 'Í einum hugsaðum gávuspæli sleppur tú at velja eina av tveimum reglum.',
       upp: ['Hvørja reglu hevði tú valt beinanvegin?', 'Skriva allar møguleikarnar við tveimum terningum, sum geva summin seks.', 'Rokna vinningslíkindini við báðum reglum.', 'Samanber úrslitið við títt fyrsta val.'],
@@ -432,19 +562,21 @@
       vid: 'Hvør summur við tveimum terningum gevur somu vinningslíkindi sum ein seksari við einum terningi?',
       btns: [['Terningar – royn reglurnar 100 ferðir', 'https://snar.fo/funkur/terningar'], ['Jatsi – spæl við fimm terningum', 'https://snar.fo/funkur/spoel/stoeddfroedi/jatsi-1']],
       laer: 'Svar: A: 1/6 = 6/36. B: 5/36. Møguleikarnir eru (1,5), (2,4), (3,3), (4,2) og (5,1). A gevur størri vinningslíkindi. Summurin sjey gevur 6/36.\nFunka: í Terningar (Líkindarokning) kann flokkurin kasta 100 ferðir við einum og við tveimum terningum og samanbera royndarúrslitið við tey væntaðu líkindini. Úrslitini av 100 køstum nýtast ikki at vera júst tey somu sum ástøðiligu líkindini; samanberið munirnar. Jatsi er eitt annað terningaspæl, har vit eisini kunnu kanna líkindi.' },
-    { d: '2026-12-11', t: 'Ferðin hjá einari jólagávu', fak: ['la'], min: '10–15', ic: 'k-map', lang: 'fo',
+    { d: '2026-12-11', und: 'Hvør eigur ábyrgdina av ferðini hjá einari jólagávu – tann, sum framleiðir, tann, sum selur, ella tann, sum keypir?', t: 'Ferðin hjá einari jólagávu', fak: ['la'], min: '10–15', ic: 'k-map', lang: 'fo',
       src: [], hold: 'ferdin',
       tx: 'Ein sjokulátupláta liggur undir jólatrænum í Føroyum. Áðrenn hon kom hagar, hevur hon verið partur av einari longri framleiðsluketu.\n\nArbeiðið við hesi hugsaðu ferðini.',
       upp: ['Finn støðini á einum heimskorti, og tekna ferðina.', 'Greið frá muninum á ráevni, framleiðslu og sølu við støði í døminum.', 'Nevn tvey arbeiði, sum kunnu vera partur av ferðini.', 'Hvørjar upplýsingar mangla, um vit skulu meta um samlaðu umhvørvisávirkanina?'],
       vid: 'Er landið, sum stendur á pakkanum, altíð nóg mikið til at greiða frá allari ferðini hjá vøruni? Grundgev við støði í døminum.',
       laer: 'Hav eitt heimskort tøkt, talgilt ella á pappíri. Knýtið kortlesing saman við tilfeingi, framleiðslu og altjóða sambondum. Næmingarnir kunnu til dømis sakna upplýsingar um flutningshátt, orkunýtslu og pakkitilfar.' },
-    { d: '2026-12-14', t: 'Hvat sigur ein jólamynd um frásøgnina?', fak: ['kr'], min: '15–20', ic: 'k-frame', lang: 'fo',
+    { d: '2026-12-14', und: 'Kann ein mynd siga satt um eina hending, sum listafólkið ongantíð sá?', bok: { h: 'Mín jólamynd – og hví', txt: 'Tekna ella mála eina lítla jólamynd, ella vel eina mynd, sum tú hevur tikið. Skriva tríggjar setningar: Hvat valdi tú at vísa? Hvat valdi tú burtur? Hvussu vilt tú, at onnur tulka myndina?', byrj: ['Eg valdi at vísa …', 'Eg valdi burtur …'] },
+      t: 'Hvat sigur ein jólamynd um frásøgnina?', fak: ['kr'], min: '15–20', ic: 'k-frame', lang: 'fo',
       src: [['Sandro Botticelli: «Mystic Nativity» (1500) – National Gallery', 'https://www.nationalgallery.org.uk/paintings/sandro-botticelli-mystic-nativity'], ['Jólaevangeliið hjá Lukasi (PDF á Snar)', 'https://snar.fo/fileadmin/00_filagoymsla/Heimspeki_TEMA_KT/13._Jolaevangeliid_raettlisid_TD_til_prent.pdf']], hold: 'talva',
       tx: 'Listafólk velja, hvat tey vísa, og hvat tey leggja dent á.\n\nHygg at málninginum «Mystic Nativity» eftir Sandro Botticelli. Hann er frá 1500. Les síðan bíbliutekstin á síðu 6 í skjalinum, fram til hirðarnir fara avstað aftur. Brúka ikki fríu endursøgnina á síðunum 1–3 til hesa samanberingina.',
       upp: ['Gerið eina talvu við tveimum teigum: Hetta síggja vit í myndini – Hetta finna vit í tekstinum.', 'Veljið trý viðurskifti at kanna, til dømis persónar, umhvørvi og hendingar. Skrivið, hvussu hvørt viðurskifti verður lýst í myndini og í tekstinum.', 'Veljið síðan ein smálut í myndini, sum ikki er beinleiðis lýstur í hesum tekstbrotinum.', 'Greiðið frá, hvussu smáluturin kann ávirka tulkingina av myndini.'],
       vid: 'Lesið frágreiðingina hjá National Gallery. Hvussu knýtir savnið myndina at tíðini, tá ið hon varð málað?',
       laer: 'Skiljið millum tekst, mynd og tulking. At ein smálutur ikki stendur í Lukasi, merkir ikki, at hann ikki kann hava støði í øðrum tekstum ella siðum.' },
-    { d: '2026-12-15', t: 'Ein søga við í mesta lagi 60 orðum', fak: ['fo'], min: '10–15', ic: 'k-pen', lang: 'fo',
+    { d: '2026-12-15', und: 'Kann ein søga gerast sterkari, tá ið hon hevur færri orð?', bok: { h: 'Mín søga við í mesta lagi 60 orðum', txt: 'Reinskriva søguna, og tekna eina lítla mynd ella eitt tekin, sum ikki avdúkar endan. Skriva undir søguna, hvussu nógv orð hon hevur, og ein setning um, hví tú endaði søguna, sum tú gjørdi.', stor: true },
+      t: 'Ein søga við í mesta lagi 60 orðum', fak: ['fo'], min: '10–15', ic: 'k-pen', lang: 'fo',
       src: [], hold: 'utgangs',
       tx: 'Ein stutt søga krevur neyvt orðaval. Lesarin skal fáa nóg mikið at vita til at skilja støðuna og samstundis fáa rúm at hugsa sjálvur.\n\nSkriva eina søgu við í mesta lagi 60 orðum. Søgan skal hava hetta – brúka listan til at kanna søguna, tá tú hevur skrivað hana:',
       upp: ['fara fram í Føroyum í desember;', 'hava ein persón, sum vil okkurt;', 'hava eina hending, sum broytir støðuna;', 'enda við einum setningi, sum fær lesaran at hugsa.'],
@@ -452,14 +584,14 @@
       vid: 'Strika fimm orð, og kanna, um søgan gerst neyvari.',
       btns: [['Tilvildarligir spurningar – hvør lesur upp?', 'https://snar.fo/funkur/tilvildarligir-spurningar-/-noevn-1']],
       laer: 'Met um søgugongd, orðaval og virknaðin av endanum. Hámarkið er ein arbeiðskarmur; meining og mál hava størri týdning enn sjálv orðateljingin.\nSet nøvnini í Tilvildarligir spurningar og lat funkuna velja, hvør lesur søguna upp fyri flokkinum.' },
-    { d: '2026-12-16', t: 'Hvør heldur samfelagnum gangandi?', fak: ['sa'], min: '10–15', ic: 'k-city', lang: 'fo',
+    { d: '2026-12-16', und: 'Hvørji halda jólini gangandi, meðan flest onnur hava frí – og leggja vit yvirhøvur merki til tey?', t: 'Hvør heldur samfelagnum gangandi?', fak: ['sa'], min: '10–15', ic: 'k-city', lang: 'fo',
       src: [],
       tx: 'Í einari hugsaðari føroyskari bygd er jólakvøld. Nógv fólk eru heima. Samstundis skulu fólk hava atgongd til neyðugar tænastur.\n\nVeljið tríggjar tænastur, sum tit meta hava stóran týdning hetta kvøldið. Tit kunnu til dømis hugsa um heilsuhjálp, elveiting, vatnveiting, samskifti og bjarging. Fyri hvørja tænastu skulu tit greiða frá:',
       upp: ['hvønn tørv hon nøktar;', 'hvørjum starvsfólkum ella øðrum tænastum hon er tengd at;', 'hvat kann henda, um hon steðgar.'],
       uppAfter: 'Teknið sambondini við pílum. Veljið eitt samband, og greiðið flokkinum frá, hví tað hevur týdning.',
       vid: 'Hvør er munurin á einum steðgi í tíggju minuttir og einum steðgi í tvey samdøgur?',
       laer: 'Arbeiðið við arbeiðsbýti, felags tørvum og tí, hvussu tænastur eru tengdar hvør at aðrari. Næmingarnir skulu grundgeva fyri valinum. Uppgávan krevur ikki upplýsingar um arbeiðið hjá foreldrunum.' },
-    { d: '2026-12-17', t: 'Can a story sell a gift?', fak: ['en'], min: '10–15', ic: 'k-play', lang: 'en',
+    { d: '2026-12-17', und: 'Can a story make us want to buy something without telling us anything about the product?', t: 'Can a story sell a gift?', fak: ['en'], min: '10–15', ic: 'k-play', lang: 'en',
       src: [['Upplýsingar frá avsendaranum (John Lewis Partnership)', 'https://www.johnlewispartnership.co.uk/media-centre/latest-news/2024/21290']], hold: 'phrases',
       yt: [['55ghIHTaRzM', 'The Gifting Hour – John Lewis, jólalýsing 2024']],
       tx: 'Hyggið at bretsku jólalýsingini «The Gifting Hour» hjá John Lewis frá 2024. Lýsingin fylgir einari kvinnu, sum leitar eftir einari gávu til systur sína.\n\nWatch the advert once. Then work in pairs.',
@@ -467,7 +599,8 @@
       uppAfter: 'Choose one of your answers and record it in about 30 seconds, or present it to another pair. Refer to a specific moment in the advert.',
       vid: 'Go further: What might change if the same images had a very different soundtrack?',
       laer: 'Dentur er á enskt samskifti, miðlafatan og grundgeving við ítøkiligum dømum. Lærarin kann vísa lýsingina felags.' },
-    { d: '2026-12-18', t: 'Desember í Føroyum, uttan orð', fak: ['ml'], min: 'umleið 20', ic: 'k-camera', lang: 'fo',
+    { d: '2026-12-18', und: 'Skilja øll eina søgu uttan orð á sama hátt – ella er tað júst tað, sum ger hana sterka?', bok: { h: 'Desember í Føroyum, uttan orð', txt: 'Setið myndarøðina inn í tær fýra rammurnar – teknið ella límið myndirnar inn. Gjørdu tit eina ljóðfrásøgn, kunnu tit tekna, hvat lurtarin hoyrir, og nær. Skrivið síðan ein setning um eitt val, sum tit gjørdu við vilja.', byrj: ['Vit valdu …, tí …'], ramm: 4, stor: true },
+      t: 'Desember í Føroyum, uttan orð', fak: ['ml'], min: 'umleið 20', ic: 'k-camera', lang: 'fo',
       src: [],
       tx: 'Hvussu siga tit eina søgu uttan orð? Sjálv ljóðfrásøgnin ella myndarøðin skal vera uttan talaðan og skrivaðan tekst. Tit kunnu greiða frá valunum aftaná.\n\nArbeiðið í smáum bólkum. Veljið annan av hesum møguleikunum:\n\nA – Ljóðfrásøgn: Gerið eina ljóðfrásøgn, sum varir 20–30 sekund. Brúkið í minsta lagi trý ymisk ljóð, sum tit sjálv gera ella taka upp. Frásøgnin skal hava eina byrjan, eina broyting og ein enda.\n\nB – Myndarøð: Gerið eina søgu við fýra myndum. Tit kunnu tekna ella taka myndir av lutum. Myndarøðin skal hava eina byrjan, eina broyting og ein enda.\n\nHeitið er «Desember í Føroyum». Tit velja sjálv, um søgan er stuttlig, stillfør, løgin ella spennandi.',
       upp: ['Vísið einum øðrum bólki avrikið uttan at greiða frá fyrst.', 'Biðið tey siga, hvørja søgu tey uppliva.', 'Greiðið síðan frá einum vali, sum tit gjørdu við vilja.'],
@@ -513,6 +646,11 @@
     root.querySelector('#jo-title').textContent = d.t;
     root.querySelector('#jo-tags').innerHTML = d.fak.map(function (f) { return '<span class="jh-sticker" style="background:' + FAK[f][1] + ';color:#fff">' + FAK[f][0] + '</span>'; }).join('') + '<span class="jh-sticker jh-sticker--yellow" style="transform:rotate(2deg)">' + d.min + ' min</span>';
     root.querySelector('#jo-src').innerHTML = (d.src || []).map(function (b) { var ext = /^https?:/.test(b[1]) || /\.pdf$/i.test(b[1]); return '<a class="jh-btn jh-btn--sm" href="' + b[1] + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '><svg class="jh-ic" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M19 14v6H4V5h6"/></svg>' + esc(b[0]) + '</a>'; }).join('');
+    root.querySelector('#jo-und-h').textContent = UNDLABEL[d.lang] || UNDLABEL.fo;
+    var undEl = root.querySelector('#jo-und'); undEl.textContent = d.und || ''; undEl.setAttribute('lang', d.lang); root.querySelector('#jo-und-w').hidden = !d.und;
+    var bokEl = root.querySelector('#jo-bok'); bokEl.hidden = !d.bok;
+    if (d.bok) { root.querySelector('#jo-bok-h').textContent = d.bok.h; root.querySelector('#jo-bok-txt').textContent = d.bok.txt; root.querySelector('#jo-bok-stor').hidden = !d.bok.stor;
+      root.querySelector('#jo-bok-byrj').innerHTML = (d.bok.byrj || []).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join(''); }
     root.querySelector('#jo-tx').textContent = d.tx;
     if (d.hold) { var h = hold.querySelector('[data-hold="' + d.hold + '"]'); if (h) root.querySelector('#jo-hold').appendChild(h); }
     var m = root.querySelector('#jo-media'); m.innerHTML = (d.yt || []).map(function (y) { return ytFacade(y[0], y[1]); }).join(''); bindYt(m);
@@ -550,6 +688,79 @@
   if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }
   else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
   root.querySelector('.jh-hero__btns a').addEventListener('click', function (e) { if (current >= 0) { e.preventDefault(); openEl.scrollIntoView({ behavior: 'smooth' }); } });
+
+
+  /* ------------------------------------------------------------ Jólabókin og Saman á skúlanum (31.10.2026)
+     Prenting: ein rót beint undir body; alt annað verður fjalt í prentinum (CSS: html.jb-printing).
+     Einki verður goymt: leistarnir hava tómar linjur, sum næmingarnir skriva á í hondini. */
+  var KAL = 'Desember undir sjóneykuni · 7.–9. flokkur';
+  function escA(s) { return esc(s).replace(/"/g, '&quot;'); }
+  function printSheets(html) {
+    var old = document.querySelector('.jb-print-root'); if (old) old.remove();
+    var pr = document.createElement('div'); pr.className = 'jb-print-root'; pr.innerHTML = html; document.body.appendChild(pr);
+    document.documentElement.classList.add('jb-printing');
+    var cleaned = false;
+    function clean() { if (cleaned) return; cleaned = true; document.documentElement.classList.remove('jb-printing'); if (pr.parentNode) pr.parentNode.removeChild(pr); window.removeEventListener('afterprint', clean); }
+    window.addEventListener('afterprint', clean);
+    setTimeout(clean, 60000);
+    setTimeout(function () { window.print(); }, 60);   // gev kaganum eina løtu at seta leistin upp
+  }
+  function copyText(text, btn) {
+    var label = btn.textContent;
+    function ok() { btn.textContent = 'Avritað ✓'; btn.classList.add('jh-copied'); setTimeout(function () { btn.textContent = label; btn.classList.remove('jh-copied'); }, 2000); }
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.left = '-9999px'; document.body.appendChild(ta); ta.select();
+      var good = false; try { good = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      if (good) ok(); else { btn.textContent = 'Avrita ikki – merk tekstin og trýst Ctrl + C'; setTimeout(function () { btn.textContent = label; }, 3500); }
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
+  }
+  var DOODLE = '<svg class="jb-doodle" viewBox="0 0 64 64" fill="none" stroke="#141414" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="26" cy="26" r="15"/><path d="M37 37l16 16"/><path d="M20 22c2-4 6-6 10-5"/></svg>';
+  function lines(n, first) { var h = ''; for (var k = 0; k < n; k++) h += '<div class="jb-line">' + (k === 0 && first ? esc(first) : '') + '</div>'; return '<div class="jb-lines">' + h + '</div>'; }
+  function foot() { return '<div class="jb-foot"><span>Navn:</span><span>Flokkur:</span></div>'; }
+  function sheetDoor(i) {
+    var d = DOORS[i], b = d.bok, frames = '';
+    if (b.ramm) { for (var k = 0; k < b.ramm; k++) frames += '<div class="jb-frame"><span>' + (k + 1) + '</span></div>'; frames = '<div class="jb-frames">' + frames + '</div>'; }
+    else frames = '<div class="jb-frame jb-frame--s"><span>Mynd</span></div>';
+    return '<div class="jb-sheet"><div class="jb-top"><span>Jólabókin · ' + KAL + '</span><span>Lúka ' + (i + 1) + ' · ' + esc(d.t) + '</span></div>' + DOODLE +
+      '<h1 class="jb-h">' + esc(b.h) + '</h1><p class="jb-txt">' + esc(b.txt) + '</p>' + frames + lines(b.ramm ? 4 : 9, (b.byrj || [])[0]) + foot() + '</div>';
+  }
+  function sheetBlank() {
+    return '<div class="jb-sheet"><div class="jb-top"><span>Jólabókin · ' + KAL + '</span><span>Lúka:</span></div>' + DOODLE +
+      '<div class="jb-h jb-h--blank">Heiti:</div><div class="jb-frame jb-frame--s"><span>Mynd</span></div>' + lines(10) + foot() + '</div>';
+  }
+  function sheetCover() {
+    return '<div class="jb-sheet jb-cover"><div class="jb-top"><span>' + KAL + '</span><span>Desember 2026</span></div>' +
+      '<h1 class="jb-h">Jólabókin</h1><p class="jb-sub">Tekstir, kanningar, tulkingar og myndir frá desember</p>' +
+      '<div class="jb-frame" style="margin-top:6mm"><span>Forsíðumynd</span></div><div class="jb-foot"><span>Flokkur:</span><span>Skúli:</span></div></div>';
+  }
+  function sheetsStory() {
+    var p1 = '<div class="jb-sheet"><div class="jb-top"><span>Saman á skúlanum · Jólasøgan, sum ferðast</span><span>' + KAL + '</span></div>' +
+      '<h1 class="jb-h">Ein jólasøga til grunddeildina</h1><p class="jb-txt">Skriva eina upprunaliga jólasøgu á umleið 150–250 orð til børn í 1.–3. flokki. Miðdeildin kann lesa hana upp, og grunddeildin kann tekna myndir til hana.</p>' +
+      '<div class="jb-box"><b>Søgan skal hava</b><ul><li>eina greiða byrjan: hvør, hvar og nær?</li><li>eina hending, sum broytir okkurt ella skapar spenning</li><li>ein enda, sum loysir støðuna – ella gevur lurtaranum okkurt at hugsa um</li><li>livandi persónar, sum vilja okkurt</li><li>orð og setningar, sum sjey ára gomul børn skilja, tá ið tey hoyra tey</li><li>gott føroyskt – les søguna upp, áðrenn tú heldur hana vera liðuga</li></ul></div>' +
+      '<div class="jb-plan"><div class="jb-frame"><span>Byrjan</span></div><div class="jb-frame"><span>Hending</span></div><div class="jb-frame"><span>Endi</span></div></div>' +
+      '<div class="jb-box"><b>Persónarnir</b>Hvør er høvuðspersónurin? Hvat vil hann ella hon? Hvat stendur í vegin?</div>' + lines(5) +
+      '<div class="jb-box"><b>Áðrenn tú letur søguna frá tær</b>Les hana upp fyri einum øðrum. Hvar steðgaði lurtarin upp? Hvørji orð kunnu gerast lættari? Hvussu nógv orð hevur søgan? ______</div></div>';
+    var p2 = '<div class="jb-sheet"><div class="jb-top"><span>Saman á skúlanum · Jólasøgan, sum ferðast</span><span>Heiti:</span></div>' + lines(23) + foot() + '</div>';
+    return p1 + p2;
+  }
+  var bokDoors = []; DOORS.forEach(function (d, i) { if (d.bok) bokDoors.push(i); });
+  root.querySelector('#jh-booklist').innerHTML = bokDoors.map(function (i) { return '<a class="jh-sticker' + (DOORS[i].bok.stor ? ' jh-sticker--yellow' : '') + '" href="#luka-' + (i + 1) + '" data-luka="' + i + '">Lúka ' + (i + 1) + ' · ' + esc(DOORS[i].bok.h) + '</a>'; }).join('');
+  root.querySelector('#jh-booklist').addEventListener('click', function (e) {
+    var a = e.target.closest('[data-luka]'); if (!a) return; e.preventDefault(); e.stopPropagation();
+    var i = +a.getAttribute('data-luka');
+    if (!unlocked(DOORS[i])) { a.textContent = 'Lúka ' + (i + 1) + ' letur upp ' + fmt(DOORS[i].d); return; }
+    openDoor(i, true);
+  }, true);
+  root.querySelector('#jo-bok-print').addEventListener('click', function () { if (current >= 0 && DOORS[current].bok) printSheets(sheetDoor(current)); });
+  root.querySelector('#jh-print-cover').addEventListener('click', function () { printSheets(sheetCover()); });
+  root.querySelector('#jh-print-blank').addEventListener('click', function () { printSheets(sheetBlank()); });
+  root.querySelector('#jh-print-story').addEventListener('click', function () { printSheets(sheetsStory()); });
+  var MSG = 'Góðan dag!\n\nÍ desember skriva næmingarnir í hádeildini hjá okkum jólasøgur til grunddeildina. Hetta er avbjóðingin «Jólasøgan, sum ferðast» í jólakalendarunum á Snar.\n\n' +
+    'Hugskotið er hetta:\n1. Hádeildin skrivar eina upprunaliga jólasøgu á umleið 150–250 orð til børn í 1.–3. flokki.\n2. Miðdeildin venur at lesa søguna upp, velur, hvussu hon skal ljóða, og ger nakrar stuttar spurningar til innihaldið.\n3. Grunddeildin lurtar eftir søguni og teknar myndir til hana.\n\n' +
+    'Úrslitið kann gerast ein felags jólabók ella ein lítil framførsla. Tit avgera sjálv, hvussu nógv tit vilja vera við. Vit kunnu senda tykkum søguna í seinasta lagi [dagfesting].\n\nVinarliga heilsan\n[navn], [flokkur]';
+  root.querySelector('#jh-copy-msg').addEventListener('click', function () { copyText(MSG, this); });
 
   /* ------------------------------------------------------------ Spenningur: nær letur næsta lúka upp? */
   var MEMES = [['Eg, meðan eg bíði eftir næstu lúku:', 'sour'], ['Eg, tá lærarin sigur „kanna víðari“:', 'happy'], ['Eg, tá eg haldi meg hava svarið – og so kemur ein nýggjur spurningur:', 'sour'], ['Eg, tá tveir avsláttir ikki geva tað, eg fyrst roknaði við:', 'sour'], ['Eg, tá søgan má vera í mesta lagi 60 orð:', 'sour'], ['Eg, tá lúkan í dag letur upp:', 'happy'], ['Eg, tá eg fái mandluna:', 'happy']];
