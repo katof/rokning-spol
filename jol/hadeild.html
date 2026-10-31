@@ -29,6 +29,8 @@
 .jol button { font-family: inherit; }
 .jh-wrap { width: min(1120px, 100% - 40px); margin: 0 auto; }
 .jh-hand { font-family: Caveat, "Comic Sans MS", cursive; font-weight: 700; font-size: 1.3rem; line-height: 1.15; }
+.jh-crumb { display: inline-block; margin-bottom: 12px; font-weight: 800; font-size: .88rem; color: #141414; text-decoration: none; border-bottom: 3px solid var(--pink); }
+.jh-crumb:hover { color: var(--pink); }
 .jh-mono { font-weight: 800; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .jh-sticker { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; font-weight: 800; font-size: .8rem; box-shadow: 2px 3px 0 var(--ink); transform: rotate(-2deg); }
 .jh-sticker--pink { background: var(--pink); color: #fff; } .jh-sticker--yellow { background: var(--yellow); } .jh-sticker--green { background: var(--green); color: #fff; }
@@ -152,6 +154,27 @@
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
 </style>
 <style>body { margin: 0; }</style>
+<style>html.i-rammu :is(.jg-crumb, .jm-crumb, .jh-crumb) { display: none !important; }</style>
+<script>
+(function () {
+  if (window === window.top) return;   // bert tá kalendarin stendur í rammuni á Snar
+  document.documentElement.classList.add('i-rammu');
+  var rs = history.replaceState;
+  history.replaceState = function () {
+    rs.apply(history, arguments);
+    var u = arguments[2];
+    if (typeof u === 'string' && u.charAt(0) === '#') { try { parent.postMessage({ type: 'jol-hash', hash: u }, '*'); } catch (e) {} }
+  };
+  var host = ''; try { host = new URL(document.referrer).origin; } catch (e) {}
+  if (['https://snar.fo', 'https://snardev.ctrl.fo'].indexOf(host) < 0) host = '';   // leinkjur til snar.fo fara til vertin, sum vísir rammuna
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href]') : null; if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (host && h.indexOf('https://snar.fo/') === 0) { h = host + h.slice(15); a.setAttribute('href', h); }
+    if ((h.charAt(0) === '/' || /^https?:/i.test(h)) && !a.getAttribute('target')) a.setAttribute('target', '_top');
+  }, true);
+})();
+</script>
 </head>
 <body>
 <div class="jol jh">
@@ -182,6 +205,7 @@
     <div class="jh-wrap">
       <div class="jh-hero__in">
         <div>
+          <a class="jh-crumb" href="index.html">← Jól á Snar</a><br>
           <span class="jh-sticker jh-sticker--yellow">7.–9. flokkur · desember 2026</span>
           <h1 style="margin-top:14px">Desember undir <span>sjóneykuni</span></h1>
           <p class="jh-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka byrjar við onkrum, sum vekir forvitni: ein tekstur, ein mynd, ein pástandur ella ein trupulleiki. Tú skalt kanna, rokna, tulka og grundgeva fyri tínum sjónarmiðum. Flestu lúkurnar taka 10–15 minuttir, einstakar umleið 20.</p>
@@ -265,7 +289,7 @@
             <div class="jh-part">
               <details class="jh-det" id="jo-laer-det"><summary>Til læraran – viðmerkingar og svar (trýst fyri at síggja tey)</summary><div class="jh-det__b" id="jo-laer"></div></details>
             </div>
-            <div class="jh-part"><button class="jh-like" type="button" id="jo-like"><svg viewBox="0 0 24 24"><path d="M12 21C5 15 2 11 3.5 7.5 5 4.5 9.5 4 12 7c2.5-3 7-2.5 8.5.5C22 11 19 15 12 21z"/></svg><span class="jh-hand" style="font-size:1.05rem">Mær dámar</span><span id="jo-like-n" class="jh-hand" style="font-size:1.05rem" hidden></span></button><p style="font-size:.78rem;color:var(--muted);margin-top:6px">Títt val verður goymt í hesum kagaranum.</p></div>
+            <div class="jh-part"><button class="jh-like" type="button" id="jo-like"><svg viewBox="0 0 24 24"><path d="M12 21C5 15 2 11 3.5 7.5 5 4.5 9.5 4 12 7c2.5-3 7-2.5 8.5.5C22 11 19 15 12 21z"/></svg><span class="jh-hand" style="font-size:1.05rem">Mær dámar</span><span id="jo-like-n" class="jh-hand" style="font-size:1.05rem" hidden></span></button></div>
           </div>
         </div>
         <div class="jh-open__foot">
@@ -352,20 +376,20 @@
      upp [punkt] · uppAfter · hint · vid (kanna víðari) · laer · yt [[id, tekstur]] */
   var DOORS = [
     { d: '2026-12-01', t: 'Hvussu ljóða føroysk jól?', fak: ['fo'], min: '10–15', ic: 'k-note', lang: 'fo',
-      src: [['«Jólaaftan» eftir Edmund í Garði – í Kórbók 2 á Snar (PDF)', '/fileadmin/05_bokavising/korbok/korbok2/files/assets/common/downloads/K.pdf']],
+      src: [['«Jólaaftan» eftir Edmund í Garði – í Kórbók 2 á Snar (PDF)', 'https://snar.fo/fileadmin/05_bokavising/korbok/korbok2/files/assets/common/downloads/K.pdf']],
       tx: 'Ein tekstur kann skapa eina heila verð við fáum orðum. Í sanginum «Jólaaftan» eftir Edmund í Garði møta vit bæði landslagi, menniskjum og jólahýri.\n\nOpna fyrst «Jólaaftan» í Kórbók 2, og les tey fimm ørindini. Tú kanst lesa tekstin uttan at lesa nótarnar. Sangurin niðanfyri er til samanberingar í «Kanna víðari».',
       upp: ['Finn tvey dømi um orð, sum knýta tekstin at einum heimligum umhvørvi.', 'Vel eina endurtøku. Hvat ger hon við tekstin?', 'Hvussu verða menniskjuni lýst í øðrum ørindi? Vís á orð, sum stuðla tínum svari.'],
       uppAfter: 'Samanber síðan tína tulking við tulkingina hjá einum øðrum.',
       hold: 'hugnaligt',
       vid: 'Hvør talar í sanginum, og hvønn vendir røddin sær til? Kanna, um hetta broytist gjøgnum ørindini.\n\nSamanber við «Hví man alt vera so hugnaligt í kvøld!» eftir Kristin í Geil (teksturin stendur omanfyri): hvat hava sangirnir í felag, og hvørjir munir eru á teimum? Kanna serliga myndir av ljósi og myrkri.',
       laer: 'Arbeiðið snýr seg um orðaval, endurtøku, rødd og tulking. Næmingarnir skulu stuðla svarunum við tekstinum. Í 7. flokki kunnu tey arbeiða við fyrsta og øðrum ørindi.' },
-    { d: '2026-12-02', t: 'Gevur 20 % og síðan 10 % í avsláttri til samans 30 %?', fak: ['st'], min: '10–15', ic: 'k-percent', lang: 'fo',
+    { d: '2026-12-02', t: 'Fært tú 30 % í avsláttri, tá ið tú fyrst fært 20 % og síðan 10 %?', fak: ['st'], min: '10–15', ic: 'k-percent', lang: 'fo',
       src: [],
       tx: 'Ein vøra kostar 500 kr. Handilin setur hana 20 % niður. Við kassan fært tú síðan 10 % av tí nýggja prísinum í eyka avsláttri.\n\nHetta er eitt hugsað roknidømi.',
       upp: ['Rokna prísin eftir fyrsta avsláttin.', 'Rokna prísin, tú skalt gjalda við kassan.', 'Hvussu nógvar krónur sparir tú til samans?', 'Hvussu nógv prosent av upprunaprísinum hevur tú spart?'],
       uppAfter: 'Greið einum øðrum frá, hví tey seinastu 10 prosentini verða roknað av 400 kr. og ikki av 500 kr.',
       vid: 'Handilin gevur í staðin 30 % í avsláttri beinanvegin. Hvussu stórur verður munurin á endaligu prísunum?',
-      btns: [['Prenta roknistykki – fleiri prosentstykki', '/funkur/prenta-roknistykki']],
+      btns: [['Prenta roknistykki – fleiri prosentstykki', 'https://snar.fo/funkur/prenta-roknistykki-1']],
       laer: 'Svar: Fyrst 400 kr., síðan 360 kr. Samlaði avslátturin er 140 kr., svarandi til 28 %. Við 30 % avsláttri kostar vøran 350 kr. Munurin er 10 kr.\nFunkan Prenta roknistykki ger prosentuppgávur við heilum tølum í svarinum, til at venja víðari.' },
     { d: '2026-12-03', t: 'Hvem har mandlen?', fak: ['da'], min: '10–15', ic: 'k-bowl', lang: 'da',
       src: [], hold: 'mandlen',
@@ -379,8 +403,8 @@
       upp: ['Hvussu nógvar tímar lýsir hvør ketan til samans?', 'Rokna orkunýtsluna hjá báðum ketunum.', 'Rokna kostnaðin hjá báðum.', 'Hvussu nógvar ferðir so nógva orku brúkar B sum A?'],
       hint: 'Hjálp: Orkunýtsla í kWh = effekt í W × tímar ÷ 1.000.',
       vid: 'Hvørjar aðrar upplýsingar hevði tú viljað havt, áðrenn tú valdi, hvørja ketu tú skuldi keypa?',
-      btns: [['Kanna koturnar – forrita jólaperur', '/funkur/kanna-koturnar']],
-      laer: 'Svar: 108 tímar. A brúkar 0,864 kWh og kostar 2,16 kr. B brúkar 4,32 kWh og kostar 10,80 kr. B brúkar fimm ferðir so nógva orku. Tosa um munin á effekt og orkunýtslu.\nÍskoyti: í Kanna koturnar setur knappurin Jólaperur eina kotu inn, har perur blinka. Lat næmingarnar broyta tíðina í animatiónini og talið á perum. Hetta framhaldið snýr seg um forritan og animatión; tað er ikki ein útrokning av elnýtslu.' },
+      btns: [['Jólaperur – spæl við kotur', 'https://snar.fo/funkur/jolafunkur/jolakotur']],
+      laer: 'Svar: 108 tímar. A brúkar 0,864 kWh og kostar 2,16 kr. B brúkar 4,32 kWh og kostar 10,80 kr. B brúkar fimm ferðir so nógva orku. Tosa um munin á effekt og orkunýtslu.\nÍskoyti: funkan Jólaperur (knappurin niðanfyri) hevur átta smáar uppgávur, har næmingarnir skriva kotu og fáa perur at hanga og blinka. Uppgávur 4–5 snúgva seg um tíðina í blinkinum, uppgáva 7 um eina for-loop. Hetta framhaldið snýr seg um forritan og animatión; tað er ikki ein útrokning av elnýtslu.' },
     { d: '2026-12-07', t: 'Scrooge: What is Christmas worth?', fak: ['en'], min: '10–15', ic: 'k-coins', lang: 'en',
       src: [['Upprunateksturin hjá Dickens (Project Gutenberg)', 'https://www.gutenberg.org/cache/epub/24022/pg24022-images.html']], hold: 'scrooge',
       tx: 'Charles Dickens skrivaði «A Christmas Carol». Her er ein stytt endursøgn á lættari enskum, grundað á samrøðuna millum Scrooge og systurson hansara í fyrsta parti.',
@@ -388,7 +412,7 @@
       uppAfter: 'Finish this sentence together: They disagree about …',
       vid: 'Go further: Can something have value without having a price? Give one example and explain it.',
       laer: 'Stuðulsorð: wealth, kindness, value, price, agree, disagree. Met um, hvussu næmingarnir brúka tekstin og samskifta á enskum.' },
-    { d: '2026-12-08', t: '1950 sæð úr 2004', fak: ['so'], min: '10–15', ic: 'k-church', lang: 'fo',
+    { d: '2026-12-08', t: 'Jólakvøldið í 1950 – lýst í 2004', fak: ['so'], min: '10–15', ic: 'k-church', lang: 'fo',
       src: [['Frits Johannesen: «Jólakvøld í Oyndarfjarðar kirkju 1950» (in.fo, 22. des. 2004)', 'https://in.fo/grein/j-lakv-ld-oyndarfjar-ar-kirkju-1950']],
       tx: 'Ein tekstur um fortíðina er eisini skrivaður í einari ávísari tíð.\n\nFrits Johannesen skrivaði greinina «Jólakvøld í Oyndarfjarðar kirkju 1950», sum varð útgivin 22. desember 2004. Í byrjanini lýsir hann kirkjurúmið, ljósið og fólkið.\n\nLes fyrsta frágreiðandi tekstbrotið undir yvirskriftini, fram til partin, sum byrjar við umrøðuni av altartalvuni.',
       upp: ['Hvussu nógv ár eru millum jólakvøldið, greinin lýsir, og útgávuárið?', 'Finn tvey dømi um ítøkilig viðurskifti og eitt dømi um eina meting ella kensluborna lýsing.', 'Hvat kann hetta brotið hjálpa okkum at skilja um jól fyrr?', 'Hvat kunnu vit ikki staðfesta við hesum brotinum einsamøllum?'],
@@ -406,7 +430,7 @@
       upp: ['Hvørja reglu hevði tú valt beinanvegin?', 'Skriva allar møguleikarnar við tveimum terningum, sum geva summin seks.', 'Rokna vinningslíkindini við báðum reglum.', 'Samanber úrslitið við títt fyrsta val.'],
       hint: 'Prei: Við tveimum terningum eru 36 líka sannlík raðað úrslit. Til dømis telja 1 og 5 og 5 og 1 sum hvør sítt úrslit.',
       vid: 'Hvør summur við tveimum terningum gevur somu vinningslíkindi sum ein seksari við einum terningi?',
-      btns: [['Terningar – royn reglurnar 100 ferðir', '/funkur/terningar'], ['Jatsi – spæl við fimm terningum', '/funkur/spoel/stoeddfroedi/jatsi']],
+      btns: [['Terningar – royn reglurnar 100 ferðir', 'https://snar.fo/funkur/terningar'], ['Jatsi – spæl við fimm terningum', 'https://snar.fo/funkur/spoel/stoeddfroedi/jatsi-1']],
       laer: 'Svar: A: 1/6 = 6/36. B: 5/36. Møguleikarnir eru (1,5), (2,4), (3,3), (4,2) og (5,1). A gevur størri vinningslíkindi. Summurin sjey gevur 6/36.\nFunka: í Terningar (Líkindarokning) kann flokkurin kasta 100 ferðir við einum og við tveimum terningum og samanbera royndarúrslitið við tey væntaðu líkindini. Úrslitini av 100 køstum nýtast ikki at vera júst tey somu sum ástøðiligu líkindini; samanberið munirnar. Jatsi er eitt annað terningaspæl, har vit eisini kunnu kanna líkindi.' },
     { d: '2026-12-11', t: 'Ferðin hjá einari jólagávu', fak: ['la'], min: '10–15', ic: 'k-map', lang: 'fo',
       src: [], hold: 'ferdin',
@@ -414,8 +438,8 @@
       upp: ['Finn støðini á einum heimskorti, og tekna ferðina.', 'Greið frá muninum á ráevni, framleiðslu og sølu við støði í døminum.', 'Nevn tvey arbeiði, sum kunnu vera partur av ferðini.', 'Hvørjar upplýsingar mangla, um vit skulu meta um samlaðu umhvørvisávirkanina?'],
       vid: 'Er landið, sum stendur á pakkanum, altíð nóg mikið til at greiða frá allari ferðini hjá vøruni? Grundgev við støði í døminum.',
       laer: 'Hav eitt heimskort tøkt, talgilt ella á pappíri. Knýtið kortlesing saman við tilfeingi, framleiðslu og altjóða sambondum. Næmingarnir kunnu til dømis sakna upplýsingar um flutningshátt, orkunýtslu og pakkitilfar.' },
-    { d: '2026-12-14', t: 'Ein jólamynd tulkar eina frásøgn', fak: ['kr'], min: '15–20', ic: 'k-frame', lang: 'fo',
-      src: [['Sandro Botticelli: «Mystic Nativity» (1500) – National Gallery', 'https://www.nationalgallery.org.uk/paintings/sandro-botticelli-mystic-nativity'], ['Jólaevangeliið hjá Lukasi (PDF á Snar)', '/fileadmin/00_filagoymsla/Heimspeki_TEMA_KT/13._Jolaevangeliid_raettlisid_TD_til_prent.pdf']], hold: 'talva',
+    { d: '2026-12-14', t: 'Hvat sigur ein jólamynd um frásøgnina?', fak: ['kr'], min: '15–20', ic: 'k-frame', lang: 'fo',
+      src: [['Sandro Botticelli: «Mystic Nativity» (1500) – National Gallery', 'https://www.nationalgallery.org.uk/paintings/sandro-botticelli-mystic-nativity'], ['Jólaevangeliið hjá Lukasi (PDF á Snar)', 'https://snar.fo/fileadmin/00_filagoymsla/Heimspeki_TEMA_KT/13._Jolaevangeliid_raettlisid_TD_til_prent.pdf']], hold: 'talva',
       tx: 'Listafólk velja, hvat tey vísa, og hvat tey leggja dent á.\n\nHygg at málninginum «Mystic Nativity» eftir Sandro Botticelli. Hann er frá 1500. Les síðan bíbliutekstin á síðu 6 í skjalinum, fram til hirðarnir fara avstað aftur. Brúka ikki fríu endursøgnina á síðunum 1–3 til hesa samanberingina.',
       upp: ['Gerið eina talvu við tveimum teigum: Hetta síggja vit í myndini – Hetta finna vit í tekstinum.', 'Veljið trý viðurskifti at kanna, til dømis persónar, umhvørvi og hendingar. Skrivið, hvussu hvørt viðurskifti verður lýst í myndini og í tekstinum.', 'Veljið síðan ein smálut í myndini, sum ikki er beinleiðis lýstur í hesum tekstbrotinum.', 'Greiðið frá, hvussu smáluturin kann ávirka tulkingina av myndini.'],
       vid: 'Lesið frágreiðingina hjá National Gallery. Hvussu knýtir savnið myndina at tíðini, tá ið hon varð málað?',
@@ -426,7 +450,7 @@
       upp: ['fara fram í Føroyum í desember;', 'hava ein persón, sum vil okkurt;', 'hava eina hending, sum broytir støðuna;', 'enda við einum setningi, sum fær lesaran at hugsa.'],
       uppAfter: 'Les søguna fyri einum øðrum. Bið viðkomandi siga, hvat søgan gevur at vita, og hvat lesarin sjálvur má hugsa sær.',
       vid: 'Strika fimm orð, og kanna, um søgan gerst neyvari.',
-      btns: [['Tilvildarligir spurningar – hvør lesur upp?', '/funkur/tilvildarligir-spurningar-/-noevn']],
+      btns: [['Tilvildarligir spurningar – hvør lesur upp?', 'https://snar.fo/funkur/tilvildarligir-spurningar-/-noevn-1']],
       laer: 'Met um søgugongd, orðaval og virknaðin av endanum. Hámarkið er ein arbeiðskarmur; meining og mál hava størri týdning enn sjálv orðateljingin.\nSet nøvnini í Tilvildarligir spurningar og lat funkuna velja, hvør lesur søguna upp fyri flokkinum.' },
     { d: '2026-12-16', t: 'Hvør heldur samfelagnum gangandi?', fak: ['sa'], min: '10–15', ic: 'k-city', lang: 'fo',
       src: [],
@@ -479,7 +503,7 @@
     }).join('');
   }
   function ytFacade(id, cap) { return '<button class="jh-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jh-yt__play">▶ Spæl</span></button><p class="jh-ytcap">' + esc(cap) + '</p>'; }
-  function returnHold() { Array.prototype.forEach.call(root.querySelector('#jo-hold').children, function (c) { hold.appendChild(c); }); }
+  function returnHold() { Array.prototype.slice.call(root.querySelector('#jo-hold').children).forEach(function (c) { hold.appendChild(c); }); }
   function openDoor(i, scroll) {
     var d = DOORS[i]; if (!d || !unlocked(d)) return;
     returnHold(); current = i;

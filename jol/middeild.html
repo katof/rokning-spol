@@ -26,6 +26,8 @@
 .jol p:last-child { margin-bottom: 0; }
 .jol a { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; }
 .jol button { font-family: inherit; }
+.jm-crumb { display: inline-block; margin-bottom: 10px; font-family: "IBM Plex Mono", Consolas, monospace; font-size: .8rem; letter-spacing: .06em; color: #9fbdd4; text-decoration: none; border-bottom: 1px solid #5ed3ff; }
+.jm-crumb:hover { color: #5ed3ff; }
 .jm-mono { font-family: "IBM Plex Mono", Consolas, monospace; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .jm-wrap { width: min(1140px, 100% - 40px); margin: 0 auto; }
 .jol .jm-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid var(--cyan); border-radius: 6px; background: transparent; color: var(--ink); font-family: "IBM Plex Mono", Consolas, monospace; font-size: .82rem; letter-spacing: .04em; text-decoration: none; cursor: pointer; transition: background .15s, transform .1s; }
@@ -136,6 +138,27 @@
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
 </style>
 <style>body { margin: 0; }</style>
+<style>html.i-rammu :is(.jg-crumb, .jm-crumb, .jh-crumb) { display: none !important; }</style>
+<script>
+(function () {
+  if (window === window.top) return;   // bert tá kalendarin stendur í rammuni á Snar
+  document.documentElement.classList.add('i-rammu');
+  var rs = history.replaceState;
+  history.replaceState = function () {
+    rs.apply(history, arguments);
+    var u = arguments[2];
+    if (typeof u === 'string' && u.charAt(0) === '#') { try { parent.postMessage({ type: 'jol-hash', hash: u }, '*'); } catch (e) {} }
+  };
+  var host = ''; try { host = new URL(document.referrer).origin; } catch (e) {}
+  if (['https://snar.fo', 'https://snardev.ctrl.fo'].indexOf(host) < 0) host = '';   // leinkjur til snar.fo fara til vertin, sum vísir rammuna
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href]') : null; if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (host && h.indexOf('https://snar.fo/') === 0) { h = host + h.slice(15); a.setAttribute('href', h); }
+    if ((h.charAt(0) === '/' || /^https?:/i.test(h)) && !a.getAttribute('target')) a.setAttribute('target', '_top');
+  }, true);
+})();
+</script>
 </head>
 <body>
 <div class="jol jm">
@@ -168,6 +191,7 @@
       </div>
       <div class="jm-hero__in">
         <div>
+          <a class="jm-crumb" href="index.html">← Jól á Snar</a><br>
           <span class="jm-mono">Snar · 4.–6. flokkur · desember 2026</span>
           <h1>Jól í <span>miðdeildini</span></h1>
           <p class="jm-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka hevur ein næmingatekst, spurningar at tosa um og eina uppgávu. Harumframt eru eyka uppgávur til 5.–6. flokk. Føroyskt, danskt, enskt, støddfrøði, náttúra og tøkni, søga og samtíð, kristnikunnleiki og átrúnaður og handaverk og list.</p>
@@ -283,13 +307,13 @@ aldri kann eg fulltakka tær
         <p style="color:var(--muted)">Funkurnar á Snar, sum lúkurnar brúka. Tær hava jólini tendrað í desember.</p>
       </div>
       <ul class="jm-list">
-        <li><a href="https://snar.fo/funkur/kanna-koturnar"><svg viewBox="0 0 64 64"><use href="#s-circuit"/></svg><span><b>Kanna koturnar</b><span>Jólaperur, sum blinka í koti – lúka 4</span></span><i>→</i></a></li>
-        <li><a href="https://snar.fo/funkur/spoel/finn-ord"><svg viewBox="0 0 64 64"><use href="#s-speech"/></svg><span><b>Finn orð</b><span>Venjingin Jólaorð: navnorð, sagnorð, lýsingarorð – lúka 6</span></span><i>→</i></a></li>
-        <li><a href="https://snar.fo/funkur/ger-fyrisoegn-1"><svg viewBox="0 0 64 64"><use href="#s-paper"/></svg><span><b>Ger fyrisøgn</b><span>Jólatekstir á trimum stigum – lúka 7</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/funkur/jolafunkur/jolakotur"><svg viewBox="0 0 64 64"><use href="#s-circuit"/></svg><span><b>Jólaperur</b><span>Spæl við kotur: fá perur at hanga og blinka – lúka 4</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/funkur/spoel/finn-ord-1"><svg viewBox="0 0 64 64"><use href="#s-speech"/></svg><span><b>Finn orð</b><span>Venjingin Jólaorð: navnorð, sagnorð, lýsingarorð – lúka 6</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/funkur/ger-fyrisoegn-1-1"><svg viewBox="0 0 64 64"><use href="#s-paper"/></svg><span><b>Ger fyrisøgn</b><span>Jólatekstir á trimum stigum – lúka 7</span></span><i>→</i></a></li>
         <li><a href="https://snar.fo/funkur/eginleikar-vid-skapum"><svg viewBox="0 0 64 64"><use href="#s-mirror"/></svg><span><b>Skipa skapini</b><span>Skap, kantar og symmetri – lúka 9</span></span><i>→</i></a></li>
-        <li><a href="https://snar.fo/spaelsavn/teknari"><svg viewBox="0 0 64 64"><use href="#s-letter"/></svg><span><b>Teknari</b><span>Jólakort og frímerki – lúka 10 og 12</span></span><i>→</i></a></li>
-        <li><a href="https://snar.fo/funkur/tilvildarligir-spurningar-/-noevn"><svg viewBox="0 0 64 64"><use href="#s-sun"/></svg><span><b>Tilvildarligir spurningar</b><span>Christmas questions á enskum – lúka 13</span></span><i>→</i></a></li>
-        <li><a href="https://snar.fo/skjol#jol"><svg viewBox="0 0 64 64"><use href="#s-book"/></svg><span><b>Jólaskjøl</b><span>Søgur, uppskriftir og leikir at prenta</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/spaelsavn/teknari-1"><svg viewBox="0 0 64 64"><use href="#s-letter"/></svg><span><b>Teknari</b><span>Jólakort og frímerki – lúka 10 og 12</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/funkur/tilvildarligir-spurningar-/-noevn-1"><svg viewBox="0 0 64 64"><use href="#s-sun"/></svg><span><b>Tilvildarligir spurningar</b><span>Christmas questions á enskum – lúka 13</span></span><i>→</i></a></li>
+        <li><a href="https://snar.fo/skjol#nav-c236080"><svg viewBox="0 0 64 64"><use href="#s-book"/></svg><span><b>Jólaskjøl</b><span>Søgur, uppskriftir og leikir at prenta</span></span><i>→</i></a></li>
       </ul>
     </div>
   </section>
@@ -345,14 +369,14 @@ aldri kann eg fulltakka tær
      src [[tekstur, slóð]] · hold (tilfar, sum stendur á síðuni) · tx · tos · upp · fram · laer · btns [[tekstur, slóð]] (funkur) */
   var DOORS = [
     { d: '2026-12-01', t: 'Gávan hjá Marini', fak: ['fo'], ic: 's-gift', lang: 'fo',
-      src: [['Søgan «Marin» eftir M. Heinesen (PDF á Snar)', '/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/Skj%C3%B8l/S%C3%B8gur/Marin.pdf']],
+      src: [['Søgan «Marin» eftir M. Heinesen (PDF á Snar)', 'https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/J%C3%B3latilfar/Marin.pdf']],
       tx: 'Marin brúkar nógva tíð at binda til børnini í bygdini. Til jóla bindur Marin sokkar og hosur til børnini. Men jólahaldið verður øðrvísi, enn hon hevði vónað. Nú skulu vit kanna, hvat fer fram, og hvussu persónarnir uppliva tað.',
       tos: 'Hví verður Marin kedd? Hvat í søguni vísir tað?',
       upp: 'Lesið søguna saman. Veljið eina hending. Skrivið tvey stutt brot í eg-formi, tveir til fýra setningar hvørt: eitt, har Marin sigur frá, og eitt, har eitt barn sigur frá. Brúkið upplýsingar úr søguni.',
       fram: 'Hvussu ávirkar sjónarhornið okkara fatan av hendingini? Kjakist um, hvat ger eina gávu góða, og grundgevið við dømum.',
       laer: 'Søgan er úr einari lesibók til yngri næmingar. Greið frá ókendum orðum eftir tørvi, til dømis um ull og binding. Í miðdeildini liggur avbjóðingin serliga í persónslýsing, sjónarhorni og grundgevingum. Næmingarnir kunnu byrja við at siga tekstirnar munnliga fyri einum makkara.', btns: [] },
     { d: '2026-12-02', t: 'Bollar til fleiri', fak: ['st'], ic: 's-scale', lang: 'fo',
-      src: [['«Uppskriftir til jólahugna» (PDF á Snar)', '/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Jolamatur/uppskriftir_til_jolahugna.pdf']],
+      src: [['«Uppskriftir til jólahugna» (PDF á Snar)', 'https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Jolamatur/uppskriftir_til_jolahugna.pdf']],
       tx: 'Ein uppskrift er ætlað til eina ávísa nøgd. Men hvat gera vit, tá vit skulu baka til færri ella fleiri? Í dag skulu vit tillaga eina uppskrift og kanna, hvussu nógv skal brúkast av hvørjum tilfari, tá uppskriftin verður minkað ella økt. Vit rokna við, at bollarnir skulu vera líka stórir.',
       tos: 'Uppskriftin gevur 16 bollar. Hvat má broytast, um vit vilja hava átta?',
       upp: 'Í uppskriftini eru millum annað 300 gramm av mjøli, tvey egg og 50 gramm av rosinum. Gerið eina talvu við mjøli, eggum og rosinum til átta, 16 og 32 bollar. Greiðið frá, hvussu tit roknaðu.',
@@ -370,8 +394,8 @@ aldri kann eg fulltakka tær
       tx: 'Ein pera lýsir ikki, bara tí eitt battarí liggur við síðuna av henni. Lutirnir skulu bindast saman í eina lokaða elringrás, har peran er partur av ringrásini. Í dag skulu tit kanna, hvussu tit fáa eina smáperu at lýsa.',
       tos: 'Hvussu halda tit, at battarí, leiðningar og pera skulu bindast saman?',
       upp: 'Teknið fyrst tykkara uppskot. Byggið síðan elringrásina, og roynið hana. Tá peran lýsir, loysa tit annan endan á einum leiðningi. Hvat hendir? Teknið elringrásina, sum riggaði.',
-      fram: 'Setið ein brótara í elringrásina. Teknið ringrásina við vanligum ringrásarteknum. Vísið, nær ringrásin er opin, og nær hon er lokað.\nTalgilt framhald: í Kanna koturnar er ein knappur, sum setur eina kotu inn, har jólaperur blinka. Broytið litir, ferð og tal av perum. Talgilda framhaldið snýr seg um forritan og animatión; tað er ikki ein roynd av streymi í einari veruligari elringrás.',
-      laer: 'Hav battarí, tveir leiðningar, peruhaldara og eina hóskandi smáperu klára til hvønn bólk. BBC-blaðið hevur ringrásartekn og uppgávur, sum kunnu brúkast til felags eftirmeting.', btns: [['Kanna koturnar – forrita blinkandi jólaperur', '/funkur/kanna-koturnar']] },
+      fram: 'Setið ein brótara í elringrásina. Teknið ringrásina við vanligum ringrásarteknum. Vísið, nær ringrásin er opin, og nær hon er lokað.\nTalgilt framhald: funkan Jólaperur (knappurin niðanfyri) hevur smáar uppgávur, har tit skriva kotu og fáa jólaperur at hanga og blinka. Broytið litir, ferð og tal av perum. Talgilda framhaldið snýr seg um forritan og animatión; tað er ikki ein roynd av streymi í einari veruligari elringrás.',
+      laer: 'Hav battarí, tveir leiðningar, peruhaldara og eina hóskandi smáperu klára til hvønn bólk. BBC-blaðið hevur ringrásartekn og uppgávur, sum kunnu brúkast til felags eftirmeting.', btns: [['Jólaperur – spæl við kotur', 'https://snar.fo/funkur/jolafunkur/jolakotur']] },
     { d: '2026-12-07', t: 'What is a Christmas cracker?', fak: ['en'], ic: 's-cracker', lang: 'en',
       src: [['whychristmas.com: «Christmas crackers» (myndir og bakgrund)', 'https://www.whychristmas.com/customs/christmas-crackers']],
       tx: 'A Christmas cracker is a colourful paper tube. Two people pull it, and it makes a snap. Inside, there is often a paper hat, a small gift and a joke. Crackers are part of many Christmas celebrations in Britain.',
@@ -385,14 +409,14 @@ aldri kann eg fulltakka tær
       tos: 'Hvat síggja tit fyri tykkum, tá tit hoyra máliskurnar?',
       upp: 'Arbeiðið við «bera jólini á baki» og «hava jól og góðar dagar». Teknið fyrst orðini, sum um tey skuldu skiljast bókstavliga. Greiðið síðan frá vanligu merkingini við hjálp frá læraranum.',
       fram: 'Skrivið eina stutta samrøðu, har onnur máliskan verður brúkt natúrliga. Flokkurin skal kunna gita merkingina út frá samrøðuni.\nOrðaarbeiði afturat: bólkið 20 jólaorð sum navnorð, sagnorð ella lýsingarorð í venjingini Jólaorð í Finn orð.',
-      laer: 'Greinin er á svenskum og er bakgrund til læraran. Merkingin av báðum máliskunum stendur her á síðuni undir Tilfar.', btns: [['Finn orð – Jólaorð', '/funkur/spoel/finn-ord']] },
+      laer: 'Greinin er á svenskum og er bakgrund til læraran. Merkingin av báðum máliskunum stendur her á síðuni undir Tilfar.', btns: [['Finn orð – Jólaorð', 'https://snar.fo/funkur/spoel/finn-ord-1']] },
     { d: '2026-12-09', t: 'Ein jólasálmur í 1891', fak: ['so'], ic: 's-paper', lang: 'fo',
       src: [['Grein hjá Posta um «Gleðilig jól» og jólafrímerkini (2012)', 'https://stamps.fo/ShopItem/2012/0/PPA020912/SETT']], hold: 'gledilig',
       tx: 'Í desember 1891 prentaði blaðið Føringatíðindi ein føroyskan jólasálm á forsíðuni. Hann var undirskrivaður F. P. og er í dag kendur sum «Gleðilig jól». Men hvussu kunnu vit kanna upplýsingar um ein tekst, sum er so gamal?',
       tos: 'Hvat er munurin á sjálvum gamla blaðnum og einari grein frá 2012 um útgávuna í 1891?',
       upp: 'Lærarin vísir eitt ávíst brot úr greinini hjá Posta, við høvundi, útgávuári og keldu. Skrivið tríggjar upplýsingar, sum greinin gevur, og ein spurning, tit vilja kanna nærri. Setið 1891, 2012 og 2026 á eina tíðarlinju.',
       fram: 'Greiðið frá, hvørjar upplýsingar tit helst vildu kanna í upprunaliga blaðnum. Hví hevði tað styrkt kanningina?',
-      laer: 'Posta-greinin er ein seinni frásøgn um sálmin og útgávuna í 1891. Lat næmingarnar greina hetta keldusambandið. Tey kunnu eisini rokna, hvussu langt er millum árstølini. Sálmateksturin stendur her á síðuni; ein fyrisøgn av fyrsta ørindinum kann gerast í Ger fyrisøgn.', btns: [['Ger fyrisøgn', '/funkur/ger-fyrisoegn-1']] },
+      laer: 'Posta-greinin er ein seinni frásøgn um sálmin og útgávuna í 1891. Lat næmingarnar greina hetta keldusambandið. Tey kunnu eisini rokna, hvussu langt er millum árstølini. Sálmateksturin stendur her á síðuni; ein fyrisøgn av fyrsta ørindinum kann gerast í Ger fyrisøgn.', btns: [['Ger fyrisøgn', 'https://snar.fo/funkur/ger-fyrisoegn-1-1']] },
     { d: '2026-12-10', t: 'Fra gårdnisse til julenisse', fak: ['da'], ic: 's-nisse', lang: 'da',
       src: [['«Nisse» á Lex (bakgrund)', 'https://lex.dk/nisse']],
       tx: 'I gamle fortællinger boede nissen på en gård. Den kunne hjælpe folk, men den kunne også blive vred. I 1800-tallet begyndte kunstnere at vise nissen som en del af julen. Nissen i de gamle fortællinger og julenissen i dag er derfor ikke helt den samme.',
@@ -406,14 +430,14 @@ aldri kann eg fulltakka tær
       tos: 'Hvussu kunnu vit kanna symmetri, so vit ikki bara gita eftir útsjóndini?',
       upp: 'Teknið eina loddrætta linju á rutupappír. Teknið hálvt jólatræ øðrumegin. Gerið hina helvtina sum spegilmynd. Teljið ruturnar: samsvarandi punkt skulu liggja líka langt frá ásinum á hvør síni síðu og á somu tvørstriku á rutupappírinum.',
       fram: 'Gerið eitt mynstur við fleiri symmetriásum. Vísið ásirnar, og greiðið frá, hvussu tit kannaðu tær.\nÁ skerminum: bólkið skapini eftir kantum og symmetri í Skipa skapini.',
-      laer: 'Hav rutupappír og linjál klár. Uppgávan er sjálvstøðug og krevur ikki, at næmingarnir taka skjøl niður. Lat næmingarnar skifta tekningar og kanna, um báðar helvtirnar samsvara.', btns: [['Skipa skapini', '/funkur/eginleikar-vid-skapum']] },
+      laer: 'Hav rutupappír og linjál klár. Uppgávan er sjálvstøðug og krevur ikki, at næmingarnir taka skjøl niður. Lat næmingarnar skifta tekningar og kanna, um báðar helvtirnar samsvara.', btns: [['Skipa skapini', 'https://snar.fo/funkur/eginleikar-vid-skapum']] },
     { d: '2026-12-14', t: 'Ein heilsan, sum sigur nakað', fak: ['fo'], ic: 's-letter', lang: 'fo',
       src: [['«Vit skriva jólakort» hjá Føroyar lesa (íblástur, 2025)', 'https://www.xn--froyarlesa-0cb.fo/grein/vit-skriva-j%C3%B3lakort-aftur-%C3%AD-%C3%A1r']],
       tx: 'Ein jólaheilsan kann siga meira enn navnið á høgtíðini. Tú kanst minnast eina felags uppliving, takka fyri okkurt ella siga, hvat tú gleðir teg til. Í dag skriva vit eina heilsan til ein ávísan móttakara.',
       tos: 'Hvørjar upplýsingar gera eina heilsan persónliga?',
       upp: 'Vel ein móttakara. Skriva eina heilsan við einari ítøkiligari uppliving og einari hugsan um tíðina, sum kemur. Les tekstin aftur: Skilir móttakarin, hvat tú hugsar um?',
       fram: 'Skrivið tvær heilsanir um somu uppliving: eina til ein góðan vin og eina til ein vaksnan, sum tú ikki kennir so væl. Samanberið orðaval og frágreiðingar.',
-      laer: 'Greinin lýsir átakið í 2025. Uppgávan krevur ikki luttøku í átakinum. Bið makkararnar vísa á ein serliga greiðan setning og eitt stað, sum kann gerast greiðari. Kortið sjálvt kann teknast í Teknaranum (litmyndin Jólakort).', btns: [['Teknari – Jólakort', '/spaelsavn/teknari']] },
+      laer: 'Greinin lýsir átakið í 2025. Uppgávan krevur ikki luttøku í átakinum. Bið makkararnar vísa á ein serliga greiðan setning og eitt stað, sum kann gerast greiðari. Kortið sjálvt kann teknast í Teknaranum (litmyndin Jólakort).', btns: [['Teknari – Jólakort', 'https://snar.fo/spaelsavn/teknari-1']] },
     { d: '2026-12-15', t: 'Hví er dagurin so stuttur?', fak: ['nt'], ic: 's-globe', lang: 'fo',
       src: [['NASA Space Place: «What Causes the Seasons?»', 'https://spaceplace.nasa.gov/seasons/en/']],
       tx: 'Í desember hava vit fáar tímar við dagsljósi í Føroyum. Samstundis er summar í Avstralia. Tað hongur saman við hallinum á jarðarásinum. Í dag brúka vit eitt modell at kanna munin.',
@@ -427,16 +451,16 @@ aldri kann eg fulltakka tær
       tos: 'Hvat skal vera við, um myndin skal kunna skiljast í lítlari stødd?',
       upp: 'Hyggið at frímerkjunum. Veljið síðan eitt føroyskt jólaevni, og gerið eina skitsu. Brúkið fáar, týðiligar formar, og veljið litir við umhugsni. Skrivið ein stuttan tekst um tykkara val.',
       fram: 'Gerið myndina í tveimum støddum. Kannið, hvørjar smálutir hvørva, tá myndin minkar. Tillagið sniðið eftir tí.',
-      laer: 'Hav frímerkjadømini á skermi og pappírsrútur á 5 × 7 cm klárar. Uppgávan snýr seg um myndamál og sniðgeving; næmingarnir skulu sjálvir velja sítt myndevni (motiv). Skitsan kann eisini gerast í Teknaranum.', btns: [['Teknari', '/spaelsavn/teknari']] },
+      laer: 'Hav frímerkjadømini á skermi og pappírsrútur á 5 × 7 cm klárar. Uppgávan snýr seg um myndamál og sniðgeving; næmingarnir skulu sjálvir velja sítt myndevni (motiv). Skitsan kann eisini gerast í Teknaranum.', btns: [['Teknari', 'https://snar.fo/spaelsavn/teknari-1']] },
     { d: '2026-12-17', t: 'Christmas in summer', fak: ['en'], ic: 's-sun', lang: 'en',
       src: [['British Council LearnEnglish Kids: «Christmas» (brotið Christmas weather)', 'https://learnenglishkids.britishcouncil.org/read-write/magazine/christmas']],
       tx: 'Christmas does not always mean winter. In Australia, December is a summer month. People can celebrate Christmas in warm weather. A snowy Christmas card may look very different from the weather outside. What would you put on an Australian Christmas card?',
       tos: 'What is different about December in the Faroe Islands and Australia?',
       upp: 'Draw two Christmas cards: one from the Faroe Islands and one from Australia. Add weather words and two short sentences to each card.',
       fram: 'Write a short message from Australia. Describe the season and an activity that fits it. Compare it with a message from the Faroe Islands.',
-      laer: 'Lúkan byggir víðari á modellið frá 15. desember. Stuðla við orðunum summer, winter, warm, cold, light og dark. Veðrið er ymiskt frá staði til stað. Ein heitur jóladagur í einum avstralskum býi lýsir ikki alt landið. Jólaspurningar á enskum til samrøðu liggja í Tilvildarligir spurningar (knappurin «Christmas questions»).', btns: [['Tilvildarligir spurningar', '/funkur/tilvildarligir-spurningar-/-noevn']] },
+      laer: 'Lúkan byggir víðari á modellið frá 15. desember. Stuðla við orðunum summer, winter, warm, cold, light og dark. Veðrið er ymiskt frá staði til stað. Ein heitur jóladagur í einum avstralskum býi lýsir ikki alt landið. Jólaspurningar á enskum til samrøðu liggja í Tilvildarligir spurningar (knappurin «Christmas questions»).', btns: [['Tilvildarligir spurningar', 'https://snar.fo/funkur/tilvildarligir-spurningar-/-noevn-1']] },
     { d: '2026-12-18', t: 'Hvat stendur í jólaevangeliinum?', fak: ['kr'], ic: 's-book', lang: 'fo',
-      src: [['«Jólaevangeliið» – Lukas 2 (PDF á Snar)', '/fileadmin/00_filagoymsla/Heimspeki_TEMA_KT/13._Jolaevangeliid_raettlisid_TD_til_prent.pdf']],
+      src: [['«Jólaevangeliið» – Lukas 2 (PDF á Snar)', 'https://snar.fo/fileadmin/00_filagoymsla/Heimspeki_TEMA_KT/13._Jolaevangeliid_raettlisid_TD_til_prent.pdf']],
       tx: 'Jólafrásøgnin verður søgd í tekstum, sangum, myndum og leikum. Tá vit minnast hana, kunnu ymiskar útgávur blandast saman. Í dag lesa vit tekstin hjá Lukasi og kanna, hvørjar upplýsingar vit finna har.',
       tos: 'Hvørji fólk og djór minnast tit úr jólafrásøgnini?',
       upp: 'Gerið fyrst ein felags lista úr minninum. Lesið síðan tekstin. Setið merki við tað á listanum, sum tit finna í tekstinum. Strikið undir orðini, sum stuðla svarinum. Tosið um, hvaðani hini minnini kunnu koma.',
@@ -466,7 +490,7 @@ aldri kann eg fulltakka tær
         '<span class="jm-door__t">' + (lock ? 'Letur upp ' + (+d.d.split('-')[2]) + '. des' : esc(d.t)) + '</span><span class="jm-door__d">' + fmt(d.d).split(' ')[0] + ' ' + (+d.d.split('-')[2]) + '. · ' + FAK[d.fak[0]][0] + '</span></button>';
     }).join('');
   }
-  function returnHold() { Array.prototype.forEach.call(root.querySelector('#jo-srctext').children, function (c) { hold.appendChild(c); }); }
+  function returnHold() { Array.prototype.slice.call(root.querySelector('#jo-srctext').children).forEach(function (c) { hold.appendChild(c); }); }
   function openDoor(i, scroll) {
     var d = DOORS[i]; if (!d || !unlocked(d)) return;
     returnHold(); current = i;
