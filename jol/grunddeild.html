@@ -180,6 +180,65 @@
 @media (max-width: 700px) { .jg-hero__in { grid-template-columns: 1fr; } .jg-hero__art { width: 240px; } .jg-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; } .jg-door { min-height: 140px; padding: 10px 6px 8px; } .jg-door__ic { width: 44px; height: 44px; } .jg-door__n { font-size: 2.1rem; } }
 @media (max-width: 430px) { .jg-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
+
+/* ---- Spæl og vinn eitt steyp (31.10.2026): digital uppgáva í lúkuni + steypaskápur ---- */
+.jg-spael { padding: 20px 24px 24px; border-top: 3px dashed var(--ink); background: #f2f7ff; }
+.jg-spael[hidden] { display: none; }
+.jg-spael__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.jg-spael__head h3 { display: flex; align-items: center; gap: 10px; font-size: 1.7rem; color: var(--blue); }
+.jg-spael__head h3 svg { width: 38px; height: 38px; flex: none; }
+.jg-spael__rounds { display: flex; align-items: center; gap: 7px; font-weight: 800; font-size: .85rem; color: var(--muted); }
+.jg-spael__rounds i { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid var(--ink); background: #fff; }
+.jg-spael__rounds i.is-on { background: var(--gold); }
+.jg-spael__q { font-size: 1.15rem; font-weight: 700; margin: 0 0 12px; }
+.jg-spael__stage { background: #fff; border: 3px solid var(--ink); border-radius: var(--wobble2); padding: 18px 14px; min-height: 230px; display: grid; gap: 18px; align-content: center; }
+.jg-spael__msg { min-height: 1.7em; margin: 12px 0 0; font-weight: 800; font-size: 1.15rem; }
+.jg-spael__msg.is-ok { color: var(--green); } .jg-spael__msg.is-no { color: var(--red); }
+.jg-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: center; }
+.jol .jg-tap { appearance: none; border: 0; background: none; padding: 0; margin: 0; cursor: pointer; border-radius: 12px; }
+.jol .jg-tap:focus-visible, .jg-plate:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.jg-tap svg, .jg-pile svg { display: block; }
+.jg-shake { animation: jg-shake .4s; } @keyframes jg-shake { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+.jg-pop { animation: jg-pop .35s; } @keyframes jg-pop { 50% { transform: scale(1.2); } }
+.jg-pile { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; min-height: 64px; padding: 6px 10px; border: 2.5px dashed #cfc8b8; border-radius: 14px; }
+.jg-pile__lbl { width: 100%; text-align: center; font-weight: 800; font-size: .8rem; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
+.jg-env { position: relative; width: 96px; height: 92px; }
+.jg-env .jg-env__card { position: absolute; left: 18px; top: -4px; width: 60px; height: 60px; transform: rotate(-6deg); transition: transform .2s; }
+.jg-env .jg-env__env { position: absolute; left: 0; bottom: 0; width: 96px; height: 80px; }
+.jg-ask { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; font-family: "Gochi Hand", cursive; font-size: 1.7rem; }
+.jg-ask[hidden] { display: none; }
+.jol .jg-ask .jg-btn { font-size: 1.15rem; padding: 10px 26px; }
+.jg-wire { position: relative; padding-top: 10px; }
+.jg-wire::before { content: ""; position: absolute; left: 0; right: 0; top: 12px; border-top: 3px solid #3a3734; border-radius: 50%; }
+.jg-bead { width: 58px; height: 80px; position: relative; }
+.jg-bead.is-empty circle.b { fill: #fff; stroke-dasharray: 6 5; }
+.jg-pal { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+.jol .jg-pal .jg-tap { display: flex; flex-direction: column; align-items: center; gap: 2px; font-weight: 800; font-size: .9rem; color: var(--ink); padding: 4px 8px; border: 2.5px solid var(--ink); border-radius: var(--wobble); background: #fff; }
+.jg-plates { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+.jg-plate { display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 2px; width: 150px; min-height: 104px; padding: 10px; border: 3px solid var(--ink); border-radius: 50%; background: var(--blue-l); cursor: pointer; user-select: none; }
+.jg-plate:hover { background: #cbd9f8; }
+.jg-plate__s { cursor: pointer; }
+.jg-again { justify-self: center; }
+.jg-door.has-steyp::before { content: "🏆"; position: absolute; left: 7px; top: 5px; font-size: 1.15rem; }
+/* Premiugluggin */
+.jg-prize { position: fixed; inset: 0; z-index: 10050; display: grid; place-items: center; background: rgba(43,42,40,.55); padding: 16px; }
+.jg-prize__card { position: relative; overflow: hidden; width: min(440px, 100%); padding: 22px 24px 24px; text-align: center; background: var(--paper); border: 3px solid var(--ink); border-radius: var(--wobble); box-shadow: 8px 9px 0 var(--gold); }
+.jg-prize__cup { display: inline-block; animation: jg-hopp .9s cubic-bezier(.3,1.6,.5,1) both; }
+@keyframes jg-hopp { 0% { transform: translateY(-60px) scale(.4); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; } }
+.jg-prize h2 { font-size: 2.4rem; color: var(--red); margin: 6px 0 4px; }
+.jg-prize__t { font-weight: 800; }
+.jg-prize__btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; }
+.jg-conf { position: absolute; top: -14px; width: 10px; height: 14px; border: 1.5px solid var(--ink); border-radius: 2px; animation: jg-fall 2.4s ease-in forwards; pointer-events: none; }
+@keyframes jg-fall { to { transform: translateY(520px) rotate(540deg); opacity: .2; } }
+/* Steypaskápurin */
+.jg-steyp h2 { font-size: clamp(1.9rem, 3.4vw, 2.8rem); color: var(--green); margin: 4px 0 6px; }
+.jg-steyp__lead { font-weight: 700; font-size: 1.1rem; }
+.jg-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0 10px; margin-top: 14px; padding: 16px 16px 0; border: 3px solid var(--ink); border-radius: var(--wobble2); background: #fbf3e4; }
+.jol .jg-shelf__i { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 4px 12px; margin-bottom: 14px; border: 0; border-bottom: 7px solid #a0703f; background: none; font: inherit; color: var(--ink); text-align: center; cursor: pointer; }
+.jg-shelf__i b { font-family: "Gochi Hand", cursive; font-weight: 400; font-size: 1.2rem; line-height: 1; }
+.jg-shelf__i span { font-size: .82rem; color: var(--muted); line-height: 1.25; }
+.jg-shelf__i:not(.is-won) svg { opacity: .75; }
+.jg-steyp__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; font-size: .9rem; color: var(--muted); }
 </style>
 <style>body { margin: 0; }</style>
 <style>html.i-rammu :is(.jg-crumb, .jm-crumb, .jh-crumb) { display: none !important; }</style>
@@ -304,12 +363,29 @@
             </div>
           </div>
         </div>
+        <div class="jg-spael" id="jo-spael" hidden>
+          <div class="jg-spael__head"><h3><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#g-star"/></svg> Spæl og vinn eitt steyp</h3><div class="jg-spael__rounds" id="jo-spael-rounds"></div></div>
+          <p class="jg-spael__q" id="jo-spael-q"></p>
+          <div class="jg-spael__stage" id="jo-spael-stage"></div>
+          <p class="jg-spael__msg" id="jo-spael-msg" role="status" aria-live="polite"></p>
+        </div>
         <div class="jg-open__foot">
           <button class="jg-btn jg-btn--sm" type="button" id="jo-prev">← Fyrra lúka</button>
           <button class="jg-btn jg-btn--sm jg-btn--green" type="button" id="jo-done">Merk sum liðugt ★</button>
           <button class="jg-btn jg-btn--sm" type="button" id="jo-next">Næsta lúka →</button>
         </div>
       </article>
+    </div>
+  </section>
+
+  <!-- ============================================ Steypaskápurin -->
+  <section class="jg-section jg-steyp" id="steyp">
+    <div class="jg-wrap">
+      <span class="jg-mono">Steypaskápurin</span>
+      <h2>Steypini hjá flokkinum</h2>
+      <p class="jg-steyp__lead" id="jg-steyp-lead"></p>
+      <div class="jg-shelf" id="jg-shelf"></div>
+      <p class="jg-steyp__foot"><button class="jg-btn jg-btn--sm" type="button" id="jg-steyp-reset">Strika steypini</button><span>Steypini verða goymd í hesum kaganum, so flokkurin savnar tey á sínum skíggja.</span></p>
     </div>
   </section>
 
@@ -479,13 +555,171 @@ aldri kann eg fulltakka tær
   // Ein beinleiðis leinkja (#luka-N) letur lúkuna upp í hesi vitjanini, eisini um hon enn er læst – til læraran, sum leggur til rættis.
   function unlocked(door) { return allOpen || door.peek || today() >= door.d; }
 
+  /* ------------------------------------------------------------ Spæl og vinn eitt steyp (31.10.2026)
+     Hvør lúka við eini digitalari uppgávu (SPAEL[lúka]) hevur tríggjar umfør. Loysir flokkurin øll umførini,
+     fær hann eitt steyp, sum verður goymt í kaganum (STEYP_KEY) og víst í steypaskápinum (#steyp). */
+  var STEYP_KEY = 'snar-jol-grunddeild-steyp-2026';
+  var steyp = {}; try { steyp = JSON.parse(store(STEYP_KEY) || '{}') || {}; } catch (e) { steyp = {}; }
+  function svgUse(id, w, h, extra) { return '<svg width="' + w + '" height="' + (h || w) + '" viewBox="0 0 64 64" aria-hidden="true"' + (extra || '') + '><use href="#' + id + '"/></svg>'; }
+  function shuffle(a) { for (var k = a.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)), t = a[k]; a[k] = a[j]; a[j] = t; } return a; }
+  function bump(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+
+  var SPAEL = {
+    /* Lúka 2: Røkka brævbjálvarnir? – eitt kort í hvønn brævbjálva, síðan ja ella nei */
+    2: { rounds: [{ k: 7, b: 5 }, { k: 4, b: 6 }, { k: 6, b: 6 }], play: function (r, api) {
+      var left = r.k, filled = 0, stage = api.stage;
+      api.q('Legg eitt kort í hvønn brævbjálva. Trýst á ein brævbjálva, so fer eitt kort í hann. Røkka brævbjálvarnir til øll korini?');
+      stage.innerHTML = '<div class="jg-pile" id="jgb-pile"></div><div class="jg-row" id="jgb-env"></div>' +
+        '<div class="jg-ask" id="jgb-ask" hidden><span>Røkka brævbjálvarnir?</span><button class="jg-btn jg-btn--green" type="button" data-a="ja">Ja</button><button class="jg-btn jg-btn--red" type="button" data-a="nei">Nei</button></div>';
+      var pile = stage.querySelector('#jgb-pile'), env = stage.querySelector('#jgb-env'), ask = stage.querySelector('#jgb-ask');
+      function drawPile() { pile.innerHTML = '<span class="jg-pile__lbl">Kort</span>' + (left ? new Array(left + 1).join(svgUse('g-card', 62)) : '<span style="color:var(--muted);font-weight:700">Eingi kort eftir</span>'); }
+      env.innerHTML = new Array(r.b + 1).join('<button class="jg-tap jg-env" type="button" aria-label="Brævbjálvi"><span class="jg-env__env">' + svgUse('g-envelope', 96, 80) + '</span></button>');
+      drawPile();
+      env.addEventListener('click', function (e) {
+        var b = e.target.closest('.jg-env'); if (!b || !ask.hidden) return;
+        if (b.classList.contains('is-full')) { bump(b, 'jg-shake'); api.msg('Hesin brævbjálvin hevur longu eitt kort.', false); return; }
+        if (!left) return;
+        left--; filled++; b.classList.add('is-full'); b.setAttribute('aria-label', 'Brævbjálvi við korti');
+        b.insertAdjacentHTML('afterbegin', '<span class="jg-env__card">' + svgUse('g-card', 60) + '</span>'); bump(b, 'jg-pop'); drawPile(); api.msg('');
+        if (!left || filled === r.b) { ask.hidden = false; api.msg(''); }
+      });
+      ask.addEventListener('click', function (e) {
+        var a = e.target.closest('[data-a]'); if (!a) return;
+        var ok = (a.getAttribute('data-a') === 'ja') === (r.k <= r.b);
+        if (!ok) { bump(a, 'jg-shake'); api.msg('Hyggið aftur: eru kort eftir uttan brævbjálva? Ella eru tómir brævbjálvar?', false); return; }
+        api.next(r.k > r.b ? 'Rætt! ' + (r.k - r.b) + ' kort fingu ongan brævbjálva.' : r.k < r.b ? 'Rætt! Brævbjálvarnir røkka, og ' + (r.b - r.k) + ' eru til avlops.' : 'Rætt! Eitt kort í hvønn brævbjálva – júst líka nógv.');
+      });
+    } },
+
+    /* Lúka 6: Hvat er reglan? – ljósaketa við kúlum; flokkurin velur, hvør kúla kemur nú */
+    6: { rounds: [{ p: ['r', 'w'], pal: ['r', 'w', 'g'] }, { p: ['r', 'r', 'w'], pal: ['r', 'w', 'g'] }, { p: ['g', 'y', 'y', 'r'], pal: ['r', 'w', 'g', 'y'] }], play: function (r, api) {
+      var COL = { r: ['url(#p-red)', 'Reyð'], w: ['#fff', 'Hvít'], g: ['url(#p-green)', 'Grøn'], y: ['url(#p-gold)', 'Gul'] };
+      var L = r.p.length, shown = 2 * L, empty = Math.max(4, L), filled = 0, stage = api.stage;
+      function bead(c, isEmpty) { return '<svg class="jg-bead' + (isEmpty ? ' is-empty' : '') + '" viewBox="0 0 58 80" aria-hidden="true"><g filter="url(#crayon)"><path d="M29 0 v14" stroke="#3a3734" stroke-width="3"/><rect x="22" y="12" width="14" height="9" fill="url(#p-gold)" stroke="#3a3734" stroke-width="2.4"/><circle class="b" cx="29" cy="47" r="23" fill="' + (isEmpty ? '#fff' : COL[c][0]) + '" stroke="' + (isEmpty ? '#9a9284' : '#3a3734') + '" stroke-width="3"/>' + (isEmpty ? '' : '<path d="M17 40 q4 -9 12 -10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".8"/>') + '</g></svg>'; }
+      api.q('Hyggið at kúlunum á ljósaketuni. Hvør kúla kemur nú? Trýst á rætta litin.');
+      var row = '';
+      for (var k = 0; k < shown + empty; k++) row += k < shown ? bead(r.p[k % L]) : '<span data-slot="' + (k - shown) + '">' + bead(null, true) + '</span>';
+      stage.innerHTML = '<div class="jg-row jg-wire" id="jgm-row" style="gap:4px">' + row + '</div><div class="jg-pal" id="jgm-pal">' +
+        r.pal.map(function (c) { return '<button class="jg-tap" type="button" data-c="' + c + '"><svg width="46" height="46" viewBox="0 0 58 58" aria-hidden="true"><circle cx="29" cy="29" r="23" fill="' + COL[c][0] + '" stroke="#3a3734" stroke-width="3" filter="url(#crayon)"/></svg>' + COL[c][1] + '</button>'; }).join('') + '</div>';
+      stage.querySelector('#jgm-pal').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-c]'); if (!b || filled >= empty) return;
+        var want = r.p[(shown + filled) % L], slot = stage.querySelector('[data-slot="' + filled + '"]');
+        if (b.getAttribute('data-c') !== want) { bump(slot, 'jg-shake'); api.msg('Ikki hendan. Sigið litirnar høgt: hvør kúla kemur nú?', false); return; }
+        slot.innerHTML = bead(want); bump(slot, 'jg-pop'); filled++; api.msg('');
+        if (filled === empty) api.next('Rætt! Tit funnu regluna: ' + r.p.map(function (c) { return COL[c][1].toLowerCase(); }).join(', ') + ' – og so umaftur.');
+      });
+    } },
+
+    /* Lúka 8: Øll skulu fáa líka nógv – býtið stjørnurnar á undirleggini */
+    8: { rounds: [{ n: 6, u: 2 }, { n: 12, u: 3 }, { n: 10, u: 5 }], play: function (r, api) {
+      var left = r.n, on = [], stage = api.stage;
+      for (var k = 0; k < r.u; k++) on.push(0);
+      api.q('Býtið ' + r.n + ' stjørnur á ' + r.u + ' undirlegg, so øll fáa líka nógv. Trýst á eitt undirlegg fyri at leggja eina stjørnu á tað. Trýst á eina stjørnu á undirlegginum fyri at taka hana aftur.');
+      stage.innerHTML = '<div class="jg-pile" id="jgs-pile"></div><div class="jg-plates" id="jgs-plates"></div>';
+      var pile = stage.querySelector('#jgs-pile'), plates = stage.querySelector('#jgs-plates');
+      function draw() {
+        pile.innerHTML = '<span class="jg-pile__lbl">Stjørnur</span>' + (left ? new Array(left + 1).join(svgUse('g-star', 50)) : '<span style="color:var(--muted);font-weight:700">Allar stjørnurnar eru býttar</span>');
+        plates.innerHTML = on.map(function (c, k) { return '<div class="jg-plate" role="button" tabindex="0" data-p="' + k + '" aria-label="Undirlegg ' + (k + 1) + ', ' + c + ' stjørnur">' + new Array(c + 1).join('<span class="jg-plate__s">' + svgUse('g-star', 34) + '</span>') + '</div>'; }).join('');
+      }
+      function act(p, back) {
+        var k = +p.getAttribute('data-p');
+        if (back) { if (!on[k]) return; on[k]--; left++; }
+        else { if (!left) { api.msg('Allar stjørnurnar eru býttar. Trýst á eina stjørnu fyri at flyta hana.', false); return; } on[k]++; left--; }
+        draw(); bump(plates.children[k], 'jg-pop'); api.msg('');
+        if (!left) {
+          if (on.every(function (c) { return c === on[0]; })) api.next('Rætt! ' + r.n + ' stjørnur býttar á ' + r.u + ' undirlegg: ' + on[0] + ' á hvørjum.');
+          else api.msg('Ikki líka nógv enn. Teljið stjørnurnar á hvørjum undirleggi, og flytið nakrar.', false);
+        }
+      }
+      plates.addEventListener('click', function (e) { var p = e.target.closest('.jg-plate'); if (p) act(p, !!e.target.closest('.jg-plate__s')); });
+      plates.addEventListener('keydown', function (e) { var p = e.target.closest('.jg-plate'); if (p && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); act(p, false); } });
+      draw();
+    } }
+  };
+
+  function runSpael(i) {
+    var n = i + 1, def = SPAEL[n], box = root.querySelector('#jo-spael');
+    if (!def) { box.hidden = true; runSpael.door = 0; return; }
+    if (runSpael.door === n && !box.hidden) return;   // sama lúka (t.d. «Merk sum liðugt»): spælið heldur fram
+    runSpael.door = n; box.hidden = false; clearTimeout(runSpael.t);
+    var stage = root.querySelector('#jo-spael-stage'), qEl = root.querySelector('#jo-spael-q'), msgEl = root.querySelector('#jo-spael-msg'), rEl = root.querySelector('#jo-spael-rounds'), r = 0;
+    function rounds() { rEl.innerHTML = 'Umfar ' + Math.min(r + 1, def.rounds.length) + ' av ' + def.rounds.length + ' ' + def.rounds.map(function (_, k) { return '<i class="' + (k < r ? 'is-on' : '') + '"></i>'; }).join(''); }
+    function msg(t, ok) { msgEl.textContent = t || ''; msgEl.className = 'jg-spael__msg' + (ok === true ? ' is-ok' : ok === false ? ' is-no' : ''); }
+    function start() {
+      if (current !== i) return;
+      rounds(); msg('');
+      var s2 = stage.cloneNode(false); stage.parentNode.replaceChild(s2, stage); stage = s2;   // gomul lurtarar burtur
+      def.play(def.rounds[r], { stage: stage, q: function (t) { qEl.textContent = t; }, msg: msg, next: next });
+    }
+    function next(text) {
+      r++; rounds(); msg(text, true);
+      Array.prototype.forEach.call(stage.querySelectorAll('button, [role="button"]'), function (b) { b.style.pointerEvents = 'none'; });
+      if (r < def.rounds.length) { runSpael.t = setTimeout(start, 1800); return; }
+      runSpael.t = setTimeout(function () {
+        if (current !== i) return;
+        stage.innerHTML = '<div style="text-align:center">' + cupSvg(DOORS[i], n, true, false) + '<p style="font-weight:800;margin:6px 0 10px">Øll tríggju umførini eru loyst!</p><button class="jg-btn jg-btn--sm jg-again" type="button">Spæl aftur</button></div>';
+        stage.querySelector('.jg-again').addEventListener('click', function () { r = 0; start(); });
+        gevSteyp(n);
+      }, 1200);
+    }
+    start();
+  }
+
+  function cupSvg(d, n, won, big) {
+    return '<svg class="jg-cup" width="' + (big ? 150 : 86) + '" viewBox="0 0 100 104" aria-hidden="true"><g stroke="#3a3734" stroke-linejoin="round">' +
+      '<path d="M26 20 C8 20 8 46 32 50 M74 20 C92 20 92 46 68 50" fill="none" stroke-width="5" stroke-linecap="round"/>' +
+      '<path d="M23 10 H77 V34 C77 58 64 68 50 68 C36 68 23 58 23 34 Z" fill="' + (won ? 'url(#jg-gold)' : '#e6e0d4') + '" stroke-width="3.5"/>' +
+      '<rect x="44" y="68" width="12" height="13" fill="' + (won ? '#d9a521' : '#d6cfc0') + '" stroke-width="3"/>' +
+      '<path d="M29 81 H71 L75 98 H25 Z" fill="' + (won ? '#7a4a1f' : '#cfc8b8') + '" stroke-width="3"/>' +
+      '<circle cx="50" cy="36" r="17" fill="#fff" stroke-width="3"/></g>' +
+      '<text x="50" y="94" text-anchor="middle" font-family="Gochi Hand, cursive" font-size="13" fill="#fff">' + n + '</text>' +
+      (won ? '<svg x="35" y="21" width="30" height="30" viewBox="0 0 64 64"><use href="#' + d.ic + '"/></svg><path d="M30 16 q-3 10 -1 20" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/>'
+           : '<text x="50" y="45" text-anchor="middle" font-family="Gochi Hand, cursive" font-size="26" fill="#9a9284">?</text>') + '</svg>';
+  }
+  root.insertAdjacentHTML('afterbegin', '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="jg-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE38A"/><stop offset=".55" stop-color="#F2C230"/><stop offset="1" stop-color="#B8860B"/></linearGradient></defs></svg>');
+
+  function spaelDoors() { return Object.keys(SPAEL).map(Number).sort(function (a, b) { return a - b; }); }
+  function countSteyp() { return spaelDoors().filter(function (n) { return steyp[n]; }).length; }
+  function drawShelf() {
+    var list = spaelDoors(), won = countSteyp(), lead = root.querySelector('#jg-steyp-lead');
+    lead.textContent = won === list.length ? 'Øll ' + won + ' steypini eru vunnin – gleðilig jól, jólameistarar!' : won ? 'Tit hava vunnið ' + won + ' av ' + list.length + ' steypum. Hvørt steyp fæst við at loysa spælið í lúkuni.' : 'Loysið spælið í lúkunum, og fyllið skápið við steypum. Hvørt spæl hevur tríggjar umfør.';
+    root.querySelector('#jg-shelf').innerHTML = list.map(function (n) { var d = DOORS[n - 1]; return '<button type="button" class="jg-shelf__i' + (steyp[n] ? ' is-won' : '') + '" data-n="' + n + '" aria-label="Lúka ' + n + ': ' + esc(d.t) + (steyp[n] ? ', steyp vunnið' : ', ikki vunnið enn') + '">' + cupSvg(d, n, !!steyp[n], false) + '<b>Lúka ' + n + '</b><span>' + esc(d.t) + '</span></button>'; }).join('');
+  }
+  function chime() {
+    try { var C = window.AudioContext || window.webkitAudioContext; if (!C) return; var ac = chime.ac || (chime.ac = new C()), t = ac.currentTime;
+      [784, 988, 1175, 1568].forEach(function (f, k) { var o = ac.createOscillator(), g = ac.createGain(); o.type = 'triangle'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t + k * .12); g.gain.exponentialRampToValueAtTime(0.09, t + k * .12 + .02); g.gain.exponentialRampToValueAtTime(0.0001, t + k * .12 + .5); o.connect(g); g.connect(ac.destination); o.start(t + k * .12); o.stop(t + k * .12 + .55); });
+    } catch (e) {}
+  }
+  function gevSteyp(n) {
+    if (steyp[n]) { root.querySelector('#jo-spael-msg').textContent = 'Tit hava longu hetta steypið. Flott gjørt aftur!'; return; }
+    steyp[n] = today(); store(STEYP_KEY, JSON.stringify(steyp)); drawShelf(); renderGrid();
+    Array.prototype.forEach.call(grid.children, function (b) { b.classList.toggle('is-open', +b.getAttribute('data-i') === current); });
+    var d = DOORS[n - 1], won = countSteyp(), total = spaelDoors().length, conf = '', cols = ['#d8382c', '#2f9b47', '#f4b81c', '#3b6fd8', '#e36aa6'];
+    for (var k = 0; k < 18; k++) conf += '<i class="jg-conf" style="left:' + Math.round(Math.random() * 96) + '%;background:' + cols[k % cols.length] + ';animation-delay:' + (Math.random() * .6).toFixed(2) + 's"></i>';
+    var ov = document.createElement('div'); ov.className = 'jg-prize'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Tit fingu eitt steyp');
+    ov.innerHTML = '<div class="jg-prize__card">' + conf + '<div class="jg-prize__cup">' + cupSvg(d, n, true, true) + '</div><h2>Tit fingu eitt steyp!</h2><p class="jg-prize__t">Lúka ' + n + ': ' + esc(d.t) + '</p><p>' + (won === total ? 'Nú hava tit øll ' + total + ' steypini. Gleðilig jól, jólameistarar!' : 'Tit hava savnað <b>' + won + '</b> av ' + total + ' steypum.') + '</p><div class="jg-prize__btns"><button class="jg-btn jg-btn--sm" type="button" data-shelf>Sí steypaskápin</button><button class="jg-btn jg-btn--sm jg-btn--green" type="button" data-close>Halt fram</button></div></div>';
+    root.appendChild(ov); chime();
+    var closeBtn = ov.querySelector('[data-close]'); closeBtn.focus();
+    function close() { document.removeEventListener('keydown', onKey); ov.remove(); }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    document.addEventListener('keydown', onKey);
+    ov.addEventListener('click', function (e) { if (e.target === ov || e.target.closest('[data-close]')) close(); else if (e.target.closest('[data-shelf]')) { close(); root.querySelector('#steyp').scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
+  }
+  root.querySelector('#jg-shelf').addEventListener('click', function (e) { var b = e.target.closest('.jg-shelf__i'); if (!b) return; var i = +b.getAttribute('data-n') - 1; if (!unlocked(DOORS[i])) { if (typeof toast === 'function') toast('Lúka ' + (i + 1) + ' letur upp ' + fmt(DOORS[i].d) + '.'); return; } openDoor(i, true); });
+  var resetBtn = root.querySelector('#jg-steyp-reset'), resetT = 0;
+  resetBtn.addEventListener('click', function () {
+    if (!resetBtn.classList.contains('is-sure')) { resetBtn.classList.add('is-sure'); resetBtn.textContent = 'Ja, strika øll steypini?'; clearTimeout(resetT); resetT = setTimeout(function () { resetBtn.classList.remove('is-sure'); resetBtn.textContent = 'Strika steypini'; }, 4000); return; }
+    clearTimeout(resetT); resetBtn.classList.remove('is-sure'); resetBtn.textContent = 'Strika steypini';
+    steyp = {}; store(STEYP_KEY, '{}'); drawShelf(); renderGrid(); runSpael.door = 0; if (current >= 0) openDoor(current, false);
+  });
+
   /* ------------------------------------------------------------ Kalendarin */
   var grid = root.querySelector('#jg-grid'), openEl = root.querySelector('#jg-open'), current = -1;
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function renderGrid() {
     grid.innerHTML = DOORS.map(function (d, i) {
       var lock = !unlocked(d), n = i + 1;
-      return '<button type="button" class="jg-door' + (lock ? ' is-locked' : '') + (done[n] ? ' is-done' : '') + '" data-c="' + d.c + '" data-i="' + i + '" role="listitem" aria-label="Lúka ' + n + ', ' + fmt(d.d) + (lock ? ', letur upp seinni' : '') + '">' +
+      return '<button type="button" class="jg-door' + (lock ? ' is-locked' : '') + (done[n] ? ' is-done' : '') + (steyp[n] ? ' has-steyp' : '') + '" data-c="' + d.c + '" data-i="' + i + '" role="listitem" aria-label="Lúka ' + n + ', ' + fmt(d.d) + (lock ? ', letur upp seinni' : '') + '">' +
         '<span class="jg-door__n">' + n + '</span><span class="jg-door__ic"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#' + d.ic + '"/></svg></span>' +
         '<span class="jg-door__t">' + (lock ? 'Letur upp ' + (+d.d.split('-')[2]) + '. des' : esc(d.t)) + '</span><span class="jg-door__d">' + fmt(d.d).split(' ')[0] + ' ' + (+d.d.split('-')[2]) + '.</span></button>';
     }).join('');
@@ -512,6 +746,7 @@ aldri kann eg fulltakka tær
     root.querySelector('#jo-dent').textContent = d.dent ? 'Fakligur dentur: ' + d.dent : '';
     root.querySelector('#jo-done').textContent = done[i + 1] ? 'Merkt sum liðugt ★ – tak merkið burtur' : 'Merk sum liðugt ★';
     root.querySelector('#jo-prev').disabled = i === 0; root.querySelector('#jo-next').disabled = i === DOORS.length - 1 || !unlocked(DOORS[i + 1]);
+    runSpael(i);
     openEl.classList.add('is-on');
     if (history.replaceState) history.replaceState(null, '', '#luka-' + (i + 1));
     if (scroll) openEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -524,7 +759,7 @@ aldri kann eg fulltakka tær
   var altBtn = root.querySelector('#jg-alt');
   function altLabel() { altBtn.textContent = allOpen ? 'Fylg dagfestingunum aftur' : 'Lat allar lúkur upp'; }
   altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); if (typeof toast === 'function') toast(allOpen ? 'Allar lúkur eru latnar upp til fyrireiking.' : 'Komandi lúkur eru aftur læstar. Lúkur frá undanfarnum skúladøgum eru framvegis tøkar.'); });
-  altLabel(); renderGrid();
+  altLabel(); renderGrid(); drawShelf();
   var hm = /#luka-(\d+)/.exec(location.hash || '');
   if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }
   else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
