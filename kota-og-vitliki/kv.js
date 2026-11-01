@@ -140,6 +140,38 @@ window.kvPageLinks=function(){
  window.addEventListener('message',function(e){var d=e.data;if(!d||d.kv!=='err'||!labs[d.id])return;var lab=labs[d.id],m=$('[data-msg]',lab.host);lab.err=d.m;m.className='kv-lab__msg is-on';m.textContent='Villa'+(d.l?' í linju '+d.l:'')+': '+d.m+'\nLes linjuna umaftur. Vantar ein klombra, eitt gásareyga ella eitt semikolon? Er navnið stavað rætt?';});
  var FS=function(){$$('.kv-lab').forEach(function(l){var u=$('[data-full] use',l);if(u)u.setAttribute('href','#kv-i-full');});};document.addEventListener('fullscreenchange',FS);
 
+
+ /* ---------------------------------------------------------------- Kotukortið */
+ (function(){
+  var INFO={
+   doctype:['&lt;!DOCTYPE html&gt;','Sigur kaganum, at hetta er ein HTML-síða. Stendur altíð allar ovast og sæst ikki á síðuni.'],
+   html:['&lt;html lang="fo"&gt;','Kassin uttan um alt. <code>lang="fo"</code> sigur, at síðan er á føroyskum. Alt annað stendur inni í honum – og endar við <code>&lt;/html&gt;</code>.'],
+   head:['&lt;head&gt; – høvdið','Upplýsingar um síðuna. Tað, sum stendur í <code>head</code>, sæst ikki á sjálvari síðuni – men tað ræður nógvum, t.d. heitinum og stílinum.'],
+   title:['&lt;title&gt; – heitið','Heitið á síðuni. Tað sæst ovast í kaganum, á fananum – ikki á sjálvari síðuni.'],
+   style:['&lt;style&gt; – stílurin (CSS)','Stílurin sæst ikki sjálvur, men hann broytir útsjóndina á allari síðuni: her bláu bakgrundina og myrkabláu yvirskriftina. Hann stendur ovast, tí kagin skal vita, hvussu alt skal síggja út, áðrenn hann teknar síðuna.'],
+   body:['&lt;body&gt; – kroppurin','Alt, sum sæst á síðuni, stendur inni í <code>body</code>. Bakgrundsliturin kemur frá <code>body</code>-regluni í stílinum.'],
+   h1:['&lt;h1&gt; – høvuðsyvirskriftin','Størsta yvirskriftin á síðuni. Myrkabláa liturin kemur frá <code>h1</code>-regluni í stílinum ovast.'],
+   p:['&lt;p&gt; – tekstbrot','Eitt tekstbrot við vanligum teksti.']};
+  var ORDER=['doctype','html','head','title','style','body','h1','p'];
+  $$('[data-kv-kort]').forEach(function(k){
+   var info=$('[data-k-info]',k),step=$('[data-k-step]',k),cur=-1;
+   function show(part){
+    $$('.kv-kort__ln',k).forEach(function(b){b.classList.toggle('on',b.getAttribute('data-part')===part);});
+    $$('[data-show]',k).forEach(function(e){e.classList.toggle('on',(' '+e.getAttribute('data-show')+' ').indexOf(' '+part+' ')>=0);});
+    ['doctype','head','style'].forEach(function(x){k.classList.toggle('is-'+x,x===part||(part==='title'&&x==='head'&&false));});
+    var g=$('[data-k-ghost]',k);if(g)g.textContent=part==='style'?'Stílurin sæst ikki – men broytir litirnar':'Sæst ikki á síðuni';
+    info.innerHTML='<b>'+INFO[part][0]+'</b>'+INFO[part][1];
+    cur=ORDER.indexOf(part);step.textContent=(cur+1)+' av '+ORDER.length;}
+   $$('.kv-kort__ln',k).forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-part'));});});
+   $('[data-k-next]',k).addEventListener('click',function(){show(ORDER[(cur+1)%ORDER.length]);});
+   $('[data-k-prev]',k).addEventListener('click',function(){show(ORDER[(cur-1+ORDER.length)%ORDER.length]);});
+   k.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();show(ORDER[(cur+1)%ORDER.length]);}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(ORDER[(cur-1+ORDER.length)%ORDER.length]);}});
+   var fb=$('[data-k-full]',k);
+   fb.addEventListener('click',function(){if(document.fullscreenElement===k){document.exitFullscreen&&document.exitFullscreen();}else if(k.requestFullscreen){k.requestFullscreen().then(function(){k.setAttribute('tabindex','-1');k.focus();}).catch(function(){});}});
+   document.addEventListener('fullscreenchange',function(){var on=document.fullscreenElement===k;fb.lastChild.textContent=on?'Far úr tavlu-hami':'Vís á tavluni';});
+   if(!document.fullscreenEnabled)fb.hidden=true;
+  });
+ })();
  /* ---------------------------------------------------------------- uppgávurnar (kanningar) */
  function noErr(id){var lab=labs[id];return lab&&lab.lastRun===lab.ta.value&&!lab.err;}
  var CHECKS={
