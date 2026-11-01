@@ -1,0 +1,177 @@
+<!doctype html><html lang="fo"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tekstupptøka</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Nunito,system-ui,Arial,sans-serif;background:#f6f8f5;color:#1f2a37}
+main{max-width:980px;margin:0 auto;padding:24px}
+h1{margin:0 0 4px}p.s{color:#5b6673;margin:0 0 18px;max-width:70ch}
+.big{border:0;border-radius:14px;padding:12px 18px;font:900 1rem Nunito,sans-serif;cursor:pointer;background:#1f9a57;color:#fff}
+.big.dl{background:#2a78c2}.big.alt{background:#fff;color:#1f2a37;box-shadow:inset 0 0 0 2px #cfd6de}
+.big.del{background:#fff;color:#d9412f;box-shadow:inset 0 0 0 2px #d9412f}
+.big:disabled{opacity:.45;cursor:default}
+.txt{background:#fff;border:1px solid #e3e7ec;border-radius:16px;padding:14px 16px;margin-bottom:16px}
+.txt summary{font-weight:900;cursor:pointer}
+.txt textarea{width:100%;box-sizing:border-box;margin-top:10px;font:400 1.05rem/1.55 Andika,Nunito,sans-serif;border:2px solid #e3e7ec;border-radius:12px;padding:10px;min-height:260px;resize:vertical}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}.hint{color:#5b6673;font-size:.92rem}
+/* Lesiskermurin: allur teksturin, parturin, sum skal lesast, er stórur og greiður */
+.stage{display:grid;grid-template-columns:1fr 210px;gap:18px;align-items:start}
+.prompter{background:#fff;border:2px solid #1f9a57;border-radius:20px;padding:22px 26px;max-height:62vh;overflow:auto;scroll-behavior:smooth}
+.prompter p{font:400 1.15rem/1.6 Andika,Nunito,sans-serif;color:#9aa4ae;margin:0 0 14px;padding:8px 12px 8px 40px;border-radius:12px;cursor:pointer;position:relative}
+.prompter p::before{content:attr(data-n);position:absolute;left:10px;top:10px;font:900 .8rem Nunito,sans-serif;color:#b7c0c9}
+.prompter p.ok::before{content:"✓";color:#1f9a57;font-size:1rem}
+.prompter p.cur{font-size:clamp(1.45rem,2.6vw,1.9rem);color:#1f2a37;background:#eef8f2}
+.prompter p.cur.rec{background:#fdecea}
+.prompter.empty p{color:#5b6673;cursor:default}
+.side{position:sticky;top:16px;display:flex;flex-direction:column;align-items:center;gap:12px;background:#fff;border:1px solid #e3e7ec;border-radius:20px;padding:18px 14px}
+.rec{width:150px;height:150px;border-radius:50%;border:0;background:#d9412f;color:#fff;font:900 1.05rem/1.25 Nunito,sans-serif;cursor:pointer}
+.rec.on{background:#111;animation:p 1s infinite}@keyframes p{50%{transform:scale(1.05)}}
+.rec:disabled{opacity:.4;cursor:default;animation:none}
+.time{font:900 1.3rem Nunito,sans-serif;min-height:1.4em}
+.cnt{color:#5b6673;font-weight:800;text-align:center;font-size:.92rem}
+.ctl{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.ctl button{border:2px solid #e3e7ec;background:#fff;border-radius:999px;padding:9px 10px;font:800 .92rem Nunito,sans-serif;cursor:pointer}
+.ctl button.wide{grid-column:1 / -1}
+.ctl button:disabled{opacity:.4;cursor:default}
+.out{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.msg{margin-top:10px;color:#5b6673;font-weight:700;min-height:1.3em}
+@media (max-width:760px){.stage{grid-template-columns:1fr}.side{position:static}.prompter{max-height:none}}
+</style></head><body><main>
+<h1>Tekstupptøka</h1>
+<p class="s">Set tekstin inn, og trýst á «Brúka tekstin». Hvør linja verður ein partur. Trýst á reyða knøttin, og les partin, sum stendur stórur. Trýst aftur, tá ið tú ert liðug. So fert tú sjálvvirkandi til næsta part. Ein partur, sum ikki gjørdist góður, kanst tú bara taka upp aftur.</p>
+<details class="txt" id="box"><summary>1. Teksturin – ein partur á hvørji linju</summary>
+<textarea id="txt"></textarea>
+<div class="row"><button class="big" id="use">Brúka tekstin</button><button class="big alt" id="orig">Set søguna inn aftur</button><span class="hint">Tómar linjur verða ikki tiknar við.</span></div></details>
+
+<div class="stage">
+  <div class="prompter" id="pr" aria-live="polite"></div>
+  <div class="side">
+    <button class="rec" id="rec">Trýst<br>og les</button>
+    <div class="time" id="time"></div>
+    <div class="cnt" id="cnt"></div>
+    <div class="ctl">
+      <button id="prev">← Aftur</button><button id="next">Fram →</button>
+      <button id="play" class="wide">▶ Hoyr partin</button>
+      <button id="all" class="wide">▶ Hoyr alt</button>
+    </div>
+  </div>
+</div>
+<div class="out">
+  <button class="big dl" id="wav">Tak niður sum eina fílu (WAV)</button>
+  <button class="big alt" id="zip">Tak niður partarnar (zip)</button>
+  <button class="big del" id="clr">Strika upptøkurnar</button>
+</div>
+<p class="msg" id="msg"></p>
+<p class="hint">Millumrúmsknappurin byrjar og steðgar upptøkuni, og pílarnir flyta millum partarnar. Einki verður sent nakran stað: upptøkurnar eru bert í hesum kaganum, til tú tekur tær niður.</p>
+</main><script>
+// Søgan til grunddeild lúku 7 «Eitt jólaminni frá fyrr» – stendur í kassanum frá byrjan
+const SOGA = `Tá ið eg var lítil
+Tá ið eg var lítil genta, búði eg í eini lítlari bygd við sjógvin. Tað er meira enn seksti ár síðan.
+Í desember var myrkt, bæði um morgunin og um kvøldið. Vit høvdu ikki so nógv ljós sum tit hava í dag. Men jólaaftan tendraði mamma levandi ljós í gluggunum, og tá var so hugnaligt.
+Vit høvdu ikki keypt jólatræ. Pápi gjørdi eitt sjálvur. Hann tók ein stav og setti lyngkvistar í hann. Vit pyntaðu træið við pappírshjørtum, sum vit sjálv høvdu klipt.
+Pápi var úti á sjónum allan veturin. Hvønn dag hugdi eg út á fjørðin eftir skipinum. Og so, tveir dagar fyri jól, kom hann heim! Tað var besta gávan.
+Jólaaftan fingu vit rísgreyt. Ein mandla var goymd í greytinum, og tann, sum fann hana, fekk ein marsipangrís. Eitt árið fann eg hana!
+Gávurnar vóru ikki stórar. Eg fekk eitt par av vøttum, sum omma hevði bundið, og eina appelsin. Vit fingu sjáldan appelsinir, so eg goymdi hana leingi, áðrenn eg át hana.
+Seinni um kvøldið hildu vit hvør í annan, gingu rundan um jólatræið og sungu «Hví man alt vera so hugnaligt í kvøld!».
+Nú eri eg gomul. Men eg minnist enn ljósini, luktina av appelsinini – og pápa, sum kom heim.
+Hvat fara tit at minnast frá jólunum í ár?`;
+const KEY = 'tekstupptoka-tekstur';
+const $ = id => document.getElementById(id);
+let P = [], i = 0, recs = [], mr = null, st = null, t0 = 0, tick = null, playing = null;
+
+function parts() { return $('txt').value.split('\n').map(l => l.trim()).filter(Boolean); }
+function say(t) { $('msg').textContent = t || ''; }
+function show(scroll) {
+  const pr = $('pr');
+  if (!P.length) { pr.classList.add('empty'); pr.innerHTML = '<p>Set tekstin inn omanfyri, og trýst á «Brúka tekstin».</p>'; $('cnt').textContent = ''; ['rec','prev','next','play','all','wav','zip'].forEach(k => $(k).disabled = true); return; }
+  pr.classList.remove('empty');
+  pr.innerHTML = P.map((t, j) => '<p data-j="' + j + '" data-n="' + (j + 1) + '" class="' + (recs[j] ? 'ok' : '') + (j === i ? ' cur' : '') + (j === i && mr ? ' rec' : '') + '"></p>').join('');
+  Array.prototype.forEach.call(pr.children, (p, j) => p.textContent = P[j]);
+  const n = recs.filter(Boolean).length;
+  $('cnt').textContent = n + ' av ' + P.length + ' pørtum eru tiknir upp';
+  $('rec').disabled = false; $('prev').disabled = !!mr || i === 0; $('next').disabled = !!mr || i === P.length - 1;
+  $('play').disabled = !!mr || !recs[i]; $('all').disabled = !!mr || !n; $('wav').disabled = $('zip').disabled = !!mr || !n;
+  if (scroll !== false) { const c = pr.querySelector('.cur'); if (c) c.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+}
+function load() { P = parts(); recs = []; i = 0; $('box').open = false; say(''); show(); }
+$('use').onclick = () => { if (recs.some(Boolean) && !confirm('Upptøkurnar, sum longu eru gjørdar, verða strikaðar. Vilt tú halda fram?')) return; if (!parts().length) { alert('Set ein tekst inn fyrst.'); return; } load(); };
+$('orig').onclick = () => { $('txt').value = SOGA; save(); };
+function save() { try { localStorage.setItem(KEY, $('txt').value); } catch (e) {} }
+$('txt').addEventListener('input', save);
+$('pr').onclick = e => { const p = e.target.closest('[data-j]'); if (p && !mr) { i = +p.dataset.j; show(); } };
+$('prev').onclick = () => { if (i > 0) { i--; show(); } };
+$('next').onclick = () => { if (i < P.length - 1) { i++; show(); } };
+
+function stopPlay() { if (playing) { playing.pause(); playing = null; } }
+function play(j, done) { stopPlay(); const r = recs[j]; if (!r) { done && done(); return; } const a = new Audio(URL.createObjectURL(r.blob)); playing = a; a.onended = () => { playing = null; done && done(); }; a.play(); }
+$('play').onclick = () => play(i);
+$('all').onclick = () => { let j = 0; const next = () => { while (j < P.length && !recs[j]) j++; if (j >= P.length) return; i = j; show(); play(j++, next); }; next(); };
+
+async function toggle() {
+  if (!P.length) return;
+  if (mr) { if (mr.state !== 'inactive') mr.stop(); return; }
+  stopPlay();
+  try { st = st || await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (x) { alert('Mikrofonin riggar ikki. Gev kaganum loyvi at brúka mikrofonina.'); return; }
+  const ch = [], j = i;
+  mr = new MediaRecorder(st); mr.ondataavailable = e => e.data.size && ch.push(e.data);
+  mr.onstop = () => {
+    const t = mr.mimeType || 'audio/webm'; mr = null; clearInterval(tick); $('time').textContent = '';
+    $('rec').classList.remove('on'); $('rec').innerHTML = 'Trýst<br>og les';
+    if (ch.length) recs[j] = { blob: new Blob(ch, { type: t }), ext: /ogg/.test(t) ? 'ogg' : /mp4/.test(t) ? 'm4a' : 'webm' };
+    if (recs[j] && i < P.length - 1 && i === j) i++;
+    show();
+  };
+  mr.start(); t0 = Date.now();
+  $('rec').classList.add('on'); $('rec').innerHTML = 'Steðga';
+  tick = setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); $('time').textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }, 250);
+  show(false);
+}
+$('rec').onclick = toggle;
+document.addEventListener('keydown', e => {
+  if (e.target.closest('textarea, input, summary') || e.repeat) return;
+  if (e.code === 'Space') { e.preventDefault(); toggle(); }
+  else if (!mr && (e.key === 'ArrowDown' || e.key === 'ArrowRight')) { e.preventDefault(); $('next').click(); }
+  else if (!mr && (e.key === 'ArrowUp' || e.key === 'ArrowLeft')) { e.preventDefault(); $('prev').click(); }
+});
+
+// Allir partarnir í eini fílu: avkoda, set saman við stuttum steðgi og skriva WAV (mono, 24 kHz)
+$('wav').onclick = async () => {
+  const js = P.map((_, j) => j).filter(j => recs[j]); if (!js.length) return;
+  if (js.length < P.length && !confirm('Ikki allir partar eru tiknir upp. Vilt tú taka niður teir, sum eru?')) return;
+  say('Ger fíluna …');
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const bufs = []; for (const j of js) bufs.push(await ac.decodeAudioData(await recs[j].blob.arrayBuffer()));
+    ac.close && ac.close();
+    const SR = 24000, GAP = 0.5, total = bufs.reduce((s, b) => s + b.duration, 0) + GAP * (bufs.length - 1);
+    const oc = new OfflineAudioContext(1, Math.ceil(total * SR), SR);
+    let at = 0; for (const b of bufs) { const s = oc.createBufferSource(); s.buffer = b; s.connect(oc.destination); s.start(at); at += b.duration + GAP; }
+    const out = (await oc.startRendering()).getChannelData(0);
+    const v = new DataView(new ArrayBuffer(44 + out.length * 2)), w = (o, s) => { for (let k = 0; k < s.length; k++) v.setUint8(o + k, s.charCodeAt(k)); };
+    w(0, 'RIFF'); v.setUint32(4, 36 + out.length * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, SR, true); v.setUint32(28, SR * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, out.length * 2, true);
+    for (let k = 0; k < out.length; k++) { const x = Math.max(-1, Math.min(1, out[k])); v.setInt16(44 + k * 2, x < 0 ? x * 0x8000 : x * 0x7FFF, true); }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([v], { type: 'audio/wav' })); a.download = 'upptoka.wav'; a.click();
+    say('Fílan «upptoka.wav» er tikin niður (' + Math.round(total) + ' sekund).');
+  } catch (x) { say('Tað riggaði ikki at gera eina fílu. Tak heldur partarnar niður sum zip.'); }
+};
+
+// Partarnir hvør sær í eini zip-fílu (uttan pakking)
+const T = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; T[n] = c >>> 0; }
+const crc = u => { let c = 0xFFFFFFFF; for (const b of u) c = T[(c ^ b) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+$('zip').onclick = async () => {
+  const js = P.map((_, j) => j).filter(j => recs[j]); if (!js.length) return;
+  const enc = new TextEncoder(), parts = [], cd = []; let off = 0;
+  for (const j of js) {
+    const u = new Uint8Array(await recs[j].blob.arrayBuffer()), nm = enc.encode('partur-' + String(j + 1).padStart(2, '0') + '.' + recs[j].ext), c = crc(u), h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x800, true); h.setUint32(14, c, true); h.setUint32(18, u.length, true); h.setUint32(22, u.length, true); h.setUint16(26, nm.length, true); parts.push(h, nm, u);
+    const e = new DataView(new ArrayBuffer(46)); e.setUint32(0, 0x02014b50, true); e.setUint16(4, 20, true); e.setUint16(6, 20, true); e.setUint16(8, 0x800, true); e.setUint32(16, c, true); e.setUint32(20, u.length, true); e.setUint32(24, u.length, true); e.setUint16(28, nm.length, true); e.setUint32(42, off, true); cd.push(e, nm); off += 30 + nm.length + u.length;
+  }
+  const cs = cd.reduce((s, x) => s + x.byteLength, 0), z = new DataView(new ArrayBuffer(22)); z.setUint32(0, 0x06054b50, true); z.setUint16(8, js.length, true); z.setUint16(10, js.length, true); z.setUint32(12, cs, true); z.setUint32(16, off, true);
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(parts.concat(cd, [z]), { type: 'application/zip' })); a.download = 'upptoka-partar.zip'; a.click();
+};
+$('clr').onclick = () => { if (!recs.some(Boolean)) return; if (!confirm('Vilt tú strika allar upptøkurnar? Hevur tú tikið fíluna niður?')) return; stopPlay(); recs = []; i = 0; say(''); show(); };
+
+let v = null; try { v = localStorage.getItem(KEY); } catch (e) {}
+$('txt').value = v || SOGA;
+load();
+</script></body></html>
