@@ -1,13 +1,17 @@
 
-/* ---- einstakar síður: leinkjur millum stigini og aftur til hubbin á Snar ---- */
+/* ---- einstakar síður: leinkjur, ramman á Snar (/kota-og-vitliki/kotuskulin#stig-N) og aftur til hubbin ---- */
+(function(){var m=location.hash.match(/^#(stig-[1-8]|sandkassi|skapid)$/),here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
+ if(m&&m[1]!==here)location.replace(m[1]+'.html');})();
 window.kvPageLinks=function(){
  var framed=window.top!==window,SNAR_HUB='/temasavn/nattura-og-visindi/kota-og-vitliki';
  var ref=(document.referrer.match(/^https?:\/\/[^\/]+/)||[''])[0];
  var onSnar=/snar\.fo$|snardev\.ctrl\.fo$/.test(location.hostname),origin=ref||(onSnar?location.origin:'');
+ var here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
  document.querySelectorAll('a[data-go]').forEach(function(a){var slug=a.getAttribute('data-go');
-  if(framed&&origin){a.href=origin+SNAR_HUB+(slug==='hub'||slug==='index'?'':'/'+slug)+(slug==='index'?'#kv-larari':'');a.target='_top';}
-  else a.href=slug==='hub'?'index.html':slug==='index'?'index.html#kv-larari':slug+'.html';});
+  if(slug==='hub'||slug==='index'){if(framed&&origin){a.href=origin+SNAR_HUB+(slug==='index'?'#kv-larari':'');a.target='_top';}else a.href='index.html'+(slug==='index'?'#kv-larari':'');}
+  else a.href=slug+'.html';});
  document.querySelectorAll('a[data-snar]').forEach(function(a){var path=a.getAttribute('data-snar');var o=origin||(onSnar?'':'https://snar.fo');a.href=o+path;if(framed)a.target='_top';});
+ if(framed){document.documentElement.classList.add('is-framed');try{parent.postMessage({type:'jol-hash',hash:here==='index'?'':'#'+here},'*');}catch(e){}}
 };
 (function(){
  'use strict';
