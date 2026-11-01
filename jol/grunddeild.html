@@ -894,7 +894,7 @@ aldri kann eg fulltakka tær
     }
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
   }
-  var BOD = 'Hallo!\n\nGrunddeildin hjá okkum er við í „Jólasøgan, sum ferðast“ í jólakalendaranum á Snar. Hava tit hug at skriva eina stutta jólasøgu til okkum (umleið 150–250 orð) ella at lesa eina søgu upp fyri okkum? Vit tekna myndirnar til søguna, og so kunnu vit hittast og lesa hana saman.\n\nAvbjóðingin stendur undir „Saman á skúlanum“ í kalendaranum hjá tykkara deild.\n\nGóð jól!\n[navn], [flokkur]';
+  var BOD = "Hey\n\nVit arbeiða við „Jólasøgan, sum ferðast“ í jólakalendaranum á Snar. Hava tit hug at skriva eina stutta jólasøgu til okkum (umleið 150–250 orð) ella at lesa eina søgu upp fyri okkum? Vit tekna myndirnar til søguna, og so kunnu vit hittast og lesa hana saman.\n\nVirknið stendur undir „Saman á skúlanum“ í snar-kalendaranum hjá hádeild.\n\nGleðilig jól\n\nHeilsan\n(flokkur)";
   root.addEventListener('click', function (e) {
     var b = e.target.closest('[data-print], [data-copy], #jo-bok-print'); if (!b || !root.contains(b)) return;
     if (b.id === 'jo-bok-print') { var d = DOORS[current]; if (d && d.bok) printSheets(sheet({ ref: 'Lúka ' + (current + 1), h: d.bok.h, byrj: d.bok.byrj, kassar: d.bok.kassar })); return; }
