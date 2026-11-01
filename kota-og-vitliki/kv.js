@@ -44,8 +44,8 @@ window.kvPageLinks=function(){
  var KEY='snar-kv-v1';
 
  /* ---------------------------------------------------------------- goymsla */
- var state={done:{},quiz:{},special:{},code:{},tried:{}};
- try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);['done','quiz','special','code','tried'].forEach(function(k){if(o[k])state[k]=o[k];});}}catch(e){}
+ var state={done:{},quiz:{},special:{},code:{},tried:{},navn:null};
+ try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);['done','quiz','special','code','tried','navn'].forEach(function(k){if(o[k])state[k]=o[k];});}}catch(e){}
  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
  function doneCount(){var n=0;for(var i=1;i<=8;i++)if(state.done['s'+i])n++;return n;}
 
@@ -133,7 +133,27 @@ window.kvPageLinks=function(){
   ta.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run(true);}
    if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();var s=ta.selectionStart,v=ta.value;ta.value=v.slice(0,s)+'  '+v.slice(ta.selectionEnd);ta.selectionStart=ta.selectionEnd=s+2;}});
   $('[data-run]',host).addEventListener('click',function(){run(true);});
-  $('[data-dl]',host).addEventListener('click',function(){var code=withPics(ta.value),blob=new Blob([code],{type:'text/html;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(id==='s8'?'min-heimasida':id==='sand'?'sandkassi':id[0]==='f'?'funka-'+id.slice(1):'kota-stig-'+id.slice(1))+'.html';a.style.display='none';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(a.href);},0);});
+  function dlFile(code,name){var blob=new Blob([code],{type:'text/html;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(a.href);},0);}
+  var FUNKA={f1:'Teljari',f2:'Tilvildarligur spurningur',f3:'Lítið kviss'},FSLUG={f1:'teljari',f2:'spurningur',f3:'kviss'};
+  function slug(t){return String(t||'').toLowerCase().replace(/ð/g,'d').replace(/ø/g,'o').replace(/æ/g,'ae').replace(/[áà]/g,'a').replace(/í/g,'i').replace(/ó/g,'o').replace(/ú/g,'u').replace(/ý/g,'y').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+  $('[data-dl]',host).addEventListener('click',function(){
+   if(id[0]!=='f'){dlFile(withPics(ta.value),(id==='s8'?'min-heimasida':id==='sand'?'sandkassi':'kota-stig-'+id.slice(1))+'.html');return;}
+   var old=host.querySelector('.kv-lab__ask');if(old)old.remove();
+   var nv=state.navn||{};var box=document.createElement('div');box.className='kv-lab__ask';
+   box.innerHTML='<span><b>Snar sigur:</b> Skriva fornavn og flokk, so veit lærarin, hvør gjørdi funkuna. Bert fornavnið – ikki eftirnavnið.</span>'
+    +'<label style="display:flex;gap:6px;align-items:center;font-weight:800">Fornavn <input type="text" maxlength="20" data-fn style="min-height:38px;padding:4px 10px;border:2px solid #1b2430;border-radius:10px;font:600 15px Nunito,sans-serif;width:9em"></label>'
+    +'<label style="display:flex;gap:6px;align-items:center;font-weight:800">Flokkur <input type="text" maxlength="6" data-fl placeholder="t.d. 6b" style="min-height:38px;padding:4px 10px;border:2px solid #1b2430;border-radius:10px;font:600 15px Nunito,sans-serif;width:5em"></label>'
+    +'<button type="button" class="kv-btn kv-btn--red kv-btn--sm" data-ja>Tak niður</button><button type="button" class="kv-btn kv-btn--sm" data-nei>Angra</button>';
+   var bar=host.querySelector('.kv-lab__bar');bar.parentNode.insertBefore(box,bar.nextSibling);
+   var fn=box.querySelector('[data-fn]'),fl=box.querySelector('[data-fl]');fn.value=nv.fornavn||'';fl.value=nv.flokkur||'';fn.focus();
+   function go(){var f=fn.value.trim().split(/\s+/)[0]||'',k=fl.value.trim();if(!f||!k){(f?fl:fn).focus();return;}
+    state.navn={fornavn:f,flokkur:k};save();box.remove();
+    var head='<!-- Funka: '+FUNKA[id]+' · Gjørd av: '+f.replace(/--/g,'-')+', '+k.replace(/--/g,'-')+' · Kota og vitlíki, Snar -->\n';
+    dlFile(head+withPics(ta.value),'funka-'+FSLUG[id]+'-'+slug(f)+'-'+slug(k)+'.html');}
+   box.querySelector('[data-ja]').addEventListener('click',go);
+   box.querySelector('[data-nei]').addEventListener('click',function(){box.remove();});
+   box.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}if(e.key==='Escape')box.remove();});
+  });
   lay.addEventListener('click',function(){var st=host.classList.toggle('is-stack');lay.querySelector('use').setAttribute('href',st?'#kv-i-side':'#kv-i-stack');});
   $('[data-full]',host).addEventListener('click',function(){if(document.fullscreenElement===host){document.exitFullscreen&&document.exitFullscreen();}else if(host.requestFullscreen){host.requestFullscreen();}});
   $('[data-reset]',host).addEventListener('click',function(){function go(){ta.value=start;delete state.code[id];save();run(false);}if(ta.value!==start)kvAsk(host,'Vilt tú fáa dømið aftur? Tað, tú hevur skrivað í hesum ritlinum, fer burtur.','Ja, byrja umaftur',go);else go();});
