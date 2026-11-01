@@ -143,6 +143,10 @@
 .jg-ljod { margin-top: 12px; padding: 10px 12px; border: 2px dashed var(--ink); border-radius: var(--wobble2); background: #fff; white-space: normal; }
 .jg-ljod p { margin: 0 0 8px; font-size: .92rem; }
 .jg-ljod audio { width: 100%; display: block; }
+.jg-story__laer { font-size: .9rem; color: var(--muted); }
+.jg-story__kelda { margin: 8px 0 0; font-size: .85rem; color: var(--muted); font-style: italic; }
+.jg-bok__luk { margin: 14px 0 0; font-weight: 700; }
+.jol .jg-bok__luk a { color: var(--purple); }
 .jg-yt { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border: 3px solid var(--ink); border-radius: 14px; padding: 0; cursor: pointer; background: #ddd; overflow: hidden; margin-top: 8px; }
 .jg-yt img { width: 100%; height: 100%; object-fit: cover; }
 .jg-yt__play { position: absolute; left: 10px; bottom: 10px; padding: 8px 14px; background: var(--red); color: #fff; border: 3px solid var(--ink); border-radius: 999px; font-weight: 900; font-size: .9rem; }
@@ -479,26 +483,13 @@
   <!-- ============================================ Jólabókin -->
   <section class="jg-section jg-bok" id="jolabok">
     <div class="jg-wrap">
-      <span class="jg-mono">Til jólabókina</span>
+      <span class="jg-mono">Til læraran</span>
       <h2>Jólabókin hjá flokkinum</h2>
-      <p class="jg-steyp__lead">Í nøkrum lúkum stendur „Til jólabókina“. Har gera børnini eina síðu: eina mynd, eitt orð ella ein stuttan setning. Í desember savnar flokkurin síðurnar í eina jólabók.</p>
-      <div class="jg-two">
-        <div class="jg-box">
-          <h3>Leistar at prenta</h3>
-          <p>Hvør síða hevur heiti, stórt pláss til eina mynd og nakrar linjur at skriva á. Prenta á A4.</p>
-          <div class="jg-btnrow"><button class="jg-btn jg-btn--sm jg-btn--gold" type="button" data-print="forsida">Prenta forsíðu</button><button class="jg-btn jg-btn--sm" type="button" data-print="tomur">Prenta tóman leist</button></div>
-          <h3 style="margin-top:16px">Til læraran</h3>
-          <ul class="jg-steps">
-            <li>Tað tekur umleið 5–10 minuttir at gera eina síðu. Tit kunnu gera hana eftir uppgávuna ella seinni á degnum.</li>
-            <li>Børnini, sum ikki skriva enn, siga frá, og tú skrivar teirra orð.</li>
-            <li>Goym síðurnar í eini mappu. Í lúku 14 setur flokkurin bókina saman.</li>
-            <li>Einki verður goymt á Snar. Síðurnar eru bert á pappíri hjá flokkinum.</li>
-          </ul>
-        </div>
-        <div class="jg-box">
-          <h3>Lúkur við síðu til bókina</h3>
-          <ul class="jg-bok__list" id="jg-bok-list"></ul>
-        </div>
+      <div class="jg-box">
+        <p>Í summum lúkum kunnu børnini tekna og skriva til eina felags jólabók. Prentið leistin á A4 og savnið síðurnar í eini mappu. Í lúku 14 setur flokkurin bókina saman.</p>
+        <p>Børn, sum ikki duga at skriva enn, kunnu siga frá, meðan lærarin skrivar. Uppgávurnar eru valfríar og kunnu eisini gerast seinni á degnum.</p>
+        <div class="jg-btnrow"><button class="jg-btn jg-btn--sm jg-btn--gold" type="button" data-print="forsida">Prenta forsíðu</button><button class="jg-btn jg-btn--sm" type="button" data-print="tomur">Prenta tóman leist</button></div>
+        <p class="jg-bok__luk" id="jg-bok-list">Jólabókin verður gjørd í lúkunum <a href="#luka-1" data-luka="0">1</a>, <a href="#luka-3" data-luka="2">3</a>, <a href="#luka-4" data-luka="3">4</a>, <a href="#luka-5" data-luka="4">5</a>, <a href="#luka-7" data-luka="6">7</a>, <a href="#luka-9" data-luka="8">9</a> og <a href="#luka-12" data-luka="11">12</a> og sett saman í lúku <a href="#luka-14" data-luka="13">14</a>.</p>
       </div>
     </div>
   </section>
@@ -527,8 +518,9 @@
         </div>
         <div class="jg-box">
           <h3>Um flokkurin arbeiðir einsamallur</h3>
-          <p>Les søguna „Ljósið hjá Hansinu“ upp. Børnini lurta og velja ein part at tekna. Lesið søguna aftur, og vísið myndirnar, meðan tit lesa.</p>
-          <details class="jg-det jg-story"><summary>Les søguna: Ljósið hjá Hansinu</summary><div class="jg-det__b"><ol><li>Tað var seinasta kvøldið fyri jól. Kavin fall, og í øllum gluggum í bygdini lýstu ljós og stjørnur. Lív stóð við gluggan og hugdi út. Tá sá hon nakað løgið. Í minsta húsinum niðri við sjógvin var kolmyrkt.</li><li>„Hví er myrkt hjá Hansinu?“ spurdi Lív. Pápi hugdi út. „Ljósaketan hjá henni er brotin,“ segði hann. „Og hon fer ikki so lætt út í kavan longur.“ Lív hugsaði seg um. So fór hon eftir lyktini í gongini.</li><li>Lív og pápi fóru í stígvælini og gingu út. Kavin náddi Lív upp á knøini. Lyktin sveiggjaði í hondini á henni, og ljósið dansaði á kavanum. Við hurðina hjá Hansinu bankaðu tey tríggjar ferðir.</li><li>Hansina læt upp. Fyrst sá hon bara ljósið. So sá hon Lív. „Gleðilig jól,“ segði Lív og setti lyktina í gluggan. Hansina smíltist, og eyguni lýstu. Nú var ljós í øllum húsunum í bygdini. Og Lív helt, at júst hetta ljósið lýsti best.</li></ol></div></details>
+          <p>Les søguna „Snjókellingin“ eftir A. C. Evensen upp. Børnini lurta og velja ein part at tekna. Lesið søguna aftur, og vísið myndirnar, meðan tit lesa.</p>
+          <p class="jg-story__laer">Søgan hevur nøkur eldri orð, til dømis toya, kreyma, homluband og heimaveður. Tosið um tey, áðrenn tit lesa.</p>
+          <details class="jg-det jg-story"><summary>Les søguna: Snjókellingin</summary><div class="jg-det__b"><ol><li>Tað var ein vetrardag; hann var farin at toya, og kavin kreymaði, men tó lítið. Tá balaðust vit úti og rullaðu stórar kavabóltar; so gjørdu vit eina snjókelling.</li><li>Pápi setti høvdið á hana, og hann gjørdi eisini nøsina og koleyguni; og inn í búkin á henni hevði stóri beiggi grivið eitt stórt rúm og kynt upp við torvi og vátum hálmi. Eitt hol gekk frá rúminum upp í munnin, og stóri beiggi setti eina pípu í munnin á snjókellingini; so stóð hon og roykti. Tað mundi hon treingja til í kuldanum.</li><li>Hurrá! Og hundurin fór at goyggja, tí snjókellingin hevði eitt homluband í hondini og lætst at vilja sláa. Gamla Marin hevði verið burtur í bygd um dagin og kom aftur um kvøldið; hon varð so kløkk, at hon rópti.</li><li>Dagin eftir slepti hon heimaveðrinum út. Men tað skuldi hon ikki gjørt. Tí veðrurin var illur, og hann tók eitt renningarlop og stangaði snjókellingina, so hon reyk um koll. Hann var vinmaður mín og hevði ofta fingið drýl frá mær. Tann dagin fekk hann einki uttan smekk.</li></ol><p class="jg-story__kelda">A. C. Evensen · Lesibók til 3. skúlaár, bls. 162</p></div></details>
           <div class="jg-btnrow"><button class="jg-btn jg-btn--sm jg-btn--gold" type="button" data-print="soga">Prenta søguna við tekniramum</button><button class="jg-btn jg-btn--sm" type="button" data-copy="soga">Avrita søguna</button></div>
         </div>
       </div>
@@ -862,7 +854,8 @@ aldri kann eg fulltakka tær
 
   /* ------------------------------------------------------------ Undrast · Til jólabókina · Saman á skúlanum (31.10.2026)
      Einki verður goymt: leistarnir verða prentaðir við tómum linjum, sum børnini skriva og tekna á. */
-  var STORY = ["Tað var seinasta kvøldið fyri jól. Kavin fall, og í øllum gluggum í bygdini lýstu ljós og stjørnur. Lív stóð við gluggan og hugdi út. Tá sá hon nakað løgið. Í minsta húsinum niðri við sjógvin var kolmyrkt.", "„Hví er myrkt hjá Hansinu?“ spurdi Lív. Pápi hugdi út. „Ljósaketan hjá henni er brotin,“ segði hann. „Og hon fer ikki so lætt út í kavan longur.“ Lív hugsaði seg um. So fór hon eftir lyktini í gongini.", "Lív og pápi fóru í stígvælini og gingu út. Kavin náddi Lív upp á knøini. Lyktin sveiggjaði í hondini á henni, og ljósið dansaði á kavanum. Við hurðina hjá Hansinu bankaðu tey tríggjar ferðir.", "Hansina læt upp. Fyrst sá hon bara ljósið. So sá hon Lív. „Gleðilig jól,“ segði Lív og setti lyktina í gluggan. Hansina smíltist, og eyguni lýstu. Nú var ljós í øllum húsunum í bygdini. Og Lív helt, at júst hetta ljósið lýsti best."];
+  var STORY_T = 'Snjókellingin', STORY_K = 'A. C. Evensen · Lesibók til 3. skúlaár, bls. 162';
+  var STORY = ["Tað var ein vetrardag; hann var farin at toya, og kavin kreymaði, men tó lítið. Tá balaðust vit úti og rullaðu stórar kavabóltar; so gjørdu vit eina snjókelling.", "Pápi setti høvdið á hana, og hann gjørdi eisini nøsina og koleyguni; og inn í búkin á henni hevði stóri beiggi grivið eitt stórt rúm og kynt upp við torvi og vátum hálmi. Eitt hol gekk frá rúminum upp í munnin, og stóri beiggi setti eina pípu í munnin á snjókellingini; so stóð hon og roykti. Tað mundi hon treingja til í kuldanum.", "Hurrá! Og hundurin fór at goyggja, tí snjókellingin hevði eitt homluband í hondini og lætst at vilja sláa. Gamla Marin hevði verið burtur í bygd um dagin og kom aftur um kvøldið; hon varð so kløkk, at hon rópti.", "Dagin eftir slepti hon heimaveðrinum út. Men tað skuldi hon ikki gjørt. Tí veðrurin var illur, og hann tók eitt renningarlop og stangaði snjókellingina, so hon reyk um koll. Hann var vinmaður mín og hevði ofta fingið drýl frá mær. Tann dagin fekk hann einki uttan smekk."];
   function escA(s) { return esc(s).replace(/"/g, '&quot;'); }
   var DOODLE = '<svg class="jb-doodle" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 L39 24 L59 25 L43 37 L49 57 L32 45 L15 57 L21 37 L5 25 L25 24 Z" fill="none" stroke="#444" stroke-width="2.6" stroke-linejoin="round"/></svg>';
   var TREE = '<svg class="jb-doodle" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6 L45 24 L39 23 L49 38 L42 37 L53 54 L11 55 L22 37 L15 38 L25 23 L19 24 Z M28 55 v6 h8 v-6" fill="none" stroke="#444" stroke-width="2.6" stroke-linejoin="round"/></svg>';
@@ -879,7 +872,7 @@ aldri kann eg fulltakka tær
       '<p class="jb-sub">hjá <i></i> flokki</p><div class="jb-frames" style="width:100%"><div class="jb-frame"></div></div><div class="jb-foot">Hesi hava gjørt bókina: <i style="width:110mm"></i></div></div>';
   }
   function storySheets() {
-    return STORY.map(function (p, k) { return '<div class="jb-sheet jb-sheet--half"><div class="jb-top"><span>Ljósið hjá Hansinu · partur ' + (k + 1) + ' av ' + STORY.length + '</span>' + DOODLE + '</div><p class="jb-story">' + esc(p) + '</p><div class="jb-frames"><div class="jb-frame"></div></div><div class="jb-foot">Tekna: <i></i></div></div>'; }).join('');
+    return STORY.map(function (p, k) { return '<div class="jb-sheet jb-sheet--half"><div class="jb-top"><span>' + STORY_T + ' · partur ' + (k + 1) + ' av ' + STORY.length + '</span>' + DOODLE + '</div><p class="jb-story">' + esc(p) + '</p><div class="jb-frames"><div class="jb-frame"></div></div><div class="jb-foot">Tekna: <i></i></div></div>'; }).join('');
   }
   function printSheets(html) {
     var old = document.querySelector('.jb-print-root'); if (old) old.remove();
@@ -910,7 +903,7 @@ aldri kann eg fulltakka tær
     else if (p === 'tomur') printSheets(sheet({}));
     else if (p === 'soga') printSheets(storySheets());
     else if (c === 'bod') copyText(BOD, b);
-    else if (c === 'soga') copyText('Ljósið hjá Hansinu\n\n' + STORY.join('\n\n'), b);
+    else if (c === 'soga') copyText(STORY_T + '\n\n' + STORY.join('\n\n') + '\n\n' + STORY_K, b);
   });
   function bokDoor(d) {
     var part = root.querySelector('#jo-bok-part');
@@ -920,7 +913,6 @@ aldri kann eg fulltakka tær
     root.querySelector('#jo-bok-txt').textContent = d.bok.txt;
     root.querySelector('#jo-bok-byrj').innerHTML = (d.bok.byrj || []).map(function (t) { return '<span>„' + esc(t) + '“</span>'; }).join('');
   }
-  root.querySelector('#jg-bok-list').innerHTML = DOORS.map(function (d, i) { return d.bok ? '<li><a href="#luka-' + (i + 1) + '" data-luka="' + i + '"><small>Lúka ' + (i + 1) + '</small><span>' + esc(d.bok.h) + (d.bok.stor ? ' <em>· góð síða</em>' : '') + '</span></a></li>' : ''; }).join('');
   root.querySelector('#jg-bok-list').addEventListener('click', function (e) {
     var a = e.target.closest('a[data-luka]'); if (!a) return; e.preventDefault(); e.stopPropagation();
     var i = +a.getAttribute('data-luka');
