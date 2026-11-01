@@ -1,16 +1,33 @@
 
 /* ---- einstakar síður: leinkjur, ramman á Snar (/kota-og-vitliki/kotuskulin#stig-N) og aftur til hubbin ---- */
-(function(){var m=location.hash.match(/^#(stig-[1-8]|sandkassi|skapid)$/),here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
- if(m&&m[1]!==here)location.replace(m[1]+'.html');})();
-window.kvPageLinks=function(){
- var framed=window.top!==window,SNAR_HUB='/temasavn/nattura-og-visindi/kota-og-vitliki';
+/* SNAR_ORIGIN: Snar-síðan, sum allar aftur-leinkjur fara til. SKIFT TIL https://snar.fo, TÁ IÐ SNARDEV VERÐUR UMDOYPT. */
+var KV_SNAR={origin:'https://snardev.ctrl.fo',hub:'/temasavn/nattura-og-visindi/kota-og-vitliki',skuli:'/kota-og-vitliki/kotuskulin'};
+(function(){
+ var framed=window.top!==window;
+ var here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
+ /* Snar-vertin: frá referrer (fyrsta síðan í rammuni), goymd í sessionStorage, so hon fylgir við, tá ið næmingurin fer frá stigi til stig */
  var ref=(document.referrer.match(/^https?:\/\/[^\/]+/)||[''])[0];
- var onSnar=/snar\.fo$|snardev\.ctrl\.fo$/.test(location.hostname),origin=ref||(onSnar?location.origin:'');
+ var isSnar=function(o){return /^https?:\/\/([^\/]*\.)?(snar\.fo|snardev\.ctrl\.fo)$/.test(o||'');};
+ var o='';try{o=sessionStorage.getItem('kv-snar-origin')||'';}catch(e){}
+ if(isSnar(ref)){o=ref;try{sessionStorage.setItem('kv-snar-origin',ref);}catch(e){}}
+ if(isSnar(location.origin))o=location.origin;
+ KV_SNAR.at=isSnar(o)?o:KV_SNAR.origin;
+ /* Opnað beinleiðis á GitHub (ikki í rammuni)? So fer síðan til Snar – GitHub-síðurnar eru bert til rammuna á Snar. */
+ if(!framed&&/github\.io$/.test(location.hostname)){
+  var hs=location.hash.match(/^#(stig-[1-8]|sandkassi|skapid)$/);
+  var to=here==='index'&&!hs?KV_SNAR.at+KV_SNAR.hub+(location.hash==='#kv-larari'?'#kv-larari':''):KV_SNAR.at+KV_SNAR.skuli+'#'+(hs?hs[1]:here);
+  location.replace(to);return;}
+ var m=location.hash.match(/^#(stig-[1-8]|sandkassi|skapid)$/);
+ if(m&&m[1]!==here)location.replace(m[1]+'.html');
+})();
+window.kvPageLinks=function(){
+ var framed=window.top!==window,at=KV_SNAR.at;
  var here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
  document.querySelectorAll('a[data-go]').forEach(function(a){var slug=a.getAttribute('data-go');
-  if(slug==='hub'||slug==='index'){if(framed&&origin){a.href=origin+SNAR_HUB+(slug==='index'?'#kv-larari':'');a.target='_top';}else a.href='index.html'+(slug==='index'?'#kv-larari':'');}
-  else a.href=slug+'.html';});
- document.querySelectorAll('a[data-snar]').forEach(function(a){var path=a.getAttribute('data-snar');var o=origin||(onSnar?'':'https://snar.fo');a.href=o+path;if(framed)a.target='_top';});
+  if(slug==='hub'||slug==='index'){a.href=at+KV_SNAR.hub+(slug==='index'?'#kv-larari':'');a.target='_top';}
+  else if(framed||!/github\.io$/.test(location.hostname))a.href=slug+'.html';
+  else{a.href=at+KV_SNAR.skuli+'#'+slug;a.target='_top';}});
+ document.querySelectorAll('a[data-snar]').forEach(function(a){a.href=at+a.getAttribute('data-snar');a.target='_top';});
  if(framed){document.documentElement.classList.add('is-framed');try{parent.postMessage({type:'jol-hash',hash:here==='index'?'':'#'+here},'*');}catch(e){}}
 };
 (function(){
