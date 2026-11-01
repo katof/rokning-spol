@@ -458,7 +458,7 @@
         </div>
         <div class="jg-open__foot">
           <button class="jg-btn jg-btn--sm" type="button" id="jo-prev">← Fyrra lúka</button>
-          <button class="jg-btn jg-btn--sm jg-btn--green" type="button" id="jo-done">Merk sum liðugt ★</button>
+          <button class="jg-btn jg-btn--sm jg-btn--green" type="button" id="jo-done" aria-pressed="false">Liðugt</button>
           <button class="jg-btn jg-btn--sm" type="button" id="jo-next">Næsta lúka →</button>
         </div>
       </article>
@@ -787,7 +787,7 @@ aldri kann eg fulltakka tær
   function runSpael(i) {
     var n = i + 1, def = SPAEL[n], box = root.querySelector('#jo-spael');
     if (!def) { box.hidden = true; runSpael.door = 0; return; }
-    if (runSpael.door === n && !box.hidden) return;   // sama lúka (t.d. «Merk sum liðugt»): spælið heldur fram
+    if (runSpael.door === n && !box.hidden) return;   // sama lúka (t.d. «Liðugt»): spælið heldur fram
     runSpael.door = n; box.hidden = false; clearTimeout(runSpael.t);
     var stage = root.querySelector('#jo-spael-stage'), qEl = root.querySelector('#jo-spael-q'), msgEl = root.querySelector('#jo-spael-msg'), rEl = root.querySelector('#jo-spael-rounds'), r = 0;
     function rounds() { rEl.innerHTML = 'Umfar ' + Math.min(r + 1, def.rounds.length) + ' av ' + def.rounds.length + ' ' + def.rounds.map(function (_, k) { return '<i class="' + (k < r ? 'is-on' : '') + '"></i>'; }).join(''); }
@@ -979,7 +979,8 @@ aldri kann eg fulltakka tær
     root.querySelector('#jo-fram').textContent = d.fram;
     root.querySelector('#jo-fram-det').open = false;
     root.querySelector('#jo-dent').textContent = d.dent ? 'Fakligur dentur: ' + d.dent : '';
-    root.querySelector('#jo-done').textContent = done[i + 1] ? 'Merkt sum liðugt ★ – tak merkið burtur' : 'Merk sum liðugt ★';
+    // Trýst einaferð = liðugt (★), trýst aftur = merkið burtur
+    var dn = root.querySelector('#jo-done'); dn.textContent = done[i + 1] ? 'Liðugt ★' : 'Liðugt'; dn.setAttribute('aria-pressed', done[i + 1] ? 'true' : 'false'); dn.title = done[i + 1] ? 'Trýst aftur fyri at taka merkið burtur' : '';
     root.querySelector('#jo-prev').disabled = i === 0; root.querySelector('#jo-next').disabled = i === DOORS.length - 1 || !unlocked(DOORS[i + 1]);
     runSpael(i);
     openEl.classList.add('is-on');
