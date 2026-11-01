@@ -83,8 +83,18 @@ window.kvPageLinks=function(){
  /* «Royn í ritlinum»: hvørt lítla dømið kann koyrast í ritlinum í stiginum (w3schools-leistur) */
  function wrapSnippet(t){if(/<html[\s>]/i.test(t))return t;var st='',rest=t.replace(/<style[^>]*>[\s\S]*?<\/style>/gi,function(m){st+='    '+m.replace(/\n/g,'\n    ')+'\n';return '';}).trim();if(!/<[a-z][\s\S]*>/i.test(rest))rest='<p id="svar">Trýst á knøttin.</p>\n<button onclick="royn()">Royn</button>\n<script>\nfunction royn() {\n'+rest.replace(/^/gm,'  ')+'\n}\n<\/script>';return '<!DOCTYPE html>\n<html lang="fo">\n  <head>\n    <title>Royn kotuna</title>\n'+st+'  </head>\n  <body>\n'+rest.replace(/^/gm,'    ')+'\n  </body>\n</html>';}
  $$('.kv-stig .kv-code[data-hl]').forEach(function(el){var sec=el.closest('.kv-stig'),id='s'+sec.getAttribute('data-stig');var b=document.createElement('button');b.type='button';b.className='kv-try';b.innerHTML='<svg aria-hidden="true"><use href="#kv-i-play"/></svg>Royn í ritlinum';el.classList.add('has-try');el.appendChild(b);
-  b.addEventListener('click',function(){var lab=labs[id];if(!lab)return;if(lab.ta.value!==lab.start&&!confirm('Seta dømið í ritilin? Tað, tú hevur skrivað í ritlinum í hesum stiginum, verður skift út.'))return;lab.ta.value=wrapSnippet(el.getAttribute('data-src'));state.code[id]=lab.ta.value;save();lab.run(true);lab.host.scrollIntoView({behavior:reduce.matches?'auto':'smooth',block:'start'});});});
+  b.addEventListener('click',function(){var lab=labs[id];if(!lab)return;function go(){lab.ta.value=wrapSnippet(el.getAttribute('data-src'));state.code[id]=lab.ta.value;save();lab.run(true);lab.host.scrollIntoView({behavior:reduce.matches?'auto':'smooth',block:'start'});}if(lab.ta.value!==lab.start){lab.host.scrollIntoView({behavior:reduce.matches?'auto':'smooth',block:'start'});kvAsk(lab.host,'Vilt tú seta dømið í ritilin? Tað, tú hevur skrivað har, fer burtur.','Ja, set dømið inn',go);}else go();});});
 
+ /* ---------------------------------------------------------------- Snar sigur: spurningur í ritlinum */
+ function kvAsk(host,text,yes,onYes){
+  var old=host.querySelector('.kv-lab__ask');if(old)old.remove();
+  var box=document.createElement('div');box.className='kv-lab__ask';box.setAttribute('role','alertdialog');
+  box.innerHTML='<span><b>Snar sigur:</b> '+text+'</span><button type="button" class="kv-btn kv-btn--red kv-btn--sm" data-ja>'+yes+'</button><button type="button" class="kv-btn kv-btn--sm" data-nei>Nei, varðveit mína kotu</button>';
+  var bar=host.querySelector('.kv-lab__bar');bar.parentNode.insertBefore(box,bar.nextSibling);
+  box.querySelector('[data-ja]').addEventListener('click',function(){box.remove();onYes();});
+  box.querySelector('[data-nei]').addEventListener('click',function(){box.remove();});
+  box.querySelector('[data-ja]').focus();
+ }
  /* ---------------------------------------------------------------- ritilin (Kanna koturnar) */
  var labs={};
  var ERRJS='<script>window.addEventListener("error",function(e){try{parent.postMessage({kv:"err",id:"__ID__",m:String(e.message||e),l:e.lineno||0},"*")}catch(x){}});<\/script>';
@@ -119,7 +129,7 @@ window.kvPageLinks=function(){
   $('[data-dl]',host).addEventListener('click',function(){var code=withPics(ta.value),blob=new Blob([code],{type:'text/html;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(id==='s8'?'min-heimasida':id==='sand'?'sandkassi':id[0]==='f'?'funka-'+id.slice(1):'kota-stig-'+id.slice(1))+'.html';a.style.display='none';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(a.href);},0);});
   lay.addEventListener('click',function(){var st=host.classList.toggle('is-stack');lay.querySelector('use').setAttribute('href',st?'#kv-i-side':'#kv-i-stack');});
   $('[data-full]',host).addEventListener('click',function(){if(document.fullscreenElement===host){document.exitFullscreen&&document.exitFullscreen();}else if(host.requestFullscreen){host.requestFullscreen();}});
-  $('[data-reset]',host).addEventListener('click',function(){if(ta.value!==start&&!confirm('Fáa dømið aftur? Tað, tú hevur skrivað í hesum ritlinum, fer burtur.'))return;ta.value=start;delete state.code[id];save();run(false);});
+  $('[data-reset]',host).addEventListener('click',function(){function go(){ta.value=start;delete state.code[id];save();run(false);}if(ta.value!==start)kvAsk(host,'Vilt tú fáa dømið aftur? Tað, tú hevur skrivað í hesum ritlinum, fer burtur.','Ja, byrja umaftur',go);else go();});
   if('IntersectionObserver' in window){var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting&&!lab.rendered){run(false);io.disconnect();}});},{rootMargin:'300px 0px'});io.observe(host);}else run(false);
   return lab;
  }

@@ -337,6 +337,13 @@
 @media (max-width:1000px){.kv-more{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.kv-more{grid-template-columns:1fr}}
 
+
+/* ---- Snar sigur: spurningur inni í ritlinum (í staðin fyri confirm() hjá brovsaranum) ---- */
+.kv-lab__ask{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 14px;background:var(--yel2);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);font:700 15px/1.4 Nunito,sans-serif;color:var(--ink)}
+.kv-lab__ask b{font:800 15px/1.2 Fraunces,serif}
+.kv-lab__ask span{flex:1 1 260px}
+.kv-lab__ask .kv-btn{min-height:38px}
+
 /* ---- dømi-savn ---- */
 .kv-ex{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .kv-ex article{display:grid;gap:8px;align-content:start;background:var(--w);border:2px solid var(--ink);border-radius:16px;padding:14px;box-shadow:4px 4px 0 var(--ink)}
