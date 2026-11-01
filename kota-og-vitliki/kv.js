@@ -175,7 +175,8 @@ window.kvPageLinks=function(){
    {t:'Øll <code>&lt;p&gt;</code> og <code>&lt;h1&gt;</code> verða latin aftur.',h:'Hvørt byrjanarmerki skal hava eitt endamerki við skrástriku: <code>&lt;p&gt;…&lt;/p&gt;</code>.',f:function(c){return closed(c,'p')&&closed(c,'h1');}}],
   s2:[
    {t:'Grundbygnaðurin er í lagi.',h:'<code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> og <code>&lt;body&gt;</code> skulu vera við.',f:structure},
-   {t:'Ein <code>&lt;h1&gt;</code> og minst tvær <code>&lt;h2&gt;</code>.',h:'Legg eina <code>&lt;h2&gt;</code> afturat – t.d. «Soleiðis byrjaði eg».',f:function(c){var b=body(c);return count(/<h1(\s|>)/gi,b)===1&&count(/<h2(\s|>)/gi,b)>=2;}},
+   {t:'Bert ein <code>&lt;h1&gt;</code> – til høvuðsyvirskriftina.',h:'Ein síða hevur bert eina <code>&lt;h1&gt;</code>. Hevur tú fleiri, so ger hinar til <code>&lt;h2&gt;</code>. Hevur tú onga, so legg eina afturat ovast í <code>&lt;body&gt;</code>.',f:function(c){return count(/<h1(\s|>)/gi,body(c))===1;}},
+   {t:'Minst tvær <code>&lt;h2&gt;</code>.',h:'Legg eina <code>&lt;h2&gt;</code> afturat – t.d. <code>&lt;h2&gt;Soleiðis byrjaði eg&lt;/h2&gt;</code>. Minst til at lata hana aftur við <code>&lt;/h2&gt;</code>.',f:function(c){return count(/<h2(\s|>)/gi,body(c))>=2;}},
    {t:'Minst tvey tekstbrot <code>&lt;p&gt;</code>.',h:'Skriva eitt tekstbrot undir hvørja <code>&lt;h2&gt;</code>.',f:function(c){return count(/<p(\s|>)/gi,body(c))>=2;}},
    {t:'Eitt orð er feitt við <code>&lt;strong&gt;</code>.',h:'Set <code>&lt;strong&gt;</code> og <code>&lt;/strong&gt;</code> rundan um eitt týdningarmikið orð.',f:function(c){return /<strong>\s*\S[\s\S]*?<\/strong>/i.test(body(c));}},
    {t:'Ein listi við prikkum <code>&lt;ul&gt;</code> við minst fýra <code>&lt;li&gt;</code>.',h:'Legg eitt <code>&lt;li&gt;…&lt;/li&gt;</code> afturat inni í <code>&lt;ul&gt;</code>.',f:function(c){var u=part(body(c),'ul');return u&&count(/<li(\s|>)/gi,u)>=4;}},
