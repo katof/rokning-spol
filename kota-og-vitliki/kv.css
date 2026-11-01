@@ -49,6 +49,7 @@
 .kv-prose li::marker{color:var(--s);font-weight:800}
 .kv-two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(22px,3vw,40px);align-items:start}
 .kv-side{display:grid;gap:18px;align-content:start}
+.kv-two>*{min-width:0}
 .kv-note{border-left:6px solid var(--s);background:var(--w);padding:14px 18px;border-radius:0 14px 14px 0;font-size:16.5px}
 .kv-note b{color:var(--s)}
 .kv-note--yel{border-color:#9a7210;background:var(--yel2)}
@@ -506,6 +507,13 @@ body{min-height:100vh}
 .kv-top__dots i.d{background:#1f9d6a;border-color:#1f9d6a}
 .kv-top__dots i.c{box-shadow:0 0 0 3px #ffc93c}
 .kv .kv-stig{border-top:0}
+.kv-troll{float:right;width:min(180px,40%);margin:0 0 12px 18px;text-align:center;shape-outside:margin-box}
+.kv-troll svg{width:100%;height:auto;animation:kv-float 5s ease-in-out infinite}
+.kv-troll figcaption{font:800 13px/1.3 Nunito,sans-serif;color:var(--mut);margin-top:4px}
+.kv-source{clear:both;max-width:100%;margin-top:14px;border:2px solid var(--ink);border-radius:14px;overflow:hidden;background:#0f172a}
+.kv-source__bar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:8px 12px;background:var(--yel2);border-bottom:2px solid var(--ink);font:700 14px/1.3 Nunito,sans-serif;color:var(--ink)}
+.kv-source pre{margin:0;max-height:420px;overflow:auto;padding:12px 14px;color:#e2e8f0;font:13px/1.5 ui-monospace,Consolas,monospace;white-space:pre;tab-size:2}
+.kv-source mark{background:#ffc93c;color:#1b2430;border-radius:3px}
 /* ritilin og partarnir skulu ikki fjalast undir føsta toppbjálkanum, tá ið síðan rennur til teirra */
 .kv-lab,.kv-section,.kv-funka,.kv-task{scroll-margin-top:calc(var(--kv-toph,64px) + 16px)}
 @media (max-width:600px){.kv-lab,.kv-section,.kv-funka,.kv-task{scroll-margin-top:12px}}

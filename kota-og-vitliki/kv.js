@@ -20,6 +20,10 @@ var KV_SNAR={origin:'https://snardev.ctrl.fo',hub:'/temasavn/nattura-og-visindi/
  var m=location.hash.match(/^#(stig-[1-8]|sandkassi|skapid|funkur)$/);
  if(m&&m[1]!==here)location.replace(m[1]+'.html');
 })();
+(function(){var b=document.querySelector('[data-kv-source]');if(!b)return;var box=document.querySelector('[data-kv-source-box]'),pre=document.querySelector('[data-kv-source-pre]'),got=false;
+ b.addEventListener('click',function(){if(!box.hidden){box.hidden=true;b.lastChild.textContent='Vís kotuna aftan fyri síðuna';return;}
+  box.hidden=false;b.lastChild.textContent='Fjal kotuna';if(got)return;pre.textContent='Heinti kotuna …';
+  fetch(location.pathname,{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){got=true;pre.textContent=t;}).catch(function(){pre.textContent='Kundi ikki heinta kotuna. Royn at høgraklikkja á síðuna og velja «Vís kelduna á rammuni».';});});})();
 window.kvPageLinks=function(){
  var framed=window.top!==window,at=KV_SNAR.at;
  var here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
