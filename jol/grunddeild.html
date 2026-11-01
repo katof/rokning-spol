@@ -182,7 +182,7 @@
 @media (max-width: 430px) { .jg-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } }
 
-/* ---- Spæl og vinn eitt steyp (31.10.2026): digital uppgáva í lúkuni + steypaskápur ---- */
+/* ---- Spæl og vinn eitt steyp (31.10.2026): digital uppgáva í lúkuni + steypaskáp ---- */
 .jg-spael { padding: 20px 24px 24px; border-top: 3px dashed var(--ink); background: #f2f7ff; }
 .jg-spael[hidden] { display: none; }
 .jg-spael__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
@@ -231,7 +231,7 @@
 .jg-prize__btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; }
 .jg-conf { position: absolute; top: -14px; width: 10px; height: 14px; border: 1.5px solid var(--ink); border-radius: 2px; animation: jg-fall 2.4s ease-in forwards; pointer-events: none; }
 @keyframes jg-fall { to { transform: translateY(520px) rotate(540deg); opacity: .2; } }
-/* Steypaskápurin */
+/* Steypaskápið */
 .jg-steyp h2 { font-size: clamp(1.9rem, 3.4vw, 2.8rem); color: var(--green); margin: 4px 0 6px; }
 .jg-steyp__lead { font-weight: 700; font-size: 1.1rem; }
 .jg-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0 10px; margin-top: 14px; padding: 16px 16px 0; border: 3px solid var(--ink); border-radius: var(--wobble2); background: #fbf3e4; }
@@ -462,10 +462,10 @@
     </div>
   </section>
 
-  <!-- ============================================ Steypaskápurin -->
+  <!-- ============================================ Steypaskápið -->
   <section class="jg-section jg-steyp" id="steyp">
     <div class="jg-wrap">
-      <span class="jg-mono">Steypaskápurin</span>
+      <span class="jg-mono">Steypaskápið</span>
       <h2>Steypini hjá flokkinum</h2>
       <p class="jg-steyp__lead" id="jg-steyp-lead"></p>
       <div class="jg-shelf" id="jg-shelf"></div>
@@ -841,7 +841,7 @@ aldri kann eg fulltakka tær
     var d = DOORS[n - 1], won = countSteyp(), total = spaelDoors().length, conf = '', cols = ['#d8382c', '#2f9b47', '#f4b81c', '#3b6fd8', '#e36aa6'];
     for (var k = 0; k < 18; k++) conf += '<i class="jg-conf" style="left:' + Math.round(Math.random() * 96) + '%;background:' + cols[k % cols.length] + ';animation-delay:' + (Math.random() * .6).toFixed(2) + 's"></i>';
     var ov = document.createElement('div'); ov.className = 'jg-prize'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Tit fingu eitt steyp');
-    ov.innerHTML = '<div class="jg-prize__card">' + conf + '<div class="jg-prize__cup">' + cupSvg(d, n, true, true) + '</div><h2>Tit fingu eitt steyp!</h2><p class="jg-prize__t">Lúka ' + n + ': ' + esc(d.t) + '</p><p>' + (won === total ? 'Nú hava tit øll ' + total + ' steypini. Gleðilig jól, jólameistarar!' : 'Tit hava savnað <b>' + won + '</b> av ' + total + ' steypum.') + '</p><div class="jg-prize__btns"><button class="jg-btn jg-btn--sm" type="button" data-shelf>Sí steypaskápin</button><button class="jg-btn jg-btn--sm jg-btn--green" type="button" data-close>Halt fram</button></div></div>';
+    ov.innerHTML = '<div class="jg-prize__card">' + conf + '<div class="jg-prize__cup">' + cupSvg(d, n, true, true) + '</div><h2>Tit fingu eitt steyp!</h2><p class="jg-prize__t">Lúka ' + n + ': ' + esc(d.t) + '</p><p>' + (won === total ? 'Nú hava tit øll ' + total + ' steypini. Gleðilig jól, jólameistarar!' : 'Tit hava savnað <b>' + won + '</b> av ' + total + ' steypum.') + '</p><div class="jg-prize__btns"><button class="jg-btn jg-btn--sm" type="button" data-shelf>Sí steypaskápið</button><button class="jg-btn jg-btn--sm jg-btn--green" type="button" data-close>Halt fram</button></div></div>';
     root.appendChild(ov); chime();
     var closeBtn = ov.querySelector('[data-close]'); closeBtn.focus();
     function close() { document.removeEventListener('keydown', onKey); ov.remove(); }
