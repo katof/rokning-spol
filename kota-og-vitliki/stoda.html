@@ -1,0 +1,7 @@
+<!DOCTYPE html><html lang="fo"><head><meta charset="utf-8"><title>stoda</title></head><body><script>
+(function(){var st={};try{st=JSON.parse(localStorage.getItem('snar-kv-v1')||'{}');}catch(e){}
+var done={},n=0;for(var i=1;i<=8;i++){done['s'+i]=!!(st.done&&st.done['s'+i]);if(done['s'+i])n++;}
+var won=n;if(st.special)for(var k in st.special)if(st.special[k])won++;
+function send(){if(window.parent!==window)window.parent.postMessage({kv:'stoda',done:done,n:n,won:won},'*');}
+send();window.addEventListener('message',function(e){if(e.data&&e.data.kv==='stoda?')send();});})();
+</script></body></html>
