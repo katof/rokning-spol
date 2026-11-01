@@ -141,7 +141,12 @@
 .kv-tag span{line-height:1.45}
 
 /* ---- ritilin (Kanna koturnar) ---- */
-.kv-lab{background:var(--w);border:2px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);overflow:hidden;margin-top:clamp(22px,3vw,30px)}
+.kv-lab{background:var(--w);border:2px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);margin-top:clamp(22px,3vw,30px)}
+/* ikki overflow:hidden á .kv-lab – tá teknar kagin ikki altíð úrslitið í rammuni; hornini verða rundaði á innara partinum */
+.kv-lab__bar{border-radius:16px 16px 0 0}
+.kv-lab__hint{border-radius:0 0 16px 16px}
+.kv-lab iframe{will-change:transform}
+.kv-lab textarea{border-radius:0}
 .kv-lab:fullscreen{border-radius:0;border:0;box-shadow:none;display:flex;flex-direction:column;background:var(--w)}
 .kv-lab::backdrop{background:#000}
 .kv-lab__bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;border-bottom:2px solid var(--ink);background:var(--p2)}
