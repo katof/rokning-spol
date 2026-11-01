@@ -410,7 +410,10 @@ window.kvPageLinks=function(){
  function nextStig(){for(var i=1;i<=8;i++)if(!state.done['s'+i])return i;return 8;}
  refresh();
  var startBtn=$('[data-kv-start]');if(startBtn){var ns=nextStig();if(doneCount()>0&&doneCount()<8){startBtn.setAttribute('href','#kv-s'+ns);startBtn.setAttribute('data-go','stig-'+ns);startBtn.innerHTML='Halt fram á stigi '+ns+' <svg aria-hidden="true"><use href="#kv-i-arrow"/></svg>';}}
- var pr=$('[data-kv-print]');if(pr)pr.addEventListener('click',function(){window.print();});
+ function printHead(){var n=$('[data-kv-print-navn]'),d=$('[data-kv-print-dato]');var M=['januar','februar','mars','apríl','mai','juni','juli','august','september','oktober','november','desember'],t=new Date();
+  if(n)n.textContent=state.navn&&state.navn.fornavn?'Navn: '+state.navn.fornavn+(state.navn.flokkur?' · Flokkur: '+state.navn.flokkur:''):'Navn: ______________   Flokkur: ______';if(d)d.textContent=t.getDate()+'. '+M[t.getMonth()]+' '+t.getFullYear();}
+ window.addEventListener('beforeprint',printHead);
+ var pr=$('[data-kv-print]');if(pr)pr.addEventListener('click',function(){printHead();window.print();});
  (function(){var b=$('[data-kv-reset]'),armed=false,t;if(!b)return;b.addEventListener('click',function(){if(!armed){armed=true;b.textContent='Ja, strika alt?';b.style.background='#ef2418';b.style.borderColor='#ef2418';t=setTimeout(function(){armed=false;b.textContent='Nullstilla alt';b.style.background='';b.style.borderColor='';},4000);return;}
   clearTimeout(t);state={done:{},quiz:{},special:{},code:{},tried:{}};try{localStorage.removeItem(KEY);}catch(e){}Object.keys(labs).forEach(function(id){labs[id].ta.value=labs[id].start;labs[id].run(false);});Object.keys(CHECKS).forEach(function(id){renderChecks(id,null);var d=$('[data-done="'+id+'"]');if(d)d.hidden=true;});$$('[data-quiz]').forEach(mountQuiz);refresh();armed=false;b.textContent='Nullstilla alt';b.style.background='';b.style.borderColor='';toast.innerHTML='<svg aria-hidden="true"><use href="#kv-i-reset"/></svg><div><b>Alt er nullstillað</b><small>Steyp, kanningar og kota eru strikað á hesi eindini.</small></div>';toast.classList.add('is-on');clearTimeout(toastTimer);toastTimer=setTimeout(function(){toast.classList.remove('is-on');},4000);});})();
 

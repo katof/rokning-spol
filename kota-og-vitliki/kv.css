@@ -497,7 +497,32 @@
  .kv-trophy svg{width:70px;height:70px}
 }
 @media (prefers-reduced-motion:reduce){.kv *{animation:none!important;transition:none!important}}
-@media print{.kv-nav,.kv-hero__glow,.kv-toast,.kv-conf,.kv-lab,.kv-reset{display:none!important}.kv-section{break-inside:avoid}}
+/* ---- prent: skápið sum eitt ark (hvítt, 4 steyp á røð, navn og dagur) ---- */
+.kv-print-head{display:none}
+@media print{
+ @page{size:A4;margin:12mm}
+ html,body{background:#fff!important}
+ .kv,.kv *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .kv{background:#fff!important;overflow:visible!important}
+ .kv-top,.kv-nav,.kv-hero__glow,.kv-toast,.kv-conf,.kv-lab,.kv-reset,.kv-try,[data-kv-skap-next]{display:none!important}
+ .kv-section{break-inside:auto;padding-top:0!important;padding-bottom:0!important}
+ .kv-wrap{padding-left:0!important;padding-right:0!important;width:100%!important}
+ #kv-skap{background:#fff!important;color:#1b2430!important}
+ #kv-skap .kv-head{display:none!important}
+ .kv-print-head{display:flex!important;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:3px solid #1b2430;padding-bottom:8px;margin-bottom:12px;font:700 11pt/1.3 Nunito,Arial,sans-serif;color:#1b2430}
+ .kv-print-head b{display:block;font:800 18pt/1.1 Fraunces,Georgia,serif}
+ .kv-shelf{background:#fff!important;border:2px solid #1b2430!important;box-shadow:none!important;padding:12px 14px!important;border-radius:14px}
+ .kv-shelf__sum{color:#1b2430!important;margin-bottom:8px!important}
+ .kv-shelf__sum b{color:#1b2430!important;font-size:16pt!important}
+ .kv-bigprog{background:#ece7d8!important;border-color:#1b2430!important;margin:4px 0 12px!important}
+ .kv-skap{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+ .kv-trophy{break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;padding:8px 6px!important;font-size:10pt!important;background:#fff!important}
+ .kv-trophy:not(.is-won){background:#f6f3ea!important}
+ .kv-trophy svg{width:58px!important;height:58px!important}
+ .kv-trophy small{font-size:8.5pt!important}
+ .kv-trophy.is-won::after{width:20px;height:20px;font-size:11px;top:-6px;right:-4px}
+ body:has(#kv-skap) .kv-section:not(#kv-skap),body:has(#kv-skap) .kv-hero,body:has(#kv-skap) .kv-end{display:none!important}
+}
 
 /* ---- einstøk síða (uttan Snar-rammuna) ---- */
 html,body{margin:0;padding:0;background:#f6f3ea}
