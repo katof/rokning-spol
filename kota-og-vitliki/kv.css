@@ -292,7 +292,7 @@
 .kv-more a:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--yel)}
 .kv-more b{font:800 19px/1.2 Fraunces,serif}
 .kv-more small{font:600 14px/1.4 Nunito,sans-serif;color:var(--mut)}
-.is-framed .kv-hero__wrap,.is-framed .kv-teacher,.is-framed .kv-end,.is-framed .kv-nav{display:none!important}
+.is-framed .kv-hero__wrap,.is-framed .kv-teacher,.is-framed .kv-end,.is-framed .kv-nav,.is-framed #kv-leistur{display:none!important}
 .is-framed .kv-hero{padding-top:14px}
 @media (max-width:820px){.kv-hubhead__wrap{grid-template-columns:1fr}.kv-stigs,.kv-more{grid-template-columns:1fr}.kv-stigs a{grid-template-columns:auto 52px minmax(0,1fr)}.kv-stigs svg{width:52px;height:52px}}
 
