@@ -28,6 +28,7 @@ window.kvPageLinks=function(){
   else if(framed||!/github\.io$/.test(location.hostname))a.href=slug+'.html';
   else{a.href=at+KV_SNAR.skuli+'#'+slug;a.target='_top';}});
  document.querySelectorAll('a[data-snar]').forEach(function(a){a.href=at+a.getAttribute('data-snar');a.target='_top';});
+ var tb=document.querySelector('.kv-top');function th(){if(tb)document.documentElement.style.setProperty('--kv-toph',tb.getBoundingClientRect().height+'px');}th();window.addEventListener('resize',th);
  if(framed){document.documentElement.classList.add('is-framed');try{parent.postMessage({type:'jol-hash',hash:here==='index'?'':'#'+here},'*');}catch(e){}}
 };
 (function(){

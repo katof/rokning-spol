@@ -452,4 +452,7 @@ body{min-height:100vh}
 .kv-top__dots i.d{background:#1f9d6a;border-color:#1f9d6a}
 .kv-top__dots i.c{box-shadow:0 0 0 3px #ffc93c}
 .kv .kv-stig{border-top:0}
+/* ritilin og partarnir skulu ikki fjalast undir føsta toppbjálkanum, tá ið síðan rennur til teirra */
+.kv-lab,.kv-section,.kv-funka,.kv-task{scroll-margin-top:calc(var(--kv-toph,64px) + 16px)}
+@media (max-width:600px){.kv-lab,.kv-section,.kv-funka,.kv-task{scroll-margin-top:12px}}
 @media (max-width:600px){.kv-top{position:static;padding:8px 14px}.kv-top__t{order:-1;width:100%;margin:0 0 2px}.kv-top__dots{order:5;width:100%}.kv-top a{min-height:34px;padding:3px 10px;font-size:13px}}
