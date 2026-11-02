@@ -117,6 +117,10 @@
 .jh-task li input { width: 22px; height: 22px; margin: 3px 0 0; accent-color: var(--green); cursor: pointer; }
 .jh-task li.is-on { text-decoration: line-through; color: var(--muted); }
 .jh-task li.jh-task__hold { display: block; margin: 4px 0 6px; }
+.jh-try { margin-top: 16px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--blue-l); box-shadow: 3px 4px 0 var(--ink); }
+.jh-try h4 { margin: 0 0 6px; font-size: 1.05rem; }
+.jh-try p { margin: 0 0 8px; white-space: pre-line; }
+.jh-try small { display: block; margin-top: 8px; color: var(--muted); }
 .jh-hint { margin-top: 10px; padding: 10px 14px; border-left: 4px solid var(--yellow); background: var(--yellow-l); border-radius: 0 10px 10px 0; font-size: .95rem; white-space: pre-line; }
 .jh-vid { margin-top: 6px; padding: 12px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--pink-l); white-space: pre-line; font-size: 1rem; position: relative; }
 .jh-det { margin-top: 10px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; }
@@ -373,7 +377,7 @@
           <div class="jh-open__col">
             <div class="jh-part jh-und" id="jo-und-w"><h3 id="jo-und-h">Undrast</h3><p class="jh-und__q" id="jo-und"></p><div class="jh-git"><p class="jh-git__hint" id="jo-git-hint"></p><label for="jo-git" id="jo-git-l">Okkara git</label><textarea id="jo-git" rows="2"></textarea><button class="jh-btn jh-btn--sm jh-btn--ink" type="button" id="jo-git-go">Vit hava gitið →</button></div></div>
             <div class="jh-part jh-gate"><div class="jh-src" id="jo-src"></div><p class="jh-tx" id="jo-tx" style="margin-top:12px"></p><div id="jo-hold"></div><div id="jo-media"></div></div>
-            <div class="jh-part jh-gate"><h3 id="jo-upp-h">Uppgáva</h3><p class="jh-tx" id="jo-upp-intro" style="font-weight:800;margin:0 0 10px" hidden></p><ul class="jh-task" id="jo-upp"></ul><p class="jh-tx" id="jo-upp-after" style="font-size:1rem;margin-top:10px"></p><div class="jh-hint" id="jo-hint" hidden></div><div class="jh-src" id="jo-btns" style="margin-top:12px"></div></div>
+            <div class="jh-part jh-gate"><h3 id="jo-upp-h">Uppgáva</h3><p class="jh-tx" id="jo-upp-intro" style="font-weight:800;margin:0 0 10px" hidden></p><ul class="jh-task" id="jo-upp"></ul><p class="jh-tx" id="jo-upp-after" style="font-size:1rem;margin-top:10px"></p><div class="jh-hint" id="jo-hint" hidden></div><div class="jh-src" id="jo-btns" style="margin-top:12px"></div><div class="jh-try" id="jo-try" lang="en" hidden></div></div>
             <div class="jh-part jh-und jh-aftur jh-gate" id="jo-aftur"><h3 id="jo-aftur-h">Undrast aftur</h3><p class="jh-und__q" id="jo-aftur-q"></p><p class="jh-aftur__git" id="jo-aftur-git"></p><p id="jo-aftur-t"></p></div>
           </div>
           <div class="jh-open__col">
@@ -417,7 +421,7 @@
         <div data-hold="reglur" class="jh-hold-box"><p><b>Regla A:</b> Kasta ein vanligan terning. Tú vinnur, um tú fært ein seksara.</p><p><b>Regla B:</b> Kasta tveir vanligar terningar. Tú vinnur, um eygnatølini til samans geva seks.</p><p style="margin:0;color:var(--muted);font-size:.92rem">Vit ganga út frá, at allar seks síðurnar á hvørjum terningi eru líka sannlíkar, og at terningarnir ikki ávirka hvør annan.</p></div>
         <div data-hold="ferdin" class="jh-hold-box"><p class="jh-mono" style="margin-bottom:8px">Ein upphugsað ferð – dømið er gjørt til uppgávuna og lýsir ikki eina ávísa sjokulátuvøru.</p><table><tr><th>Land</th><th>Hvat hendir?</th></tr><tr><td>Gana</td><td>Kakaobaunir verða dyrkaðar og heystaðar.</td></tr><tr><td>Niðurlond</td><td>Kakaobaunirnar verða brúktar til at framleiða sjokulátu.</td></tr><tr><td>Danmark</td><td>Sjokulátan verður flutt á eina goymslu.</td></tr><tr><td>Føroyar</td><td>Sjokulátan verður seld í einum handli.</td></tr></table></div>
         <div data-hold="talva" class="jh-hold-box"><table><tr><th>Hetta síggja vit á málninginum</th><th>Hetta stendur í bíbliutekstinum</th></tr><tr><td style="height:56px"></td><td></td></tr><tr><td style="height:56px"></td><td></td></tr><tr><td style="height:56px"></td><td></td></tr></table></div>
-        <div data-hold="phrases" class="jh-hold-box" lang="en"><p class="jh-mono" style="margin-bottom:8px">Useful phrases</p><p><em>At the beginning …</em><br><em>The music makes the scene feel …</em><br><em>The advert suggests that …</em><br><em>The company wants viewers to …</em></p></div>
+        <div data-hold="phrases" class="jh-hold-box" lang="en"><p class="jh-mono" style="margin-bottom:8px">Useful phrases</p><p><em>At the beginning, …</em><br><em>One important moment is when …</em><br><em>The music makes the scene feel …</em><br><em>I think the advert wants us to feel …</em><br><em>The company wants viewers to …</em></p></div>
         <div data-hold="hugnaligt" class="jh-hold-box"><p class="jh-mono" style="margin-bottom:8px">Samanbering · „Hví man alt vera so hugnaligt í kvøld!“ · orð: Kristin í Geil</p>
 <p>1. Hví man alt vera so hugnaligt í kvøld!<br>Frosturin bítur, men ongi er køld.<br>Dagur var strævin, men ongin sýnast móð,<br>hví eru øll so blíð og fró?</p>
 <p>Tað er jólaaftan! Klokkan ring:<br>Bing, bang, bing! Bing, bang, bing!<br>Brátt er træið tendrað – slá so ring,<br>dansa kvøð og syng!</p>
@@ -623,14 +627,16 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
       vid: 'Veljið eina av tænastunum.\nHvat hevði tað havt at siga, um hon ikki virkaði í tíggju minuttir?\nOg hvat hevði hent, um hon ikki virkaði í tvey samdøgur?\nHvør hevði merkt avleiðingarnar fyrst?',
       aftur: 'Halda tit framvegis tað sama, ella hava tit broytt hugsan?\nHava tit lagt merki til arbeiði ella tænastur, sum tit ikki hugsaðu um í byrjanini?\nBrúkið dømi úr uppgávuni til at greiða frá, hví hesar tænasturnar eru týdningarmiklar.',
       laer: 'Uppgávan snýr seg um arbeiðsbýti og tær tænastur, sum vit hava brúk fyri í gerandisdegnum – eisini á halgidøgum.\nNæmingarnir skulu kanna, hvørji fólk eru til arbeiðis á jólaaftan, og hvussu ymiskar tænastur eru bundnar at hvørjari aðrari.\nTil dømis hevur ein sjúkrabilur brúk fyri bæði starvsfólkum, samskifti og vegum, sum eru koyrandi. Ein vatnveiting kann vera treytað av streymi, og um streymurin fer, kann tað eisini ávirka aðrar tænastur.\nLegg dent á, at næmingarnir kunnu greiða frá, hví teir hava valt júst hesar tænasturnar, og hvat kann henda, um tær ikki virka.\nUppgávan krevur ikki, at næmingarnir greiða frá arbeiðinum hjá foreldrum ella øðrum í familjuni.' },
-    { d: '2026-12-17', und: 'Can a story make us want to buy something without telling us anything about the product?', t: 'Can a story sell a gift?', fak: ['en'], min: '10–15', ic: 'k-play', lang: 'en',
-      src: [['Upplýsingar frá avsendaranum (John Lewis Partnership)', 'https://www.johnlewispartnership.co.uk/media-centre/latest-news/2024/21290']], hold: 'phrases',
-      yt: [['55ghIHTaRzM', 'The Gifting Hour – John Lewis, jólalýsing 2024']],
-      tx: 'Hyggið at bretsku jólalýsingini «The Gifting Hour» hjá John Lewis frá 2024. Lýsingin fylgir einari kvinnu, sum leitar eftir einari gávu til systur sína.\n\nWatch the advert once. Then work in pairs.',
-      upp: ['Describe the story in three sentences.', 'Choose one moment where music or images affect the mood. Explain how.', 'What does the advert suggest makes a good gift?', 'What does the company want viewers to do?'],
-      uppAfter: 'Choose one of your answers and record it in about 30 seconds, or present it to another pair. Refer to a specific moment in the advert.',
-      vid: 'Go further: What might change if the same images had a very different soundtrack?',
-      laer: 'Denturin liggur á enskum samskifti, miðlafatan og grundgeving við ítøkiligum dømum. Lærarin kann vísa lýsingina felags.' },
+    { d: '2026-12-17', und: 'Can an advert make us want to buy something without focusing on a particular product?', t: 'Can a story make us want to shop?', fak: ['en'], min: '15–20', ic: 'k-play', lang: 'en',
+      src: [], hold: 'phrases', gitHint: 'What do you think? Talk together and write down your ideas before you watch the advert.',
+      yt: [['55ghIHTaRzM', 'Watch The Gifting Hour – John Lewis Christmas advert (2024)']],
+      tx: 'Hyggið at bretsku jólalýsingini „The Gifting Hour“ hjá John Lewis frá 2024. Lýsingin er um eina kvinnu, sum leitar eftir einari jólagávu til systur sína.\n\nHyggið fyrst at lýsingini og fylgið við søguni. Hyggið síðan eina ferð aftrat og leggið serliga merki til tónleikin, myndirnar og kenslurnar, sum lýsingin roynir at vekja.\n\n**Work in pairs. Discuss your answers in English.**',
+      upp: ['**Tell the story in three sentences.** What happens at the beginning, in the middle and at the end?', '**Choose one moment where the music or images create a particular feeling.** What feeling is it, and how is it created?', '**What does the advert suggest makes a good Christmas gift?** Give an example from the advert.', '**What does John Lewis want viewers to feel or do?** How can you tell?'],
+      uppAfter: '**Speak up!**\nChoose one of your answers and explain it in English to another pair. Speak for about 30 seconds.\nTry to mention a particular moment in the advert.',
+      prova: { h: 'Try it yourself – Lýsingarsmiðjan', txt: 'Now it\'s your turn to create an advert!\nChoose a product and make two different adverts. Try to make one advert focus on facts and the other on feelings.\nCan you make people want the same product in two different ways?', btn: ['Lýsingarsmiðjan – create your own adverts', 'https://snardev.ctrl.fo/funkur/lysingar-til-samfelagsfroedi#c236195'], note: 'The activity is in Faroese. You can write your adverts in English.' },
+      aftur: 'Do you still think the same, or have you changed your mind?\nWhat is the advert really trying to sell: a product, a feeling or the shop itself?\nGive an example from the advert to support your answer.',
+      vid: 'Imagine watching the same advert with completely different music.\nHow might the mood change? Would the advert still have the same effect on you?\n**Find out more:** [Read what John Lewis says about the advert](https://www.johnlewispartnership.co.uk/media-centre/latest-news/2024/21290).\nDoes the company\'s explanation match your own interpretation?',
+      laer: 'Uppgávan leggur dent á at skilja og tulka eina enska lýsing og at tosa um hana á enskum.\nNæmingarnir skulu kanna, hvussu lýsingin brúkar eina søgu, tónleik og myndir til at vekja kenslur og ávirka hyggjaran.\n**Fyrsta sýning:** Lat næmingarnar hyggja at lýsingini uttan at steðga. Endamálið er at skilja søguna.\n**Onnur sýning:** Bið næmingarnar leggja merki til, hvussu tónleikurin og myndirnar ávirka stemningin, og hvat tey halda, at fyritøkan vil hava hyggjaran at hugsa ella gera.\nLýsingin snýr seg um eina kvinnu, sum leitar eftir einari jólagávu til systur sína. Á ferðini verða minnir og kenslur knýtt at tí at geva eina gávu. Samstundis verður John Lewis vístur sum staðið, har hon finnur gávuna.\nNæmingarnir kunnu tí koma fram til, at lýsingin ikki fyrst og fremst roynir at selja eina ávísa vøru, men heldur eina hugmynd um tað at geva gávur – og at fáa hyggjaran at hugsa um John Lewis, tá ið hann skal keypa.\nFleiri tulkingar eru møguligar. Tað týdningarmesta er, at næmingarnir kunnu greiða frá sínum hugsanum á enskum og vísa á ítøkilig dømi úr lýsingini.\n**Munnligt enskt:** Tað er ikki neyðugt, at næmingarnir tosa lýtaleyst. Legg heldur dent á, at teir royna at orða sínar hugsanir, brúka orð og vendingar úr uppgávuni og greiða frá, hví teir halda, sum teir gera.\nFrágreiðingin hjá John Lewis kann brúkast aftaná, so næmingarnir fyrst fáa høvi at gera sínar egnu tulkingar.' },
     { d: '2026-12-18', und: 'Skilja øll eina søgu uttan orð á sama hátt – ella er tað júst tað, sum ger hana sterka?', bok: { h: 'Desember í Føroyum, uttan orð', txt: 'Setið myndarøðina inn í tær fýra rammurnar – teknið ella límið myndirnar inn. Gjørdu tit eina ljóðfrásøgn, kunnu tit tekna, hvat lurtarin hoyrir, og nær. Skrivið síðan ein setning um eitt val, sum tit gjørdu við vilja.', byrj: ['Vit valdu …, tí …'], ramm: 4, stor: true },
       t: 'Desember í Føroyum, uttan orð', fak: ['ml'], min: 'umleið 20', ic: 'k-camera', lang: 'fo',
       src: [],
@@ -667,13 +673,14 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
         '<span class="jh-door__t">' + (lock ? 'Letur upp ' + (+d.d.split('-')[2]) + '. des' : esc(d.t)) + '</span><span class="jh-door__d">' + fmt(d.d).split(' ')[0] + ' ' + (+d.d.split('-')[2]) + '.</span>' + (lock ? '' : '<span class="jh-door__fak">' + FAK[d.fak[0]][0] + '</span>') + '</button>';
     }).join('');
   }
+  function md(s) { return esc(s || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\[([^\]]+)\]\((https?:[^)\s]+|\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>'); }
   function ytFacade(id, cap) { return '<button class="jh-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jh-yt__play">▶ Spæl</span></button><p class="jh-ytcap">' + esc(cap) + '</p>'; }
   function returnHold() { Array.prototype.slice.call(root.querySelectorAll('#jo-hold [data-hold], #jo-upp [data-hold]')).forEach(function (c) { hold.appendChild(c); }); }
   /* Gitið verður goymt í kaganum á hesi teldu (ikki á Snar). Í fyrireikingini («Lat allar lúkur upp») sær lærarin alt beinanvegin. */
   var GIT = {
     fo: { hint: 'Hvat halda tit? Tosið saman og skrivið niður, hvat tit halda, áðrenn tit lesa víðari.', l: 'Hetta halda vit', go: 'Vit hava gitið →', h: 'Undrast aftur', t: 'Halda tit framvegis tað sama, ella hava tit broytt hugsan? Hvat í tekstinum, á myndini, í tølunum ella í døminum fær tykkum at halda tað?', tomt: 'Tit hava ikki skrivað nakað niður enn. Hvat hildu tit, áðrenn tit byrjaðu?' },
     da: { hint: 'Gæt først. Tal sammen, og skriv jeres gæt, før I læser videre.', l: 'Vores gæt', go: 'Vi har gættet →', h: 'Undr jer igen', t: 'Tænker I det samme nu? Hvad i teksten støtter jeres svar?', tomt: 'I skrev ikke noget gæt. Hvad tænkte I, før I begyndte?' },
-    en: { hint: 'Guess first. Talk together, and write down your guess before you read on.', l: 'Our guess', go: 'We have guessed →', h: 'Wonder again', t: 'Do you still think the same? What in the text or the advert supports your answer?', tomt: 'You did not write down a guess. What did you think before you started?' }
+    en: { hint: 'What do you think? Talk together and write down your ideas before you read on.', l: 'Our ideas', go: 'We are ready →', h: 'Wonder again', t: 'Do you still think the same, or have you changed your mind? What in the text or the advert supports your answer?', tomt: 'You haven\'t written anything down yet. What did you think before you started?' }
   };
   var GIT_KEY = 'snar-jol-hadeild-git-2026', GITID_KEY = 'snar-jol-hadeild-gitid-2026', gits = {}, gitid = {};
   try { gits = JSON.parse(store(GIT_KEY) || '{}') || {}; gitid = JSON.parse(store(GITID_KEY) || '{}') || {}; } catch (e) { gits = {}; gitid = {}; }
@@ -681,12 +688,12 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
   function renderAftur(n, G) { var g = (gits[n] || '').trim(); root.querySelector('#jo-aftur-git').textContent = g ? G.l + ': ' + g : G.tomt; }
   function setupGit(i, d) {
     var G = GIT[d.lang] || GIT.fo, n = i + 1, has = !!d.und;
-    root.querySelector('#jo-git-hint').textContent = G.hint; root.querySelector('#jo-git-hint').setAttribute('lang', d.lang);
+    root.querySelector('#jo-git-hint').textContent = d.gitHint || G.hint; root.querySelector('#jo-git-hint').setAttribute('lang', d.lang);
     root.querySelector('#jo-git-l').textContent = G.l; gitTa.value = gits[n] || ''; gitTa.setAttribute('lang', d.lang);
     root.querySelector('#jo-git-go').textContent = G.go;
     root.querySelector('#jo-aftur-h').textContent = G.h;
     root.querySelector('#jo-aftur-q').textContent = d.und || ''; root.querySelector('#jo-aftur-q').setAttribute('lang', d.lang);
-    root.querySelector('#jo-aftur-t').textContent = (d.lang === 'fo' && d.aftur) || G.t; root.querySelector('#jo-aftur-t').setAttribute('lang', d.lang);
+    root.querySelector('#jo-aftur-t').textContent = d.aftur || G.t; root.querySelector('#jo-aftur-t').setAttribute('lang', d.lang);
     renderAftur(n, G); root.querySelector('#jo-aftur').hidden = !has;
     openEl.classList.toggle('is-gated', has && !allOpen && !gitid[n]);
   }
@@ -707,19 +714,20 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
     var bokEl = root.querySelector('#jo-bok'); bokEl.hidden = !d.bok;
     if (d.bok) { root.querySelector('#jo-bok-h').textContent = d.bok.h; root.querySelector('#jo-bok-txt').textContent = d.bok.txt; root.querySelector('#jo-bok-stor').hidden = !d.bok.stor;
       root.querySelector('#jo-bok-byrj').innerHTML = (d.bok.byrj || []).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join(''); }
-    root.querySelector('#jo-tx').textContent = d.tx;
+    root.querySelector('#jo-tx').innerHTML = md(d.tx);
     if (d.hold && d.uppHold == null) { var h = hold.querySelector('[data-hold="' + d.hold + '"]'); if (h) root.querySelector('#jo-hold').appendChild(h); }
     var m = root.querySelector('#jo-media'); m.innerHTML = (d.yt || []).map(function (y) { return ytFacade(y[0], y[1]); }).join(''); bindYt(m);
     root.querySelector('#jo-upp-h').innerHTML = (LABEL[d.lang] || LABEL.fo) + (d.lang !== 'fo' ? '<b>' + d.lang.toUpperCase() + '</b>' : '');
-    var ul = root.querySelector('#jo-upp'); ul.innerHTML = d.upp.map(function (u, k) { return '<li><input type="checkbox" id="jo-c' + k + '" aria-label="Liðugt"><label for="jo-c' + k + '" lang="' + d.lang + '">' + esc(u) + '</label></li>'; }).join('');
+    var ul = root.querySelector('#jo-upp'); ul.innerHTML = d.upp.map(function (u, k) { return '<li><input type="checkbox" id="jo-c' + k + '" aria-label="Liðugt"><label for="jo-c' + k + '" lang="' + d.lang + '">' + md(u) + '</label></li>'; }).join('');
     var ui = root.querySelector('#jo-upp-intro'); ui.textContent = d.uppIntro || ''; ui.hidden = !d.uppIntro; ui.style.fontWeight = d.uppIntroN ? '400' : '800';
     if (d.hold && d.uppHold != null) { var hb = hold.querySelector('[data-hold="' + d.hold + '"]'), li = document.createElement('li'); li.className = 'jh-task__hold'; if (hb) li.appendChild(hb); var ref = ul.children[d.uppHold]; ul.insertBefore(li, ref || null); }
     Array.prototype.forEach.call(ul.querySelectorAll('input'), function (cb) { cb.addEventListener('change', function () { cb.parentElement.classList.toggle('is-on', cb.checked); }); });
-    root.querySelector('#jo-upp-after').textContent = d.uppAfter || '';
+    root.querySelector('#jo-upp-after').innerHTML = md(d.uppAfter);
+    var tr = root.querySelector('#jo-try'); tr.hidden = !d.prova; tr.innerHTML = d.prova ? '<h4>' + esc(d.prova.h) + '</h4><p>' + md(d.prova.txt) + '</p><a class="jh-btn jh-btn--sm jh-btn--yellow" href="' + d.prova.btn[1] + '">🎮 ' + esc(d.prova.btn[0]) + ' →</a>' + (d.prova.note ? '<small>' + esc(d.prova.note) + '</small>' : '') : '';
     var hint = root.querySelector('#jo-hint'); hint.hidden = !d.hint; hint.textContent = d.hint || '';
     root.querySelector('#jo-btns').innerHTML = (d.btns || []).map(function (b) { return '<a class="jh-btn jh-btn--sm jh-btn--yellow" href="' + b[1] + '">🎮 ' + esc(b[0]) + ' →</a>'; }).join('');
-    root.querySelector('#jo-vid').textContent = d.vid.replace(/^(Go further|Undersøg mere|Kanna víðari):\s*/, ''); root.querySelector('#jo-vid-h').textContent = VIDLABEL[d.lang] || VIDLABEL.fo;
-    root.querySelector('#jo-laer').textContent = d.laer; root.querySelector('#jo-laer-det').open = false;
+    root.querySelector('#jo-vid').innerHTML = md(d.vid.replace(/^(Go further|Undersøg mere|Kanna víðari):\s*/, '')); root.querySelector('#jo-vid-h').textContent = VIDLABEL[d.lang] || VIDLABEL.fo;
+    root.querySelector('#jo-laer').innerHTML = md(d.laer); root.querySelector('#jo-laer-det').open = false;
     var lk = root.querySelector('#jo-like'); lk.classList.toggle('is-on', !!likes[i + 1]); likeText();
     root.querySelector('#jo-done').textContent = done[i + 1] ? 'Merkt sum liðugt ✓ – tak merkið burtur' : 'Merk sum liðugt ✓';
     root.querySelector('#jo-prev').disabled = i === 0; root.querySelector('#jo-next').disabled = i === DOORS.length - 1 || !unlocked(DOORS[i + 1]);
