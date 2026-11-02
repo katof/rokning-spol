@@ -167,6 +167,8 @@
 .jol .jm-boklist a:hover { border-color: var(--pink); }
 .jm-boklist small { display: block; font-family: "IBM Plex Mono", monospace; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--pink); }
 .jm-boklist b { font-family: "Space Grotesk", sans-serif; }
+.jm-bokluk { margin-top: 14px; font-weight: 700; }
+.jol .jm-bokluk a { color: var(--pink); }
 .jm-chain { list-style: none; margin: 14px 0 18px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; counter-reset: c; }
 .jm-chain li { position: relative; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: .95rem; }
 .jm-chain li b { display: block; font-family: "Space Grotesk", sans-serif; font-size: 1.05rem; }
@@ -406,22 +408,20 @@ aldri kann eg fulltakka tær
 
   <!-- ============================================ Jólabókin -->
   <section class="jm-section jm-new jm-new--bok" id="jolabok">
-    <details class="jol-fold"><summary><span class="jm-wrap jol-fold__in"><span class="jol-fold__t"><small>Til jólabókina · valfrítt</small><b>Jólabókin hjá flokkinum</b></span><span class="jol-fold__btn"><span class="o">Lat upp ▾</span><span class="c">Lat aftur ▴</span></span></span></summary>
+    <details class="jol-fold"><summary><span class="jm-wrap jol-fold__in"><span class="jol-fold__t"><small>Til læraran</small><b>Jólabókin hjá flokkinum</b></span><span class="jol-fold__btn"><span class="o">Lat upp ▾</span><span class="c">Lat aftur ▴</span></span></span></summary>
     <div class="jm-wrap jm-section__in">
       <div>
-        <span class="jm-mono">Til jólabókina · valfrítt</span>
+        <span class="jm-mono">Til læraran</span>
         <h2>Jólabókin hjá flokkinum</h2>
-        <p style="color:var(--muted)">Í summum lúkum er ein lítil partur, «Til jólabókina». Har gera næmingarnir eina síðu: ein stuttan tekst, eina tekning, eitt úrslit ella eina hugleiðing.</p>
       </div>
       <div>
-        <p>Prentið síðuna á A4, og latið næmingarnar skriva og tekna í hondini. Fyri jól velja tit síður úr arbeiðinum og hefta tær saman til eina bók. Fýra lúkur eru serliga góðar til bókina; tær eru merktar «Góð síða til bókina».</p>
+        <p>Í summum lúkum kunnu næmingarnir skriva og tekna til eina felags jólabók. Prentið leistin á A4 og savnið síðurnar í eini mappu. Fyri jól velja næmingarnir síður úr arbeiðinum og hefta tær saman til eina bók.</p>
+        <p>Uppgávurnar eru valfríar og kunnu eisini gerast seinni.</p>
         <div class="jm-btns">
           <button class="jm-btn jm-btn--pink" type="button" data-jb="forsida">Prenta forsíðu</button>
           <button class="jm-btn jm-btn--pink" type="button" data-jb="tomur">Prenta tóman leist</button>
         </div>
-        <div class="jm-boklist" id="jm-boklist"></div>
-        <details class="jm-det"><summary>Til læraran</summary><div class="jm-det__b">Jólabókin er eitt valfrítt ískoyti, ikki ein uppgáva í hvørjari lúku. Tit kunnu til dømis gera eina síðu um vikuna. Leisturin hevur heiti, pláss til mynd og linjur at skriva á. Brúka tóma leistin til síður, sum næmingarnir sjálvir finna upp á.
-Einki verður goymt á síðuni. Tað, sum næmingarnir gera, er á pappírinum.</div></details>
+        <p class="jm-bokluk" id="jm-boklist">Síður til jólabókina eru í lúkunum <a href="#luka-1" data-luka="0">1</a>, <a href="#luka-4" data-luka="3">4</a>, <a href="#luka-7" data-luka="6">7</a>, <a href="#luka-10" data-luka="9">10</a>, <a href="#luka-11" data-luka="10">11</a>, <a href="#luka-12" data-luka="11">12</a> og <a href="#luka-14" data-luka="13">14</a>.</p>
       </div>
     </div>
     </details>
@@ -807,15 +807,11 @@ aldri kann eg fulltakka tær
     else if (k === 'soga') printSheets(jbStory() + jbPlan());
     else if (k === 'aetlan') printSheets(jbPlan());
   });
-  root.querySelector('#jm-boklist').innerHTML = DOORS.map(function (d, i) {
-    if (!d.bok) return '';
-    return '<a href="#luka-' + (i + 1) + '" data-luka="' + i + '"><small>Lúka ' + String(i + 1).padStart(2, '0') + ' · ' + (+d.d.split('-')[2]) + '. des' + (d.bok.stor ? ' · góð síða' : '') + '</small><b>' + esc(d.bok.h) + '</b></a>';
-  }).join('');
   // Læstar lúkur verða verandi læstar: listin letur bert lúkur upp, sum longu eru opnar.
   root.querySelector('#jm-boklist').addEventListener('click', function (e) {
     var a = e.target.closest('[data-luka]'); if (!a) return;
     e.preventDefault(); e.stopPropagation();
-    var i = +a.getAttribute('data-luka'), sm = a.querySelector('small');
+    var i = +a.getAttribute('data-luka'), sm = a.querySelector('small') || a;
     if (!unlocked(DOORS[i])) { var was = sm.textContent; sm.textContent = 'Letur upp ' + fmt(DOORS[i].d); setTimeout(function () { sm.textContent = was; }, 2500); return; }
     openDoor(i, true);
   });
