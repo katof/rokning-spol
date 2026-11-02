@@ -157,6 +157,18 @@
 .jh-part.jh-und { position: relative; margin-bottom: 16px; padding: 14px 16px 14px 64px; border: 2px solid var(--ink); border-radius: 14px; background: var(--yellow-l); box-shadow: 3px 4px 0 var(--ink); transform: rotate(-.4deg); }
 .jh-und::before { content: "?"; position: absolute; left: 12px; top: 12px; width: 38px; height: 38px; border: 2px solid var(--ink); border-radius: 50%; background: var(--yellow); font-family: "Permanent Marker", cursive; font-size: 1.45rem; line-height: 35px; text-align: center; transform: rotate(-8deg); }
 .jol .jh-und h3, .jol .jh-bok h3 { background: var(--ink); }
+/* ---- Gitið fyrst · Undrast aftur (2.11.2026) ---- */
+.jh-git { margin-top: 12px; }
+.jh-git__hint { font-size: .98rem; margin: 0 0 6px !important; }
+.jh-git label { display: block; font-weight: 800; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+.jh-git textarea { width: 100%; min-height: 60px; padding: 10px 12px; border: 2px solid var(--ink); border-radius: 10px; background: #fff; color: var(--ink); font: inherit; font-size: 1rem; resize: vertical; }
+.jh-git textarea:focus { outline: 3px solid var(--yellow); outline-offset: 1px; }
+.jol .jh-git .jh-btn { margin-top: 10px; }
+.jh-open.is-gated .jh-gate, .jh-open.is-gated .jh-open__col + .jh-open__col { display: none !important; }
+.jh-open.is-gated .jh-open__body { grid-template-columns: 1fr; }
+.jh-open:not(.is-gated) #jo-git-go { display: none; }
+.jh-part.jh-aftur { margin-top: 16px; border-top: 2px solid var(--ink); }
+.jh-aftur__git { margin: 10px 0 !important; padding: 8px 12px; border-left: 4px solid var(--yellow); background: #fff; font-style: italic; white-space: pre-line; }
 .jh-und__q { margin: 0; font-family: Caveat, "Comic Sans MS", cursive; font-weight: 700; font-size: clamp(1.4rem, 2.4vw, 1.75rem); line-height: 1.2; }
 .jh-part.jh-bok { margin-top: 4px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--pink-l); }
 .jh-bok__top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
@@ -357,9 +369,10 @@
         </div>
         <div class="jh-open__body">
           <div class="jh-open__col">
-            <div class="jh-part jh-und" id="jo-und-w"><h3 id="jo-und-h">Undrast</h3><p class="jh-und__q" id="jo-und"></p></div>
-            <div class="jh-part"><div class="jh-src" id="jo-src"></div><p class="jh-tx" id="jo-tx" style="margin-top:12px"></p><div id="jo-hold"></div><div id="jo-media"></div></div>
-            <div class="jh-part"><h3 id="jo-upp-h">Uppgáva</h3><ul class="jh-task" id="jo-upp"></ul><p class="jh-tx" id="jo-upp-after" style="font-size:1rem;margin-top:10px"></p><div class="jh-hint" id="jo-hint" hidden></div><div class="jh-src" id="jo-btns" style="margin-top:12px"></div></div>
+            <div class="jh-part jh-und" id="jo-und-w"><h3 id="jo-und-h">Undrast</h3><p class="jh-und__q" id="jo-und"></p><div class="jh-git"><p class="jh-git__hint" id="jo-git-hint"></p><label for="jo-git" id="jo-git-l">Okkara git</label><textarea id="jo-git" rows="2"></textarea><button class="jh-btn jh-btn--sm jh-btn--ink" type="button" id="jo-git-go">Vit hava gitið →</button></div></div>
+            <div class="jh-part jh-gate"><div class="jh-src" id="jo-src"></div><p class="jh-tx" id="jo-tx" style="margin-top:12px"></p><div id="jo-hold"></div><div id="jo-media"></div></div>
+            <div class="jh-part jh-gate"><h3 id="jo-upp-h">Uppgáva</h3><ul class="jh-task" id="jo-upp"></ul><p class="jh-tx" id="jo-upp-after" style="font-size:1rem;margin-top:10px"></p><div class="jh-hint" id="jo-hint" hidden></div><div class="jh-src" id="jo-btns" style="margin-top:12px"></div></div>
+            <div class="jh-part jh-und jh-aftur jh-gate" id="jo-aftur"><h3 id="jo-aftur-h">Undrast aftur</h3><p class="jh-und__q" id="jo-aftur-q"></p><p class="jh-aftur__git" id="jo-aftur-git"></p><p id="jo-aftur-t"></p></div>
           </div>
           <div class="jh-open__col">
             <div class="jh-part"><h3 id="jo-vid-h">Kanna víðari</h3><div class="jh-vid" id="jo-vid"></div></div>
@@ -512,11 +525,11 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
       hold: 'hugnaligt',
       vid: 'Hvør talar í sanginum, og hvønn vendir røddin sær til? Kanna, um hetta broytist gjøgnum ørindini.\n\nSamanber við «Hví man alt vera so hugnaligt í kvøld!» eftir Kristin í Geil (teksturin stendur omanfyri): hvat hava sangirnir í felag, og hvørjir munir eru á teimum? Kanna serliga myndir av ljósi og myrkri.',
       laer: 'Arbeiðið snýr seg um orðaval, endurtøku, rødd og tulking. Næmingarnir skulu stuðla svarunum við tekstinum. Í 7. flokki kunnu tey arbeiða við fyrsta og øðrum ørindi.' },
-    { d: '2026-12-02', und: 'Hví er tað so lætt at halda, at 20 % og 10 % geva 30 % – og hvør tænir á, at vit halda tað?', t: 'Fært tú 30 % í avsláttri, tá ið tú fyrst fært 20 % og síðan 10 %?', fak: ['st'], min: '10–15', ic: 'k-percent', lang: 'fo',
+    { d: '2026-12-02', und: 'Hvussu nógv sparir tú í veruleikanum, tá ið handilin lovar «20 % + 10 %»?', t: 'Fært tú 30 % í avsláttri, tá ið tú fyrst fært 20 % og síðan 10 %?', fak: ['st'], min: '10–15', ic: 'k-percent', lang: 'fo',
       src: [],
       tx: 'Ein vøra kostar 500 kr. Handilin setur hana 20 % niður. Við kassan fært tú so 10 % av tí nýggja prísinum í eyka avsláttri.\n\nHetta er eitt hugsað roknidømi.',
       upp: ['Rokna prísin eftir fyrsta avsláttin.', 'Rokna prísin, tú skalt gjalda við kassan.', 'Hvussu nógvar krónur sparir tú til samans?', 'Hvussu nógv prosent av upprunaprísinum hevur tú spart?'],
-      uppAfter: 'Greið einum øðrum frá, hví tey seinastu 10 prosentini verða roknað av 400 kr. og ikki av 500 kr.',
+      uppAfter: 'Greið einum øðrum frá, av hvørjum prísi tey seinastu 10 prosentini verða roknað – og hví.',
       vid: 'Handilin gevur í staðin 30 % í avsláttri beinanvegin. Hvussu stórur verður munurin á endaligu prísunum?',
       btns: [['Prenta roknistykki – fleiri prosentstykki', 'https://snardev.ctrl.fo/funkur/prenta-roknistykki-1']],
       laer: 'Svar: Fyrst 400 kr., síðan 360 kr. Samlaði avslátturin er 140 kr., svarandi til 28 %. Við 30 % avsláttri kostar vøran 350 kr. Munurin er 10 kr.\nFunkan Prenta roknistykki ger prosentuppgávur við heilum tølum í svarinum, til at venja víðari.' },
@@ -555,7 +568,7 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
       upp: ['Hvat fáa tit at vita um sjálva vøruna í hvørjari lýsing?', 'Hvørjar kenslur ella ynskir roynir lýsing B at vekja? Hvat fáa vit í veruleikanum at vita við orðunum «Bert hesa vikuna»?', 'Hvønn halda tit, at hvør lýsing vendir sær til? Grundgevið.', 'Skrivið eina nýggja lýsing við í mesta lagi 25 orðum. Veljið ein ávísan málbólk.'],
       vid: 'Hvussu hevði tað ávirkað lýsingina, um hon varð borin fram av einum persóni, sum nógv ung fylgja?',
       laer: 'Arbeið við avsendara, málbólki, upplýsingum og sannføring. Tað er ikki givið frammanundan, hvør lýsing virkar best.' },
-    { d: '2026-12-10', und: 'Hví halda vit ofta, at nakað er sannlíkt, bara tí at tað kennist so?', t: 'Vel tína vinnarareglu', fak: ['st'], min: '10–15', ic: 'k-dice', lang: 'fo',
+    { d: '2026-12-10', und: 'Hvør regla gevur bestu vinningslíkindini – og kanst tú vita tað uttan at rokna?', t: 'Vel tína vinnarareglu', fak: ['st'], min: '10–15', ic: 'k-dice', lang: 'fo',
       src: [], hold: 'reglur',
       tx: 'Í einum hugsaðum gávuspæli sleppur tú at velja eina av tveimum reglum.',
       upp: ['Hvørja reglu hevði tú valt beinanvegin?', 'Skriva allar møguleikarnar við tveimum terningum, sum geva summin seks.', 'Rokna vinningslíkindini við báðum reglum.', 'Samanber úrslitið við títt fyrsta val.'],
@@ -638,6 +651,29 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
   }
   function ytFacade(id, cap) { return '<button class="jh-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jh-yt__play">▶ Spæl</span></button><p class="jh-ytcap">' + esc(cap) + '</p>'; }
   function returnHold() { Array.prototype.slice.call(root.querySelector('#jo-hold').children).forEach(function (c) { hold.appendChild(c); }); }
+  /* Gitið verður goymt í kaganum á hesi teldu (ikki á Snar). Í fyrireikingini («Lat allar lúkur upp») sær lærarin alt beinanvegin. */
+  var GIT = {
+    fo: { hint: 'Gitið fyrst. Tosið saman, og skrivið tykkara git, áðrenn tit lesa víðari.', l: 'Okkara git', go: 'Vit hava gitið →', h: 'Undrast aftur', t: 'Halda tit tað sama nú? Hvat í tekstinum, tølunum ella døminum stuðlar svarinum?', tomt: 'Tit skrivaðu einki git niður. Hvat hildu tit, áðrenn tit byrjaðu?' },
+    da: { hint: 'Gæt først. Tal sammen, og skriv jeres gæt, før I læser videre.', l: 'Vores gæt', go: 'Vi har gættet →', h: 'Undr jer igen', t: 'Tænker I det samme nu? Hvad i teksten støtter jeres svar?', tomt: 'I skrev ikke noget gæt. Hvad tænkte I, før I begyndte?' },
+    en: { hint: 'Guess first. Talk together, and write down your guess before you read on.', l: 'Our guess', go: 'We have guessed →', h: 'Wonder again', t: 'Do you still think the same? What in the text or the advert supports your answer?', tomt: 'You did not write down a guess. What did you think before you started?' }
+  };
+  var GIT_KEY = 'snar-jol-hadeild-git-2026', GITID_KEY = 'snar-jol-hadeild-gitid-2026', gits = {}, gitid = {};
+  try { gits = JSON.parse(store(GIT_KEY) || '{}') || {}; gitid = JSON.parse(store(GITID_KEY) || '{}') || {}; } catch (e) { gits = {}; gitid = {}; }
+  var gitTa = root.querySelector('#jo-git');
+  function renderAftur(n, G) { var g = (gits[n] || '').trim(); root.querySelector('#jo-aftur-git').textContent = g ? G.l + ': ' + g : G.tomt; }
+  function setupGit(i, d) {
+    var G = GIT[d.lang] || GIT.fo, n = i + 1, has = !!d.und;
+    root.querySelector('#jo-git-hint').textContent = G.hint; root.querySelector('#jo-git-hint').setAttribute('lang', d.lang);
+    root.querySelector('#jo-git-l').textContent = G.l; gitTa.value = gits[n] || ''; gitTa.setAttribute('lang', d.lang);
+    root.querySelector('#jo-git-go').textContent = G.go;
+    root.querySelector('#jo-aftur-h').textContent = G.h;
+    root.querySelector('#jo-aftur-q').textContent = d.und || ''; root.querySelector('#jo-aftur-q').setAttribute('lang', d.lang);
+    root.querySelector('#jo-aftur-t').textContent = G.t; root.querySelector('#jo-aftur-t').setAttribute('lang', d.lang);
+    renderAftur(n, G); root.querySelector('#jo-aftur').hidden = !has;
+    openEl.classList.toggle('is-gated', has && !allOpen && !gitid[n]);
+  }
+  gitTa.addEventListener('input', function () { if (current < 0) return; var n = current + 1; gits[n] = gitTa.value; store(GIT_KEY, JSON.stringify(gits)); renderAftur(n, GIT[DOORS[current].lang] || GIT.fo); });
+  root.querySelector('#jo-git-go').addEventListener('click', function () { if (current < 0) return; gitid[current + 1] = 1; store(GITID_KEY, JSON.stringify(gitid)); openEl.classList.remove('is-gated'); var t = root.querySelector('#jo-tx'); if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   function openDoor(i, scroll) {
     var d = DOORS[i]; if (!d || !unlocked(d)) return;
     returnHold(); current = i;
@@ -649,6 +685,7 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
     root.querySelector('#jo-src').innerHTML = (d.src || []).map(function (b) { var ext = /^https?:/.test(b[1]) || /\.pdf$/i.test(b[1]); return '<a class="jh-btn jh-btn--sm" href="' + b[1] + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '><svg class="jh-ic" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M19 14v6H4V5h6"/></svg>' + esc(b[0]) + '</a>'; }).join('');
     root.querySelector('#jo-und-h').textContent = UNDLABEL[d.lang] || UNDLABEL.fo;
     var undEl = root.querySelector('#jo-und'); undEl.textContent = d.und || ''; undEl.setAttribute('lang', d.lang); root.querySelector('#jo-und-w').hidden = !d.und;
+    setupGit(i, d);
     var bokEl = root.querySelector('#jo-bok'); bokEl.hidden = !d.bok;
     if (d.bok) { root.querySelector('#jo-bok-h').textContent = d.bok.h; root.querySelector('#jo-bok-txt').textContent = d.bok.txt; root.querySelector('#jo-bok-stor').hidden = !d.bok.stor;
       root.querySelector('#jo-bok-byrj').innerHTML = (d.bok.byrj || []).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join(''); }
