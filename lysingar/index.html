@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lýsingarsmiðjan – Snar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   Lýsingarsmiðjan – ein funka á Snar (Prototypa, nov. 2026)
+   Næmingarnir undrast, gera lýsingar til upphugsaðar vørur, lata onnur
+   gita málbólk og amboð og kanna orðini í eini lýsing.
+   Sjálvstøðug fíla, sum fyllir allan skermin (til funkurammuna á Snar).
+   Einki verður goymt á Snar – bert í kaganum á hesi teldu.
+   ===================================================================== */
+:root {
+  --red: #ef2418; --red-dark: #c81d12; --red-deep: #c41e15; --blue: #1559e8;
+  --ink: #202124; --muted: #505359; --hair: #e5e5e5; --hair2: #e2e2df;
+  --field: #cfcfcb; --control: #77787b; --surface: #f6f6f4; --tip: #f7f7f6;
+  --info: #1559e8; --info-bg: #e9f0fb; --feel: #c41e15; --feel-bg: #fdecea;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { font-family: Inter, Arial, Helvetica, sans-serif; color: var(--ink); background: #fff; font-size: 1.0625rem; line-height: 1.6; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+h1, h2, h3 { margin: 0; line-height: 1.1; letter-spacing: -.03em; }
+p { margin: 0 0 .8em; }
+
+.ls { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ---- Toppur ---- */
+.ls-top { display: flex; align-items: center; gap: 14px; padding: 12px clamp(16px, 3vw, 32px); border-bottom: 1px solid var(--hair); }
+.ls-top__mark { width: 34px; height: 34px; flex: none; }
+.ls-top h1 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight: 900; }
+.ls-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--feel-bg); color: var(--red-deep); font-size: .62rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; vertical-align: middle; margin-left: 8px; }
+.ls-top__sp { flex: 1; }
+.ls-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 18px; border: 1px solid var(--control); border-radius: 0; background: #fff; font-weight: 700; font-size: 1rem; line-height: 1; box-shadow: 3px 3px 0 rgba(32,33,36,.08); text-decoration: none; color: var(--ink); }
+.ls-btn:hover { background: var(--surface); }
+.ls-btn--red { background: var(--red); border-color: var(--red); color: #fff; box-shadow: none; }
+.ls-btn--red:hover { background: var(--red-dark); }
+.ls-btn--ink { background: var(--ink); border-color: var(--ink); color: #fff; box-shadow: none; }
+.ls-btn--ink:hover { background: #000; }
+.ls-btn--sm { min-height: 38px; padding: 8px 12px; font-size: .9rem; }
+.ls-btn[disabled] { opacity: .4; cursor: default; }
+
+/* ---- Stigini ---- */
+.ls-steps { display: flex; gap: 0; overflow-x: auto; border-bottom: 1px solid var(--hair2); padding: 0 clamp(8px, 2vw, 24px); scrollbar-width: thin; }
+.ls-step { flex: none; border: 0; background: none; padding: .85rem 1rem; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; white-space: nowrap; }
+.ls-step b { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 6px; border-radius: 50%; border: 1px solid var(--control); font-size: .78rem; }
+.ls-step.is-on { color: var(--ink); border-bottom-color: var(--red); }
+.ls-step.is-on b { background: var(--ink); border-color: var(--ink); color: #fff; }
+.ls-step.is-done b { background: var(--surface); }
+
+/* ---- Innihald ---- */
+.ls-main { flex: 1; width: min(1240px, 100%); margin: 0 auto; padding: clamp(18px, 3vw, 36px) clamp(16px, 3vw, 32px) 40px; }
+.ls-panel { display: none; }
+.ls-panel.is-on { display: block; }
+.ls-h { font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 900; margin-bottom: .6rem; }
+.ls-h::before { content: ""; display: block; width: 48px; height: 4px; margin: 0 0 1.1rem; background: var(--red); border-radius: 999px; }
+.ls-lead { color: var(--muted); font-size: clamp(1.06rem, 1.6vw, 1.22rem); max-width: 62ch; }
+.ls-q { font-size: clamp(1.5rem, 3.2vw, 2.4rem); font-weight: 800; line-height: 1.2; letter-spacing: -.02em; max-width: 30ch; margin: .4rem 0 1.2rem; }
+.ls-tip { background: var(--tip); border-left: 3px solid var(--red); padding: 12px 16px; font-size: .95rem; margin: 14px 0; max-width: 70ch; }
+.ls-label { display: block; font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.ls-field, .ls-area { width: 100%; padding: 12px 14px; border: 1px solid var(--field); border-radius: 0; background: #fff; font-size: 1.05rem; }
+.ls-field:hover, .ls-area:hover { border-color: #a9a9a5; }
+.ls-field:focus, .ls-area:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(32,33,36,.08); }
+.ls-area { min-height: 96px; resize: vertical; }
+.ls-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+.ls-grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
+.ls-count { font-size: .88rem; font-weight: 500; color: var(--muted); margin-top: 4px; }
+.ls-count.is-over { color: var(--red-deep); font-weight: 700; }
+
+/* Kort til vøru og málbólk */
+.ls-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.ls-card { text-align: left; padding: 14px; border: 1px solid var(--field); background: #fff; min-height: 96px; display: flex; flex-direction: column; gap: 6px; }
+.ls-card:hover { background: var(--surface); }
+.ls-card[aria-pressed="true"] { border: 2px solid var(--ink); padding: 13px; background: var(--surface); }
+.ls-card__e { font-size: 2rem; line-height: 1; }
+.ls-card__n { font-weight: 700; }
+.ls-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ls-chip { padding: 9px 14px; border: 1px solid var(--field); background: #fff; font-weight: 600; min-height: 44px; }
+.ls-chip:hover { background: var(--surface); }
+.ls-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.ls-facts { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.ls-facts li { padding: 4px 10px; background: var(--info-bg); color: var(--info); font-size: .9rem; font-weight: 600; }
+
+/* Amboðini */
+.ls-tools { display: grid; gap: 8px; }
+.ls-tool { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 10px 12px; border: 1px solid var(--hair2); background: #fff; cursor: pointer; }
+.ls-tool:hover { background: var(--surface); }
+.ls-tool input { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--ink); }
+.ls-tool b { display: block; }
+.ls-tool span { font-size: .92rem; color: var(--muted); }
+
+/* Útgávurnar A og B */
+.ls-ver { display: flex; gap: 0; border-bottom: 1px solid var(--hair2); margin-bottom: 18px; }
+.ls-ver button { border: 0; background: none; padding: .7rem 1rem; font-weight: 700; color: var(--muted); border-bottom: 3px solid transparent; }
+.ls-ver button.is-on { color: var(--ink); border-bottom-color: var(--red); }
+.ls-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.ls-swatch { width: 40px; height: 40px; border: 1px solid var(--control); padding: 0; }
+.ls-swatch[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 2px; }
+.ls-emojis { display: flex; flex-wrap: wrap; gap: 6px; }
+.ls-emoji { width: 46px; height: 46px; border: 1px solid var(--hair2); background: #fff; font-size: 1.5rem; padding: 0; }
+.ls-emoji[aria-pressed="true"] { border: 2px solid var(--ink); background: var(--surface); }
+.ls-form > div { margin-bottom: 16px; }
+
+/* Lýsingin (canvas) */
+.ls-adwrap { position: sticky; top: 12px; }
+.ls-ad { width: 100%; max-width: 460px; aspect-ratio: 4 / 5; display: block; border: 1px solid var(--hair); background: var(--surface); }
+.ls-adcap { font-size: .82rem; color: var(--muted); margin-top: 6px; }
+.ls-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 900px; }
+.ls-pair figure { margin: 0; }
+.ls-pair figcaption { font-weight: 700; margin-top: 6px; }
+
+/* Gita */
+.ls-result { margin-top: 16px; display: grid; gap: 6px; max-width: 640px; }
+.ls-result div { padding: 8px 12px; border: 1px solid var(--hair2); }
+.ls-result .is-both { background: #eaf6ee; border-color: #b9dfc5; }
+.ls-result .is-guess { background: var(--tip); }
+.ls-result .is-miss { background: var(--feel-bg); border-color: #f3c3bd; }
+
+/* Kanna eina lýsing */
+.ls-pens { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.ls-pen { padding: 9px 14px; border: 2px solid transparent; font-weight: 700; min-height: 44px; }
+.ls-pen--info { background: var(--info-bg); color: var(--info); }
+.ls-pen--feel { background: var(--feel-bg); color: var(--feel); }
+.ls-pen--off { background: var(--surface); color: var(--ink); }
+.ls-pen[aria-pressed="true"] { border-color: var(--ink); }
+.ls-words { font-size: clamp(1.25rem, 2.4vw, 1.7rem); line-height: 1.9; padding: 18px 20px; border: 1px solid var(--hair2); background: #fff; max-width: 820px; }
+.ls-w { border: 0; background: none; padding: 1px 4px; margin: 0 1px; font-weight: 600; border-bottom: 3px solid transparent; }
+.ls-w:hover { background: var(--surface); }
+.ls-w.is-info { background: var(--info-bg); color: var(--info); border-bottom-color: var(--info); }
+.ls-w.is-feel { background: var(--feel-bg); color: var(--feel); border-bottom-color: var(--feel); }
+.ls-sum { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; font-weight: 700; }
+.ls-sum span { padding: 6px 12px; }
+
+/* Undrast */
+.ls-git { max-width: 760px; }
+.ls-mine { padding: 12px 16px; border-left: 3px solid var(--ink); background: var(--surface); font-style: italic; white-space: pre-line; max-width: 760px; margin: 0 0 14px; }
+
+/* Til læraran */
+.ls-side { position: fixed; inset: 0 0 0 auto; width: min(520px, 92vw); background: #fff; box-shadow: -20px 0 60px rgba(0,0,0,.12); padding: 28px 26px 40px; overflow-y: auto; transform: translateX(105%); visibility: hidden; transition: transform .25s ease, visibility 0s linear .25s; z-index: 20; }
+.ls-side.is-on { transform: none; visibility: visible; transition: transform .25s ease, visibility 0s; }
+.ls-side h2 { font-size: 1.75rem; font-weight: 900; margin-bottom: 1rem; }
+.ls-side h2::before { content: ""; display: block; width: 48px; height: 4px; margin: 0 0 1.1rem; background: var(--red); border-radius: 999px; }
+.ls-side h3 { font-size: 1.05rem; margin: 1.2rem 0 .4rem; letter-spacing: 0; }
+.ls-side p, .ls-side li { font-size: .95rem; color: var(--muted); }
+.ls-side ul, .ls-side ol { padding-left: 1.2em; margin: 0 0 .8em; }
+.ls-close { position: absolute; right: 18px; top: 18px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--control); background: #fff; font-size: 1.3rem; line-height: 1; }
+.ls-shade { position: fixed; inset: 0; background: rgba(32,33,36,.25); z-index: 19; display: none; }
+.ls-shade.is-on { display: block; }
+
+.ls-foot { padding: 14px clamp(16px, 3vw, 32px); border-top: 1px solid var(--hair); font-size: .82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+
+@media (max-width: 850px) {
+  .ls-grid2 { grid-template-columns: 1fr; }
+  .ls-adwrap { position: static; order: -1; }
+  .ls-adwrap .ls-ad, #ls-ad-g { max-width: 340px; }
+}
+@media (max-width: 600px) {
+  .ls-pair { grid-template-columns: 1fr; }
+  .ls-top h1 .ls-pill { display: none; }
+  .ls-step { padding: .7rem .7rem; font-size: .92rem; }
+}
+@media print {
+  .ls-top, .ls-steps, .ls-foot, .ls-side, .ls-shade, .ls-noprint { display: none !important; }
+  .ls-panel { display: none !important; }
+  .ls-panel.is-on { display: block !important; }
+}
+@media (prefers-reduced-motion: reduce) { .ls-side { transition: none; } }
+</style>
+</head>
+<body>
+<div class="ls" id="ls">
+
+  <header class="ls-top">
+    <svg class="ls-top__mark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="48" fill="#202124"/><circle cx="50" cy="50" r="39" fill="#fff"/><path d="M36 64 64 36" stroke="#202124" stroke-width="11"/><g fill="#202124"><circle cx="29.5" cy="62.5" r="7"/><circle cx="37.5" cy="70.5" r="7"/><circle cx="62.5" cy="29.5" r="7"/><circle cx="70.5" cy="37.5" r="7"/></g></svg>
+    <h1>Lýsingarsmiðjan <span class="ls-pill">Prototypa</span></h1>
+    <span class="ls-top__sp"></span>
+    <button class="ls-btn ls-btn--sm" type="button" id="ls-open-laer">Til læraran</button>
+  </header>
+
+  <nav class="ls-steps" aria-label="Stigini">
+    <button class="ls-step" type="button" data-go="0"><b>1</b>Undrast</button>
+    <button class="ls-step" type="button" data-go="1"><b>2</b>Vøra og málbólkur</button>
+    <button class="ls-step" type="button" data-go="2"><b>3</b>Gerið lýsingina</button>
+    <button class="ls-step" type="button" data-go="3"><b>4</b>Latið onnur gita</button>
+    <button class="ls-step" type="button" data-go="4"><b>5</b>Kannið eina lýsing</button>
+    <button class="ls-step" type="button" data-go="5"><b>6</b>Undrast aftur</button>
+  </nav>
+
+  <main class="ls-main">
+
+    <!-- 1 · Undrast -->
+    <section class="ls-panel" data-p="0">
+      <h2 class="ls-h">Undrast</h2>
+      <p class="ls-q" id="ls-und"></p>
+      <div class="ls-git">
+        <p>Hvat halda tit? Tosið saman og skrivið niður, hvat tit halda, áðrenn tit byrja.</p>
+        <label class="ls-label" for="ls-git">Hetta halda vit</label>
+        <textarea class="ls-area" id="ls-git" rows="3"></textarea>
+        <div class="ls-row"><button class="ls-btn ls-btn--red" type="button" data-next>Vit hava gitið →</button></div>
+      </div>
+    </section>
+
+    <!-- 2 · Vøra og málbólkur -->
+    <section class="ls-panel" data-p="1">
+      <h2 class="ls-h">Vøra og málbólkur</h2>
+      <p class="ls-lead">Veljið eina vøru, sum tit skulu gera lýsing til. Allar vørurnar eru upphugsaðar. Tit kunnu eisini finna upp á tykkara egnu vøru.</p>
+      <div class="ls-cards" id="ls-vorur" role="group" aria-label="Vørur"></div>
+      <div id="ls-egin" hidden style="margin-top:14px;max-width:640px">
+        <label class="ls-label" for="ls-egin-n">Hvat er tykkara vøra?</label>
+        <input class="ls-field" id="ls-egin-n" maxlength="40" placeholder="t.d. ein skúlataska">
+        <label class="ls-label" for="ls-egin-u" style="margin-top:12px">Skrivið nakrar upplýsingar um vøruna (ein í hvørja linju)</label>
+        <textarea class="ls-area" id="ls-egin-u" rows="4" placeholder="t.d. vatntætt&#10;tvey rúm&#10;299 kr."></textarea>
+      </div>
+      <div id="ls-factbox" hidden>
+        <p style="margin:16px 0 0;font-weight:700">Hetta vita vit um vøruna:</p>
+        <ul class="ls-facts" id="ls-facts"></ul>
+      </div>
+
+      <div style="margin-top:26px;max-width:640px">
+        <label class="ls-label" for="ls-merki">Finnið upp á eitt navn til vørumerkið</label>
+        <input class="ls-field" id="ls-merki" maxlength="24" placeholder="t.d. LOGN">
+      </div>
+
+      <h3 style="margin:26px 0 10px;font-size:1.25rem">Hvønn skal lýsingin venda sær til?</h3>
+      <div class="ls-chips" id="ls-malb" role="group" aria-label="Málbólkur"></div>
+      <div style="margin-top:12px;max-width:640px">
+        <label class="ls-label" for="ls-malb-egin">Ella skrivið tykkara egna málbólk</label>
+        <input class="ls-field" id="ls-malb-egin" maxlength="40" placeholder="t.d. hondbóltsleikarar í 8. flokki">
+      </div>
+      <div class="ls-row"><button class="ls-btn ls-btn--red" type="button" data-next>Gerið lýsingina →</button></div>
+    </section>
+
+    <!-- 3 · Gerið lýsingina -->
+    <section class="ls-panel" data-p="2">
+      <h2 class="ls-h">Gerið lýsingina</h2>
+      <p class="ls-lead">Gerið tvær lýsingar til somu vøru. Tit kunnu til dømis lata lýsing A siga nakað um sjálva vøruna og lýsing B vekja kenslur. Tit velja sjálv.</p>
+      <div class="ls-ver" role="tablist" aria-label="Lýsing">
+        <button type="button" role="tab" data-v="A" class="is-on">Lýsing A</button>
+        <button type="button" role="tab" data-v="B">Lýsing B</button>
+      </div>
+      <div class="ls-grid2">
+        <div class="ls-form">
+          <div>
+            <label class="ls-label" for="f-yvir">Yvirskrift</label>
+            <input class="ls-field" id="f-yvir" maxlength="60">
+            <p class="ls-count" id="f-yvir-c"></p>
+          </div>
+          <div>
+            <label class="ls-label" for="f-tekst">Tekstur (í mesta lagi 25 orð)</label>
+            <textarea class="ls-area" id="f-tekst" rows="3"></textarea>
+            <p class="ls-count" id="f-tekst-c"></p>
+          </div>
+          <div>
+            <label class="ls-label" for="f-eyka">Eyka linja – t.d. prísur, tilboð ella eitt slagorð</label>
+            <input class="ls-field" id="f-eyka" maxlength="40">
+          </div>
+          <div>
+            <span class="ls-label">Mynd</span>
+            <div class="ls-emojis" id="f-emoji" role="group" aria-label="Mynd"></div>
+          </div>
+          <div>
+            <span class="ls-label">Litur</span>
+            <div class="ls-swatches" id="f-litur" role="group" aria-label="Litur"></div>
+          </div>
+          <div>
+            <span class="ls-label">Snið</span>
+            <div class="ls-chips" id="f-snid" role="group" aria-label="Snið"></div>
+          </div>
+          <div>
+            <h3 style="font-size:1.25rem;margin-bottom:4px">Hvørji amboð brúka tit?</h3>
+            <p style="color:var(--muted);font-size:.95rem">Merkið tey amboð, sum tit vilja brúka í hesi lýsingini. Onnur skulu seinni gita tey.</p>
+            <div class="ls-tools" id="f-ambod"></div>
+          </div>
+        </div>
+        <div class="ls-adwrap">
+          <canvas class="ls-ad" id="ls-ad" width="1080" height="1350" role="img" aria-label="Lýsingin"></canvas>
+          <p class="ls-adcap" id="ls-adcap"></p>
+          <div class="ls-row ls-noprint">
+            <button class="ls-btn ls-btn--sm" type="button" id="ls-dl">Tak niður</button>
+          </div>
+        </div>
+      </div>
+      <div class="ls-row"><button class="ls-btn ls-btn--red" type="button" data-next>Latið onnur gita →</button></div>
+    </section>
+
+    <!-- 4 · Latið onnur gita -->
+    <section class="ls-panel" data-p="3">
+      <h2 class="ls-h">Latið onnur gita</h2>
+      <p class="ls-lead">Bjóðið einum øðrum bólki at hyggja at lýsingini. Tey skulu gita, hvønn lýsingin vendir sær til, og hvørji amboð hon brúkar. Sigið einki, áðrenn tey hava gitið.</p>
+      <div class="ls-ver" role="tablist" aria-label="Lýsing at gita">
+        <button type="button" role="tab" data-gv="A" class="is-on">Lýsing A</button>
+        <button type="button" role="tab" data-gv="B">Lýsing B</button>
+      </div>
+      <div class="ls-grid2">
+        <div>
+          <canvas class="ls-ad" id="ls-ad-g" width="1080" height="1350" role="img" aria-label="Lýsingin, sum skal gitast"></canvas>
+        </div>
+        <div>
+          <h3 style="font-size:1.25rem;margin-bottom:10px">Hvønn vendir lýsingin sær til?</h3>
+          <div class="ls-chips" id="g-malb" role="group" aria-label="Gita málbólk"></div>
+          <h3 style="font-size:1.25rem;margin:22px 0 10px">Hvørji amboð brúkar lýsingin?</h3>
+          <div class="ls-tools" id="g-ambod"></div>
+          <div class="ls-row"><button class="ls-btn ls-btn--ink" type="button" id="g-avduka">Vís, hvat bólkurin ætlaði</button></div>
+          <div class="ls-result" id="g-result" hidden></div>
+          <div class="ls-tip" id="g-spurn" hidden>Gittu tit rætt frammanundan? Skildu tey lýsingina, sum tit ætlaðu? Hvat kundu tit broytt, so at lýsingin rakti málbólkin betur?</div>
+        </div>
+      </div>
+      <div class="ls-row"><button class="ls-btn ls-btn--red" type="button" data-next>Kannið eina lýsing →</button></div>
+    </section>
+
+    <!-- 5 · Kannið eina lýsing -->
+    <section class="ls-panel" data-p="4">
+      <h2 class="ls-h">Kannið eina lýsing</h2>
+      <p class="ls-lead">Veljið eina lýsing. Merkið orðini, sum siga nakað um sjálva vøruna, og orðini, sum royna at vekja kenslur. Trýst á eitt orð fyri at merkja tað.</p>
+      <div class="ls-chips" id="k-val" role="group" aria-label="Vel lýsing"></div>
+      <div class="ls-pens" role="group" aria-label="Penni">
+        <button class="ls-pen ls-pen--info" type="button" data-pen="info" aria-pressed="true">Upplýsing um vøruna</button>
+        <button class="ls-pen ls-pen--feel" type="button" data-pen="feel" aria-pressed="false">Kensla</button>
+        <button class="ls-pen ls-pen--off" type="button" data-pen="off" aria-pressed="false">Viska</button>
+      </div>
+      <div class="ls-words" id="k-words" lang="fo"></div>
+      <div class="ls-sum" id="k-sum"></div>
+      <div class="ls-tip">Tosið saman: Hvat fáa vit at vita um sjálva vøruna? Hvat fáa vit ikki at vita? Hví halda tit, at lýsingin er skrivað soleiðis?</div>
+      <div class="ls-row"><button class="ls-btn ls-btn--red" type="button" data-next>Undrast aftur →</button></div>
+    </section>
+
+    <!-- 6 · Undrast aftur -->
+    <section class="ls-panel" data-p="5">
+      <h2 class="ls-h">Undrast aftur</h2>
+      <p class="ls-q" id="ls-und2"></p>
+      <p class="ls-mine" id="ls-mine"></p>
+      <p style="max-width:70ch">Halda tit framvegis tað sama, ella hava tit broytt hugsan?<br>Hvør av lýsingunum hevði helst fingið tykkum at keypt vøruna? Hví?<br>Hvat í lýsingunum fær tykkum at halda tað?</p>
+      <div class="ls-pair" id="ls-pair">
+        <figure><canvas class="ls-ad" id="ls-ad-a" width="1080" height="1350" role="img" aria-label="Lýsing A"></canvas><figcaption>Lýsing A</figcaption><button class="ls-btn ls-btn--sm ls-noprint" type="button" id="ls-dl-a" style="margin-top:8px">Tak niður</button></figure>
+        <figure><canvas class="ls-ad" id="ls-ad-b" width="1080" height="1350" role="img" aria-label="Lýsing B"></canvas><figcaption>Lýsing B</figcaption><button class="ls-btn ls-btn--sm ls-noprint" type="button" id="ls-dl-b" style="margin-top:8px">Tak niður</button></figure>
+      </div>
+      <div class="ls-row ls-noprint">
+        <button class="ls-btn" type="button" onclick="window.print()">Prenta</button>
+        <button class="ls-btn" type="button" id="ls-reset">Byrja av nýggjum</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="ls-foot">
+    <span>Lýsingarsmiðjan · Snar · Prototypa</span>
+    <span>Vørurnar og vørumerkini eru upphugsaði. Einki verður goymt á Snar.</span>
+  </footer>
+
+  <div class="ls-shade" id="ls-shade"></div>
+  <aside class="ls-side" id="ls-side" aria-label="Til læraran" aria-hidden="true">
+    <button class="ls-close" type="button" id="ls-close-laer" aria-label="Lat aftur">×</button>
+    <h2>Til læraran</h2>
+    <p>Í Lýsingarsmiðjuni kanna næmingarnir, hvussu lýsingar royna at ávirka okkum. Tey gera sínar egnu lýsingar, lata onnur gita, hvønn lýsingarnar venda sær til, og hvørji amboð tær brúka, og kanna orðini í eini lýsing.</p>
+    <h3>Gongdin – umleið 45 minuttir</h3>
+    <ol>
+      <li><b>Undrast</b> (5 min.): Næmingarnir tosa um spurningin og skriva, hvat tey halda.</li>
+      <li><b>Vøra og málbólkur</b> (5 min.): Tey velja eina upphugsaða vøru, eitt vørumerki og ein málbólk.</li>
+      <li><b>Gerið lýsingina</b> (15 min.): Tey gera tvær lýsingar til somu vøru og merkja, hvørji amboð tey brúka.</li>
+      <li><b>Latið onnur gita</b> (10 min.): Ein annar bólkur gitir málbólk og amboð. Síðan vísa tey, hvat tey ætlaðu.</li>
+      <li><b>Kannið eina lýsing</b> (5 min.): Tey merkja orðini sum upplýsing ella kenslu.</li>
+      <li><b>Undrast aftur</b> (5 min.): Tey hyggja aftur at tí, tey hildu, og grundgeva fyri, um tey hava broytt hugsan.</li>
+    </ol>
+    <p>Sig ikki frammanundan, hvussu lýsingar ávirka okkum. Lat næmingarnar finna tað sjálv, og nevn hugtøkini, tá ið tey hava sæð tey í síni egnu lýsing.</p>
+    <h3>Hóskar til</h3>
+    <ul>
+      <li>Samfelagsfrøði: forbrúk, miðlar og ávirkan.</li>
+      <li>Føroyskt: tekstsløg, orðaval, móttakari og endamál.</li>
+      <li>Enskt: lýsingin kann eisini gerast á enskum.</li>
+    </ul>
+    <p>Funkan er ætlað 7.–9. flokki, men kann eisini brúkast í 5.–6. flokki. Hon hóskar sum framhald til lúku 7 í jólakalendaranum til hádeildina.</p>
+    <h3>Veruligar lýsingar</h3>
+    <p>Vís gjarna veruligar lýsingar sum dømi, til dømis frá YouTube, men tak ikki myndir, tekst ella filmar úr teimum inn í funkuna. Gamlar lýsingar finnur tú millum annað í <a href="https://archive.org/details/prelinger" target="_blank" rel="noopener">Prelinger Archives</a> á Internet Archive. Kanna treytirnar fyri hvønn film.</p>
+    <h3>Goyming</h3>
+    <p>Einki verður goymt á Snar. Arbeiðið verður goymt í kaganum á hesi teldu, til næmingarnir trýsta á «Byrja av nýggjum». Lýsingarnar kunnu takast niður sum myndir ella prentast.</p>
+  </aside>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.getElementById('ls');
+  function $(s) { return root.querySelector(s); }
+  function $$(s) { return Array.prototype.slice.call(root.querySelectorAll(s)); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+
+  /* ------------------------------------------------------------ Tilfar */
+  var UND = 'Hvat fær okkum at keypa nakað – er tað sjálv vøran ella lýsingin?';
+  var VORUR = [
+    { id: 'hettu', n: 'Hettutroyggja', e: '🧥', u: ['bleyt bummull', 'fýra litir', 'støddir XS–XL', 'kann vaskast við 30 stigum', '349 kr.'] },
+    { id: 'ljos', n: 'Ljósketa', e: '💡', u: ['100 LED-perur', '8 W', 'kann brúkast úti', 'lýsir í 25.000 tímar', '199 kr.'] },
+    { id: 'sjok', n: 'Sjokulátuplata', e: '🍫', u: ['100 g', '70 % kakao', 'við heilum hasselnøtum', 'framleidd í Belgia', '29 kr.'] },
+    { id: 'skogv', n: 'Fótbóltsskógvar', e: '⚽', u: ['til gras og kunstgras', 'støddir 30–46', 'vekt 210 g', '699 kr.'] },
+    { id: 'hoyr', n: 'Hoyritól', e: '🎧', u: ['trádleys', 'battaríið varir í 20 tímar', 'fáast í trimum litum', '899 kr.'] },
+    { id: 'kort', n: 'Kortspæl', e: '🃏', u: ['2–6 spælarar', 'frá 8 ár', 'eitt spæl tekur umleið 20 minuttir', 'reglur á føroyskum', '149 kr.'] },
+    { id: 'egin', n: 'Okkara egna vøra', e: '⭐', egin: true }
+  ];
+  var MALB = ['Børn 6–9 ár', 'Ung 13–16 ár', 'Foreldur við smábørnum', 'Ommur og abbar', 'Ítróttarfólk', 'Onkur, sum keypir jólagávur'];
+  var AMBOD = [
+    { id: 'upp', n: 'Upplýsingar', t: 'Lýsingin sigur nakað ítøkiligt um vøruna.' },
+    { id: 'kensla', n: 'Kenslur', t: 'Lýsingin knýtir vøruna at gleði, hugna ella vinskapi.' },
+    { id: 'skunda', n: 'Skunda tær', t: 'Lýsingin fær teg at halda, at tú mást keypa skjótt.' },
+    { id: 'kendur', n: 'Kendur persónur', t: 'Ein, sum nógv kenna ella fylgja, mælir til vøruna.' },
+    { id: 'oll', n: 'Øll hini hava hana', t: 'Lýsingin fær teg at halda, at øll hini longu hava vøruna.' },
+    { id: 'tilbod', n: 'Tilboð', t: 'Lýsingin lovar lægri prís ella nakað ókeypis afturat.' },
+    { id: 'skemt', n: 'Skemt', t: 'Lýsingin roynir at fáa teg at flenna.' }
+  ];
+  var EMOJI = ['🧥', '💡', '🍫', '⚽', '🎧', '🃏', '🎁', '🎄', '⭐', '❄️', '❤️', '😊', '🔥', '🏔️', '🐑', '👟', '📱', '🧸', '🕯️', '🎉'];
+  var LITIR = ['#ffffff', '#ef2418', '#1559e8', '#1f7a4d', '#f2b705', '#7b3fbf', '#202124', '#fdecea', '#e9f0fb', '#f6f6f4'];
+  var SNID = [['rein', 'Reint'], ['litur', 'Litsterkt'], ['plakat', 'Plakat']];
+  var DOMI = [
+    { n: 'Hettutroyggja · lýsing A', t: 'Bleyt hettutroyggja í fýra litum. Fæst í støddunum XS–XL. Kann vaskast við 30 stigum.' },
+    { n: 'Hettutroyggja · lýsing B', t: 'Jólini eru full av hugnaligum løtum. Ger tær tað hugnaligt í nýggju hettutroyggjuni frá okkum. Bert hesa vikuna!' },
+    { n: 'Ljósketa', t: 'GLIMT ljósketa. 100 LED-perur. Brúkar bert 8 W. Gev barninum jól, tað altíð fer at minnast. Fá eftir á goymslu!' },
+    { n: 'Sjokuláta', t: 'KAKO. 70 % kakao og heilar hasselnøtir. Tú hevur uppiborið eina lítla løtu bert fyri teg. Allir vinirnir elska KAKO. Nú 2 fyri 1!' }
+  ];
+
+  /* ------------------------------------------------------------ Støða (goymd í kaganum) */
+  var KEY = 'snar-lysingarsmidjan-1';
+  function blank() { return { yvir: '', tekst: '', eyka: '', emoji: '', litur: '#ffffff', snid: 'rein', ambod: [] }; }
+  var S = { step: 0, git: '', vora: '', eginN: '', eginU: '', merki: '', malb: '', malbEgin: '', ver: 'A', ads: { A: blank(), B: blank() }, gv: 'A', k: { val: 0, marks: {} } };
+  try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); if (o && o.ads) S = Object.assign(S, o); } } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+  function vora() { for (var i = 0; i < VORUR.length; i++) if (VORUR[i].id === S.vora) return VORUR[i]; return null; }
+  function voraNavn() { var v = vora(); if (!v) return ''; return v.egin ? (S.eginN.trim() || 'Okkara vøra') : v.n; }
+  function voraFacts() { var v = vora(); if (!v) return []; if (v.egin) return S.eginU.split('\n').map(function (s) { return s.trim(); }).filter(Boolean); return v.u; }
+  function malbolkur() { return S.malbEgin.trim() || S.malb; }
+  function words(s) { return (s.trim().match(/\S+/g) || []).length; }
+
+  /* ------------------------------------------------------------ Stigini */
+  var steps = $$('.ls-step'), panels = $$('.ls-panel');
+  function go(n) {
+    S.step = n; save();
+    steps.forEach(function (b, i) { b.classList.toggle('is-on', i === n); b.classList.toggle('is-done', i < n); b.setAttribute('aria-current', i === n ? 'step' : 'false'); });
+    panels.forEach(function (p, i) { p.classList.toggle('is-on', i === n); });
+    if (n === 2) renderForm();
+    if (n === 3) renderGita();
+    if (n === 4) renderKanna();
+    if (n === 5) renderAftur();
+    window.scrollTo(0, 0);
+    var on = steps[n]; if (on && on.scrollIntoView) on.scrollIntoView({ block: 'nearest', inline: 'center' });
+  }
+  steps.forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.go); }); });
+  $$('[data-next]').forEach(function (b) { b.addEventListener('click', function () { go(Math.min(S.step + 1, panels.length - 1)); }); });
+
+  /* ------------------------------------------------------------ 1 · Undrast */
+  $('#ls-und').textContent = UND; $('#ls-und2').textContent = UND;
+  var gitTa = $('#ls-git'); gitTa.value = S.git;
+  gitTa.addEventListener('input', function () { S.git = gitTa.value; save(); });
+
+  /* ------------------------------------------------------------ 2 · Vøra og málbólkur */
+  function renderVorur() {
+    $('#ls-vorur').innerHTML = VORUR.map(function (v) { return '<button type="button" class="ls-card" data-vora="' + v.id + '" aria-pressed="' + (S.vora === v.id) + '"><span class="ls-card__e" aria-hidden="true">' + v.e + '</span><span class="ls-card__n">' + esc(v.n) + '</span></button>'; }).join('');
+    var v = vora();
+    $('#ls-egin').hidden = !(v && v.egin);
+    var f = voraFacts();
+    $('#ls-factbox').hidden = !(v && !v.egin);
+    $('#ls-facts').innerHTML = (v && !v.egin) ? f.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') : '';
+  }
+  $('#ls-vorur').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-vora]'); if (!b) return;
+    S.vora = b.dataset.vora;
+    var v = vora(); ['A', 'B'].forEach(function (k) { if (!S.ads[k].emoji) S.ads[k].emoji = v.e; });
+    save(); renderVorur();
+  });
+  function renderMalb() {
+    $('#ls-malb').innerHTML = MALB.map(function (m) { return '<button type="button" class="ls-chip" data-m="' + esc(m) + '" aria-pressed="' + (S.malb === m && !S.malbEgin.trim()) + '">' + esc(m) + '</button>'; }).join('');
+  }
+  $('#ls-malb').addEventListener('click', function (e) { var b = e.target.closest('[data-m]'); if (!b) return; S.malb = b.dataset.m; S.malbEgin = ''; $('#ls-malb-egin').value = ''; save(); renderMalb(); });
+  [['#ls-egin-n', 'eginN'], ['#ls-egin-u', 'eginU'], ['#ls-merki', 'merki'], ['#ls-malb-egin', 'malbEgin']].forEach(function (p) {
+    var el = $(p[0]); el.value = S[p[1]] || '';
+    el.addEventListener('input', function () { S[p[1]] = el.value; save(); if (p[1] === 'malbEgin') renderMalb(); });
+  });
+
+  /* ------------------------------------------------------------ Teknað lýsing (canvas) */
+  function lum(hex) { var c = hex.replace('#', ''); var r = parseInt(c.substr(0, 2), 16) / 255, g = parseInt(c.substr(2, 2), 16) / 255, b = parseInt(c.substr(4, 2), 16) / 255;
+    function f(x) { return x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4); } return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); }
+  function onColor(hex) { return lum(hex) > .4 ? '#202124' : '#ffffff'; }
+  function wrap(ctx, text, maxW) {
+    var out = []; String(text).split('\n').forEach(function (para) {
+      var ws = para.split(/\s+/).filter(Boolean), line = '';
+      ws.forEach(function (w) { var t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t; });
+      out.push(line);
+    }); return out;
+  }
+  function fitText(ctx, text, maxW, maxH, size, minSize, weight, lh) {
+    var lines;
+    for (var s = size; s >= minSize; s -= 4) { ctx.font = weight + ' ' + s + 'px Inter, Arial, sans-serif'; lines = wrap(ctx, text, maxW); if (lines.length * s * lh <= maxH) return { s: s, lines: lines }; }
+    ctx.font = weight + ' ' + minSize + 'px Inter, Arial, sans-serif'; return { s: minSize, lines: wrap(ctx, text, maxW) };
+  }
+  function drawLines(ctx, fit, x, y, lh) { fit.lines.forEach(function (l, i) { ctx.fillText(l, x, y + i * fit.s * lh); }); return y + fit.lines.length * fit.s * lh; }
+  function drawAd(cv, ad) {
+    var ctx = cv.getContext('2d'), W = cv.width, H = cv.height, P = 80;
+    var bg = ad.litur || '#ffffff', merki = (S.merki || '').trim().toUpperCase();
+    var yvir = ad.yvir.trim() || 'Skrivið eina yvirskrift', tekst = ad.tekst.trim(), eyka = ad.eyka.trim(), emoji = ad.emoji || (vora() ? vora().e : '⭐');
+    var empty = !ad.yvir.trim();
+    ctx.clearRect(0, 0, W, H); ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    if (ad.snid === 'plakat') {
+      var topH = H * .5;
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, topH);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, topH, W, H - topH);
+      ctx.font = '300px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(emoji, W / 2, topH / 2 + 10); ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      if (merki) { ctx.fillStyle = onColor(bg); ctx.font = '800 40px Inter, Arial, sans-serif'; ctx.fillText(merki, P, P - 20); }
+      var y = topH + 60; ctx.fillStyle = empty ? '#8a8d93' : '#202124';
+      var f1 = fitText(ctx, yvir, W - 2 * P, 260, 92, 48, '900', 1.05); y = drawLines(ctx, f1, P, y, 1.05) + 30;
+      if (tekst) { ctx.fillStyle = '#505359'; var f2 = fitText(ctx, tekst, W - 2 * P, H - y - 150, 46, 28, '500', 1.35); y = drawLines(ctx, f2, P, y, 1.35); }
+      if (eyka) { ctx.fillStyle = '#ef2418'; ctx.fillRect(P, H - P - 74, Math.min(W - 2 * P, 60 + measure(ctx, eyka, '800 44px Inter, Arial, sans-serif')), 74); ctx.fillStyle = '#ffffff'; ctx.font = '800 44px Inter, Arial, sans-serif'; ctx.fillText(eyka, P + 30, H - P - 60); }
+      return;
+    }
+    var fill = ad.snid === 'litur' ? bg : '#ffffff', ink = onColor(fill), soft = ink === '#ffffff' ? 'rgba(255,255,255,.88)' : '#505359';
+    ctx.fillStyle = fill; ctx.fillRect(0, 0, W, H);
+    if (ad.snid === 'rein') { ctx.fillStyle = bg === '#ffffff' ? '#ef2418' : bg; ctx.fillRect(0, 0, W, 28); }
+    var y0 = P;
+    if (merki) { ctx.fillStyle = ink; ctx.font = '800 40px Inter, Arial, sans-serif'; ctx.fillText(merki, P, y0); }
+    ctx.fillStyle = ad.snid === 'rein' ? '#ef2418' : ink; ctx.fillRect(P, y0 + 70, 96, 10);
+    var y = y0 + 120;
+    ctx.fillStyle = empty ? (ink === '#ffffff' ? 'rgba(255,255,255,.6)' : '#8a8d93') : ink;
+    var fa = fitText(ctx, yvir, W - 2 * P, 400, 110, 56, '900', 1.04); y = drawLines(ctx, fa, P, y, 1.04) + 36;
+    if (tekst) { ctx.fillStyle = soft; var fb = fitText(ctx, tekst, W - 2 * P, 300, 48, 28, '500', 1.35); y = drawLines(ctx, fb, P, y, 1.35); }
+    ctx.font = '260px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = ink; ctx.fillText(emoji, W - P + 10, H - P + 20); ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    if (eyka) { var fe = '800 46px Inter, Arial, sans-serif', ew = Math.min(W - 2 * P - 300, 60 + measure(ctx, eyka, fe));
+      ctx.fillStyle = ink === '#ffffff' ? '#ffffff' : '#202124'; ctx.fillRect(P, H - P - 80, ew, 80);
+      ctx.fillStyle = ink === '#ffffff' ? fill : '#ffffff'; ctx.font = fe; ctx.fillText(eyka, P + 30, H - P - 64); }
+  }
+  function measure(ctx, t, f) { ctx.font = f; return ctx.measureText(t).width; }
+  function adLabel(k) { var a = S.ads[k]; return 'Lýsing ' + k + ': ' + (a.yvir || '') + '. ' + (a.tekst || '') + ' ' + (a.eyka || ''); }
+
+  /* ------------------------------------------------------------ 3 · Gerið lýsingina */
+  var F = { yvir: $('#f-yvir'), tekst: $('#f-tekst'), eyka: $('#f-eyka') };
+  function cur() { return S.ads[S.ver]; }
+  function renderForm() {
+    var a = cur();
+    $$('.ls-ver [data-v]').forEach(function (b) { var on = b.dataset.v === S.ver; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on); });
+    F.yvir.value = a.yvir; F.tekst.value = a.tekst; F.eyka.value = a.eyka;
+    $('#f-emoji').innerHTML = EMOJI.map(function (e) { return '<button type="button" class="ls-emoji" data-e="' + e + '" aria-pressed="' + (a.emoji === e) + '">' + e + '</button>'; }).join('');
+    $('#f-litur').innerHTML = LITIR.map(function (c) { return '<button type="button" class="ls-swatch" data-c="' + c + '" style="background:' + c + '" aria-pressed="' + (a.litur === c) + '" aria-label="Litur ' + c + '"></button>'; }).join('');
+    $('#f-snid').innerHTML = SNID.map(function (s) { return '<button type="button" class="ls-chip" data-s="' + s[0] + '" aria-pressed="' + (a.snid === s[0]) + '">' + s[1] + '</button>'; }).join('');
+    $('#f-ambod').innerHTML = toolsHtml('fa', a.ambod);
+    counts(); draw();
+  }
+  function toolsHtml(pre, on) { return AMBOD.map(function (t) { return '<label class="ls-tool"><input type="checkbox" data-t="' + t.id + '" id="' + pre + '-' + t.id + '"' + (on.indexOf(t.id) >= 0 ? ' checked' : '') + '><div><b>' + esc(t.n) + '</b><span>' + esc(t.t) + '</span></div></label>'; }).join(''); }
+  function counts() {
+    var a = cur(), n = words(a.tekst), c = $('#f-tekst-c');
+    c.textContent = n + ' av 25 orðum' + (n > 25 ? ' – strikið nøkur orð' : ''); c.classList.toggle('is-over', n > 25);
+    $('#f-yvir-c').textContent = words(a.yvir) + ' orð';
+  }
+  function draw() {
+    var a = cur(); drawAd($('#ls-ad'), a); $('#ls-ad').setAttribute('aria-label', adLabel(S.ver));
+    var v = voraNavn(), m = malbolkur();
+    $('#ls-adcap').textContent = (v ? 'Vøra: ' + v : 'Tit hava ikki valt nakra vøru enn') + (m ? ' · Málbólkur: ' + m : '');
+  }
+  $$('.ls-ver [data-v]').forEach(function (b) { b.addEventListener('click', function () { S.ver = b.dataset.v; save(); renderForm(); }); });
+  ['yvir', 'tekst', 'eyka'].forEach(function (k) { F[k].addEventListener('input', function () { cur()[k] = F[k].value; save(); counts(); draw(); }); });
+  $('#f-emoji').addEventListener('click', function (e) { var b = e.target.closest('[data-e]'); if (!b) return; cur().emoji = b.dataset.e; save(); renderForm(); });
+  $('#f-litur').addEventListener('click', function (e) { var b = e.target.closest('[data-c]'); if (!b) return; cur().litur = b.dataset.c; save(); renderForm(); });
+  $('#f-snid').addEventListener('click', function (e) { var b = e.target.closest('[data-s]'); if (!b) return; cur().snid = b.dataset.s; save(); renderForm(); });
+  $('#f-ambod').addEventListener('change', function () { cur().ambod = $$('#f-ambod input:checked').map(function (i) { return i.dataset.t; }); save(); });
+
+  function download(k) {
+    var cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1350; drawAd(cv, S.ads[k]);
+    var a = document.createElement('a'), name = ((S.merki || 'lysing').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'lysing');
+    a.download = name + '-' + k.toLowerCase() + '.png'; a.href = cv.toDataURL('image/png'); document.body.appendChild(a); a.click(); a.remove();
+  }
+  $('#ls-dl').addEventListener('click', function () { download(S.ver); });
+  $('#ls-dl-a').addEventListener('click', function () { download('A'); });
+  $('#ls-dl-b').addEventListener('click', function () { download('B'); });
+
+  /* ------------------------------------------------------------ 4 · Latið onnur gita */
+  var G = { malb: '', ambod: [] };
+  function renderGita() {
+    $$('[data-gv]').forEach(function (b) { var on = b.dataset.gv === S.gv; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on); });
+    drawAd($('#ls-ad-g'), S.ads[S.gv]); $('#ls-ad-g').setAttribute('aria-label', adLabel(S.gv));
+    var opts = MALB.slice(); var mine = malbolkur(); if (mine && opts.indexOf(mine) < 0) opts.splice(Math.floor(opts.length / 2), 0, mine);
+    $('#g-malb').innerHTML = opts.map(function (m) { return '<button type="button" class="ls-chip" data-gm="' + esc(m) + '" aria-pressed="' + (G.malb === m) + '">' + esc(m) + '</button>'; }).join('');
+    $('#g-ambod').innerHTML = toolsHtml('ga', G.ambod);
+    $('#g-result').hidden = true; $('#g-spurn').hidden = true;
+  }
+  $$('[data-gv]').forEach(function (b) { b.addEventListener('click', function () { S.gv = b.dataset.gv; G = { malb: '', ambod: [] }; save(); renderGita(); }); });
+  $('#g-malb').addEventListener('click', function (e) { var b = e.target.closest('[data-gm]'); if (!b) return; G.malb = b.dataset.gm; $$('#g-malb [data-gm]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); });
+  $('#g-ambod').addEventListener('change', function () { G.ambod = $$('#g-ambod input:checked').map(function (i) { return i.dataset.t; }); });
+  $('#g-avduka').addEventListener('click', function () {
+    var ad = S.ads[S.gv], mine = malbolkur(), html = '';
+    if (!mine) html += '<div class="is-guess">Bólkurin, sum gjørdi lýsingina, valdi ongan málbólk.</div>';
+    else if (G.malb === mine) html += '<div class="is-both">✓ Málbólkur: Tit gittu <b>' + esc(mine) + '</b>. Tað var tað, bólkurin ætlaði.</div>';
+    else html += '<div class="is-miss">Málbólkur: Tit gittu <b>' + esc(G.malb || 'ongan') + '</b>. Bólkurin ætlaði <b>' + esc(mine) + '</b>.</div>';
+    AMBOD.forEach(function (t) {
+      var a = ad.ambod.indexOf(t.id) >= 0, g = G.ambod.indexOf(t.id) >= 0;
+      if (a && g) html += '<div class="is-both">✓ <b>' + esc(t.n) + '</b>: Bæði bólkurin og tit valdu hetta amboðið.</div>';
+      else if (a) html += '<div class="is-miss"><b>' + esc(t.n) + '</b>: Bólkurin brúkti hetta amboðið, men tit sóu tað ikki.</div>';
+      else if (g) html += '<div class="is-guess"><b>' + esc(t.n) + '</b>: Tit sóu hetta amboðið, men bólkurin hevði ikki ætlað tað.</div>';
+    });
+    if (!ad.ambod.length && !G.ambod.length) html += '<div class="is-guess">Hvørki bólkurin ella tit valdu nøkur amboð.</div>';
+    $('#g-result').innerHTML = html; $('#g-result').hidden = false; $('#g-spurn').hidden = false;
+  });
+
+  /* ------------------------------------------------------------ 5 · Kannið eina lýsing */
+  var pen = 'info';
+  function kSources() {
+    var list = DOMI.map(function (d) { return { n: d.n, t: d.t }; });
+    ['A', 'B'].forEach(function (k) { var a = S.ads[k], t = [a.yvir, a.tekst, a.eyka].map(function (x) { return x.trim(); }).filter(Boolean).join(' '); if (t) list.push({ n: 'Okkara lýsing ' + k, t: t }); });
+    return list;
+  }
+  function renderKanna() {
+    var src = kSources(); if (S.k.val >= src.length) S.k.val = 0;
+    $('#k-val').innerHTML = src.map(function (s, i) { return '<button type="button" class="ls-chip" data-kv="' + i + '" aria-pressed="' + (S.k.val === i) + '">' + esc(s.n) + '</button>'; }).join('');
+    var key = src[S.k.val].n + '|' + src[S.k.val].t, marks = S.k.marks[key] || {};
+    var ws = src[S.k.val].t.split(/\s+/).filter(Boolean);
+    $('#k-words').innerHTML = ws.map(function (w, i) { var m = marks[i]; return '<button type="button" class="ls-w' + (m ? ' is-' + m : '') + '" data-wi="' + i + '">' + esc(w) + '</button>'; }).join(' ');
+    var ni = 0, nf = 0; Object.keys(marks).forEach(function (k) { if (marks[k] === 'info') ni++; else if (marks[k] === 'feel') nf++; });
+    $('#k-sum').innerHTML = '<span style="background:var(--info-bg);color:var(--info)">Upplýsing um vøruna: ' + ni + ' orð</span><span style="background:var(--feel-bg);color:var(--feel)">Kensla: ' + nf + ' orð</span><span style="background:var(--surface)">Ikki merkt: ' + (ws.length - ni - nf) + ' orð</span>';
+    $('#k-words').dataset.key = key;
+  }
+  $('#k-val').addEventListener('click', function (e) { var b = e.target.closest('[data-kv]'); if (!b) return; S.k.val = +b.dataset.kv; save(); renderKanna(); });
+  $$('[data-pen]').forEach(function (b) { b.addEventListener('click', function () { pen = b.dataset.pen; $$('[data-pen]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); }); });
+  $('#k-words').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-wi]'); if (!b) return;
+    var key = $('#k-words').dataset.key, m = S.k.marks[key] || (S.k.marks[key] = {}), i = b.dataset.wi;
+    if (pen === 'off' || m[i] === pen) delete m[i]; else m[i] = pen;
+    save(); renderKanna();
+  });
+
+  /* ------------------------------------------------------------ 6 · Undrast aftur */
+  function renderAftur() {
+    var g = (S.git || '').trim();
+    $('#ls-mine').textContent = g ? 'Hetta hildu tit: ' + g : 'Tit hava ikki skrivað nakað niður enn. Hvat hildu tit, áðrenn tit byrjaðu?';
+    drawAd($('#ls-ad-a'), S.ads.A); drawAd($('#ls-ad-b'), S.ads.B);
+    $('#ls-ad-a').setAttribute('aria-label', adLabel('A')); $('#ls-ad-b').setAttribute('aria-label', adLabel('B'));
+  }
+  var resetArmed = false, resetBtn = $('#ls-reset');
+  resetBtn.addEventListener('click', function () {
+    if (!resetArmed) { resetArmed = true; resetBtn.textContent = 'Trýst aftur fyri at strika alt'; setTimeout(function () { resetArmed = false; resetBtn.textContent = 'Byrja av nýggjum'; }, 4000); return; }
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    location.reload();
+  });
+
+  /* ------------------------------------------------------------ Til læraran */
+  var side = $('#ls-side'), shade = $('#ls-shade');
+  function laer(on) { side.classList.toggle('is-on', on); shade.classList.toggle('is-on', on); side.setAttribute('aria-hidden', !on); if (on) $('#ls-close-laer').focus(); }
+  $('#ls-open-laer').addEventListener('click', function () { laer(true); });
+  $('#ls-close-laer').addEventListener('click', function () { laer(false); });
+  shade.addEventListener('click', function () { laer(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && side.classList.contains('is-on')) laer(false); });
+
+  /* ------------------------------------------------------------ Byrjan */
+  renderVorur(); renderMalb();
+  go(S.step || 0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (S.step === 2) draw(); if (S.step === 3) renderGita(); if (S.step === 5) renderAftur(); });
+})();
+</script>
+</body>
+</html>
