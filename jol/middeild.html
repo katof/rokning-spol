@@ -145,6 +145,24 @@
 .jm-und__q { display: inline-grid; place-items: center; width: 22px; height: 22px; border: 1.5px solid var(--gold); border-radius: 50%; font-size: .8rem; line-height: 1; }
 .jm-und__t { font-family: "Space Grotesk", Arial, sans-serif; font-weight: 700; font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.3; margin: 0; }
 .jm-und + .jm-part { border-top: 0; }
+/* ---- Gitið fyrst · Undrast aftur (2.11.2026) ------------------------------
+   Lúkan byrjar við undranini. Teksturin, uppgávan og tilfarið koma fyrst til sjóndar,
+   tá ið flokkurin hevur gitið. Aftast í lúkuni undrast tey aftur og hyggja at gitinum. */
+.jm-git { margin-top: 12px; }
+.jm-git__hint { font-size: .98rem; margin: 0 0 8px !important; }
+.jm-git label { display: block; margin-bottom: 4px; color: var(--gold); }
+.jm-git textarea { width: 100%; min-height: 64px; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 6px; background: rgba(0,0,0,.18); color: var(--ink); font: inherit; font-size: 1rem; resize: vertical; }
+.jm-git textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.jol .jm-btn--goldsolid { background: var(--gold); border-color: var(--gold); color: #06182a; font-weight: 600; margin-top: 10px; }
+.jol .jm-btn--goldsolid:hover { background: #ffe09a; }
+.jm-open.is-gated .jm-gate, .jm-open.is-gated .jm-open__col + .jm-open__col, .jm-open.is-gated .jm-spael { display: none !important; }
+.jm-open.is-gated .jm-open__body { grid-template-columns: 1fr; }
+.jm-open:not(.is-gated) #jo-git-go { display: none; }
+.jm-aftur { border: 1.5px dashed var(--gold) !important; border-radius: 8px; padding: 14px 16px !important; margin-top: 14px; background: rgba(255,209,102,.07); }
+.jm-aftur h3 { color: var(--gold) !important; }
+.jm-aftur__git { margin: 10px 0 !important; padding: 8px 12px; border-left: 3px solid var(--gold); white-space: pre-line; font-style: italic; }
+.jm-src details { margin-top: 6px; }
+.jm-src summary { cursor: pointer; color: var(--gold); }
 .jm-bok { border-top: 1.5px solid var(--pink) !important; margin-top: 6px; }
 .jm-bok h3 { color: var(--pink) !important; flex-wrap: wrap; }
 .jm-bok__stor { margin-left: auto; padding: 2px 8px; border: 1px solid var(--pink); border-radius: 999px; font-size: .62rem; letter-spacing: .08em; color: var(--pink); }
@@ -330,7 +348,7 @@
           <a class="jm-crumb" href="index.html">← Jól á Snar</a><br>
           <span class="jm-mono">Snar · 4.–6. flokkur · desember 2026</span>
           <h1>Jól í <span>miðdeildini</span></h1>
-          <p class="jm-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka hevur ein næmingatekst, spurningar at tosa um og eina uppgávu. Harumframt eru eykauppgávur til 5.–6. flokk. Hvør lúka byrjar við einum spurningi at undrast á. Lærugreinirnar eru føroyskt, danskt, enskt, støddfrøði, náttúra og tøkni, søga og samtíð, kristnikunnleiki og átrúnaður og handaverk og list.</p>
+          <p class="jm-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka hevur ein næmingatekst, spurningar at tosa um og eina uppgávu. Harumframt eru eykauppgávur til 5.–6. flokk. Hvør lúka byrjar við einum spurningi at undrast á. Næmingarnir gita fyrst, og aftast í lúkuni undrast tey aftur. Lærugreinirnar eru føroyskt, danskt, enskt, støddfrøði, náttúra og tøkni, søga og samtíð, kristnikunnleiki og átrúnaður og handaverk og list.</p>
           <div class="jm-hero__btns">
             <a class="jm-btn jm-btn--solid" href="#kalendari">Far til lúkurnar ↓</a>
             <button class="jm-btn" type="button" id="jm-alt" title="Til læraran, sum leggur til rættis">Lat allar lúkur upp</button>
@@ -386,10 +404,11 @@
         </div>
         <div class="jm-open__body">
           <div class="jm-open__col">
-            <div class="jm-part jm-und" id="jo-und-wrap"><h3><span class="jm-und__q" aria-hidden="true">?</span><span id="jo-und-h">Undrast</span></h3><p class="jm-und__t" id="jo-und"></p></div>
-            <div class="jm-part"><h3 id="jo-tx-h">Tekstur til næmingarnar</h3><p class="jm-tx" id="jo-tx"></p></div>
-            <div class="jm-part"><h3 id="jo-tos-h">Tosið saman</h3><p class="jm-tos" id="jo-tos"></p></div>
-            <div class="jm-part"><h3 id="jo-upp-h">Uppgáva</h3><p class="jm-upp" id="jo-upp"></p><div class="jm-btns" id="jo-btns"></div></div>
+            <div class="jm-part jm-und" id="jo-und-wrap"><h3><span class="jm-und__q" aria-hidden="true">?</span><span id="jo-und-h">Undrast</span></h3><p class="jm-und__t" id="jo-und"></p><div class="jm-git"><p class="jm-git__hint" id="jo-git-hint"></p><label class="jm-mono" for="jo-git" id="jo-git-l">Okkara git</label><textarea id="jo-git" rows="2"></textarea><button class="jm-btn jm-btn--goldsolid" type="button" id="jo-git-go">Vit hava gitið →</button></div></div>
+            <div class="jm-part jm-gate"><h3 id="jo-tx-h">Tekstur til næmingarnar</h3><p class="jm-tx" id="jo-tx"></p></div>
+            <div class="jm-part jm-gate"><h3 id="jo-tos-h">Tosið saman</h3><p class="jm-tos" id="jo-tos"></p></div>
+            <div class="jm-part jm-gate"><h3 id="jo-upp-h">Uppgáva</h3><p class="jm-upp" id="jo-upp"></p><div class="jm-btns" id="jo-btns"></div></div>
+            <div class="jm-part jm-aftur jm-gate" id="jo-aftur"><h3><span class="jm-und__q" aria-hidden="true">?</span><span id="jo-aftur-h">Undrast aftur</span></h3><p class="jm-und__t" id="jo-aftur-q"></p><p class="jm-aftur__git" id="jo-aftur-git"></p><p id="jo-aftur-t"></p></div>
           </div>
           <div class="jm-open__col">
             <div class="jm-part"><h3>Tilfar</h3><div class="jm-btns" id="jo-src" style="margin-top:0"></div><div id="jo-srctext"></div></div>
@@ -421,7 +440,7 @@
 <p>“O, var jeg dog saadant et stort Træ, som de Andre!” sukkede det lille Træ, “saa kunde jeg brede mine Grene saa langt omkring og med Toppen see ud i den vide Verden! Fuglene vilde da bygge Rede imellem mine Grene, og naar det blæste kunde jeg nikke saa fornemt, ligesom de Andre der!”</p>
 <p>Det havde slet ingen Fornøielse af Solskinnet, af Fuglene eller de røde Skyer, som Morgen og Aften seilede hen over det.</p>
 <p>Var det nu Vinter, og Sneen rundt omkring laae gnistrende hvid, saa kom tidt en Hare springende, og satte lige over det lille Træ, — o, det var saa ærgerligt! — Men to Vintre gik, og ved den tredie var Træet saa stort, at Haren maatte gaae uden om det. O, voxe, voxe, blive stor og gammel, det var dog det eneste deilige i denne Verden, tænkte Træet.</p></div>
-        <div data-hold="maliskur" class="jm-src"><p><b>Máliskurnar</b></p><p><b>At bera jólini á baki</b> verður brúkt um ein jólagest, sum fer avstað uttan at hava fingið mat ella drekka.</p><p><b>At hava jól og góðar dagar</b> merkir at hava tað sera gott – so gott sum um jólini.</p></div>
+        <div data-hold="maliskur" class="jm-src"><p><b>Máliskurnar</b></p><details><summary>Merkingin – les hana, tá ið tit hava teknað og gitið</summary><p><b>At bera jólini á baki</b> verður brúkt um ein jólagest, sum fer avstað uttan at hava fingið mat ella drekka.</p><p><b>At hava jól og góðar dagar</b> merkir at hava tað sera gott – so gott sum um jólini.</p></details></div>
         <div data-hold="gledilig" class="jm-src"><p><b>«Gleðilig jól! Gleðilig jól!»</b> · føroysk útgáva: Fríðrikur Petersen, 1891 · lagtilvísing: sálmur 84 · kelda: sálmabókin nr. 95 (skeyk.fo)</p>
 <p>«Gleðilig jól! Gleðilig jól!»
 ljóðar av himli einglalag.
@@ -617,14 +636,14 @@ aldri kann eg fulltakka tær
       upp: 'Læs begyndelsen af eventyret. Tegn træet, og skriv to talebobler: én med noget, træet ønsker sig, og én med noget, det allerede har. Fortæl en makker om forskellen.',
       fram: 'Skriv et kort råd til træet. Begrund dit råd med et eksempel fra teksten.',
       laer: 'Les tey fimm brotini, sum standa undir Tilfar, eisini síðsta brotið um haran. Teksturin hevur eldri danskan stavihátt. Tað eru ikki stavivillur. Orðalisti: voxe – vokse, Grene – grene, Fornøielse – fornøjelse. Í 4. flokki kanst tú lesa tekstin upp.', btns: [] },
-    { d: '2026-12-04', t: 'Fá jólaljósið at lýsa', fak: ['nt'], ic: 's-circuit', lang: 'fo', und: 'Hví lýsir peran bert, tá ið alt er bundið saman í ein ring?',
+    { d: '2026-12-04', t: 'Fá jólaljósið at lýsa', fak: ['nt'], ic: 's-circuit', lang: 'fo', und: 'Hvat skal til, fyri at ein pera fer at lýsa?',
       bok: { h: 'Soleiðis fingu vit peruna at lýsa', txt: 'Tekna elringrásina, sum riggaði, og skriva úrslitið niður: Hvat royndu tit fyrst? Hvat broyttu tit? Hvat hendi, tá ið ringrásin var opin?', byrj: ['Fyrst royndu vit …', 'Peran lýsti, tá ið …', 'Tá ið vit loystu ein leiðning, …'] },
       src: [['«Circuits and symbols» hjá BBC (PDF)', 'https://downloads.bbc.co.uk/learning/livelessons/getscientific_activity1.pdf']],
-      tx: 'Ein pera lýsir ikki, bara tí eitt battarí liggur við síðuna av henni. Lutirnir skulu bindast saman í eina lokaða elringrás, har peran er partur av ringrásini. Í dag skulu tit kanna, hvussu tit fáa eina smáperu at lýsa.',
+      tx: 'Á borðinum liggja eitt battarí, tveir leiðningar og ein smápera. Peran lýsir ikki enn. Í dag skulu tit kanna, hvussu tit fáa hana at lýsa – og hví tað riggar.',
       tos: 'Hvussu halda tit, at battarí, leiðningar og pera skulu bindast saman?',
-      upp: 'Teknið fyrst tykkara uppskot. Byggið síðan elringrásina, og roynið hana. Tá ið peran lýsir, loysið so annan endan á einum leiðningi. Hvat hendir? Teknið elringrásina, sum riggaði.',
+      upp: 'Teknið fyrst tykkara uppskot. Byggið síðan elringrásina, og roynið hana. Tá ið peran lýsir, loysið so annan endan á einum leiðningi. Hvat hendir? Teknið elringrásina, sum riggaði. Berið hana saman við fyrsta uppskotið.',
       fram: 'Setið ein brótara í elringrásina. Teknið ringrásina við vanligum ringrásarteknum. Vísið, nær ringrásin er opin, og nær hon er lokað.\nTalgilt framhald: funkan Jólaperur (knappurin niðanfyri) hevur smáar uppgávur, har tit skriva kotu og fáa jólaperur at hanga og blinka. Broytið litirnar, ferðina og talið á perunum. Talgilda framhaldið snýr seg um forritan og animatión; tað er ikki ein roynd av streymi í einari veruligari elringrás.',
-      laer: 'Hav battarí, tveir leiðningar, peruhaldara og eina hóskandi smáperu klár til hvønn bólk. BBC-blaðið hevur ringrásartekn og uppgávur, sum kunnu brúkast til felags eftirmeting.', btns: [['Jólaperur – spæl við kotur', 'https://snardev.ctrl.fo/funkur/jolafunkur/jolakotur']] },
+      laer: 'Sig ikki frammanundan, at ringrásin skal vera lokað. Lat næmingarnar royna seg fram, og nevn hugtøkini «lokað ringrás» og «opin ringrás», tá ið tey hava sæð munin. Hav battarí, tveir leiðningar, peruhaldara og eina hóskandi smáperu klár til hvønn bólk. BBC-blaðið hevur ringrásartekn og uppgávur, sum kunnu brúkast til felags eftirmeting.', btns: [['Jólaperur – spæl við kotur', 'https://snardev.ctrl.fo/funkur/jolafunkur/jolakotur']] },
     { d: '2026-12-07', t: 'What is a Christmas cracker?', fak: ['en'], ic: 's-cracker', lang: 'en', und: 'Why do people pull a cracker together instead of opening it alone?',
       src: [['whychristmas.com: «Christmas crackers» (myndir og upplýsingar)', 'https://www.whychristmas.com/customs/christmas-crackers']],
       tx: 'A Christmas cracker is a colourful paper tube. Two people pull it, and it makes a snap. Inside, there is often a paper hat, a small gift and a joke. Crackers are part of many Christmas celebrations in Britain.',
@@ -638,7 +657,7 @@ aldri kann eg fulltakka tær
       tos: 'Hvat síggja tit fyri tykkum, tá ið tit hoyra máliskurnar?',
       upp: 'Arbeiðið við «bera jólini á baki» og «hava jól og góðar dagar». Teknið fyrst orðini, sum um tey skuldu skiljast bókstavliga. Greiðið síðan frá vanligu merkingini við hjálp frá læraranum.',
       fram: 'Skrivið eina stutta samrøðu, har ein av máliskunum verður brúkt á natúrligan hátt. Flokkurin skal kunna gita merkingina út frá samrøðuni.\nOrðaarbeiði afturat: bólkið 20 jólaorð sum navnorð, sagnorð ella lýsingarorð í venjingini Jólaorð í Finn orð.',
-      laer: 'Greinin er á svenskum og er ætlað sum kunning til læraran. Merkingin av báðum máliskunum stendur her á síðuni undir Tilfar.', btns: [['Finn orð – Jólaorð', 'https://snardev.ctrl.fo/funkur/spoel/finn-ord-1']] },
+      laer: 'Greinin er á svenskum og er ætlað sum kunning til læraran. Merkingin av báðum máliskunum stendur undir Tilfar, men hon er fjald, til næmingarnir hava teknað og gitið.', btns: [['Finn orð – Jólaorð', 'https://snardev.ctrl.fo/funkur/spoel/finn-ord-1']] },
     { d: '2026-12-09', t: 'Ein jólasálmur í 1891', fak: ['so'], ic: 's-paper', lang: 'fo', und: 'Hvat kann eitt gamalt blað siga okkum, sum ein grein frá 2012 ikki kann?',
       bok: { h: 'Jól í 1891 og jól í dag', txt: 'Samanber jól í 1891 við jól í dag. Skriva vinstrumegin, hvat keldurnar siga um 1891, og set ? við tað, sum tú gitir. Skriva høgrumegin, hvat tú kennir frá tínum egnu jólum.', byrj: ['Vit vita tað, tí …'], kol: ['Í 1891', 'Í dag'], stor: true },
       src: [['Grein hjá Posta um «Gleðilig jól» og jólafrímerkini (2012)', 'https://stamps.fo/ShopItem/2012/0/PPA020912/SETT']], hold: 'gledilig',
@@ -649,7 +668,7 @@ aldri kann eg fulltakka tær
       laer: 'Posta-greinin er ein seinni frásøgn um sálmin og útgávuna í 1891. Lat næmingarnar greina hetta keldusambandið. Tey kunnu eisini rokna, hvussu langt er millum árstølini. Sálmateksturin stendur her á síðuni; ein fyrisøgn av fyrsta ørindinum kann gerast í Ger fyrisøgn.', btns: [['Ger fyrisøgn', 'https://snardev.ctrl.fo/funkur/ger-fyrisoegn-1-1']] },
     { d: '2026-12-10', t: 'Fra gårdnisse til julenisse', fak: ['da'], ic: 's-nisse', lang: 'da', und: 'Hvorfor tror I, at nissen har forandret sig så meget gennem tiden?',
       src: [['«Nisse» á Lex (upplýsingar)', 'https://lex.dk/nisse']],
-      tx: 'I gamle fortællinger boede nissen på en gård. Den kunne hjælpe folk, men den kunne også blive vred. I 1800-tallet begyndte kunstnere at vise nissen som en del af julen. Nissen i de gamle fortællinger og julenissen i dag er derfor ikke helt den samme.',
+      tx: 'I gamle fortællinger boede nissen på en gård. Den kunne hjælpe folk, men den kunne også blive vred. I 1800-tallet begyndte kunstnere at vise nissen som en del af julen.',
       tos: 'Hvad kunne den gamle nisse gøre? Hvad forbinder I med en julenisse i dag?',
       upp: 'Lav to felter: Gårdnissen og Julenissen. Skriv først det, teksten fortæller om gårdnissen og julenissen. Tilføj derefter jeres egne forestillinger i en anden farve. Fortæl en makker om én lighed og én forskel.',
       fram: 'Skriv en kort dansk tekst om, hvordan et gammelt sagnvæsen kan forandre sig, når der bliver lavet nye billeder og historier om det.',
@@ -658,33 +677,33 @@ aldri kann eg fulltakka tær
       src: [['Jólakort við symmetri (PDF frá «Komið og roknið»)', 'https://katof.github.io/rokning-spol/jol/skjol/Jolakort_vid_symmetri.pdf']],
       tx: 'Eitt mynstur kann vera speglað um eina linju. Tá samsvara báðar síðurnar. Í dag skulu tit gera eitt jólatræ við spegilsymmetri og kanna, um báðar helvtirnar veruliga passa saman.',
       tos: 'Hvussu kunnu vit kanna symmetri, so vit ikki bara gita eftir útsjóndini?',
-      upp: 'Teknið eina loddrætta linju á rutupappír. Teknið hálvt jólatræ øðrumegin. Gerið hina helvtina sum spegilmynd. Teljið ruturnar: samsvarandi punkt skulu liggja líka langt frá ásinum á hvør síni síðu og á somu tvørstriku á rutupappírinum.',
+      upp: 'Teknið eina loddrætta linju á rutupappír. Teknið hálvt jólatræ øðrumegin. Gerið hina helvtina sum spegilmynd. Hvussu kunnu tit vita við vissu, at helvtirnar passa? Finnið ein hátt at kanna tað, og roynið hann.',
       fram: 'Gerið eitt mynstur við fleiri symmetriásum. Vísið ásirnar, og greiðið frá, hvussu tit kannaðu tær.\nÁ skerminum: bólkið skapini eftir kantum og symmetri í Skipa skapini.',
-      laer: 'Hav rutupappír og linjál klár. Uppgávan er sjálvstøðug og krevur ikki, at næmingarnir taka skjøl niður. Lat næmingarnar skifta tekningar og kanna, um báðar helvtirnar samsvara.', btns: [['Skipa skapini', 'https://snardev.ctrl.fo/funkur/eginleikar-vid-skapum']] },
+      laer: 'Hav rutupappír og linjal klár. Ein góður háttur at kanna er at telja ruturnar: Samsvarandi punkt liggja líka langt frá ásinum á hvør síni síðu og á somu tvørstriku. Lat næmingarnar finna ein hátt sjálv, áðrenn tú vísir teimum hann. Uppgávan er sjálvstøðug og krevur ikki, at næmingarnir taka skjøl niður. Lat næmingarnar skifta tekningar og kanna, um báðar helvtirnar samsvara.', btns: [['Skipa skapini', 'https://snardev.ctrl.fo/funkur/eginleikar-vid-skapum']] },
     { d: '2026-12-14', t: 'Ein heilsan, sum sigur nakað', fak: ['fo'], ic: 's-letter', lang: 'fo', und: 'Kann ein jólaheilsan siga meira enn ein gáva?',
       bok: { h: 'Ein heilsan, sum sigur nakað', txt: 'Reinskriva heilsanina til jólabókina – ella skriva eina nýggja til ein annan móttakara. Strika undir setningin, sum ger hana persónliga, og tekna eina lítla mynd.', byrj: ['Góði … / Góða …', 'Takk fyri, tá ið …', 'Eg gleði meg til …'], stor: true },
       src: [['«Vit skriva jólakort» hjá Føroyar lesa (íblástur, 2025)', 'https://www.xn--froyarlesa-0cb.fo/grein/vit-skriva-j%C3%B3lakort-aftur-%C3%AD-%C3%A1r']],
-      tx: 'Ein jólaheilsan kann siga meira enn navnið á høgtíðini. Tú kanst minnast eina felags uppliving, takka fyri okkurt ella siga, hvat tú gleðir teg til. Í dag skriva vit eina heilsan til ein ávísan móttakara.',
+      tx: 'Mong jólakort siga bara «Gleðilig jól». Men onkur kort goymir tú í mong ár. Í dag kanna vit, hvat ger munin, og so skriva vit eina heilsan til ein ávísan móttakara.',
       tos: 'Hvørjar upplýsingar gera eina heilsan persónliga?',
-      upp: 'Vel ein móttakara. Skriva eina heilsan við einari ítøkiligari uppliving og einari hugsan um tíðina, sum kemur. Les tekstin aftur: Skilir móttakarin, hvat tú hugsar um?',
+      upp: 'Vel ein móttakara. Skriva eina heilsan, sum bert hesin móttakarin kundi fingið. Les tekstin aftur: Skilir móttakarin, hvat tú hugsar um?',
       fram: 'Skrivið tvær heilsanir um somu uppliving: eina til ein góðan vin og eina til ein vaksnan, sum tit ikki kenna so væl. Samanberið orðaval og frágreiðingar.',
-      laer: 'Greinin lýsir átakið í 2025. Uppgávan krevur ikki luttøku í átakinum. Bið makkararnar vísa á ein serliga greiðan setning og eitt stað, sum kann gerast greiðari. Kortið sjálvt kann teknast í Teknaranum (litmyndin Jólakort).', btns: [['Teknari – Jólakort', 'https://snardev.ctrl.fo/spaelsavn/teknari-1']] },
-    { d: '2026-12-15', t: 'Hví er dagurin so stuttur?', fak: ['nt'], ic: 's-globe', lang: 'fo', und: 'Hvussu hevði desember verið í Føroyum, um jarðarásurin als ikki hallaði?',
+      laer: 'Lat flokkin sjálvan finna fram til, hvat ger eina heilsan persónliga, til dømis ein felags uppliving, eitt takk ella ein hugsan um tíðina, sum kemur. Greinin lýsir átakið í 2025. Uppgávan krevur ikki luttøku í átakinum. Bið makkararnar vísa á ein serliga greiðan setning og eitt stað, sum kann gerast greiðari. Kortið sjálvt kann teknast í Teknaranum (litmyndin Jólakort).', btns: [['Teknari – Jólakort', 'https://snardev.ctrl.fo/spaelsavn/teknari-1']] },
+    { d: '2026-12-15', t: 'Hví er dagurin so stuttur?', fak: ['nt'], ic: 's-globe', lang: 'fo', und: 'Hví er tað myrkt, tá ið vit fara í skúla í desember, men ljóst í juni?',
       bok: { h: 'Ljós og myrkur í desember', txt: 'Tekna modellið við sól, jørð og ás. Skriva tveir til tríggjar setningar: Hví er dagurin stuttur í Føroyum í desember, meðan hann er langur í Avstralia?', byrj: ['Í desember hellir …', 'Tí er dagurin …'] },
       src: [['NASA Space Place: «What Causes the Seasons?»', 'https://spaceplace.nasa.gov/seasons/en/']],
-      tx: 'Í desember hava vit fáar tímar við dagsljósi í Føroyum. Samstundis er summar í Avstralia. Tað hongur saman við hallinum á jarðarásinum. Í dag brúka vit eitt modell at kanna munin.',
+      tx: 'Í desember hava vit fáar tímar við dagsljósi í Føroyum. Samstundis er summar í Avstralia. Í dag brúka vit ein globus og eina lampu sum modell og kanna, hvat ið kann gera munin.',
       tos: 'Hvussu kann sama jørð hava vetur og summar samstundis?',
-      upp: 'Finnið Føroyar og Avstralia á einum globusi. Latið lampuna vera sólina. Setið globusin soleiðis, at norðurpólurin hellir frá lampuni – tað er støðan í desember. Snarið globusinum um sín egna ás, og fylgið Føroyum og einum staði í Avstralia gjøgnum ljós og myrkur.',
-      fram: 'Vísið eisini støðuna í juni. Greiðið frá, hví jarðarásurin skal peika í somu ætt, meðan jørðin flytur seg rundan um sólina.',
-      laer: 'Hav globus og lampu klár. Snaringin um ásin gevur dag og nátt. Hallið á ásinum saman við ferðini um sólina gevur árstíðir og broytingar í dagslongd. Tosa eisini um, hvat modellið ikki vísir neyvt.', btns: [] },
+      upp: 'Finnið Føroyar og Avstralia á einum globusi. Latið lampuna vera sólina. Snarið globusinum um sín egna ás, og fylgið Føroyum og einum staði í Avstralia gjøgnum ljós og myrkur. Roynið síðan at seta globusin soleiðis, at Føroyar fáa ein stuttan dag og Avstralia ein langan. Hvussu mugu tit seta hann? Teknið tað.',
+      fram: 'Vísið eisini støðuna í juni. Er nóg mikið at flyta globusin hinumegin lampuna, ella mugu tit eisini broyta, hvussu hann hellir? Roynið bæði, og greiðið frá.',
+      laer: 'Hav globus og lampu klár. Sig ikki frammanundan, at tað er hallið á ásinum. Lat næmingarnar royna seg fram við globusinum. Mong halda, at tað er vetur, tí jørðin er longri burtur frá sólini. Tað er eitt gott git at kanna: Í roynd og veru er jørðin nærri sólini í januar enn í juli. Snaringin um ásin gevur dag og nátt. Hallið á ásinum saman við ferðini um sólina gevur árstíðir og broytingar í dagslongd. Tosa eisini um, hvat modellið ikki vísir neyvt.', btns: [] },
     { d: '2026-12-16', t: 'Føroysk jól á einum frímerki', fak: ['hv'], ic: 's-stamp', lang: 'fo', und: 'Hvussu kann ein so lítil mynd siga nakað um jólini í øllum Føroyum?',
       bok: { h: 'Mítt jólafrímerki', txt: 'Tekna frímerkið stórt í rammuna. Skriva, hvat myndin vísir, og hví tú valdi júst hetta evnið. Hvat tókst tú burtur, tá ið myndin varð minni?', byrj: ['Frímerkið vísir …', 'Eg valdi …, tí …'], stor: true },
       src: [['Jólafrímerkini 2012 hjá Posta, sniðgivin av Anker Eli Petersen', 'https://stamps.fo/ShopItem/2012/0/PPA020912/SETT']],
       tx: 'Eitt frímerki er lítið, men kann bera eina stóra søgu. Tí mugu vit hugsa okkum væl um, tá ið vit velja eitt myndevni. Í dag skulu tit sniðgeva eitt frímerki, sum sigur okkurt um jól í Føroyum.',
       tos: 'Hvat skal vera við, um myndin skal kunna skiljast í lítlari stødd?',
-      upp: 'Hyggið at frímerkjunum. Veljið síðan eitt føroyskt jólaevni, og gerið eina skitsu. Brúkið fáar, týðiligar formar, og veljið litir við umhugsni. Skrivið ein stuttan tekst um tykkara val.',
+      upp: 'Hyggið at frímerkjunum. Veljið síðan eitt føroyskt jólaevni, og gerið eina skitsu. Skrivið ein stuttan tekst um tykkara val.',
       fram: 'Gerið myndina í tveimum støddum. Kannið, hvørjar smálutir hvørva, tá ið myndin minkar. Tillagið sniðið eftir tí.',
-      laer: 'Hav frímerkjadømini á skermi og pappírsbitar á 5 × 7 cm klárar. Uppgávan snýr seg um myndamál og sniðgeving; næmingarnir skulu sjálvir velja sítt myndevni. Skitsan kann eisini gerast í Teknaranum.', btns: [['Teknari', 'https://snardev.ctrl.fo/spaelsavn/teknari-1']] },
+      laer: 'Lat næmingarnar sjálv finna út av, hvat riggar í lítlari stødd, til dømis fáir og týðiligir formar og litir við góðum kontrasti. Hav frímerkjadømini á skermi og pappírsbitar á 5 × 7 cm klárar. Uppgávan snýr seg um myndamál og sniðgeving; næmingarnir skulu sjálvir velja sítt myndevni. Skitsan kann eisini gerast í Teknaranum.', btns: [['Teknari', 'https://snardev.ctrl.fo/spaelsavn/teknari-1']] },
     { d: '2026-12-17', t: 'Christmas in summer', fak: ['en'], ic: 's-sun', lang: 'en', und: 'Would Christmas still feel like Christmas without snow and dark evenings?',
       src: [['British Council LearnEnglish Kids: «Christmas» (brotið Christmas weather)', 'https://learnenglishkids.britishcouncil.org/read-write/magazine/christmas']],
       tx: 'Christmas does not always mean winter. In Australia, December is a summer month. People can celebrate Christmas in warm weather. A snowy Christmas card may look very different from the weather outside. What would you put on an Australian Christmas card?',
@@ -695,11 +714,11 @@ aldri kann eg fulltakka tær
     { d: '2026-12-18', t: 'Hvat stendur í jólaevangeliinum?', fak: ['kr'], ic: 's-book', lang: 'fo', und: 'Hví lesa fólk og siga frá somu jólafrásøgn ár eftir ár?',
       bok: { h: 'Hetta taki eg við mær úr desember', txt: 'Skriva eina stutta hugleiðing, fýra til seks setningar: Hvørja lúku minnist tú best? Hvat lærdi tú? Hvat undrast tú enn á?', byrj: ['Eg minnist best …', 'Eg lærdi, at …', 'Eg undrist enn á …'] },
       src: [['«Jólaevangeliið» – Lukas 2 (PDF á Snar)', 'https://snardev.ctrl.fo/fileadmin/00_filagoymsla/Heimspeki_TEMA_KT/13._Jolaevangeliid_raettlisid_TD_til_prent.pdf']],
-      tx: 'Jólafrásøgnin verður søgd í tekstum, sangum, myndum og leikum. Tá ið vit minnast hana, kunnu ymiskar útgávur blandast saman. Í dag lesa vit tekstin hjá Lukasi og kanna, hvørjar upplýsingar vit finna har.',
+      tx: 'Jólafrásøgnin verður søgd í tekstum, sangum, myndum og leikum. Men hvat stendur í sjálvum tekstinum hjá Lukasi? Í dag kanna vit tað.',
       tos: 'Hvørji fólk og djór minnast tit úr jólafrásøgnini?',
       upp: 'Gerið fyrst ein felags lista úr minninum. Lesið síðan tekstin. Setið merki við tað á listanum, sum tit finna í tekstinum. Strikið undir orðini, sum stuðla svarinum. Tosið um, hvaðani hini minnini kunnu koma.',
       fram: 'Veljið eina hending, og greiðið frá, hvussu hon kundi verið sýnd í einari mynd ella einum leiki. Hvat tekur myndin ella leikurin við, og hvat verður lagt afturat?',
-      laer: 'Brúka bíbliutekstin á síðu 6 í skjalinum. Síðurnar 1–3 hava eina fría endursøgn, og síðurnar 4–5 hava samrøðuspurningar. Enda gjarna við einari samrøðu um, hvat friður og gleðiboð merkja í frásøgnini.', btns: [] }
+      laer: 'Brúka bíbliutekstin á síðu 6 í skjalinum. Sig ikki frammanundan, hvat stendur í tekstinum. Vísmenninir og stjørnan eru hjá Matteusi (Matt 2), og oksin og asnin eru als ikki í evangeliunum; tey koma úr seinni siðvenju, myndum og jólaspølum. Síðurnar 1–3 hava eina fría endursøgn, og síðurnar 4–5 hava samrøðuspurningar. Enda gjarna við einari samrøðu um, hvat friður og gleðiboð merkja í frásøgnini.', btns: [] }
   ];
 
   /* ------------------------------------------------------------ Dagar og lásar */
@@ -794,6 +813,33 @@ aldri kann eg fulltakka tær
     });
   })();
 
+  /* ------------------------------------------------------------ Gitið fyrst · Undrast aftur (2.11.2026)
+     Gitið verður goymt í kaganum á hesi teldu (ikki á Snar). Í fyrireikingini («Lat allar lúkur upp») sær lærarin alt beinanvegin. */
+  var GIT = {
+    fo: { hint: 'Gitið fyrst. Tosið saman, og skrivið tykkara git, áðrenn tit lesa víðari.', l: 'Okkara git', go: 'Vit hava gitið →', h: 'Undrast aftur', t: 'Halda tit tað sama nú? Hvat hava tit sæð, lisið ella roynt, sum stuðlar svarinum?', tomt: 'Tit skrivaðu einki git niður. Hvat hildu tit, áðrenn tit byrjaðu?' },
+    da: { hint: 'Gæt først. Tal sammen, og skriv jeres gæt, før I læser videre.', l: 'Vores gæt', go: 'Vi har gættet →', h: 'Undr jer igen', t: 'Tænker I det samme nu? Hvad har I set, læst eller prøvet, som støtter jeres svar?', tomt: 'I skrev ikke noget gæt. Hvad tænkte I, før I begyndte?' },
+    en: { hint: 'Guess first. Talk together, and write down your guess before you read on.', l: 'Our guess', go: 'We have guessed →', h: 'Wonder again', t: 'Do you still think the same? What have you seen, read or tried that supports your answer?', tomt: 'You did not write down a guess. What did you think before you started?' }
+  };
+  var GIT_KEY = 'snar-jol-middeild-git-2026', GITID_KEY = 'snar-jol-middeild-gitid-2026', gits = {}, gitid = {};
+  try { gits = JSON.parse(store(GIT_KEY) || '{}') || {}; gitid = JSON.parse(store(GITID_KEY) || '{}') || {}; } catch (e) { gits = {}; gitid = {}; }
+  var gitTa = root.querySelector('#jo-git');
+  function renderAftur(n, G) { var g = (gits[n] || '').trim(); root.querySelector('#jo-aftur-git').textContent = g ? G.l + ': ' + g : G.tomt; }
+  function setupGit(i, d) {
+    var G = GIT[d.lang] || GIT.fo, n = i + 1, has = !!d.und;
+    root.querySelector('#jo-git-hint').textContent = G.hint; root.querySelector('#jo-git-hint').setAttribute('lang', d.lang);
+    root.querySelector('#jo-git-l').textContent = G.l;
+    gitTa.value = gits[n] || ''; gitTa.setAttribute('lang', d.lang);
+    root.querySelector('#jo-git-go').textContent = G.go;
+    root.querySelector('#jo-aftur-h').textContent = G.h;
+    root.querySelector('#jo-aftur-q').textContent = d.und || ''; root.querySelector('#jo-aftur-q').setAttribute('lang', d.lang);
+    root.querySelector('#jo-aftur-t').textContent = G.t; root.querySelector('#jo-aftur-t').setAttribute('lang', d.lang);
+    renderAftur(n, G);
+    root.querySelector('#jo-aftur').hidden = !has;
+    openEl.classList.toggle('is-gated', has && !allOpen && !gitid[n]);
+  }
+  gitTa.addEventListener('input', function () { if (current < 0) return; var n = current + 1; gits[n] = gitTa.value; store(GIT_KEY, JSON.stringify(gits)); renderAftur(n, GIT[DOORS[current].lang] || GIT.fo); });
+  root.querySelector('#jo-git-go').addEventListener('click', function () { if (current < 0) return; gitid[current + 1] = 1; store(GITID_KEY, JSON.stringify(gitid)); openEl.classList.remove('is-gated'); var t = root.querySelector('#jo-tx'); if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+
   function renderGrid() {
     grid.innerHTML = DOORS.map(function (d, i) {
       var lock = !unlocked(d), n = i + 1, c = FAK[d.fak[0]][1];
@@ -818,6 +864,7 @@ aldri kann eg fulltakka tær
     root.querySelector('#jo-upp').textContent = d.upp; root.querySelector('#jo-upp').setAttribute('lang', d.lang);
     root.querySelector('#jo-und-h').innerHTML = 'Undrast' + tag;
     root.querySelector('#jo-und').textContent = d.und || ''; root.querySelector('#jo-und').setAttribute('lang', d.lang); root.querySelector('#jo-und-wrap').hidden = !d.und;
+    setupGit(i, d);
     renderBok(d);
     root.querySelector('#jo-btns').innerHTML = (d.btns || []).map(function (b) { return '<a class="jm-btn jm-btn--gold" href="' + b[1] + '">' + esc(b[0]) + ' →</a>'; }).join('');
     root.querySelector('#jo-src').innerHTML = (d.src || []).map(function (b) { var ext = /^https?:/.test(b[1]) || /\.pdf$/i.test(b[1]); return '<a class="jm-btn" href="' + b[1] + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '><svg class="jm-ic" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M19 14v6H4V5h6"/></svg>' + esc(b[0]) + '</a>'; }).join('');
