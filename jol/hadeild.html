@@ -768,7 +768,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
     if (b.ramm) { for (var k = 0; k < b.ramm; k++) frames += '<div class="jb-frame"><span>' + (k + 1) + '</span></div>'; frames = '<div class="jb-frames">' + frames + '</div>'; }
     else frames = '<div class="jb-frame jb-frame--s"><span>Mynd</span></div>';
     return '<div class="jb-sheet"><div class="jb-top"><span>Jólabókin · ' + KAL + '</span><span>Lúka ' + (i + 1) + ' · ' + esc(d.t) + '</span></div>' + DOODLE +
-      '<h1 class="jb-h">' + esc(b.ph || b.h) + '</h1><p class="jb-txt">' + esc(b.ptxt || b.txt) + '</p>' + frames + lines(b.ramm ? 4 : 9, (b.byrj || [])[0]) + foot() + '</div>';
+      '<h1 class="jb-h">' + esc(b.ph || b.h) + '</h1><p class="jb-txt">' + esc((b.ptxt || b.txt).replace(/\s*Tú kanst byrja soleiðis:\s*$/, '')) + '</p>' + frames + lines(b.ramm ? 4 : 9, (b.byrj || [])[0]) + foot() + '</div>';
   }
   function sheetBlank() {
     return '<div class="jb-sheet"><div class="jb-top"><span>Jólabókin · ' + KAL + '</span><span>Lúka:</span></div>' + DOODLE +
