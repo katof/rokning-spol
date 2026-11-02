@@ -113,6 +113,9 @@
 .jx-cal__body small { color: var(--gold); font-weight: 800; letter-spacing: .04em; }
 .jx-cal__body p { font-size: .97rem; color: #dde3ee; }
 .jx-cal__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 8px; }
+.jx-cal { position: relative; cursor: pointer; }
+.jol .jx-cal__btns a:first-child::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.jol .jx-cal__btns a + a { position: relative; z-index: 1; }
 /* grunddeild: barnatekning */ .jx-cal--g .jx-cal__art { background: #fffdf7; background-image: repeating-linear-gradient(transparent 0 23px, #f0ebe0 23px 24px); }
 .jx-cal--g h3 { font-family: Fraunces, serif; }
 /* miðdeild: teknitekning */ .jx-cal--m .jx-cal__art { background: #0f2740; background-image: linear-gradient(rgba(94,211,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(94,211,255,.09) 1px, transparent 1px); background-size: 22px 22px; border-bottom: 1px solid rgba(94, 211, 255, .25); }
@@ -592,7 +595,13 @@
   function chips(container, key, map, labelFn, allLabel) {
     var all = document.createElement('button'); all.type = 'button'; all.className = 'jx-chip is-on'; all.textContent = allLabel; all.dataset.v = ''; container.appendChild(all);
     Object.keys(map).forEach(function (k) { var b = document.createElement('button'); b.type = 'button'; b.className = 'jx-chip'; b.dataset.v = k; b.textContent = labelFn(k); container.appendChild(b); });
-    container.addEventListener('click', function (e) { var b = e.target.closest('.jx-chip'); if (!b) return; sel[key] = b.dataset.v; Array.prototype.forEach.call(container.querySelectorAll('.jx-chip'), function (x) { x.classList.toggle('is-on', x === b); }); render(); });
+    // Trýst á eitt val fyri at velja tað; trýst á sama val aftur fyri at taka tað burtur (so verða øll víst aftur)
+    container.addEventListener('click', function (e) {
+      var b = e.target.closest('.jx-chip'); if (!b) return;
+      var v = (b.dataset.v && sel[key] === b.dataset.v) ? '' : b.dataset.v; sel[key] = v;
+      Array.prototype.forEach.call(container.querySelectorAll('.jx-chip'), function (x) { x.classList.toggle('is-on', x.dataset.v === v); x.setAttribute('aria-pressed', x.dataset.v === v ? 'true' : 'false'); });
+      render();
+    });
   }
   var usedFak = {}; ITEMS.forEach(function (it) { it[3].forEach(function (f) { usedFak[f] = 1; }); });
   var FAK_USED = {}; Object.keys(FAK).forEach(function (k) { if (usedFak[k]) FAK_USED[k] = FAK[k]; });
