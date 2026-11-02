@@ -491,7 +491,7 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
 
 <b>Svar og viðmerkingar:</b> Í hvørjari lúku eru svar og viðmerkingar savnað undir „Til læraran“. Trýst á yvirskriftina fyri at síggja tey.
 
-Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur upp“ ovast á síðuni. Tá verða allar lúkurnar tøkar. Trýst á „Fylg dagfestingunum aftur“ fyri at læsa komandi lúkur aftur. Tær lúkurnar, sum longu hava verið opnar, verða framvegis tøkar.</div></details>
+Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur upp“ ovast á síðuni. Tá verða allar lúkurnar tøkar. Trýst á „Fylg døgunum“ fyri at læsa komandi lúkur aftur. Tær lúkurnar, sum longu hava verið opnar, verða framvegis tøkar.</div></details>
       </div>
     </div>
   </section>
@@ -724,7 +724,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
     else likeText();
   });
   var altBtn = root.querySelector('#jh-alt');
-  function altLabel() { altBtn.textContent = allOpen ? 'Fylg dagfestingunum aftur' : 'Lat allar lúkur upp'; }
+  function altLabel() { altBtn.textContent = allOpen ? 'Fylg døgunum' : 'Lat allar lúkur upp'; }
   altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); countdown(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); });
   altLabel(); renderGrid();
   var hm = /#luka-(\d+)/.exec(location.hash || '');
@@ -815,7 +815,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
   function countdown() {
     var n = new Date(), next = null;
     for (var i = 0; i < DOORS.length; i++) { if (!unlocked(DOORS[i])) { next = DOORS[i]; break; } }
-    if (!next) { cdEl.hidden = false; cdTxt.innerHTML = allOpen ? 'Allar lúkur eru latnar upp til fyrireiking. Komandi lúkur verða læstar aftur við „Fylg dagfestingunum aftur“; eldri lúkur eru framvegis tøkar.' : 'Allar lúkur eru latnar upp. <b>Gleðilig jól.</b>'; return; }
+    if (!next) { cdEl.hidden = false; cdTxt.innerHTML = allOpen ? 'Allar lúkurnar eru nú opnar, so tú kanst fyrireika undirvísingina. Trýst á „Fylg døgunum“ fyri at fara aftur til vanligu skipanina. Tá eru bara lúkurnar til og við dagsins dag opnar.' : 'Allar lúkur eru latnar upp. <b>Gleðilig jól.</b>'; return; }
     var p = next.d.split('-'), t = new Date(+p[0], +p[1] - 1, +p[2]), d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate());
     var dd = Math.round((t - d0) / 86400000);
     cdEl.hidden = false;

@@ -1031,8 +1031,8 @@ aldri kann eg fulltakka tær
   root.querySelector('#jo-next').addEventListener('click', function () { openDoor(current + 1, true); });
   root.querySelector('#jo-done').addEventListener('click', function () { var n = current + 1; if (done[n]) delete done[n]; else done[n] = 1; store(DONE_KEY, JSON.stringify(done)); renderGrid(); openDoor(current, false); });
   var altBtn = root.querySelector('#jg-alt');
-  function altLabel() { altBtn.textContent = allOpen ? 'Fylg dagfestingunum aftur' : 'Lat allar lúkur upp'; }
-  altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); if (typeof toast === 'function') toast(allOpen ? 'Allar lúkur eru latnar upp til fyrireiking.' : 'Komandi lúkur eru aftur læstar. Lúkur frá undanfarnum skúladøgum eru framvegis tøkar.'); });
+  function altLabel() { altBtn.textContent = allOpen ? 'Fylg døgunum' : 'Lat allar lúkur upp'; }
+  altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); if (typeof toast === 'function') toast(allOpen ? 'Allar lúkurnar eru nú opnar, so tú kanst fyrireika undirvísingina. Trýst á „Fylg døgunum“ fyri at fara aftur til vanligu skipanina. Tá eru bara lúkurnar til og við dagsins dag opnar.' : 'Komandi lúkur eru aftur læstar. Lúkur frá undanfarnum skúladøgum eru framvegis tøkar.'); });
   altLabel(); renderGrid(); drawShelf();
   var hm = /#luka-(\d+)/.exec(location.hash || '');
   if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }
@@ -1053,7 +1053,7 @@ aldri kann eg fulltakka tær
   function bindYt(scope) { Array.prototype.forEach.call(scope.querySelectorAll('.jg-yt[data-yt]'), function (b) { b.addEventListener('click', function () { var f = document.createElement('iframe'); f.src = 'https://www.youtube.com/embed/' + b.getAttribute('data-yt') + '?autoplay=1&rel=0'; f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; f.allowFullscreen = true; f.title = b.getAttribute('aria-label') || 'YouTube'; b.innerHTML = ''; b.appendChild(f); }, { once: true }); }); }
   var SAY = ['Vuff! Tað var ikki eg!', 'Mmm … piparkøkur.', 'Eg havi molar í skegginum.', 'Hvar er mandlan?', 'Eg goymi meg betur næstu ferð!', 'Vuff vuff! Gleðilig jól!', 'Eg eti bert eina afturat.'];
   var toastEl = document.createElement('div'); toastEl.className = 'jg-toast'; toastEl.setAttribute('role', 'status'); root.appendChild(toastEl); var toastT = 0;
-  function toast(text) { toastEl.textContent = text; toastEl.classList.add('is-on'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('is-on'); }, 2200); }
+  function toast(text) { toastEl.textContent = text; toastEl.classList.add('is-on'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('is-on'); }, Math.max(2200, text.length * 60)); }
   var found = 0, counter = root.querySelector('#jg-dog-count'), cookies = root.querySelectorAll('#jg-cookies svg'), msg = root.querySelector('#jg-hunt-msg'), hero = root.querySelector('.jg-dog--hero');
   Array.prototype.forEach.call(root.querySelectorAll('[data-dog]'), function (dog) {
     var say = dog.querySelector('.jg-dog__say');
