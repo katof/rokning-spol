@@ -168,6 +168,7 @@
 .jh-open.is-gated .jh-open__body { grid-template-columns: 1fr; }
 .jh-open:not(.is-gated) #jo-git-go { display: none; }
 .jh-part.jh-aftur { margin-top: 16px; border-top: 2px solid var(--ink); }
+#jo-aftur-t { white-space: pre-line; }
 .jh-aftur__git { margin: 10px 0 !important; padding: 8px 12px; border-left: 4px solid var(--yellow); background: #fff; font-style: italic; white-space: pre-line; }
 .jh-und__q { margin: 0; font-family: Caveat, "Comic Sans MS", cursive; font-weight: 700; font-size: clamp(1.4rem, 2.4vw, 1.75rem); line-height: 1.2; }
 .jh-part.jh-bok { margin-top: 4px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--pink-l); }
@@ -175,7 +176,7 @@
 .jh-bok__top h3 { margin-bottom: 0; }
 .jol .jh-sticker[hidden], .jol .jh-part[hidden] { display: none !important; }
 .jh-bok__h { font-weight: 800; margin: 0 0 4px; }
-.jh-bok__txt { margin: 0 0 8px; font-size: .98rem; }
+.jh-bok__txt { margin: 0 0 8px; font-size: .98rem; white-space: pre-line; }
 .jh-bok__byrj { margin: 0 0 10px; padding: 0; list-style: none; font-family: Caveat, cursive; font-weight: 700; font-size: 1.2rem; color: #444; }
 .jh-bok__byrj li::before { content: "✎ "; color: var(--pink); }
 .jh-tagline { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 12px; }
@@ -209,7 +210,7 @@
 .jb-top { display: flex; justify-content: space-between; align-items: baseline; gap: 6mm; padding-bottom: 2mm; border-bottom: 1.5px solid #141414; font-size: 8pt; letter-spacing: .05em; text-transform: uppercase; color: #555; }
 .jb-h { margin: 2mm 26mm 0 0; font-family: "Permanent Marker", "Comic Sans MS", cursive; font-weight: 400; font-size: 24pt; line-height: 1.1; }
 .jb-h--blank { min-height: 14mm; border-bottom: 1.5px solid #141414; font-size: 11pt; font-family: Inter, Arial, sans-serif; color: #777; padding-top: 6mm; }
-.jb-txt { margin: 0; font-size: 10pt; color: #444; line-height: 1.4; }
+.jb-txt { margin: 0; font-size: 10pt; color: #444; line-height: 1.4; white-space: pre-line; }
 .jb-frame { flex: 1 1 0; min-height: 60mm; border: 2px solid #141414; border-radius: 4mm; position: relative; }
 .jb-frame--s { flex: 0 0 95mm; }
 .jb-frame span { position: absolute; left: 3mm; top: 2mm; font-size: 8pt; color: #888; text-transform: uppercase; letter-spacing: .08em; }
@@ -378,7 +379,7 @@
             <div class="jh-part"><h3 id="jo-vid-h">Kanna víðari</h3><div class="jh-vid" id="jo-vid"></div></div>
             <div class="jh-part jh-bok" id="jo-bok" hidden><div class="jh-bok__top"><h3>📖 Til jólabókina</h3><span class="jh-sticker jh-sticker--yellow" id="jo-bok-stor" hidden>Góð síða til bókina</span></div><p class="jh-bok__h" id="jo-bok-h"></p><p class="jh-bok__txt" id="jo-bok-txt"></p><ul class="jh-bok__byrj" id="jo-bok-byrj"></ul><button class="jh-btn jh-btn--sm" type="button" id="jo-bok-print">🖨 Prenta síðu til jólabókina</button></div>
             <div class="jh-part">
-              <details class="jh-det" id="jo-laer-det"><summary>Til læraran – viðmerkingar og svar (trýst fyri at síggja tey)</summary><div class="jh-det__b" id="jo-laer"></div></details>
+              <details class="jh-det" id="jo-laer-det"><summary>Til læraran – viðmerkingar og svar<br>(Trýst fyri at síggja tey.)</summary><div class="jh-det__b" id="jo-laer"></div></details>
             </div>
             <div class="jh-part"><button class="jh-like" type="button" id="jo-like"><svg viewBox="0 0 24 24"><path d="M12 21C5 15 2 11 3.5 7.5 5 4.5 9.5 4 12 7c2.5-3 7-2.5 8.5.5C22 11 19 15 12 21z"/></svg><span class="jh-hand" style="font-size:1.05rem">Mær dámar</span><span id="jo-like-n" class="jh-hand" style="font-size:1.05rem" hidden></span></button></div>
           </div>
@@ -509,7 +510,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
   if (!root) return;
   root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
 
-  var FAK = { fo: ['Føroyskt', 'var(--pink)'], da: ['Danskt', 'var(--red)'], en: ['Enskt', 'var(--blue)'], st: ['Støddfrøði', 'var(--green)'], al: ['Alisfrøði og evnafrøði', '#8338ec'], sa: ['Samfelagsfrøði', '#fb8500'], so: ['Søga og samtíð', '#6f4e37'], kr: ['Kristnikunnleiki og átrúnaður', '#0096c7'], la: ['Landafrøði', '#2a9d8f'], ml: ['Myndlist og tónleikur', '#e5383b'] };
+  var FAK = { fo: ['Føroyskt', 'var(--pink)'], da: ['Danskt', 'var(--red)'], en: ['Enskt', 'var(--blue)'], st: ['Støddfrøði', 'var(--green)'], al: ['Alis- og evnafrøði', '#8338ec'], sa: ['Samfelagsfrøði', '#fb8500'], so: ['Søga og samtíð', '#6f4e37'], kr: ['Kristnikunnleiki og átrúnaður', '#0096c7'], la: ['Landafrøði', '#2a9d8f'], ml: ['Myndlist og tónleikur', '#e5383b'] };
   var LABEL = { fo: 'Uppgáva', da: 'Opgave', en: 'Task' }, VIDLABEL = { fo: 'Kanna víðari', da: 'Undersøg mere', en: 'Go further' }, UNDLABEL = { fo: 'Undrast', da: 'Undren', en: 'Wonder' };
   var MONTHS = ['januar', 'februar', 'mars', 'apríl', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
   var DAYS = ['sunnudagur', 'mánadagur', 'týsdagur', 'mikudagur', 'hósdagur', 'fríggjadagur', 'leygardagur'];
@@ -542,14 +543,15 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
       upp: ['Find et sted, hvor læseren ved noget, som nogle af de andre personer ved bordet ikke ved.', 'Hvorfor gemmer Freja mandlen? Find noget i teksten, som støtter dit forslag.', 'Hvorfor tror du, at far skubber sin tomme tallerken væk? Find noget i teksten, der støtter din forklaring.', 'Skriv to nye replikker, som kunne afslutte scenen.'],
       vid: 'Undersøg mere: Hvordan kan den sidste sætning ændre vores opfattelse af faren?',
       laer: 'Dentur verður lagdur á persónarnar, tað, sum ikki verður sagt beinleiðis í søguni, og at tosa og skriva danskt.\n\nNæmingarnir skulu leggja merki til, at lesarin veit nakað, sum fleiri av persónunum ikki vita. Teir skulu eisini royna at skilja, hví Freja goymir mandluna, og hvussu hini við borðið reagera.\n\nFleiri tulkingar eru møguligar. Tað týdningarmesta er, at næmingarnir kunnu greiða frá sínum hugsanum og vísa á nakað í tekstinum, sum stuðlar teimum.' },
-    { d: '2026-12-04', und: '„LED-ljós brúka næstan einki.“ Hvussu kunnu vit kanna, um ein slíkur pástandur um orkunýtslu er rættur?', bok: { h: 'Hvat kostar jólaljósið?', txt: 'Set niðurstøðuna úr kanningini upp sum eina lítla upplýsingasíðu: ein talva, eitt súlurit ella ein tekning og tveir setningar við tínum ráði til ein, sum skal keypa ljósketu.', byrj: ['Okkara niðurstøða er, at …', 'Vit ráða tær at …, tí …'] },
-      t: 'Hvat brúka jólaljósini?', fak: ['al'], min: '10–15', ic: 'k-bulb', lang: 'fo',
+    { d: '2026-12-04', und: '„LED-ljós brúka næstan onga orku.“ Hvussu kunnu vit kanna, um tað er rætt?', bok: { h: 'Hvat kosta jólaljósini?', txt: 'Ger eina lítla upplýsingasíðu, har tú vísir, hvat tú ert komin fram til.\nTú kanst brúka eina talvu, eitt súludiagramm ella eina tekning til at vísa munin á ljósketunum.\nSkriva eisini tveir setningar, har tú gevur einum, sum skal keypa eina ljósketu, góð ráð.\nTú kanst byrja soleiðis:', byrj: ['Okkara útrokningar vísa, at …', 'Vit ráða tær til at …, tí …'], ph: 'Hvussu nógva orku brúka jólaljósini?', ptxt: 'Ger eina lítla upplýsingasíðu, har tú vísir, hvat tú ert komin fram til.\nBrúka eina talvu, eitt súludiagramm ella eina tekning til at vísa munin á ljósketunum. Skriva eisini tveir setningar við ráðum til ein, sum skal keypa eina ljósketu.' },
+      t: 'Hvussu nógva orku brúka jólaljósini?', fak: ['al'], min: '10–15', ic: 'k-bulb', lang: 'fo',
       src: [],
-      tx: 'Tvær ljósketur skulu lýsa seks tímar um dagin í 18 dagar.\n\nÍ hesum hugsaða døminum er effektin hjá ljósketu A 8 W, og effektin hjá B er 40 W. Orkunýtslan verður síðan roknað í kWh. Vit rokna við einum elprísi á 2,50 kr. fyri kWh.\n\nTølini eru gjørd til uppgávuna.',
-      upp: ['Hvussu nógvar tímar lýsir hvør ketan til samans?', 'Rokna orkunýtsluna hjá báðum ketunum.', 'Rokna kostnaðin hjá báðum.', 'Hvussu nógvar ferðir so nógva orku brúkar B sum A?'],
-      hint: 'Hjálp: Orkunýtsla í kWh = effekt í W × tímar ÷ 1.000.',
-      vid: 'Hvørjar aðrar upplýsingar hevði tú viljað havt, áðrenn tú valdi, hvørja ketu tú skuldi keypa?',
-      btns: [['Jólaperur – spæl við kotur', 'https://snardev.ctrl.fo/funkur/jolafunkur/jolakotur']],
+      tx: 'Tvær ljósketur lýsa í seks tímar um dagin í 18 dagar.\n\nÍ hesum døminum hevur ljósketa A eina effekt á 8 W, meðan ljósketa B hevur eina effekt á 40 W.\n\nVit skulu rokna út, hvussu nógva orku keturnar brúka, og hvat tað kostar at hava tær tendraðar. Vit rokna við, at ein kWh kostar 2,50 kr.\n\nTølini eru hugsað til hesa uppgávuna.',
+      upp: ['Hvussu nógvar tímar lýsir hvør ljósketa til samans?', 'Roknið, hvussu nógva orku hvør ljósketa brúkar í kWh.', 'Hvussu nógv kostar tað at hava hvørja ljósketu tendraða í 18 dagar?', 'Hvussu nógvar ferðir størri er orkunýtslan hjá ljósketu B enn hjá ljósketu A?'],
+      hint: 'Hjálp: Orkunýtsla í kWh = effekt í W × tímatal ÷ 1.000.',
+      vid: 'Hvat annað hevði tú viljað vitað um ljósketurnar, áðrenn tú keypti aðra teirra?\nHugsa til dømis um prís, livitíð og hvussu væl keturnar lýsa.',
+      aftur: 'Halda tit framvegis tað sama, ella hava tit broytt hugsan?\nHvat vísa útrokningarnar? Kunnu tit siga, at LED-ljós brúka næstan onga orku, ella veldst tað um, hvat tit samanbera við?',
+      btns: [['Jólaperur – spæl við kotum', 'https://snardev.ctrl.fo/funkur/jolafunkur/jolakotur']],
       laer: 'Svar: 108 tímar. A brúkar 0,864 kWh og kostar 2,16 kr. B brúkar 4,32 kWh og kostar 10,80 kr. B brúkar fimm ferðir so nógva orku. Tosa um munin á effekt og orkunýtslu.\nÍskoyti: funkan Jólaperur (knappurin niðanfyri) hevur átta smáar uppgávur, har næmingarnir skriva kotu og fáa perur at hanga og blinka. Uppgávur 4–5 snúgva seg um tíðina í blinkinum, uppgáva 7 um eina for-loop. Hetta framhaldið snýr seg um forritan og animatión; tað er ikki ein útrokning av elnýtslu.' },
     { d: '2026-12-07', und: 'Can something be worth a lot without costing anything – and who decides what Christmas is worth?', t: 'Scrooge: What is Christmas worth?', fak: ['en'], min: '10–15', ic: 'k-coins', lang: 'en',
       src: [['Upprunateksturin hjá Dickens (Project Gutenberg)', 'https://www.gutenberg.org/cache/epub/24022/pg24022-images.html']], hold: 'scrooge',
@@ -684,7 +686,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
     Array.prototype.forEach.call(grid.children, function (b) { b.classList.toggle('is-open', +b.getAttribute('data-i') === i); });
     root.querySelector('#jo-meta').textContent = 'Lúka ' + (i + 1) + ' · ' + fmt(d.d);
     root.querySelector('#jo-title').textContent = d.t;
-    root.querySelector('#jo-tags').innerHTML = d.fak.map(function (f) { return '<span class="jh-sticker" style="background:' + FAK[f][1] + ';color:#fff">' + FAK[f][0] + '</span>'; }).join('') + '<span class="jh-sticker jh-sticker--yellow" style="transform:rotate(2deg)">' + d.min + ' min</span>';
+    root.querySelector('#jo-tags').innerHTML = d.fak.map(function (f) { return '<span class="jh-sticker" style="background:' + FAK[f][1] + ';color:#fff">' + FAK[f][0] + '</span>'; }).join('') + '<span class="jh-sticker jh-sticker--yellow" style="transform:rotate(2deg)">' + d.min + ' minuttir</span>';
     root.querySelector('#jo-src').innerHTML = (d.src || []).map(function (b) { var ext = /^https?:/.test(b[1]) || /\.pdf$/i.test(b[1]); return '<a class="jh-btn jh-btn--sm" href="' + b[1] + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '><svg class="jh-ic" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M19 14v6H4V5h6"/></svg>' + esc(b[0]) + '</a>'; }).join('');
     root.querySelector('#jo-und-h').textContent = UNDLABEL[d.lang] || UNDLABEL.fo;
     var undEl = root.querySelector('#jo-und'); undEl.textContent = d.und || ''; undEl.setAttribute('lang', d.lang); root.querySelector('#jo-und-w').hidden = !d.und;
@@ -765,7 +767,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
     if (b.ramm) { for (var k = 0; k < b.ramm; k++) frames += '<div class="jb-frame"><span>' + (k + 1) + '</span></div>'; frames = '<div class="jb-frames">' + frames + '</div>'; }
     else frames = '<div class="jb-frame jb-frame--s"><span>Mynd</span></div>';
     return '<div class="jb-sheet"><div class="jb-top"><span>Jólabókin · ' + KAL + '</span><span>Lúka ' + (i + 1) + ' · ' + esc(d.t) + '</span></div>' + DOODLE +
-      '<h1 class="jb-h">' + esc(b.h) + '</h1><p class="jb-txt">' + esc(b.txt) + '</p>' + frames + lines(b.ramm ? 4 : 9, (b.byrj || [])[0]) + foot() + '</div>';
+      '<h1 class="jb-h">' + esc(b.ph || b.h) + '</h1><p class="jb-txt">' + esc(b.ptxt || b.txt) + '</p>' + frames + lines(b.ramm ? 4 : 9, (b.byrj || [])[0]) + foot() + '</div>';
   }
   function sheetBlank() {
     return '<div class="jb-sheet"><div class="jb-top"><span>Jólabókin · ' + KAL + '</span><span>Lúka:</span></div>' + DOODLE +
