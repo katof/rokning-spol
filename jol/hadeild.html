@@ -216,6 +216,17 @@
 .jb-box ul { margin: 0; padding-left: 5mm; }
 .jb-plan { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; flex: 0 0 62mm; }
 .jb-plan .jb-frame { min-height: 0; }
+
+/* Jólabókin og Jólasøgan, sum ferðast: samanlagdir partar, sum lærarin letur upp (2.11.2026) */
+.jol-fold > summary { list-style: none; cursor: pointer; }
+.jol-fold > summary::-webkit-details-marker { display: none; }
+.jol-fold__in { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.jol-fold__t small { display: block; font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.jol-fold__t b { display: block; font-size: clamp(1.3rem, 2.4vw, 1.8rem); line-height: 1.15; }
+.jol-fold__btn { flex: none; padding: 8px 16px; border: 2px solid currentColor; border-radius: 999px; font-weight: 800; font-size: .9rem; }
+.jol-fold__btn .c, .jol-fold[open] .jol-fold__btn .o, .jol-fold[open] .jol-fold__t { display: none; }
+.jol-fold[open] .jol-fold__btn .c { display: inline; }
+.jol-fold[open] .jol-fold__in { justify-content: flex-end; margin-bottom: 10px; }
 </style>
 <style>body { margin: 0; }</style>
 <style>html.i-rammu :is(.jg-crumb, .jm-crumb, .jh-crumb) { display: none !important; }</style>
@@ -406,6 +417,7 @@
 
   <!-- ============================================ Jólabókin -->
   <section class="jh-section" id="jolabok">
+    <details class="jol-fold"><summary><span class="jh-wrap jol-fold__in"><span class="jol-fold__t"><small>Valfrítt</small><b>Jólabókin</b></span><span class="jol-fold__btn"><span class="o">Lat upp ▾</span><span class="c">Lat aftur ▴</span></span></span></summary>
     <div class="jh-wrap jh-section__in">
       <div><span class="jh-sticker jh-sticker--yellow">Valfrítt</span><h2 style="margin-top:12px">Jólabókin</h2><p style="color:var(--muted)">Eitt savn av tí besta, flokkurin ger í desember.</p></div>
       <div>
@@ -420,49 +432,37 @@
 Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður uttan hana. Ein góð mannagongd er at lata hvønn næming velja eina ella tvær síður, sum hann ella hon vil arbeiða víðari við, áðrenn bókin verður sett saman.</div></details>
       </div>
     </div>
+    </details>
   </section>
 
   <!-- ============================================ Saman á skúlanum -->
   <section class="jh-section" id="saman">
+    <details class="jol-fold"><summary><span class="jh-wrap jol-fold__in"><span class="jol-fold__t"><small>Saman á skúlanum · valfrítt</small><b>Jólasøgan, sum ferðast</b></span><span class="jol-fold__btn"><span class="o">Lat upp ▾</span><span class="c">Lat aftur ▴</span></span></span></summary>
     <div class="jh-wrap jh-section__in">
-      <div><span class="jh-sticker jh-sticker--pink">Saman á skúlanum</span><h2 style="margin-top:12px">Jólasøgan, sum ferðast</h2><p style="color:var(--muted)">Ein valfrí avbjóðing: tit skriva, miðdeildin lesur upp, grunddeildin teknar.</p></div>
+      <div><span class="jh-sticker jh-sticker--pink">Saman á skúlanum · valfrítt</span><h2 style="margin-top:12px">Jólasøgan, sum ferðast</h2><p style="color:var(--muted)">Tit skriva eina jólasøgu til børn í 1.–3. flokki. Miðdeildin lesur hana upp, og grunddeildin teknar myndir til hana.</p></div>
       <div>
-        <p>Tit skriva eina upprunaliga jólasøgu til børn í 1.–3. flokki. Søgan ferðast síðan víðari á skúlanum, og at enda kann hon gerast ein felags jólabók ella ein lítil framførsla.</p>
-        <div class="jh-chain">
-          <div class="is-us"><b>Hádeildin skrivar</b>Ein søga á umleið 150–250 orð, sum er góð at lesa upp fyri yngri børnum.</div>
-          <div><b>Miðdeildin lesur upp</b>Næmingarnir venja upplestur, velja, hvussu søgan skal ljóða, og gera stuttar spurningar til innihaldið.</div>
-          <div><b>Grunddeildin teknar</b>Børnini lurta eftir søguni og tekna myndir til hana.</div>
-        </div>
-        <div class="jh-tip" style="margin-bottom:12px"><b>Søgan skal hava</b>
+        <h3>Skriva søguna</h3>
+        <p>Skrivið eina søgu við umleið 150–250 orðum. Hugsið um, at yngri børn skulu lurta eftir henni.</p>
+        <div class="jh-tip" style="margin-bottom:12px"><b>Søgan skal hava:</b>
           <ul class="jh-check">
-            <li>eina greiða byrjan: hvør, hvar og nær?</li>
-            <li>eina hending, sum broytir okkurt ella skapar spenning</li>
-            <li>ein enda, sum loysir støðuna – ella gevur lurtaranum okkurt at hugsa um</li>
-            <li>livandi persónar, sum vilja okkurt, og sum vit síggja fyri okkum</li>
-            <li>orð og setningar, sum børn í grunddeildini skilja, tá ið tey hoyra søguna</li>
-            <li>gott føroyskt: les søguna upp, áðrenn tú gert hana lidna</li>
+            <li>eina greiða byrjan, eina hending og ein enda</li>
+            <li>persónar, sum vilja okkurt</li>
+            <li>orð, sum yngri børn skilja</li>
+            <li>hendingar, sum børnini kunnu tekna</li>
           </ul>
         </div>
-        <div class="jh-tips">
-          <div class="jh-tip"><b>Byrja við lúku 11</b>Søgan við í mesta lagi 60 orðum kann gerast kjarnin í tí longri søguni. Hvat má leggjast afturat, tá ið lurtarin er sjey ár og ikki sjeyti?</div>
-          <div class="jh-tip"><b>Skriva til eitt barn, sum lurtar</b>Hugsa um, hvat lurtarin skal síggja fyri sær. Ljóð, litir og rørslur virka betur enn langar frágreiðingar. Ein setningur, sum kemur aftur, hjálpir yngri børnum at fylgja við – og gevur tekningunum nakað at byggja á.</div>
-          <div class="jh-tip" style="background:var(--pink-l)"><b>Kanna víðari</b>Hvussu kann ein barnasøga vera hugvekjandi uttan at siga lesaranum, hvat hann skal halda? Finn eina søgu, tú kendi sum barn, og kanna, hvussu hon ger tað.</div>
-        </div>
+        <p>Lesið søguna upp fyri hvørjum øðrum. Skilja tit hana, tá ið tit bara hoyra hana? Rættið tað, sum er ógreitt.</p>
+        <h3 style="margin-top:18px">Til læraran</h3>
+        <p>Næmingarnir kunnu arbeiða tvey og tvey ella í bólkum. Veljið eina ella fleiri søgur, sum kunnu sendast til miðdeildina.</p>
+        <p>Avtala við hinar lærararnar, nær søgurnar skulu verða klárar.</p>
+        <p>Um tit ikki samstarva við aðrar flokkar, kunnu næmingarnir lesa søgurnar upp fyri hvørjum øðrum og tekna myndir til tær.</p>
         <div class="jh-btns">
-          <button class="jh-btn jh-btn--pink" type="button" id="jh-print-story">🖨 Prenta skrivileist og eftirlitslista</button>
-          <button class="jh-btn" type="button" id="jh-copy-msg">📋 Avrita boðini til hinar lærararnar</button>
+          <button class="jh-btn jh-btn--pink" type="button" id="jh-print-story">🖨 Prenta skrivileist</button>
+          <button class="jh-btn" type="button" id="jh-copy-msg">📋 Avrita boðini til lærararnar</button>
         </div>
-        <details class="jh-det"><summary>Til læraran – soleiðis kanst tú skipa avbjóðingina</summary><div class="jh-det__b"><b>Tíð:</b> Umleið tríggjar lektiónir: ein til at leggja til rættis og skriva fyrstu útgávuna, ein til at lesa upp í bólkum og rætta, og ein til at gera søguna lidna.
-
-<b>Uttan aðrar flokkar:</b> Næmingarnir lesa søgurnar upp fyri hvørjum øðrum í bólkum og meta um tær við eftirlitslistanum. Tit kunnu taka søgurnar upp sum ljóðfílu, ella bólkarnir kunnu býta søgur og tekna myndir hvør til annans søgu. Ein søga kann eisini verða lisin upp fyri flokkinum sum ein lítil framførsla.
-
-<b>Við øðrum flokkum:</b> Vel eina ella tvær søgur saman við næmingunum. Avrita boðini omanfyri og send tey til lærararnar í miðdeild og grunddeild. Jólakalendararnir hjá teimum hava sín part av avbjóðingini.
-
-<b>Fakligt:</b> søgubygnaður, persónslýsing, at skriva til ein ávísan móttakara, orðaval og munnligt mál.
-
-<b>Næmingaavrik:</b> Einki verður goymt á síðuni. Søgurnar verða skrivaðar á pappír ella í skipanini hjá skúlanum, og tit avgera sjálv, hvat verður víst og fyri hvørjum.</div></details>
       </div>
     </div>
+    </details>
   </section>
 
   <!-- ============================================ Til læraran -->
@@ -758,9 +758,7 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
   root.querySelector('#jh-print-cover').addEventListener('click', function () { printSheets(sheetCover()); });
   root.querySelector('#jh-print-blank').addEventListener('click', function () { printSheets(sheetBlank()); });
   root.querySelector('#jh-print-story').addEventListener('click', function () { printSheets(sheetsStory()); });
-  var MSG = 'Góðan dag!\n\nÍ desember skriva næmingarnir í hádeildini hjá okkum jólasøgur til grunddeildina. Hetta er avbjóðingin «Jólasøgan, sum ferðast» í jólakalendarunum á Snar.\n\n' +
-    'Hugskotið er hetta:\n1. Hádeildin skrivar eina upprunaliga jólasøgu á umleið 150–250 orð til børn í 1.–3. flokki.\n2. Miðdeildin venur at lesa søguna upp, velur, hvussu hon skal ljóða, og ger nakrar stuttar spurningar til innihaldið.\n3. Grunddeildin lurtar eftir søguni og teknar myndir til hana.\n\n' +
-    'Úrslitið kann gerast ein felags jólabók ella ein lítil framførsla. Tit avgera sjálv, hvussu nógv tit vilja vera við. Vit kunnu senda tykkum søguna í seinasta lagi [dagfesting].\n\nVinarliga heilsan\n[navn], [flokkur]';
+  var MSG = "Góðan dagin\n\nÍ desember skriva næmingarnir í hádeildini jólasøgur til grunddeildina. Hetta er til virknið: «Jólasøgan, sum ferðast» í jólakalendarunum á Snar.\n\nHetta skulu vit gera:\n1. Hádeildin skrivar eina upprunaliga jólasøgu við umleið 150–250 orðum til børn í 1.–3. flokki.\n2. Miðdeildin venur at lesa søguna hart, velur, hvussu hon skal ljóða, og ger nakrar stuttar spurningar til innihaldið.\n3. Grunddeildin lurtar eftir søguni og teknar myndir til hana.\n\nÚrslitið kann vera ein felags jólabók ella ein lítil framførsla. Tit avgera sjálv, hvussu nógv tit vilja gera við hetta. Vit kunnu senda tykkum søguna í seinasta lagi [dagfesting].\n\nVinarliga heilsan\n\n(flokkur)";
   root.querySelector('#jh-copy-msg').addEventListener('click', function () { copyText(MSG, this); });
 
   /* ------------------------------------------------------------ Spenningur: nær letur næsta lúka upp? */
@@ -798,6 +796,15 @@ Jólabókin er eitt valfrítt ískoyti. Lúkurnar kunnu gerast eins og áður ut
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (history.replaceState) history.replaceState(null, '', '#' + id);
   }, true);
+})();
+</script>
+<script>
+// Samanlagdir partar (Jólabókin, Jólasøgan, sum ferðast) lata seg upp, tá ið ein leinkja ella slóðin peikar á teir
+(function () {
+  function op(id) { var el = id && document.getElementById(id), f = el && (el.querySelector('details.jol-fold') || el.closest('details.jol-fold')); if (f) f.open = true; }
+  op(location.hash.slice(1));
+  window.addEventListener('hashchange', function () { op(location.hash.slice(1)); });
+  window.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) op(a.getAttribute('href').slice(1)); }, true);
 })();
 </script>
 </body>

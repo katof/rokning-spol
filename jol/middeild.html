@@ -228,6 +228,17 @@
 .jb-sub { margin: 5mm 0 1mm; font: 700 12pt "Space Grotesk", Arial, sans-serif; }
 .jb-check { list-style: none; margin: 1mm 0 0; padding: 0; font-size: 10.5pt; line-height: 1.9; }
 .jb-check li::before { content: "☐  "; }
+
+/* Jólabókin og Jólasøgan, sum ferðast: samanlagdir partar, sum lærarin letur upp (2.11.2026) */
+.jol-fold > summary { list-style: none; cursor: pointer; }
+.jol-fold > summary::-webkit-details-marker { display: none; }
+.jol-fold__in { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.jol-fold__t small { display: block; font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.jol-fold__t b { display: block; font-size: clamp(1.3rem, 2.4vw, 1.8rem); line-height: 1.15; }
+.jol-fold__btn { flex: none; padding: 8px 16px; border: 2px solid currentColor; border-radius: 999px; font-weight: 800; font-size: .9rem; }
+.jol-fold__btn .c, .jol-fold[open] .jol-fold__btn .o, .jol-fold[open] .jol-fold__t { display: none; }
+.jol-fold[open] .jol-fold__btn .c { display: inline; }
+.jol-fold[open] .jol-fold__in { justify-content: flex-end; margin-bottom: 10px; }
 </style>
 <style>body { margin: 0; }</style>
 <style>html.i-rammu :is(.jg-crumb, .jm-crumb, .jh-crumb) { display: none !important; }</style>
@@ -395,6 +406,7 @@ aldri kann eg fulltakka tær
 
   <!-- ============================================ Jólabókin -->
   <section class="jm-section jm-new jm-new--bok" id="jolabok">
+    <details class="jol-fold"><summary><span class="jm-wrap jol-fold__in"><span class="jol-fold__t"><small>Til jólabókina · valfrítt</small><b>Jólabókin hjá flokkinum</b></span><span class="jol-fold__btn"><span class="o">Lat upp ▾</span><span class="c">Lat aftur ▴</span></span></span></summary>
     <div class="jm-wrap jm-section__in">
       <div>
         <span class="jm-mono">Til jólabókina · valfrítt</span>
@@ -412,48 +424,40 @@ aldri kann eg fulltakka tær
 Einki verður goymt á síðuni. Tað, sum næmingarnir gera, er á pappírinum.</div></details>
       </div>
     </div>
+    </details>
   </section>
 
   <!-- ============================================ Saman á skúlanum -->
   <section class="jm-section jm-new jm-new--saman" id="saman">
+    <details class="jol-fold"><summary><span class="jm-wrap jol-fold__in"><span class="jol-fold__t"><small>Saman á skúlanum · valfrítt</small><b>Jólasøgan, sum ferðast</b></span><span class="jol-fold__btn"><span class="o">Lat upp ▾</span><span class="c">Lat aftur ▴</span></span></span></summary>
     <div class="jm-wrap jm-section__in">
       <div>
         <span class="jm-mono">Saman á skúlanum · valfrítt</span>
         <h2>Jólasøgan, sum ferðast</h2>
-        <p style="color:var(--muted)">Ein jólasøga ferðast millum deildirnar. Hádeildin skrivar hana, miðdeildin ger hana klára til upplestur, og grunddeildin lurtar og teknar.</p>
+        <p style="color:var(--muted)">Hádeildin skrivar eina jólasøgu. Tit venja at lesa hana hart fyri grunddeildini, sum teknar myndir til hana.</p>
       </div>
       <div>
-        <ol class="jm-chain" aria-label="Søgan ferðast gjøgnum tríggjar deildir">
-          <li><small>1 · Hádeild</small><b>Skrivar søguna</b>á 150–250 orð til yngri børn.</li>
-          <li class="is-us"><small>2 · Miðdeild · tit</small><b>Gera hana klára</b>Lesa upp, velja rødd og gera spurningar.</li>
-          <li><small>3 · Grunddeild</small><b>Lurtar og teknar</b>Eina mynd til hvønn part.</li>
-        </ol>
+        <h3>Soleiðis gera tit</h3>
         <ol class="jm-steps">
-          <li><b>Lesið søguna upp</b> hvør fyri øðrum, tvey og tvey. Hvat hendir í byrjanini, í miðjuni og at enda?</li>
-          <li><b>Veljið, hvussu hon skal ljóða.</b> Hvør persónur fær sína egnu rødd? Hvar lesa tit skjótt, og hvar spakuliga? Merkið steðgir við /, og strikið undir orð, sum skulu sigast sterkt.</li>
-          <li><b>Gerið tríggjar stuttar spurningar</b> til lurtararnar: ein um tað, sum stendur, ein um tað, sum ein persónur hugsar, og ein, sum lurtarin sjálvur má gita.</li>
-          <li><b>Fyrireikið søguna til yngri børn.</b> Býtið hana í fýra partar, so børnini í grunddeildini kunnu tekna hvør sín part. Lesið upp, og steðgið eftir hvørjum parti.</li>
+          <li>Lesið søguna saman. Hvat hendir fyrst, síðan og at enda?</li>
+          <li>Venjið upplesturin. Hvørji orð skulu tit leggja dent á? Hvar skulu tit steðga á?</li>
+          <li>Býtið søguna í fýra partar, sum børnini kunnu tekna.</li>
+          <li>Gerið tríggjar spurningar til børnini, og lesið síðan søguna upp fyri teimum.</li>
         </ol>
-        <p><b>Uttan aðrar flokkar:</b> Skrivið eina stutta søgu sjálv, átta til tólv setningar við byrjan, hending og enda, og lesið hana fyri einum øðrum bólki. Ella brúkið søguna «Snjókellingin» eftir A. C. Evensen niðanfyri. Hon hevur nøkur eldri orð, til dømis toya, kreyma, homluband og heimaveður.</p>
+        <h3 style="margin-top:18px">Til læraran</h3>
+        <p>Ger eina avtalu við lærararnar í hádeildini og grunddeildini, nær søgan skal verða klár, og nær næmingarnir kunnu lesa hana upp.</p>
+        <p>Um tit ikki samstarva við aðrar flokkar, kunnu næmingarnir skriva eina stutta søgu sjálvir ella arbeiða við Snjókellingini eftir A. C. Evensen.</p>
         <div class="jm-btns">
-          <button class="jm-btn jm-btn--mintsolid" type="button" data-jb="soga">Prenta søguna og upplestrarætlanina</button>
-          <button class="jm-btn jm-btn--mint" type="button" data-jb="aetlan">Prenta bert upplestrarætlanina</button>
+          <button class="jm-btn jm-btn--mintsolid" type="button" data-jb="aetlan">Prenta upplestrarætlan</button>
+          <button class="jm-btn jm-btn--mint" type="button" data-copy="lar">Avrita boðini til lærararnar</button>
         </div>
         <details class="jm-det" style="margin-top:14px"><summary>Søgan: Snjókellingin</summary><div class="jm-det__b" style="white-space:normal">
           <div class="jm-story" id="jm-story"></div>
-          <div class="jm-btns"><button class="jm-btn jm-btn--mint" type="button" data-copy="soga">Avrita søguna</button></div>
+          <div class="jm-btns"><button class="jm-btn jm-btn--mint" type="button" data-jb="soga">Prenta søguna og upplestrarætlanina</button><button class="jm-btn jm-btn--mint" type="button" data-copy="soga">Avrita søguna</button></div>
         </div></details>
-        <details class="jm-det"><summary>Boð til hinar lærararnar</summary><div class="jm-det__b" style="white-space:normal">
-          <p style="margin:6px 0 0">Til læraran í hádeildini – spyr eftir eini søgu:</p>
-          <p class="jm-msg" id="jm-msg-ha"></p>
-          <div class="jm-btns"><button class="jm-btn jm-btn--mint" type="button" data-copy="ha">Avrita boðini til hádeildina</button></div>
-          <p style="margin:14px 0 0">Til læraran í grunddeildini – bjóða upplestur:</p>
-          <p class="jm-msg" id="jm-msg-gr"></p>
-          <div class="jm-btns"><button class="jm-btn jm-btn--mint" type="button" data-copy="gr">Avrita boðini til grunddeildina</button></div>
-        </div></details>
-        <details class="jm-det"><summary>Til læraran</summary><div class="jm-det__b">Arbeiðið kann býtast á tríggjar til fýra stuttar løtur á 10–15 minuttir, til dømis í føroyskt. Kemur eingin søga frá hádeildini, skriva næmingarnir sjálvir eina, ella tit brúka «Snjókellingin». Lesa tit fyri grunddeildini, so avtala fyrst tíð og stað við læraran har.</div></details>
       </div>
     </div>
+    </details>
   </section>
 
   <!-- ============================================ Til læraran: nýggju partarnir -->
@@ -792,8 +796,7 @@ aldri kann eg fulltakka tær
     gr: 'Hallo!\n\nÍ miðdeildini hava vit gjørt eina jólasøgu klára til upplestur. Vilja tínir næmingar lurta og tekna myndir til hana? Søgan er býtt í fýra partar, so børnini kunnu tekna ein part hvør ella tvey og tvey.\n\nVit kunnu koma og lesa upp [dag og tíð]. Tað tekur umleið 15 minuttir.\n\nVinarliga\n[navn], [flokkur]',
     soga: STORY_T + '\n\n' + STORY.map(function (p, k) { return (k + 1) + '. ' + p; }).join('\n\n') + '\n\n' + STORY_K
   };
-  root.querySelector('#jm-msg-ha').textContent = MSG.ha;
-  root.querySelector('#jm-msg-gr').textContent = MSG.gr;
+  MSG.lar = 'Til læraran í hádeildini:\n\n' + MSG.ha + '\n\n– – –\n\nTil læraran í grunddeildini:\n\n' + MSG.gr;
   root.querySelector('#jm-story').innerHTML = '<h3>' + esc(STORY_T) + '</h3><ol>' + STORY.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol><p style="font-style:italic;color:var(--muted)">' + esc(STORY_K) + '</p>';
   root.addEventListener('click', function (e) {
     var c = e.target.closest('[data-copy]'); if (c) { copyText(MSG[c.getAttribute('data-copy')], c); return; }
@@ -835,6 +838,15 @@ aldri kann eg fulltakka tær
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (history.replaceState) history.replaceState(null, '', '#' + id);
   }, true);
+})();
+</script>
+<script>
+// Samanlagdir partar (Jólabókin, Jólasøgan, sum ferðast) lata seg upp, tá ið ein leinkja ella slóðin peikar á teir
+(function () {
+  function op(id) { var el = id && document.getElementById(id), f = el && (el.querySelector('details.jol-fold') || el.closest('details.jol-fold')); if (f) f.open = true; }
+  op(location.hash.slice(1));
+  window.addEventListener('hashchange', function () { op(location.hash.slice(1)); });
+  window.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) op(a.getAttribute('href').slice(1)); }, true);
 })();
 </script>
 </body>
