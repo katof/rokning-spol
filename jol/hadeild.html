@@ -117,6 +117,7 @@
 .jh-task li input { width: 22px; height: 22px; margin: 3px 0 0; accent-color: var(--green); cursor: pointer; }
 .jh-task li.is-on { text-decoration: line-through; color: var(--muted); }
 .jh-task li.jh-task__hold { display: block; margin: 4px 0 6px; }
+.jh-task label { white-space: pre-line; }
 .jh-try { margin-top: 16px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--blue-l); box-shadow: 3px 4px 0 var(--ink); }
 .jh-try h4 { margin: 0 0 6px; font-size: 1.05rem; }
 .jh-try p { margin: 0 0 8px; white-space: pre-line; }
@@ -382,7 +383,7 @@
           </div>
           <div class="jh-open__col">
             <div class="jh-part"><h3 id="jo-vid-h">Kanna víðari</h3><div class="jh-vid" id="jo-vid"></div></div>
-            <div class="jh-part jh-bok" id="jo-bok" hidden><div class="jh-bok__top"><h3>📖 Til jólabókina</h3><span class="jh-sticker jh-sticker--yellow" id="jo-bok-stor" hidden>Góð síða til bókina</span></div><p class="jh-bok__h" id="jo-bok-h"></p><p class="jh-bok__txt" id="jo-bok-txt"></p><ul class="jh-bok__byrj" id="jo-bok-byrj"></ul><button class="jh-btn jh-btn--sm" type="button" id="jo-bok-print">🖨 Prenta síðu til jólabókina</button></div>
+            <div class="jh-part jh-bok" id="jo-bok" hidden><div class="jh-bok__top"><h3>📖 Til jólabókina</h3><span class="jh-sticker jh-sticker--yellow" id="jo-bok-stor" hidden>Góð síða til bókina</span></div><p class="jh-bok__h" id="jo-bok-h"></p><p class="jh-bok__txt" id="jo-bok-txt"></p><ul class="jh-bok__byrj" id="jo-bok-byrj"></ul><p class="jh-bok__txt" id="jo-bok-after" style="margin-top:8px" hidden></p><button class="jh-btn jh-btn--sm" type="button" id="jo-bok-print">🖨 Prenta síðu til jólabókina</button></div>
             <div class="jh-part">
               <details class="jh-det" id="jo-laer-det"><summary>Til læraran – viðmerkingar og svar<br>(Trýst fyri at síggja tey.)</summary><div class="jh-det__b" id="jo-laer"></div></details>
             </div>
@@ -504,7 +505,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
   <section class="jh-outro">
     <div class="jh-wrap">
       <h2>Gleðilig <span>jól</span>!</h2>
-      <p class="jh-hand" style="margin-top:12px;color:var(--muted)">Takk fyri góðar spurningar og grundgevingar. Vit síggjast í januar!</p>
+      <p class="jh-hand" style="margin-top:12px;color:var(--muted)"><b>Takk fyri góðar spurningar, nýggjar hugsanir og alt tað, tit hava kannað í desember. Gleðilig jól – vit síggjast í januar!</b></p>
     </div>
   </section>
 </div>
@@ -637,13 +638,14 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
       aftur: 'Do you still think the same, or have you changed your mind?\nWhat is the advert really trying to sell: a product, a feeling or the shop itself?\nGive an example from the advert to support your answer.',
       vid: 'Imagine watching the same advert with completely different music.\nHow might the mood change? Would the advert still have the same effect on you?\n**Find out more:** [Read what John Lewis says about the advert](https://www.johnlewispartnership.co.uk/media-centre/latest-news/2024/21290).\nDoes the company\'s explanation match your own interpretation?',
       laer: 'Uppgávan leggur dent á at skilja og tulka eina enska lýsing og at tosa um hana á enskum.\nNæmingarnir skulu kanna, hvussu lýsingin brúkar eina søgu, tónleik og myndir til at vekja kenslur og ávirka hyggjaran.\n**Fyrsta sýning:** Lat næmingarnar hyggja at lýsingini uttan at steðga. Endamálið er at skilja søguna.\n**Onnur sýning:** Bið næmingarnar leggja merki til, hvussu tónleikurin og myndirnar ávirka stemningin, og hvat tey halda, at fyritøkan vil hava hyggjaran at hugsa ella gera.\nLýsingin snýr seg um eina kvinnu, sum leitar eftir einari jólagávu til systur sína. Á ferðini verða minnir og kenslur knýtt at tí at geva eina gávu. Samstundis verður John Lewis vístur sum staðið, har hon finnur gávuna.\nNæmingarnir kunnu tí koma fram til, at lýsingin ikki fyrst og fremst roynir at selja eina ávísa vøru, men heldur eina hugmynd um tað at geva gávur – og at fáa hyggjaran at hugsa um John Lewis, tá ið hann skal keypa.\nFleiri tulkingar eru møguligar. Tað týdningarmesta er, at næmingarnir kunnu greiða frá sínum hugsanum á enskum og vísa á ítøkilig dømi úr lýsingini.\n**Munnligt enskt:** Tað er ikki neyðugt, at næmingarnir tosa lýtaleyst. Legg heldur dent á, at teir royna at orða sínar hugsanir, brúka orð og vendingar úr uppgávuni og greiða frá, hví teir halda, sum teir gera.\nFrágreiðingin hjá John Lewis kann brúkast aftaná, so næmingarnir fyrst fáa høvi at gera sínar egnu tulkingar.' },
-    { d: '2026-12-18', und: 'Skilja øll eina søgu uttan orð á sama hátt – ella er tað júst tað, sum ger hana sterka?', bok: { h: 'Desember í Føroyum, uttan orð', txt: 'Setið myndarøðina inn í tær fýra rammurnar – teknið ella límið myndirnar inn. Gjørdu tit eina ljóðfrásøgn, kunnu tit tekna, hvat lurtarin hoyrir, og nær. Skrivið síðan ein setning um eitt val, sum tit gjørdu við vilja.', byrj: ['Vit valdu …, tí …'], ramm: 4, stor: true },
-      t: 'Desember í Føroyum, uttan orð', fak: ['ml'], min: 'umleið 20', ic: 'k-camera', lang: 'fo',
-      src: [],
-      tx: 'Hvussu siga tit eina søgu uttan orð? Sjálv ljóðfrásøgnin ella myndarøðin skal vera uttan talaðan og skrivaðan tekst. Tit kunnu greiða frá valunum aftaná.\n\nArbeiðið í smáum bólkum. Veljið annan av hesum møguleikunum:\n\nA – Ljóðfrásøgn: Gerið eina ljóðfrásøgn, sum varir 20–30 sekund. Brúkið í minsta lagi trý ymisk ljóð, sum tit sjálv gera ella taka upp. Frásøgnin skal hava eina byrjan, eina broyting og ein enda.\n\nB – Myndarøð: Gerið eina søgu við fýra myndum. Tit kunnu tekna ella taka myndir av lutum. Myndarøðin skal hava eina byrjan, eina broyting og ein enda.\n\nHeitið er «Desember í Føroyum». Tit velja sjálv, um søgan er stuttlig, stillfør, løgin ella spennandi.',
-      upp: ['Vísið einum øðrum bólki avrikið uttan at greiða frá fyrst.', 'Biðið tey siga, hvørja søgu tey uppliva.', 'Greiðið so frá einum vali, sum tit gjørdu við vilja.'],
-      vid: 'Broytið eitt ljóð ella eina mynd. Hvussu broytist søgan?',
-      laer: 'Legg dent á tilvitað val av ljóði, mynd og raðfylgju. Avrikið kann gerast einfalt við lutum og amboðum, sum longu eru í skúlastovuni.' }
+    { d: '2026-12-18', und: 'Hvat hava vit lært í desember – og hevur nakað fingið okkum at hugsa øðrvísi?', bok: { h: 'Hetta taki eg við mær úr desember', txt: 'Nú skulu tit gera seinastu síðuna í jólabókina.\nVel eina uppgávu, sum tú minnist serliga væl, og skriva eina stutta hugleiðing við fýra til seks setningum.\nGreið frá, hví tú valdi hesa uppgávuna, hvat tú lærdi, og um nakað fekk teg at hugsa øðrvísi.\nTú kanst byrja soleiðis:', byrj: ['Eg minnist serliga væl …', 'Áðrenn vit arbeiddu við hesum, helt eg …', 'Nú havi eg lært …', 'Eg undrist enn á …'], after: 'Vel síðan eina síðu í jólabókini, sum tú ert serliga væl nøgd ella nøgdur við.\nSetið jólabókina saman, og hyggið at tí, tit hava gjørt í desember.', stor: true },
+      t: 'Hvat taka vit við okkum úr desember?', fak: ['fo'], fakLabel: 'Føroyskt og tvørgreinaligt arbeiði', min: '20–25', ic: 'k-camera', lang: 'fo',
+      src: [], gitHint: 'Hvat halda tit? Tosið saman og skrivið niður, hvat tit minnast best úr uppgávunum í jólakalendaranum, áðrenn tit hyggja aftur at teimum.',
+      tx: '**Vit hyggja aftur**\n\nÍ desember hava tit arbeitt við nógvum ymiskum evnum. Tit hava lisið, roknað, kannað, samanborið, skapað og kjakast.\n\nTit hava millum annað kannað gamlar jólasiðir, roknað við orkunýtslu og líkindum, arbeitt við søguligum keldum og hugt at, hvussu myndir og lýsingar kunnu ávirka okkum.\n\nNú er tíð at hyggja aftur at tí, tit hava gjørt.\n\nHvat minnast tit best? Hvat hevur bilsið tykkum? Og er nakað, sum tit hugsa øðrvísi um nú?',
+      upp: ['**1. Hyggið aftur**\nVeljið tvær lúkur úr jólakalendaranum, sum tit minnast serliga væl. Tær skulu helst vera úr hvør sínari lærugrein.\nTosið saman tvey og tvey:\n• Hvat snúði uppgávan seg um?\n• Hvat lærdu tit, ella hvat fingu tit at hugsa um?\n• Var nakað, sum var øðrvísi, enn tit høvdu væntað?\n• Hvat í uppgávuni fekk tykkum at hugsa soleiðis?', '**2. Veljið eitt dømi**\nFinnið eina uppgávu, har tit lærdu nakað nýtt, broyttu hugsan ella funnu fram til nakað, sum tit ikki vistu frammanundan.\nVís á eitt ítøkiligt dømi. Tað kann vera ein tekstur, ein útrokning, ein mynd, ein kanning ella nakað, tit sjálv hava gjørt.', '**3. Deilið við flokkin**\nGreiðið einum øðrum bólki frá tí, tit hava valt.\nRoynið ikki bara at siga, *hvat* tit lærdu, men eisini *hvussu* tit komu fram til tað.'],
+      aftur: 'Hyggið aftur at tí, tit skrivaðu í byrjanini.\nEr nakað, tit høvdu gloymt, men nú eru komin í tankar um?\nHvørja uppgávu fara tit helst at minnast, tá ið jólini eru farin?\nOg hvat undrast tit enn á?',
+      vid: '**Desember í Føroyum – í einari mynd**\nUm tit skuldu valt eina mynd, sum lýsir tað, tit hava arbeitt við í desember, hvussu skuldi hon so sæð út?\nTit kunnu tekna myndina sjálv ella gera eina myndasamanseting við íblástri úr uppgávunum í kalendaranum.\nRoynið at fáa okkurt við úr minst tveimum ymiskum lúkum.\nVísið myndina fyri einum øðrum bólki. Latið tey siga, hvat tey leggja merki til, áðrenn tit greiða frá tykkara egnu hugsan.',
+      laer: 'Seinasta lúkan er ætlað sum ein felags endi á arbeiðinum við jólakalendaranum.\nNæmingarnir skulu fáa høvi at hyggja aftur at uppgávunum, hugleiða um tað, teir hava lært, og greiða frá, hvussu teir eru komnir fram til sínar niðurstøður.\nDentur verður lagdur á, at næmingarnir kunnu:\n• minnast og greiða frá arbeiði, teir hava gjørt\n• vísa á ítøkilig dømi um tað, teir hava lært\n• hugleiða um egnar hugsanir og møguligar broytingar í teimum\n• lurta eftir øðrum og samanbera ymiskar upplivingar og niðurstøður\nTað kann vera gott at vísa yvirlitið yvir lúkurnar á flokstalvuni. Lat næmingarnar fáa eina løtu at hyggja aftur at uppgávunum, áðrenn teir velja.\nNæmingarnir hava ikki neyðturviliga arbeitt við øllum lúkunum. Teir kunnu velja millum tær uppgávur, teir hava verið við til.\nTað er heldur ikki neyðugt, at allir næmingar hava broytt hugsan um nakað. At fáa váttað eina hugsan ella at fáa nýggjar spurningar er eisini ein partur av at læra.\n**Jólabókin**\nBrúkið seinastu løtuna til at savna jólabókina og hyggja at úrslitunum.\nNæmingarnir kunnu vísa hvørjum øðrum síður, sum teir eru serliga væl nøgdir við, og greiða frá, hví teir hava valt júst tær.\nEndamálið er ikki at meta um, hvør hevur gjørt mest, men at lata næmingarnar síggja, hvussu nógv ymiskt teir hava arbeitt við í desember.' }
   ];
 
   /* ------------------------------------------------------------ Dagar og lásar */
@@ -673,7 +675,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
         '<span class="jh-door__t">' + (lock ? 'Letur upp ' + (+d.d.split('-')[2]) + '. des' : esc(d.t)) + '</span><span class="jh-door__d">' + fmt(d.d).split(' ')[0] + ' ' + (+d.d.split('-')[2]) + '.</span>' + (lock ? '' : '<span class="jh-door__fak">' + FAK[d.fak[0]][0] + '</span>') + '</button>';
     }).join('');
   }
-  function md(s) { return esc(s || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\[([^\]]+)\]\((https?:[^)\s]+|\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>'); }
+  function md(s) { return esc(s || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*([^*\n]+)\*/g, '<em>$1</em>').replace(/\[([^\]]+)\]\((https?:[^)\s]+|\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>'); }
   function ytFacade(id, cap) { return '<button class="jh-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jh-yt__play">▶ Spæl</span></button><p class="jh-ytcap">' + esc(cap) + '</p>'; }
   function returnHold() { Array.prototype.slice.call(root.querySelectorAll('#jo-hold [data-hold], #jo-upp [data-hold]')).forEach(function (c) { hold.appendChild(c); }); }
   /* Gitið verður goymt í kaganum á hesi teldu (ikki á Snar). Í fyrireikingini («Lat allar lúkur upp») sær lærarin alt beinanvegin. */
@@ -706,14 +708,15 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
     Array.prototype.forEach.call(grid.children, function (b) { b.classList.toggle('is-open', +b.getAttribute('data-i') === i); });
     root.querySelector('#jo-meta').textContent = 'Lúka ' + (i + 1) + ' · ' + fmt(d.d);
     root.querySelector('#jo-title').textContent = d.t;
-    root.querySelector('#jo-tags').innerHTML = d.fak.map(function (f) { return '<span class="jh-sticker" style="background:' + FAK[f][1] + ';color:#fff">' + FAK[f][0] + '</span>'; }).join('') + '<span class="jh-sticker jh-sticker--yellow" style="transform:rotate(2deg)">' + d.min + ' minuttir</span>';
+    root.querySelector('#jo-tags').innerHTML = (d.fakLabel ? [d.fak[0]] : d.fak).map(function (f) { return '<span class="jh-sticker" style="background:' + FAK[f][1] + ';color:#fff">' + (d.fakLabel || FAK[f][0]) + '</span>'; }).join('') + '<span class="jh-sticker jh-sticker--yellow" style="transform:rotate(2deg)">' + d.min + ' minuttir</span>';
     root.querySelector('#jo-src').innerHTML = (d.src || []).map(function (b) { var ext = /^https?:/.test(b[1]) || /\.pdf$/i.test(b[1]); return '<a class="jh-btn jh-btn--sm" href="' + b[1] + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '><svg class="jh-ic" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M19 14v6H4V5h6"/></svg>' + esc(b[0]) + '</a>'; }).join('');
     root.querySelector('#jo-und-h').textContent = UNDLABEL[d.lang] || UNDLABEL.fo;
     var undEl = root.querySelector('#jo-und'); undEl.textContent = d.und || ''; undEl.setAttribute('lang', d.lang); root.querySelector('#jo-und-w').hidden = !d.und;
     setupGit(i, d);
     var bokEl = root.querySelector('#jo-bok'); bokEl.hidden = !d.bok;
     if (d.bok) { root.querySelector('#jo-bok-h').textContent = d.bok.h; root.querySelector('#jo-bok-txt').textContent = d.bok.txt; root.querySelector('#jo-bok-stor').hidden = !d.bok.stor;
-      root.querySelector('#jo-bok-byrj').innerHTML = (d.bok.byrj || []).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join(''); }
+      root.querySelector('#jo-bok-byrj').innerHTML = (d.bok.byrj || []).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('');
+      var ba = root.querySelector('#jo-bok-after'); ba.textContent = d.bok.after || ''; ba.hidden = !d.bok.after; }
     root.querySelector('#jo-tx').innerHTML = md(d.tx);
     if (d.hold && d.uppHold == null) { var h = hold.querySelector('[data-hold="' + d.hold + '"]'); if (h) root.querySelector('#jo-hold').appendChild(h); }
     var m = root.querySelector('#jo-media'); m.innerHTML = (d.yt || []).map(function (y) { return ytFacade(y[0], y[1]); }).join(''); bindYt(m);
