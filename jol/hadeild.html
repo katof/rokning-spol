@@ -300,11 +300,12 @@ document.addEventListener('DOMContentLoaded', function () {
   if (['https://snar.fo', 'https://snardev.ctrl.fo'].indexOf(host) < 0) host = '';   // leinkjur til snar.fo fara til vertin, sum vísir rammuna
   // 3.11.2026: «← Jól á Snar» og leinkjur millum kalendararnar fara til Typo3-síðurnar á tí Snar, sum vísir rammuna
   // (snardev nú, snar.fo aftaná flytingina) – ikki til GitHub-síðurnar inni í rammuni.
-  var SIDUR = { 'index.html': 'index.html', 'grunddeild.html': 'grunddeild.html', 'middeild.html': 'middeild.html', 'hadeild.html': 'hadeild.html' };
+  // Virðini standa uttan 'index.html' – gh_page skiftir annars '/jol…' í JS-strongum út við GitHub-fílunøvn (index.html …).
+  var SIDUR = { 'index.html': '', 'grunddeild.html': '/grunddeild', 'middeild.html': '/middeild', 'hadeild.html': '/hadeild' };
   function snarSida(a) {
     var h = (a.getAttribute('href') || '').split('#'), sida = SIDUR[h[0]];
-    if (!sida) return false;
-    a.setAttribute('href', (host || 'https://snar.fo') + sida + (h[1] ? '#' + h[1] : ''));
+    if (sida === undefined) return false;
+    a.setAttribute('href', (host || 'https://snar.fo') + '/j' + 'ol' + sida + (h[1] ? '#' + h[1] : ''));
     a.setAttribute('target', '_top');
     return true;
   }
