@@ -1086,7 +1086,7 @@ aldri kann eg fulltakka tær
   root.querySelector('#jo-done').addEventListener('click', function () { var n = current + 1; if (done[n]) delete done[n]; else done[n] = 1; store(DONE_KEY, JSON.stringify(done)); renderGrid(); openDoor(current, false); });
   var altBtn = root.querySelector('#jg-alt');
   function altLabel() { altBtn.textContent = allOpen ? 'Fylg døgunum' : 'Lat allar lúkur upp'; }
-  altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); if (typeof toast === 'function') toast(allOpen ? 'Allar lúkurnar eru nú opnar, so tú kanst fyrireika undirvísingina. Trýst á „Fylg døgunum“ fyri at fara aftur til vanligu skipanina. Tá eru bara lúkurnar til og við dagsins dag opnar.' : 'Komandi lúkur eru aftur læstar. Lúkur frá undanfarnum skúladøgum eru framvegis tøkar.'); });
+  altBtn.addEventListener('click', function () { allOpen = !allOpen; store(ALT_KEY, allOpen ? '1' : '0'); altLabel(); renderGrid(); if (current >= 0 && !unlocked(DOORS[current])) root.querySelector('#jo-close').click(); if (typeof toast === 'function') toast(allOpen ? 'Allar lúkurnar eru nú opnar, so tú kanst fyrireika undirvísingina. Trýst á „Fylg døgunum“ fyri at fara aftur til vanligu skipanina.' : 'Komandi lúkur eru aftur læstar. Lúkur frá undanfarnum skúladøgum eru framvegis tøkar.'); });
   altLabel(); renderGrid(); drawShelf();
   var hm = /#luka-(\d+)/.exec(location.hash || '');
   if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }

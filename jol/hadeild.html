@@ -893,7 +893,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
   function countdown() {
     var n = new Date(), next = null;
     for (var i = 0; i < DOORS.length; i++) { if (!unlocked(DOORS[i])) { next = DOORS[i]; break; } }
-    if (!next) { cdEl.hidden = false; cdTxt.innerHTML = allOpen ? 'Allar lúkurnar eru nú opnar, so tú kanst fyrireika undirvísingina. Trýst á „Fylg døgunum“ fyri at fara aftur til vanligu skipanina. Tá eru bara lúkurnar til og við dagsins dag opnar.' : 'Allar lúkur eru latnar upp. <b>Gleðilig jól.</b>'; return; }
+    if (!next) { cdEl.hidden = false; cdTxt.innerHTML = allOpen ? 'Allar lúkurnar eru nú opnar, so tú kanst fyrireika undirvísingina. Trýst á „Fylg døgunum“ fyri at fara aftur til vanligu skipanina.' : 'Allar lúkur eru latnar upp. <b>Gleðilig jól.</b>'; return; }
     var p = next.d.split('-'), t = new Date(+p[0], +p[1] - 1, +p[2]), d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate());
     var dd = Math.round((t - d0) / 86400000);
     cdEl.hidden = false;
