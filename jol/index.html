@@ -219,6 +219,20 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
 @media (max-width: 640px) { .jx-hero__in { grid-template-columns: 1fr; } .jx-dog { width: 110px; } .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: 1fr; } .jx-filter span.jx-mono { min-width: 0; width: 100%; } .jx-search__go { padding: 0 1rem; } }
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } .jx-plane { transform: translateX(calc(var(--jol-vw, 100vw) * .42)); } }
 
+/* ---- Jólabókin: gongdin í fýra stigum (3.11.2026) ---- */
+.jx-flow { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr 34px 1fr; align-items: center; gap: 6px; }
+.jx-flow__step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 14px 16px; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; text-align: center; height: 100%; }
+.jx-flow__step b { font-size: .98rem; line-height: 1.3; }
+.jx-flow__art { width: 100%; max-width: 170px; height: auto; display: block; overflow: visible; }
+.jx-flow__n { position: absolute; left: 12px; top: 10px; width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: var(--dark); font-weight: 800; font-size: .85rem; display: grid; place-items: center; }
+.jx-flow__arrow svg { width: 34px; height: 18px; display: block; }
+.jx-flow__out { animation: jx-print 4s ease-in-out infinite; }
+@keyframes jx-print { 0%, 15% { transform: translateY(-10px); } 45%, 100% { transform: translateY(0); } }
+.jx-flow__pen { animation: jx-pen 2.4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 0 100%; }
+@keyframes jx-pen { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(-6px, 4px) rotate(-6deg); } }
+.jx-flow__star { animation: jx-twinkle 1.8s ease-in-out infinite alternate; }
+@media (max-width: 900px) { .jx-flow { grid-template-columns: 1fr 1fr; gap: 12px; } .jx-flow__arrow { display: none; } }
+@media (max-width: 480px) { .jx-flow { grid-template-columns: 1fr; } }
 /* ---- Jólabókin og Jólasøgan, sum ferðast, á jólahubburinum (31.10.2026) ---- */
 .jx-bridge__header { margin-bottom: 18px; max-width: 75ch; }
 .jx-bridge__kicker { color: var(--gold); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; }
@@ -393,30 +407,17 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
       <div class="jx-bridge__header">
         <span class="jx-bridge__kicker">Skapið nakað saman</span>
         <h2>Jólabókin hjá flokkinum</h2>
-        <p class="jx-section__lead">Í nøkrum lúkum kunnu næmingarnir tekna, skriva, kanna og savna tað, tey hava lært. Veljið síður úr arbeiðinum, og savnið tær í eina jólabók. Tað er valfrítt, og tit kunnu arbeiða við bókini, tá ið tað hóskar.</p>
-        <p>Í hvørjum kalendara eru leistar til forsíðu og síður í bókini. Tit kunnu prenta teir á A4, og einki verður goymt á Snar.</p>
+        <p class="jx-section__lead">Í summum lúkum kunnu næmingarnir skriva og tekna til eina felags jólabók. Prentið forsíðuna og ørkini á A4 og goymið síðurnar í einari mappu ella í einum kassa. Seinni kunnu tit gera allar síðurnar til eina jólabók.</p>
       </div>
-      <div class="jx-bridge__cards">
-        <article class="jx-bridge__card">
-          <span class="jx-bridge__tag">1.–3. flokkur</span>
-          <h3>Teknið og sigið frá</h3>
-          <p>Børnini tekna, velja orð og siga frá. Lærarin kann skriva orðini hjá teimum, sum ikki skriva enn.</p>
-          <a class="jx-btn jx-btn--sm" href="grunddeild.html#jolabok">Jólabókin í grunddeild</a>
-        </article>
-        <article class="jx-bridge__card">
-          <span class="jx-bridge__tag">4.–6. flokkur</span>
-          <h3>Skrivið og kannið</h3>
-          <p>Næmingarnir savna tekstir, tekningar, royndarúrslit og hugleiðingar í bókina.</p>
-          <a class="jx-btn jx-btn--sm" href="middeild.html#jolabok">Jólabókin í miðdeild</a>
-        </article>
-        <article class="jx-bridge__card">
-          <span class="jx-bridge__tag">7.–9. flokkur</span>
-          <h3>Tulkið og skapið</h3>
-          <p>Næmingarnir velja eitt úrval av søgum, tulkingum, kanningum og myndum, sum tey hava arbeitt við.</p>
-          <a class="jx-btn jx-btn--sm" href="hadeild.html#jolabok">Jólabókin í hádeild</a>
-        </article>
-      </div>
-      <div class="jx-bridge__question"><b>Undrast fyrst.</b> Hvør lúka byrjar við einum spurningi, sum kann fáa næmingarnar at tosa, hugsa og kanna. Spyrjið aftur eftir uppgávuna: Halda tit tað sama nú?</div>
+      <ol class="jx-flow">
+        <li class="jx-flow__step"><span class="jx-flow__n">1</span><svg class="jx-flow__art" viewBox="0 0 180 130" aria-hidden="true"><rect x="34" y="40" width="112" height="44" rx="8" fill="#22385f" stroke="#f2b84b" stroke-width="2.5"/><rect x="48" y="26" width="84" height="16" rx="3" fill="#1b3462" stroke="#f2b84b" stroke-width="2"/><circle cx="130" cy="54" r="3.5" fill="#7fd19b"/><g class="jx-flow__out"><path d="M58 70 h50 v52 h-50z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.5" transform="rotate(-6 83 96)"/><path d="M66 88 h34 M66 96 h34 M66 104 h24" stroke="#c9c2b4" stroke-width="2" stroke-linecap="round" transform="rotate(-6 83 96)"/><path d="M74 68 h54 v54 h-54z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.5"/><text x="101" y="84" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="10" fill="#d4213a">Jólabókin</text><path d="M101 90 l9 14 h-5 l7 10 h-22 l7 -10 h-5z" fill="#7fd19b"/><circle cx="101" cy="90" r="2.2" fill="#ffd27a"/></g><rect x="44" y="66" width="92" height="6" rx="3" fill="#0b1830"/></svg><b>Prentið forsíðuna og ørkini á A4</b></li>
+        <li class="jx-flow__arrow" aria-hidden="true"><svg viewBox="0 0 40 20"><path d="M2 10 h30 M24 3 l9 7 -9 7" fill="none" stroke="#f2b84b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></li>
+        <li class="jx-flow__step"><span class="jx-flow__n">2</span><svg class="jx-flow__art" viewBox="0 0 180 130" aria-hidden="true"><path d="M44 14 h80 v104 h-80z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.5"/><path d="M62 30 c8 -10 22 -10 30 0 c6 8 0 20 -15 20 c-14 0 -21 -11 -15 -20z" fill="none" stroke="#2d5ea8" stroke-width="3" stroke-linecap="round"/><circle cx="70" cy="34" r="2" fill="#1f1d1a"/><circle cx="84" cy="34" r="2" fill="#1f1d1a"/><path d="M70 41 q7 5 14 0" fill="none" stroke="#1f1d1a" stroke-width="2" stroke-linecap="round"/><path d="M56 68 h56 M56 80 h56 M56 92 h44 M56 104 h50" stroke="#c9c2b4" stroke-width="2" stroke-linecap="round"/><path class="jx-flow__word" d="M57 66 q4 -6 8 0 t8 0 t8 0 t8 0" fill="none" stroke="#d4213a" stroke-width="2.4" stroke-linecap="round"/><g class="jx-flow__pen"><path d="M128 52 l14 -14 l8 8 l-14 14z" fill="#f2b84b" stroke="#1f1d1a" stroke-width="1.5"/><path d="M128 52 l-6 14 l14 -6z" fill="#f3c9a0" stroke="#1f1d1a" stroke-width="1.5"/><path d="M122 66 l3 -6 l3 3z" fill="#1f1d1a"/></g><path d="M140 92 l2 5 5 .5 -4 3.5 1 5 -4 -2.6 -4 2.6 1 -5 -4 -3.5 5 -.5z" fill="#ffd27a"/></svg><b>Næmingarnir tekna og skriva í lúkunum</b></li>
+        <li class="jx-flow__arrow" aria-hidden="true"><svg viewBox="0 0 40 20"><path d="M2 10 h30 M24 3 l9 7 -9 7" fill="none" stroke="#f2b84b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></li>
+        <li class="jx-flow__step"><span class="jx-flow__n">3</span><svg class="jx-flow__art" viewBox="0 0 180 130" aria-hidden="true"><path d="M46 34 h50 v80 h-50z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.5" transform="rotate(-8 71 74)"/><path d="M66 28 h50 v86 h-50z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.5" transform="rotate(5 91 71)"/><path d="M84 32 h50 v82 h-50z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.5"/><path d="M94 46 h30 M94 54 h30" stroke="#c9c2b4" stroke-width="2" stroke-linecap="round"/><path d="M30 70 h120 l-8 50 h-104z" fill="#d4213a" stroke="#1f1d1a" stroke-width="2"/><path d="M30 70 l10 -10 h100 l10 10" fill="#b01a30" stroke="#1f1d1a" stroke-width="2" stroke-linejoin="round"/><path d="M30 92 h118" stroke="#f2b84b" stroke-width="5"/><path d="M90 86 v12" stroke="#f2b84b" stroke-width="5"/><path d="M84 80 q6 -10 6 6 q0 -16 6 -6 q-6 8 -12 0z" fill="#ffd27a" stroke="#1f1d1a" stroke-width="1.2"/></svg><b>Goymið síðurnar í einari mappu ella í einum kassa</b></li>
+        <li class="jx-flow__arrow" aria-hidden="true"><svg viewBox="0 0 40 20"><path d="M2 10 h30 M24 3 l9 7 -9 7" fill="none" stroke="#f2b84b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></li>
+        <li class="jx-flow__step"><span class="jx-flow__n">4</span><svg class="jx-flow__art" viewBox="0 0 180 130" aria-hidden="true"><path d="M30 30 q30 -8 60 4 q30 -12 60 -4 v84 q-30 -8 -60 4 q-30 -12 -60 -4z" fill="#152a50" stroke="#f2b84b" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 34 q27 -6 54 4 v78 q-27 -10 -54 -4z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><path d="M90 38 q27 -10 54 -4 v78 q-27 -6 -54 4z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><path d="M90 38 v78" stroke="#1f1d1a" stroke-width="1.5"/><path d="M48 54 q8 -10 16 0 q-8 12 -16 0z" fill="#7fd19b"/><path d="M48 70 h30 M48 78 h30 M48 86 h22" stroke="#c9c2b4" stroke-width="2" stroke-linecap="round"/><path d="M104 58 h28 M104 66 h28 M104 74 h20" stroke="#c9c2b4" stroke-width="2" stroke-linecap="round"/><circle cx="118" cy="92" r="8" fill="none" stroke="#2d5ea8" stroke-width="2.5"/><path d="M126 30 v34 l-6 -6 l-6 6 v-34" fill="#d4213a" stroke="#1f1d1a" stroke-width="1.2"/><path class="jx-flow__star" d="M90 6 l4 9 10 1 -8 6 3 10 -9 -6 -9 6 3 -10 -8 -6 10 -1z" fill="#ffd27a"/></svg><b>Seinni gerið tit allar síðurnar til eina jólabók</b></li>
+      </ol>
     </div>
   </section>
   <section class="jx-section jx-bridge" id="saman">
@@ -553,7 +554,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
       <div class="jx-steps">
         <div><b>Ein lúka hvønn skúladag.</b> Ein nýggj lúka letur upp hvønn skúladag frá 1. til 18. desember. Jólafrítíðin byrjar 19. desember. Flestu uppgávurnar taka 10–15 minuttir, men nakrar taka umleið 20 minuttir.</div>
         <div><b>Undrast og arbeiða víðari.</b> Hvør lúka byrjar við einum spurningi, sum vekir forvitni. Næmingarnir gita fyrst, og aftast í lúkuni undrast tey aftur: Halda tit tað sama nú? Í miðdeild og hádeild koma teksturin og uppgávan fyrst til sjóndar, tá ið flokkurin hevur gitið. Í grunddeild gita børnini munnliga, og lærarin kann skriva gitið. Í miðdeild eru eyka uppgávur til 5. og 6. flokk, og í hádeild kunnu tey velja „Kanna víðari“.</div>
-        <div><b>Jólabókin.</b> Í útvaldum lúkum kunnu næmingarnir skriva, tekna ella savna úrslit. Prentið A4-leistarnar í kalendarunum og savnið síðurnar í eina bók. Hetta er valfrítt.</div>
+        <div><b>Jólabókin.</b> Í útvaldum lúkum kunnu næmingarnir skriva, tekna ella savna úrslit. Prentið forsíðuna og ørkini á A4 í kalendarunum og goymið síðurnar í einari mappu ella í einum kassa, til tit gera tær til eina jólabók. Hetta er valfrítt.</div>
         <div><b>Saman á skúlanum.</b> Hádeildin kann skriva eina jólasøgu, miðdeildin lesa hana upp og grunddeildin tekna myndir til hana. Hvør deild kann eisini arbeiða einsamøll.</div>
         <div><b>Vegleiðing og svar.</b> Í hvørjari lúku í grunddeild og miðdeild finnur tú partin „Til læraran“. Í hádeild eru læraraviðmerkingar og svar savnað í einum serligum parti, sum lærarin sjálvur kann lata upp.</div>
         <div><b>Arbeiðshættir.</b> Lærarin kann vísa tilfarið á stórskíggja, so flokkurin arbeiðir við tí í felag. Næmingarnir kunnu eisini loysa fleiri av uppgávunum tvey og tvey ella í smáum bólkum.</div>
@@ -642,7 +643,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   Array.prototype.forEach.call(root.querySelectorAll('#meira details.jx-det'), function (d) { (d.querySelector('.jx-films').getAttribute('data-films') || '').split(',').forEach(function (f) { add('Filmur', TAGC.film, f.split('|')[1] || '', d.querySelector('summary').textContent, '#meira', d); }); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-funkur a'), function (a) { add('Funka í jólabúna', TAGC.funka, a.querySelector('b').textContent, a.querySelector('span').textContent, a.getAttribute('href')); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-steps > div'), function (d) { add('Til læraran', TAGC.laer, d.querySelector('b').textContent, d.textContent.replace(d.querySelector('b').textContent, ''), '#laerari'); });
-  add('Skapa saman', TAGC.fo, 'Jólabókin hjá flokkinum', 'Prentið leistar og savnið orð, tekningar, tulkingar og kanningar í eina jólabók', '#jolabok');
+  add('Skapa saman', TAGC.fo, 'Jólabókin hjá flokkinum', 'Prentið forsíðuna og ørkini á A4 og savnið síðurnar til eina felags jólabók', '#jolabok');
   add('Felags uppgáva', TAGC.kal, 'Jólasøgan, sum ferðast', 'Hádeildin skrivar, miðdeildin lesur upp, og grunddeildin teknar', '#saman');
   var q = root.querySelector('#jx-q'), res = root.querySelector('#jx-res'), clr = root.querySelector('#jx-q-clear');
   function mark(text, words) { var out = esc(text); words.forEach(function (w) { if (w.length < 2) return; out = out.replace(new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<mark>$1</mark>'); }); return out; }
