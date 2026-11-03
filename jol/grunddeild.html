@@ -845,7 +845,7 @@ aldri kann eg fulltakka tær
   function countSteyp() { return spaelDoors().filter(function (n) { return steyp[n]; }).length; }
   function drawShelf() {
     var list = spaelDoors(), won = countSteyp(), lead = root.querySelector('#jg-steyp-lead');
-    lead.textContent = won === list.length ? 'Øll ' + won + ' steypini eru vunnin – gleðilig jól, jólameistarar!' : won ? 'Tit hava vunnið ' + won + ' av ' + list.length + ' steypum. Hvørt steyp fæst við at loysa spælið í lúkuni.' : 'Loysið spælið í lúkunum, og fyllið skápið við steypum. Hvørt spæl hevur tríggjar umfør.';
+    lead.textContent = won === list.length ? 'Øll ' + won + ' steypini eru vunnin – gleðilig jól, jólameistarar!' : won ? 'Tit hava vunnið ' + won + ' av ' + list.length + ' steypum. Hvørt steyp fæst við at loysa spælið í lúkuni.' : 'Smáspøl sum geva steyp eru í nøkrum lúkum. Samanlagt kunnu tit fáa trý steyp.';
     root.querySelector('#jg-shelf').innerHTML = list.map(function (n) { var d = DOORS[n - 1]; return '<button type="button" class="jg-shelf__i' + (steyp[n] ? ' is-won' : '') + '" data-n="' + n + '" aria-label="Lúka ' + n + ': ' + esc(d.t) + (steyp[n] ? ', steyp vunnið' : ', ikki vunnið enn') + '">' + cupSvg(d, n, !!steyp[n], false) + '<b>Lúka ' + n + '</b><span>' + esc(d.t) + '</span></button>'; }).join('');
   }
   function chime() {
