@@ -219,12 +219,11 @@ button { font: inherit; color: inherit; }
 <div class="hm-own" id="hm-own" hidden>
   <div class="hm-own__box" role="dialog" aria-modal="true" aria-labelledby="hm-own-h">
     <h2 id="hm-own-h">Egin orð</h2>
-    <p>Skriva eitt orð á hvørja linju. Tit kunnu eisini skriva fleiri orð saman, t.d. «Gleðilig jól».</p>
+    <p>Skriva eitt orð á hvørja linju. Tit kunnu eisini skriva fleiri orð saman, t.d. «Gleðilig jól». Orðini verða ikki goymd: tá ið síðan verður latin aftur, eru tey burtur.</p>
     <textarea id="hm-own-text" spellcheck="false" placeholder="Jólaaftan&#10;Jólafrí&#10;Jólatræ"></textarea>
     <p class="hm-own__note" id="hm-own-note"></p>
     <div class="hm-actions">
       <button class="hm-btn hm-btn--main" type="button" id="hm-own-use">Spæl við hesum orðunum</button>
-      <button class="hm-btn" type="button" id="hm-own-link">Avrita leinkju</button>
       <button class="hm-btn" type="button" id="hm-own-close">Lat aftur</button>
     </div>
   </div>
@@ -243,11 +242,10 @@ button { font: inherit; color: inherit; }
   var ORDER = ['jol', 'djor', 'skuli', 'egin'];
   var LETTERS = 'A Á B D Ð E F G H I Í J K L M N O Ó P R S T U Ú V Y Ý Æ Ø'.split(' ');
   var MAX = 7;
-  var OWN_KEY = 'snar-heingja-mann-egin';
 
   var $ = function (id) { return document.getElementById(id); };
   var parts = Array.prototype.slice.call(document.querySelectorAll('.hm-figure .part'));
-  var group = '', word = '', guessed = [], misses = 0, over = true, lastWord = '';
+  var group = '', word = '', guessed = [], misses = 0, over = true, lastWord = '', deck = {};
 
   function isLetter(ch) { return ch.toLocaleUpperCase('fo') !== ch.toLocaleLowerCase('fo'); }
   function clean(list) {
@@ -258,16 +256,6 @@ button { font: inherit; color: inherit; }
     });
     return out;
   }
-
-  /* ---- Egin orð: úr leinkjuni (#o=) ella úr hesi teldu ---- */
-  function encode(list) { return btoa(unescape(encodeURIComponent(list.join('\n')))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
-  function decode(s) { try { s = s.replace(/-/g, '+').replace(/_/g, '/'); return decodeURIComponent(escape(atob(s))).split('\n'); } catch (e) { return []; } }
-  function loadOwn() {
-    var m = location.hash.match(/[#&]o=([\w-]+)/);
-    if (m) { var fromLink = clean(decode(m[1])); if (fromLink.length) return { words: fromLink, link: true }; }
-    try { return { words: clean(JSON.parse(localStorage.getItem(OWN_KEY) || '[]')), link: false }; } catch (e) { return { words: [], link: false }; }
-  }
-  function saveOwn(list) { try { localStorage.setItem(OWN_KEY, JSON.stringify(list)); } catch (e) {} }
 
   /* ---- Orðabólkar ---- */
   function renderGroups() {
@@ -352,9 +340,12 @@ button { font: inherit; color: inherit; }
   function newWord() {
     var pool = GROUPS[group].words;
     if (!pool.length) { openOwn(); return; }
-    var pick = pool[Math.floor(Math.random() * pool.length)];
-    if (pool.length > 1) while (pick === lastWord) pick = pool[Math.floor(Math.random() * pool.length)];
-    word = lastWord = pick;
+    if (!deck[group] || !deck[group].length) {
+      deck[group] = pool.slice();
+      for (var i = deck[group].length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = deck[group][i]; deck[group][i] = deck[group][j]; deck[group][j] = t; }
+      if (deck[group].length > 1 && deck[group][deck[group].length - 1] === lastWord) deck[group].unshift(deck[group].pop());
+    }
+    word = lastWord = deck[group].pop();
     guessed = []; misses = 0; over = false;
     $('hm-msg').textContent = ''; $('hm-msg').className = 'hm-msg';
     $('hm-hint').textContent = GROUPS[group].hint + ' · ' + word.replace(/[^ ]/g, function (ch) { return isLetter(ch) ? '•' : ch; }).split(' ').map(function (w) { return w.length; }).join(' + ') + (word.length === 1 ? ' stavur' : ' stavir');
@@ -381,23 +372,12 @@ button { font: inherit; color: inherit; }
   $('hm-own-use').addEventListener('click', function () {
     var list = ownFromText();
     if (!list.length) { $('hm-own-note').textContent = 'Skriva minst eitt orð.'; return; }
-    GROUPS.egin.words = list; saveOwn(list);
+    GROUPS.egin.words = list; deck.egin = [];
     group = 'egin'; renderGroups(); closeOwn(); newWord();
   });
-  $('hm-own-link').addEventListener('click', function () {
-    var list = ownFromText();
-    if (!list.length) { $('hm-own-note').textContent = 'Skriva minst eitt orð.'; return; }
-    var url = location.href.split('#')[0] + '#o=' + encode(list);
-    var done = function () { $('hm-own-note').textContent = 'Leinkjan er avritað. Tey, sum lata hana upp, spæla við hesum orðunum.'; };
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { prompt('Avrita leinkjuna:', url); });
-    else prompt('Avrita leinkjuna:', url);
-  });
-
   /* ---- Byrjan: jól frá 20. nov. til 6. jan., annars djór ---- */
-  var own = loadOwn();
-  GROUPS.egin.words = own.words;
   var d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate();
-  group = own.link ? 'egin' : (md >= 1120 || md <= 106) ? 'jol' : 'djor';
+  group = (md >= 1120 || md <= 106) ? 'jol' : 'djor';
   if (/[#&]g=(jol|djor|skuli)/.test(location.hash)) group = location.hash.match(/[#&]g=(jol|djor|skuli)/)[1];
   renderGroups();
   newWord();
