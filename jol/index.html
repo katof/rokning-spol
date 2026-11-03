@@ -208,8 +208,8 @@
 .jx-sea__glints path { opacity: .32; animation: jx-glint 3.6s ease-in-out infinite; }
 .jx-sea__glints path:nth-child(3n) { animation-delay: -1.2s; } .jx-sea__glints path:nth-child(3n+1) { animation-delay: -2.4s; }
 @keyframes jx-glint { 50% { opacity: .1; } }
-.jx-sea__boat { position: absolute; left: 14%; bottom: 26%; width: clamp(44px, 5vw, 76px); animation: jx-bob 4.5s ease-in-out infinite; transform-origin: 50% 80%; }
-@keyframes jx-bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(3px) rotate(2deg); } }
+.jx-sea__boat { position: absolute; left: 14%; bottom: 26%; width: clamp(44px, 5vw, 76px); animation: jx-bob 7s ease-in-out infinite; transform-origin: 50% 80%; }
+@keyframes jx-bob { 0%, 100% { transform: translateY(0) rotate(-.7deg); } 50% { transform: translateY(1px) rotate(.7deg); } }
 @media (prefers-reduced-motion: reduce) { .jx-sea__glints path, .jx-sea__boat { animation: none; } }
 /* Footaraaldan á Snar: sjógvurin rennur beint niður í hana */
 body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
