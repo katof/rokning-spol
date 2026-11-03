@@ -667,11 +667,11 @@ Nissa mín, hvat heldur tú?
           <h3>Gleðilig jól! Gleðilig jól!</h3>
           <p class="jg-song__by">Føroysk útgáva: Fríðrikur Petersen, 1891 · Lagtilvísing: sálmur 84 · Kelda: Sálmabókin nr. 95, skeyk.fo</p>
           <div class="jg-song__t">
-«Gleðilig jól! Gleðilig jól!»
+„Gleðilig jól! Gleðilig jól!“
 ljóðar av himli einglalag.
-«Armi syndari, óttast ei nú,
+„Armi syndari, óttast ei nú,
 gleðiboðskapin hoyrir tú:
-:,: Jesus er føddur í dag. :,:»
+:,: Jesus er føddur í dag. :,:“
 
 2. Faðir vár! Faðir vár!
 Høgt tó tú á himli býrt,
@@ -857,7 +857,7 @@ aldri kann eg fulltakka tær
   function runSpael(i) {
     var n = i + 1, def = SPAEL[n], box = root.querySelector('#jo-spael');
     if (!def) { box.hidden = true; runSpael.door = 0; return; }
-    if (runSpael.door === n && !box.hidden) return;   // sama lúka (t.d. «Liðugt»): spælið heldur fram
+    if (runSpael.door === n && !box.hidden) return;   // sama lúka (t.d. „Liðugt“): spælið heldur fram
     runSpael.door = n; box.hidden = false; clearTimeout(runSpael.t);
     var stage = root.querySelector('#jo-spael-stage'), qEl = root.querySelector('#jo-spael-q'), msgEl = root.querySelector('#jo-spael-msg'), rEl = root.querySelector('#jo-spael-rounds'), r = 0;
     function rounds() { rEl.innerHTML = 'Umfar ' + Math.min(r + 1, def.rounds.length) + ' av ' + def.rounds.length + ' ' + def.rounds.map(function (_, k) { return '<i class="' + (k < r ? 'is-on' : '') + '"></i>'; }).join(''); }
