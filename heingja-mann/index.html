@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heingja mann – Snar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<style>
+:root {
+  --ink: #202328;
+  --muted: #5d636d;
+  --line: #202328;
+  --paper: #ffffff;
+  --soft: #f3f5f9;
+  --red: #c1272d;
+  --blue: #1559e8;
+  --blue-soft: #dce6fc;
+  --green: #1f7a4a;
+  --green-soft: #dcf2e4;
+  --red-soft: #fbe3e4;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+button { font: inherit; color: inherit; }
+
+/* ---- Ovast: heiti og orðabólkar ---- */
+.hm-top {
+  display: flex;
+  align-items: center;
+  gap: 14px 22px;
+  flex-wrap: wrap;
+  padding: 14px 22px;
+  border-bottom: 2px solid var(--line);
+}
+.hm-top h1 { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -.01em; }
+.hm-groups { display: flex; flex-wrap: wrap; gap: 8px; }
+.hm-chip {
+  border: 2px solid var(--line);
+  background: var(--paper);
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: .95rem;
+  cursor: pointer;
+}
+.hm-chip:hover { box-shadow: 3px 3px 0 var(--line); transform: translate(-1px, -1px); }
+.hm-chip[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.hm-chip:focus-visible, .hm-key:focus-visible, .hm-btn:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* ---- Spælið ---- */
+.hm-main {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(200px, 34%) 1fr;
+  gap: 24px;
+  padding: 18px 22px;
+}
+.hm-left { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 0; }
+.hm-figure { width: 100%; max-width: 320px; flex: 1; min-height: 0; }
+.hm-figure svg { width: 100%; height: 100%; display: block; }
+.hm-figure .part { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; fill: none; opacity: 0; transition: opacity .25s; }
+.hm-figure .part.on { opacity: 1; }
+.hm-figure .gallows { stroke: #9aa0a8; stroke-width: 6; stroke-linecap: round; fill: none; }
+.hm-figure .eyes { stroke: var(--red); stroke-width: 3.5; }
+.hm-lives { display: flex; gap: 6px; }
+.hm-lives i { width: 18px; height: 18px; border: 2px solid var(--line); display: block; }
+.hm-lives i.lost { background: var(--red); border-color: var(--red); }
+.hm-lives-txt { font-size: .95rem; color: var(--muted); font-weight: 600; }
+
+.hm-right { display: flex; flex-direction: column; justify-content: center; gap: 18px; min-height: 0; }
+.hm-hint { font-weight: 700; color: var(--muted); font-size: 1rem; }
+.hm-word {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 8px;
+  min-height: 4.2rem;
+  align-items: flex-end;
+}
+.hm-word .w { display: flex; gap: 8px; margin-right: 18px; }
+.hm-word .c {
+  width: clamp(2rem, 4.2vw, 3.4rem);
+  border-bottom: 4px solid var(--line);
+  text-align: center;
+  font-size: clamp(1.8rem, 4.2vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  min-height: 1.2em;
+}
+.hm-word .c.shown { animation: pop .3s ease; }
+.hm-word .c.missed { color: var(--red); }
+.hm-word .c.sep { border-bottom: 0; width: auto; }
+@keyframes pop { from { transform: translateY(6px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.hm-keys { display: flex; flex-wrap: wrap; gap: 8px; }
+.hm-key {
+  min-width: clamp(2.6rem, 4.4vw, 3.6rem);
+  height: clamp(2.6rem, 4.4vw, 3.6rem);
+  padding: 0 8px;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+  font-weight: 700;
+  cursor: pointer;
+}
+.hm-key:hover:not(:disabled) { box-shadow: 3px 3px 0 var(--line); transform: translate(-1px, -1px); }
+.hm-key.hit { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+.hm-key.miss { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+.hm-key:disabled { cursor: default; }
+.hm-key:disabled:not(.hit):not(.miss) { opacity: .35; }
+
+.hm-msg { min-height: 1.6em; font-size: 1.2rem; font-weight: 800; }
+.hm-msg.win { color: var(--green); }
+.hm-msg.lose { color: var(--red); }
+
+.hm-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hm-btn {
+  border: 2px solid var(--line);
+  background: var(--paper);
+  padding: 10px 18px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.hm-btn:hover { box-shadow: 3px 3px 0 var(--line); transform: translate(-1px, -1px); }
+.hm-btn--main { background: var(--red); border-color: var(--red); color: #fff; }
+.hm-btn--main:hover { box-shadow: 3px 3px 0 var(--ink); }
+
+/* ---- Egin orð ---- */
+.hm-own[hidden] { display: none; }
+.hm-own {
+  position: fixed; inset: 0;
+  background: rgba(32, 35, 40, .45);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; z-index: 10;
+}
+.hm-own__box {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  box-shadow: 6px 6px 0 var(--line);
+  width: min(560px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  padding: 20px 22px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.hm-own__box h2 { margin: 0; font-size: 1.3rem; }
+.hm-own__box p { margin: 0; color: var(--muted); font-size: .95rem; }
+.hm-own textarea {
+  width: 100%;
+  min-height: 9rem;
+  border: 2px solid var(--line);
+  padding: 10px;
+  font: 600 1.05rem/1.5 Inter, "Segoe UI", Arial, sans-serif;
+  resize: vertical;
+}
+.hm-own__note { font-size: .9rem; color: var(--blue) !important; font-weight: 600; }
+.hm-own__note:empty { display: none; }
+
+@media (max-width: 900px) {
+  body { overflow: auto; }
+  .hm-main { grid-template-columns: 1fr; gap: 14px; flex: none; }
+  .hm-left { flex-direction: row; flex-wrap: wrap; }
+  .hm-figure { height: 26vh; min-height: 150px; flex: none; width: auto; aspect-ratio: 200 / 220; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-word .c.shown { animation: none; }
+  .hm-figure .part { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hm-top">
+  <h1>Heingja mann</h1>
+  <div class="hm-groups" id="hm-groups" role="group" aria-label="Orðabólkur"></div>
+</header>
+
+<main class="hm-main">
+  <div class="hm-left">
+    <div class="hm-figure" aria-hidden="true">
+      <svg viewBox="0 0 200 220">
+        <path class="gallows" d="M20 210 H120 M50 210 V12 H140 M50 52 L90 12"/>
+        <path class="part" d="M140 12 V38"/>
+        <circle class="part" cx="140" cy="58" r="20"/>
+        <path class="part" d="M140 78 V138"/>
+        <path class="part" d="M140 92 L112 118"/>
+        <path class="part" d="M140 92 L168 118"/>
+        <path class="part" d="M140 138 L116 180"/>
+        <path class="part" d="M140 138 L164 180"/>
+        <g class="part eyes"><path d="M128 50 l8 8 M136 50 l-8 8 M144 50 l8 8 M152 50 l-8 8"/></g>
+      </svg>
+    </div>
+    <div class="hm-lives" id="hm-lives"></div>
+    <div class="hm-lives-txt" id="hm-lives-txt"></div>
+  </div>
+
+  <div class="hm-right">
+    <div class="hm-hint" id="hm-hint"></div>
+    <div class="hm-word" id="hm-word" aria-live="polite"></div>
+    <div class="hm-keys" id="hm-keys" role="group" aria-label="Bókstavir"></div>
+    <div class="hm-msg" id="hm-msg" role="status"></div>
+    <div class="hm-actions">
+      <button class="hm-btn hm-btn--main" type="button" id="hm-new">Nýtt orð</button>
+      <button class="hm-btn" type="button" id="hm-show">Vís orðið</button>
+      <button class="hm-btn" type="button" id="hm-own-open">Skriva egin orð</button>
+    </div>
+  </div>
+</main>
+
+<div class="hm-own" id="hm-own" hidden>
+  <div class="hm-own__box" role="dialog" aria-modal="true" aria-labelledby="hm-own-h">
+    <h2 id="hm-own-h">Egin orð</h2>
+    <p>Skriva eitt orð á hvørja linju. Tit kunnu eisini skriva fleiri orð saman, t.d. «Gleðilig jól».</p>
+    <textarea id="hm-own-text" spellcheck="false" placeholder="Jólaaftan&#10;Jólafrí&#10;Jólatræ"></textarea>
+    <p class="hm-own__note" id="hm-own-note"></p>
+    <div class="hm-actions">
+      <button class="hm-btn hm-btn--main" type="button" id="hm-own-use">Spæl við hesum orðunum</button>
+      <button class="hm-btn" type="button" id="hm-own-link">Avrita leinkju</button>
+      <button class="hm-btn" type="button" id="hm-own-close">Lat aftur</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var GROUPS = {
+    jol: { name: 'Jól', hint: 'Eitt jólaorð', words: ['JÓL', 'GÁVA', 'JÓLATRÆ', 'NISSA', 'JÓLALJÓS', 'KAVAMAÐUR', 'JÓLAMAÐUR', 'GLEÐILIG JÓL', 'DUNNA', 'JÓLAMATUR', 'HOSA', 'KAVI', 'KAVABLAK', 'ADVENT', 'STJØRNA', 'JÓLAPAKKI', 'JÓLASANGUR'] },
+    djor: { name: 'Djór', hint: 'Eitt djór', words: ['HUNDUR', 'KETTA', 'HESTUR', 'SEYÐUR', 'KÚGV', 'LUNDI', 'TJALDUR', 'HVALUR', 'FISKUR', 'KRÁKA', 'MÚS', 'HARI', 'SELUR', 'HØNA', 'HANI', 'GÁS'] },
+    skuli: { name: 'Skúlin', hint: 'Eitt orð úr skúlanum', words: ['SKÚLI', 'LÆRARI', 'BÓK', 'BLÝANTUR', 'TAVLA', 'VISKILEÐUR', 'SKÚLATASKA', 'FRÍTÍMI', 'FLOKKUR', 'PENNUR', 'LINJAL', 'TELDA', 'STÓLUR', 'BORÐ', 'LESIBÓK'] },
+    egin: { name: 'Egin orð', hint: 'Eitt av tykkara egnu orðum', words: [] }
+  };
+  var ORDER = ['jol', 'djor', 'skuli', 'egin'];
+  var LETTERS = 'A Á B D Ð E F G H I Í J K L M N O Ó P R S T U Ú V Y Ý Æ Ø'.split(' ');
+  var MAX = 7;
+  var OWN_KEY = 'snar-heingja-mann-egin';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var parts = Array.prototype.slice.call(document.querySelectorAll('.hm-figure .part'));
+  var group = '', word = '', guessed = [], misses = 0, over = true, lastWord = '';
+
+  function isLetter(ch) { return ch.toLocaleUpperCase('fo') !== ch.toLocaleLowerCase('fo'); }
+  function clean(list) {
+    var out = [];
+    list.forEach(function (w) {
+      w = w.replace(/\s+/g, ' ').trim().toLocaleUpperCase('fo');
+      if (w && /\S/.test(w) && w.split('').some(isLetter) && out.indexOf(w) < 0) out.push(w);
+    });
+    return out;
+  }
+
+  /* ---- Egin orð: úr leinkjuni (#o=) ella úr hesi teldu ---- */
+  function encode(list) { return btoa(unescape(encodeURIComponent(list.join('\n')))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function decode(s) { try { s = s.replace(/-/g, '+').replace(/_/g, '/'); return decodeURIComponent(escape(atob(s))).split('\n'); } catch (e) { return []; } }
+  function loadOwn() {
+    var m = location.hash.match(/[#&]o=([\w-]+)/);
+    if (m) { var fromLink = clean(decode(m[1])); if (fromLink.length) return { words: fromLink, link: true }; }
+    try { return { words: clean(JSON.parse(localStorage.getItem(OWN_KEY) || '[]')), link: false }; } catch (e) { return { words: [], link: false }; }
+  }
+  function saveOwn(list) { try { localStorage.setItem(OWN_KEY, JSON.stringify(list)); } catch (e) {} }
+
+  /* ---- Orðabólkar ---- */
+  function renderGroups() {
+    $('hm-groups').innerHTML = ORDER.map(function (k) {
+      if (k === 'egin' && !GROUPS.egin.words.length) return '';
+      return '<button class="hm-chip" type="button" data-g="' + k + '" aria-pressed="' + (k === group) + '">' + GROUPS[k].name + '</button>';
+    }).join('');
+  }
+  $('hm-groups').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-g]');
+    if (!b) return;
+    group = b.getAttribute('data-g');
+    renderGroups();
+    newWord();
+  });
+
+  /* ---- Bókstavir: føroyska stavraðin + aðrir stavir úr egnum orðum ---- */
+  function keyLetters() {
+    var extra = [];
+    word.split('').forEach(function (ch) { if (isLetter(ch) && LETTERS.indexOf(ch) < 0 && extra.indexOf(ch) < 0) extra.push(ch); });
+    return LETTERS.concat(extra);
+  }
+  function renderKeys() {
+    $('hm-keys').innerHTML = keyLetters().map(function (l) {
+      var used = guessed.indexOf(l) > -1, cls = used ? (word.indexOf(l) > -1 ? ' hit' : ' miss') : '';
+      return '<button class="hm-key' + cls + '" type="button" data-l="' + l + '"' + (used || over ? ' disabled' : '') + '>' + l + '</button>';
+    }).join('');
+  }
+  $('hm-keys').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-l]');
+    if (b) guess(b.getAttribute('data-l'));
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey || !$('hm-own').hidden) return;
+    if (e.key === 'Enter' && over && document.activeElement === document.body) { newWord(); return; }
+    if (e.key.length !== 1) return;
+    var l = e.key.toLocaleUpperCase('fo');
+    if (keyLetters().indexOf(l) > -1) { e.preventDefault(); guess(l); }
+  });
+
+  /* ---- Orðið og myndin ---- */
+  function renderWord(reveal) {
+    $('hm-word').innerHTML = word.split(' ').map(function (w) {
+      return '<span class="w">' + w.split('').map(function (ch) {
+        if (!isLetter(ch)) return '<span class="c sep">' + ch + '</span>';
+        var known = guessed.indexOf(ch) > -1;
+        if (known) return '<span class="c shown">' + ch + '</span>';
+        if (reveal) return '<span class="c missed">' + ch + '</span>';
+        return '<span class="c"></span>';
+      }).join('') + '</span>';
+    }).join('');
+    $('hm-word').setAttribute('aria-label', word.split('').map(function (ch) { return !isLetter(ch) || guessed.indexOf(ch) > -1 || reveal ? ch : 'tómt'; }).join(' '));
+  }
+  function renderFigure() {
+    parts.forEach(function (p, i) { p.classList.toggle('on', i < misses + (misses ? 1 : 0)); });
+    var lives = '';
+    for (var i = 0; i < MAX; i++) lives += '<i class="' + (i < misses ? 'lost' : '') + '"></i>';
+    $('hm-lives').innerHTML = lives;
+    $('hm-lives-txt').textContent = misses === 1 ? '1 feilur av ' + MAX : misses + ' feilir av ' + MAX;
+  }
+  function solved() { return word.split('').every(function (ch) { return !isLetter(ch) || guessed.indexOf(ch) > -1; }); }
+
+  function guess(l) {
+    if (over || guessed.indexOf(l) > -1) return;
+    guessed.push(l);
+    if (word.indexOf(l) < 0) misses++;
+    renderFigure();
+    if (solved()) finish(true);
+    else if (misses >= MAX) finish(false);
+    else { renderWord(false); renderKeys(); }
+  }
+  function finish(won) {
+    over = true;
+    renderWord(!won);
+    renderKeys();
+    var m = $('hm-msg');
+    m.className = 'hm-msg ' + (won ? 'win' : 'lose');
+    m.textContent = won ? 'Tit fingu orðið! Væl gjørt.' : 'Maðurin er hongdur. Orðið var ' + word + '.';
+    $('hm-new').focus();
+  }
+
+  function newWord() {
+    var pool = GROUPS[group].words;
+    if (!pool.length) { openOwn(); return; }
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    if (pool.length > 1) while (pick === lastWord) pick = pool[Math.floor(Math.random() * pool.length)];
+    word = lastWord = pick;
+    guessed = []; misses = 0; over = false;
+    $('hm-msg').textContent = ''; $('hm-msg').className = 'hm-msg';
+    $('hm-hint').textContent = GROUPS[group].hint + ' · ' + word.replace(/[^ ]/g, function (ch) { return isLetter(ch) ? '•' : ch; }).split(' ').map(function (w) { return w.length; }).join(' + ') + (word.length === 1 ? ' stavur' : ' stavir');
+    renderFigure(); renderWord(false); renderKeys();
+  }
+  $('hm-new').addEventListener('click', newWord);
+  $('hm-show').addEventListener('click', function () { if (!over) { finish(false); $('hm-msg').textContent = 'Orðið var ' + word + '.'; } });
+
+  /* ---- Egin orð: vindeyga ---- */
+  var back = null;
+  function openOwn() {
+    back = document.activeElement;
+    $('hm-own-text').value = GROUPS.egin.words.map(function (w) { return w.charAt(0) + w.slice(1).toLocaleLowerCase('fo'); }).join('\n');
+    $('hm-own-note').textContent = '';
+    $('hm-own').hidden = false;
+    $('hm-own-text').focus();
+  }
+  function closeOwn() { $('hm-own').hidden = true; if (back && back.focus) back.focus(); }
+  function ownFromText() { return clean($('hm-own-text').value.split(/\r?\n/)); }
+  $('hm-own-open').addEventListener('click', openOwn);
+  $('hm-own-close').addEventListener('click', closeOwn);
+  $('hm-own').addEventListener('click', function (e) { if (e.target === this) closeOwn(); });
+  $('hm-own').addEventListener('keydown', function (e) { if (e.key === 'Escape') closeOwn(); });
+  $('hm-own-use').addEventListener('click', function () {
+    var list = ownFromText();
+    if (!list.length) { $('hm-own-note').textContent = 'Skriva minst eitt orð.'; return; }
+    GROUPS.egin.words = list; saveOwn(list);
+    group = 'egin'; renderGroups(); closeOwn(); newWord();
+  });
+  $('hm-own-link').addEventListener('click', function () {
+    var list = ownFromText();
+    if (!list.length) { $('hm-own-note').textContent = 'Skriva minst eitt orð.'; return; }
+    var url = location.href.split('#')[0] + '#o=' + encode(list);
+    var done = function () { $('hm-own-note').textContent = 'Leinkjan er avritað. Tey, sum lata hana upp, spæla við hesum orðunum.'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { prompt('Avrita leinkjuna:', url); });
+    else prompt('Avrita leinkjuna:', url);
+  });
+
+  /* ---- Byrjan: jól frá 20. nov. til 6. jan., annars djór ---- */
+  var own = loadOwn();
+  GROUPS.egin.words = own.words;
+  var d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate();
+  group = own.link ? 'egin' : (md >= 1120 || md <= 106) ? 'jol' : 'djor';
+  if (/[#&]g=(jol|djor|skuli)/.test(location.hash)) group = location.hash.match(/[#&]g=(jol|djor|skuli)/)[1];
+  renderGroups();
+  newWord();
+})();
+</script>
+</body>
+</html>
