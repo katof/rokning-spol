@@ -294,7 +294,6 @@
 @keyframes jm-pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 <style>body { margin: 0; }</style>
-<style>html.i-rammu :is(.jg-crumb, .jm-crumb, .jh-crumb) { display: none !important; }</style>
 <script>
 (function () {
   if (window === window.top) return;   // bert tá kalendarin stendur í rammuni á Snar
@@ -307,8 +306,22 @@
   };
   var host = ''; try { host = new URL(document.referrer).origin; } catch (e) {}
   if (['https://snar.fo', 'https://snardev.ctrl.fo'].indexOf(host) < 0) host = '';   // leinkjur til snar.fo fara til vertin, sum vísir rammuna
+  // 3.11.2026: «← Jól á Snar» og leinkjur millum kalendararnar fara til Typo3-síðurnar á tí Snar, sum vísir rammuna
+  // (snardev nú, snar.fo aftaná flytingina) – ikki til GitHub-síðurnar inni í rammuni.
+  var SIDUR = { 'index.html': 'index.html', 'grunddeild.html': 'grunddeild.html', 'middeild.html': 'middeild.html', 'hadeild.html': 'hadeild.html' };
+  function snarSida(a) {
+    var h = (a.getAttribute('href') || '').split('#'), sida = SIDUR[h[0]];
+    if (!sida) return false;
+    a.setAttribute('href', (host || 'https://snar.fo') + sida + (h[1] ? '#' + h[1] : ''));
+    a.setAttribute('target', '_top');
+    return true;
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    Array.prototype.forEach.call(document.querySelectorAll('a[href]'), snarSida);
+  });
   document.addEventListener('click', function (e) {
     var a = e.target.closest ? e.target.closest('a[href]') : null; if (!a) return;
+    if (snarSida(a)) return;
     var h = a.getAttribute('href') || '';
     var hm = h.match(/^https:\/\/(snar\.fo|snardev\.ctrl\.fo)\//);
     if (host && hm) { h = host + h.slice(hm[0].length - 1); a.setAttribute('href', h); }

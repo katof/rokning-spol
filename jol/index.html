@@ -203,6 +203,16 @@
 .jx-outro h2 { font-size: clamp(2rem, 4.5vw, 3.4rem); font-weight: 900; }
 .jx-outro h2 em { font-style: italic; color: var(--warm); text-shadow: 0 0 22px rgba(255, 196, 90, .45); }
 .jx-outro .jx-mono { color: var(--muted); }
+.jx-sea { position: relative; height: clamp(48px, 6.5vw, 92px); }
+.jx-sea__water { display: block; width: 100%; height: 100%; }
+.jx-sea__glints path { opacity: .32; animation: jx-glint 3.6s ease-in-out infinite; }
+.jx-sea__glints path:nth-child(3n) { animation-delay: -1.2s; } .jx-sea__glints path:nth-child(3n+1) { animation-delay: -2.4s; }
+@keyframes jx-glint { 50% { opacity: .1; } }
+.jx-sea__boat { position: absolute; left: 14%; bottom: 26%; width: clamp(44px, 5vw, 76px); animation: jx-bob 4.5s ease-in-out infinite; transform-origin: 50% 80%; }
+@keyframes jx-bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(3px) rotate(2deg); } }
+@media (prefers-reduced-motion: reduce) { .jx-sea__glints path, .jx-sea__boat { animation: none; } }
+/* Footaraaldan á Snar: sjógvurin rennur beint niður í hana */
+body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
 .jx-outro__town { display: block; width: 100%; height: clamp(90px, 13vw, 190px); margin-top: 22px; }
 
 @media (max-width: 960px) { .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: repeat(2, 1fr); } .jx-two { grid-template-columns: 1fr; } }
@@ -475,7 +485,7 @@
             <li><div><b>Smágentan við svávulpinnunum</b><span>H.C. Andersen: «Den lille pige med svovlstikkerne». Marius Johannesen týddi (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/Jól/Skjøl/Søgur/Gentan_við_svávulpinnunum.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Jólagávur</b><span>Eftir Sólrún Michelsen. Astrid MacDonald teknaði (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/Jól/Skjøl/Søgur/Jólagávur_Snípa_1.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Músabilurin</b><span>Søga eftir Oskar Hermannsson (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/F%C3%B8royskt/M%C3%BAsabilurin.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li><div><b>Orðið «jól» í Evropa</b><span>Kort, sum vísir, hvat jól eita á málunum í Evropa (mynd).</span></div><a class="jx-btn jx-btn--sm" href="https://snardev.ctrl.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Christmas-map-v2.png" target="_blank" rel="noopener">Mynd</a></li>
+            <li><div><b>Orðið «jól» í Evropa</b><span>Kort, sum vísir, hvat jól eita á málunum í Evropa (mynd).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Christmas-map-v2.png" target="_blank" rel="noopener">Mynd</a></li>
           </ul>
         </div>
         <div>
@@ -560,6 +570,7 @@
       <p class="jx-mono" style="margin-top:10px">Góðan arbeiðshug í adventini</p>
     </div>
     <svg class="jx-outro__town" viewBox="0 40 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#jx-houses"/><rect x="0" y="272" width="1440" height="8" fill="#1b2335"/></svg>
+    <div class="jx-sea" aria-hidden="true"><svg class="jx-sea__water" viewBox="0 0 1440 100" preserveAspectRatio="none"><rect width="1440" height="100" fill="#10294d"/><g class="jx-sea__glints" stroke="#ffd27a" stroke-width="2.4" stroke-linecap="round"><path d="M40 20 h24"/><path d="M101 14 h10"/><path d="M162 14 h18"/><path d="M223 14 h14"/><path d="M284 14 h10"/><path d="M345 32 h24"/><path d="M406 14 h14"/><path d="M467 14 h24"/><path d="M528 14 h10"/><path d="M589 20 h10"/><path d="M650 32 h10"/><path d="M711 20 h10"/><path d="M772 20 h18"/><path d="M833 32 h14"/><path d="M894 14 h18"/><path d="M955 20 h10"/><path d="M1016 20 h18"/><path d="M1077 14 h10"/><path d="M1138 14 h14"/><path d="M1199 32 h24"/><path d="M1260 26 h24"/><path d="M1321 32 h18"/><path d="M1382 26 h14"/></g><path fill="#15386a" d="M0 50 C120 40 240 60 360 50 S600 40 720 50 960 60 1080 50 1320 40 1440 50 V100 H0Z"/><path fill="#1d4f8c" d="M0 74 C160 64 320 84 480 74 S800 64 960 74 1280 84 1440 74 V100 H0Z"/></svg><svg class="jx-sea__boat" viewBox="0 0 80 48"><path d="M38 6 V30" stroke="#f4eee3" stroke-width="2"/><circle cx="38" cy="6" r="3" fill="#ffd27a"/><path d="M26 18 h12 v12 h-12z" fill="#f4eee3"/><path d="M29 21 h6 v4 h-6z" fill="#ffd27a"/><path d="M4 30 H76 L68 42 H14 Z" fill="#c1272d"/><path d="M8 35 H72" stroke="#f4eee3" stroke-width="1.6"/></svg></div>
   </section>
 </div>
 
