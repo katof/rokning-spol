@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { URL.revokeObjectURL(dl.href); }, 4000);
     var note = document.querySelector('.kal-goym__note');
     if (!note) { note = document.createElement('span'); note.className = 'kal-goym__note'; note.setAttribute('role', 'status'); a.insertAdjacentElement('afterend', note); }
-    note.textContent = 'Styttingin liggur nú í Niðurtøkum. Drag hana á skrivaraborðið – so letur tú kalendaran upp við einum dupultklikki.';
+    note.textContent = 'Kalendarin liggur nú í Downloads. Flyt hann til skriviborðið ella aðrastaðni.';
     clearTimeout(note._t); note._t = setTimeout(function () { note.remove(); }, 12000);
   });
 });
