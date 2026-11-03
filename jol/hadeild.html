@@ -248,6 +248,41 @@
 .jol-fold[open] .jol-fold__in { justify-content: flex-end; margin-bottom: 10px; }
 </style>
 <style>body { margin: 0; }</style>
+<style>.kal-goym { margin-left: 14px; cursor: pointer; } .kal-goym__note { display: block; margin: -4px 0 10px; font-size: .8rem; opacity: .85; }</style>
+<script>
+// 3.11.2026: «Goym kalendaran á skrivaraborðinum» – ein stytting (.url á Windows, .webloc á Mac), sum letur
+// kalendaran upp á Snar. Stendur við síðuna av «← Jól á Snar». Vísir altíð á snar.fo (eisini meðan snardev verður brúkt).
+document.addEventListener('DOMContentLoaded', function () {
+  var crumb = document.querySelector('.jg-crumb, .jm-crumb, .jh-crumb');
+  var NAVN = { grunddeild: 'Jól í grunddeildini', middeild: 'Jól í miðdeildini', hadeild: 'Desember undir sjóneykuni' };
+  var file = location.pathname.split('/').pop() || '';
+  var slug = Object.keys(NAVN).filter(function (k) { return file.indexOf(k) >= 0; })[0];
+  if (!crumb || !slug) return;
+  var url = 'https://snar.fo/jol/' + slug, mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  var a = document.createElement('a');
+  a.className = crumb.className + ' kal-goym';
+  a.href = '#';
+  a.textContent = '⤓ Goym kalendaran á skrivaraborðinum';
+  a.title = 'Tekur eina stytting niður, sum letur kalendaran upp á Snar';
+  crumb.insertAdjacentElement('afterend', a);
+  a.addEventListener('click', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    var text = mac
+      ? '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0"><dict><key>URL</key><string>' + url + '</string></dict></plist>\n'
+      : '[InternetShortcut]\r\nURL=' + url + '\r\n';
+    var blob = new Blob([text], { type: mac ? 'application/x-apple-plist' : 'application/octet-stream' });
+    var dl = document.createElement('a');
+    dl.href = URL.createObjectURL(blob);
+    dl.download = NAVN[slug] + (mac ? '.webloc' : '.url');
+    document.body.appendChild(dl); dl.click(); dl.remove();
+    setTimeout(function () { URL.revokeObjectURL(dl.href); }, 4000);
+    var note = document.querySelector('.kal-goym__note');
+    if (!note) { note = document.createElement('span'); note.className = 'kal-goym__note'; note.setAttribute('role', 'status'); a.insertAdjacentElement('afterend', note); }
+    note.textContent = 'Styttingin liggur nú í Niðurtøkum. Drag hana á skrivaraborðið – so letur tú kalendaran upp við einum dupultklikki.';
+    clearTimeout(note._t); note._t = setTimeout(function () { note.remove(); }, 12000);
+  });
+});
+</script>
 <script>
 (function () {
   if (window === window.top) return;   // bert tá kalendarin stendur í rammuni á Snar
