@@ -53,6 +53,9 @@ button { font: inherit; color: inherit; }
 }
 .hm-chip:hover { box-shadow: 3px 3px 0 var(--line); transform: translate(-1px, -1px); }
 .hm-chip[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.hm-chip--mode[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); }
+#hm-modes { padding-right: 18px; border-right: 2px solid var(--line); }
+@media (max-width: 900px) { #hm-modes { border-right: 0; padding-right: 0; } }
 .hm-chip:focus-visible, .hm-key:focus-visible, .hm-btn:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
 
 /* ---- Spælið ---- */
@@ -69,6 +72,7 @@ button { font: inherit; color: inherit; }
 .hm-figure svg { width: 100%; height: 100%; display: block; }
 .hm-figure .part { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; fill: none; opacity: 0; transition: opacity .25s; }
 .hm-figure .part.on { opacity: 1; }
+.hm-figure .fig[hidden] { display: none; }
 .hm-figure .gallows { stroke: #9aa0a8; stroke-width: 6; stroke-linecap: round; fill: none; }
 .hm-figure .eyes { stroke: var(--red); stroke-width: 3.5; }
 .hm-lives { display: flex; gap: 6px; }
@@ -180,7 +184,11 @@ button { font: inherit; color: inherit; }
 <body>
 
 <header class="hm-top">
-  <h1>Heingja mann</h1>
+  <h1 id="hm-title">Heingja mann</h1>
+  <div class="hm-groups" id="hm-modes" role="group" aria-label="Hvønn skulu tit heingja?">
+    <button class="hm-chip hm-chip--mode" type="button" data-m="mann" aria-pressed="true">Mann · 7 feilir</button>
+    <button class="hm-chip hm-chip--mode" type="button" data-m="kona" aria-pressed="false">Konu · 10 feilir</button>
+  </div>
   <div class="hm-groups" id="hm-groups" role="group" aria-label="Orðabólkur"></div>
 </header>
 
@@ -189,14 +197,29 @@ button { font: inherit; color: inherit; }
     <div class="hm-figure" aria-hidden="true">
       <svg viewBox="0 0 200 220">
         <path class="gallows" d="M20 210 H120 M50 210 V12 H140 M50 52 L90 12"/>
-        <path class="part" d="M140 12 V38"/>
-        <circle class="part" cx="140" cy="58" r="20"/>
-        <path class="part" d="M140 78 V138"/>
-        <path class="part" d="M140 92 L112 118"/>
-        <path class="part" d="M140 92 L168 118"/>
-        <path class="part" d="M140 138 L116 180"/>
-        <path class="part" d="M140 138 L164 180"/>
-        <g class="part eyes"><path d="M128 50 l8 8 M136 50 l-8 8 M144 50 l8 8 M152 50 l-8 8"/></g>
+        <g class="fig" data-fig="mann">
+          <path class="part" d="M140 12 V38"/>
+          <circle class="part" cx="140" cy="58" r="20"/>
+          <path class="part" d="M140 78 V138"/>
+          <path class="part" d="M140 92 L112 118"/>
+          <path class="part" d="M140 92 L168 118"/>
+          <path class="part" d="M140 138 L116 180"/>
+          <path class="part" d="M140 138 L164 180"/>
+          <g class="part eyes"><path d="M128 50 l8 8 M136 50 l-8 8 M144 50 l8 8 M152 50 l-8 8"/></g>
+        </g>
+        <g class="fig" data-fig="kona" hidden>
+          <path class="part" d="M140 12 V38"/>
+          <circle class="part" cx="140" cy="58" r="20"/>
+          <path class="part" d="M121 54 C119 31 161 31 159 54 M159 50 q17 9 9 32"/>
+          <path class="part" d="M140 78 V100"/>
+          <path class="part" d="M140 100 L113 150 H167 Z" stroke-linejoin="round"/>
+          <path class="part" d="M140 88 L114 114"/>
+          <path class="part" d="M140 88 L166 114"/>
+          <path class="part" d="M130 150 V186"/>
+          <path class="part" d="M150 150 V186"/>
+          <path class="part" d="M130 186 h-10 M150 186 h10"/>
+          <g class="part eyes"><path d="M128 50 l8 8 M136 50 l-8 8 M144 50 l8 8 M152 50 l-8 8"/></g>
+        </g>
       </svg>
     </div>
     <div class="hm-lives" id="hm-lives"></div>
@@ -241,10 +264,28 @@ button { font: inherit; color: inherit; }
   };
   var ORDER = ['jol', 'djor', 'skuli', 'egin'];
   var LETTERS = 'A Á B D Ð E F G H I Í J K L M N O Ó P R S T U Ú V Y Ý Æ Ø'.split(' ');
-  var MAX = 7;
+  var MODES = {
+    mann: { max: 7, title: 'Heingja mann', lost: 'Maðurin er hongdur.' },
+    kona: { max: 10, title: 'Heingja konu', lost: 'Konan er hongd.' }
+  };
+  var mode = 'mann', MAX = 7;
 
   var $ = function (id) { return document.getElementById(id); };
-  var parts = Array.prototype.slice.call(document.querySelectorAll('.hm-figure .part'));
+  var parts = [];
+  function setMode(m) {
+    mode = m; MAX = MODES[m].max;
+    Array.prototype.forEach.call(document.querySelectorAll('.hm-figure .fig'), function (g) { if (g.getAttribute('data-fig') === m) g.removeAttribute('hidden'); else g.setAttribute('hidden', ''); });
+    parts = Array.prototype.slice.call(document.querySelectorAll('.hm-figure .fig[data-fig="' + m + '"] > .part'));
+    $('hm-title').textContent = MODES[m].title;
+    document.title = MODES[m].title + ' – Snar';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-m]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-m') === m)); });
+  }
+  $('hm-modes').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-m]');
+    if (!b || b.getAttribute('data-m') === mode) return;
+    setMode(b.getAttribute('data-m'));
+    newWord();
+  });
   var group = '', word = '', guessed = [], misses = 0, over = true, lastWord = '', deck = {};
 
   function isLetter(ch) { return ch.toLocaleUpperCase('fo') !== ch.toLocaleLowerCase('fo'); }
@@ -333,7 +374,7 @@ button { font: inherit; color: inherit; }
     renderKeys();
     var m = $('hm-msg');
     m.className = 'hm-msg ' + (won ? 'win' : 'lose');
-    m.textContent = won ? 'Tit fingu orðið! Væl gjørt.' : 'Maðurin er hongdur. Orðið var ' + word + '.';
+    m.textContent = won ? 'Tit fingu orðið! Væl gjørt.' : MODES[mode].lost + ' Orðið var ' + word + '.';
     $('hm-new').focus();
   }
 
@@ -379,6 +420,7 @@ button { font: inherit; color: inherit; }
   var d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate();
   group = (md >= 1120 || md <= 106) ? 'jol' : 'djor';
   if (/[#&]g=(jol|djor|skuli)/.test(location.hash)) group = location.hash.match(/[#&]g=(jol|djor|skuli)/)[1];
+  setMode('mann');
   renderGroups();
   newWord();
 })();
