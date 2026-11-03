@@ -339,6 +339,8 @@
 .jb-cover .jb-sub { font-size: 18pt; font-weight: 700; }
 .jb-cover .jb-sub i { display: inline-block; width: 50mm; border-bottom: .4mm solid #444; }
 .jb-cover .jb-frame { width: 100%; }
+.jb-cover .jb-names { flex: 0 0 62mm; }
+.jb-cover .jb-names b { font-size: 12pt; }
 .jb-doodle { width: 14mm; height: 14mm; }
 
 /* Jólabókin og Jólasøgan, sum ferðast: samanlagdir partar, sum lærarin letur upp (2.11.2026) */
@@ -893,7 +895,7 @@ aldri kann eg fulltakka tær
   }
   function cover() {
     return '<div class="jb-sheet jb-cover"><div class="jb-top" style="width:100%"><span>Grunddeildin · desember 2026</span>' + TREE + '</div><h1 class="jb-h">Jólabókin</h1>' +
-      '<p class="jb-sub">hjá <i></i> flokki</p><div class="jb-frames" style="width:100%"><div class="jb-frame"></div></div><div class="jb-foot">Hesi hava gjørt bókina: <i style="width:110mm"></i></div></div>';
+      '<p class="jb-sub">hjá <i></i> flokki</p><div class="jb-frames" style="width:100%"><div class="jb-frame"></div></div><div class="jb-frame jb-names"><b>Hesi hava gjørt bókina</b></div></div>';
   }
   function storySheets() {
     return STORY.map(function (p, k) { return '<div class="jb-sheet jb-sheet--half"><div class="jb-top"><span>' + STORY_T + ' · partur ' + (k + 1) + ' av ' + STORY.length + '</span>' + DOODLE + '</div><p class="jb-story">' + esc(p) + '</p><div class="jb-frames"><div class="jb-frame"></div></div><div class="jb-foot">Tekna: <i></i></div></div>'; }).join('');
