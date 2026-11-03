@@ -256,7 +256,7 @@
         <div class="jx-hero__btns">
           <a class="jx-btn jx-btn--red" href="#kalendarar">Jólakalendararnir</a>
           <a class="jx-btn" href="#finn">Finn jólatilfar</a>
-          <a class="jx-btn" href="#meira">Undanfarin jól</a>
+          <a class="jx-btn" href="#meira">Tilfar frá jólasíðuni í fjør</a>
           <a class="jx-btn" href="#laerari">Til læraran</a>
         </div>
       </div>
@@ -601,7 +601,7 @@
   ITEMS.forEach(function (it) { add('Lúka · ' + DEILD[it[0]][0], TAGC.luka, it[2], DEILD[it[0]][1] + ' · ' + it[3].map(function (f) { return FAK[f]; }).join(', ') + ' · ' + it[5] + ' minuttir', DEILD[it[0]][2] + '#luka-' + it[1]); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-cal'), function (c) { add('Jólakalendari', TAGC.kal, c.querySelector('h3').textContent, c.querySelector('small').textContent + ' · ' + c.querySelector('p').textContent, c.querySelector('.jx-cal__btns a').getAttribute('href')); });
   Array.prototype.forEach.call(root.querySelectorAll('#foroyar .jx-list li'), function (li) { var a = li.querySelector('a'); add('Jól í Føroyum', TAGC.fo, li.querySelector('b').textContent, li.querySelector('span').textContent, a.getAttribute('href')); });
-  var meiraLabel = 'Undanfarin jól · ';
+  var meiraLabel = 'Tilfar frá jólasíðuni í fjør · ';
   Array.prototype.forEach.call(root.querySelectorAll('#meira .jx-more > div'), function (col) {
     var tag = meiraLabel + ((col.querySelector('.jx-more__h') || {}).textContent || 'tilfar');
     Array.prototype.forEach.call(col.querySelectorAll('.jx-list li'), function (li) { var a = li.querySelector('a'); add(tag, TAGC.meira, li.querySelector('b').textContent, li.querySelector('span').textContent, a.getAttribute('href')); });
