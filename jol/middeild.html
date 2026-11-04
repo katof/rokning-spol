@@ -55,7 +55,7 @@
 .jm-hero__art { position: relative; }
 .jm-hero__art svg { width: 100%; height: auto; display: block; }
 .jm-node { animation: jm-blink 3s ease-in-out infinite; animation-delay: var(--d, 0s); }
-.jm-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 64px; height: 64px; right: 0; bottom: 0; }
+.jm-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 64px; height: 64px; right: 4px; top: 24px; }
 .jm-dog img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--cyan); background: #fff; box-shadow: 0 0 14px rgba(94,211,255,.5); }
 .jm-dog__hat { position: absolute; left: 50%; top: -34%; width: 78%; transform: translateX(-46%); pointer-events: none; }
 
@@ -292,6 +292,76 @@
 .jm-win__card svg { width: 110px; height: auto; filter: drop-shadow(0 0 22px var(--gold)); animation: jm-pop .6s ease-out; }
 .jm-win__card .jm-btns { justify-content: center; }
 @keyframes jm-pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ---- Tendra ljósið (4.11.2026) --------------------------------------------
+   Avbrótarin í ringrásini (ella knøtturin í hero) letur ringrásina aftur: straumurin rennur,
+   perurnar í trænum tendrast, og síðan lýsir øll síðan upp og verður ljós og pen.
+   .is-straumur = ringrásin er lokað · .is-tendrar = meðan sýningin gongur · .is-ljos = ljósa síðan.
+   Blink: í mesta lagi tvey veik flikk og eitt ljós (WCAG: ikki meira enn trý um sekundi). */
+.jm-svgtxt { fill: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; }
+.jm-krins--on, .is-straumur .jm-krins--off { display: none; }
+.is-straumur .jm-krins--on { display: inline; }
+.jm-node { opacity: .22; animation: none; }
+.is-straumur .jm-node { opacity: 1; animation: jm-blink 3s ease-in-out infinite; animation-delay: var(--d, 0s); filter: drop-shadow(0 0 4px rgba(255, 225, 140, .95)); }
+.is-tendrar .jm-node { animation: none; opacity: .22; }
+.jm-straum { fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; opacity: 0; }
+.is-straumur .jm-straum { opacity: 1; stroke-dasharray: 1 3; animation: jm-flow 1.6s linear infinite; }
+@keyframes jm-flow { to { stroke-dashoffset: -8; } }
+.jm-sw { cursor: pointer; outline: none; }
+.jm-sw__hit { fill: transparent; }
+.jm-sw__pin { fill: var(--ink); }
+.jm-sw__arm { transform-box: view-box; transform-origin: 268px 250px; transform: rotate(-38deg); transition: transform .16s cubic-bezier(.3, 1.6, .5, 1); }
+.jm-sw__arm line { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; }
+.jm-sw__arm circle { fill: var(--gold); stroke: var(--ink); stroke-width: 1.5; }
+.is-straumur .jm-sw__arm { transform: rotate(0deg); }
+.jol:not(.is-straumur) .jm-sw__arm circle { animation: jm-kalla 1.5s ease-in-out infinite; }
+@keyframes jm-kalla { 50% { filter: drop-shadow(0 0 7px #ffd166); } }
+.jm-sw:focus-visible .jm-sw__hit { stroke: var(--gold); stroke-width: 1.5; }
+.jm-sw:hover .jm-sw__arm line { stroke: var(--gold); }
+.jol .jm-btn--tendra { border-color: var(--gold); color: var(--gold); font-weight: 600; }
+.jol .jm-btn--tendra:hover { background: rgba(255, 209, 102, .16); }
+.jol:not(.is-straumur) .jm-btn--tendra { animation: jm-kallaknott 1.8s ease-in-out infinite; }
+@keyframes jm-kallaknott { 50% { box-shadow: 0 0 16px rgba(255, 209, 102, .7); } }
+.jm-t--on, .is-ljos .jm-t--off { display: none; }
+.is-ljos .jm-t--on { display: inline; }
+.is-tendrar .jm-hero__art { z-index: 10061; }
+.jm-fx { position: fixed; inset: 0; z-index: 10060; pointer-events: none; }
+.jm-fx--dark { background: #02060c; opacity: 0; }
+.jm-fx--burst { background: radial-gradient(circle at var(--x) var(--y), #fff 0, #fffbe6 30%, #fff3c9 100%); clip-path: circle(0 at var(--x) var(--y)); }
+
+.jol { --kr: #ffffff; }
+.jol.is-ljos {
+  --paper: #fff8ea; --panel: #ffffff; --panel2: #fff2da; --line: #d8bf8f; --ink: #22303d; --muted: #5a6670;
+  --cyan: #0a75ab; --mint: #0a7d56; --red: #cf2e2e; --green: #15803d; --gold: #9a6500; --pink: #bf2f86; --violet: #6a45cf; --kr: #22303d;
+  background-image: radial-gradient(ellipse at 50% -80px, rgba(255, 205, 90, .6), transparent 70%), linear-gradient(rgba(190, 140, 50, .13) 1px, transparent 1px), linear-gradient(90deg, rgba(190, 140, 50, .13) 1px, transparent 1px);
+  background-size: 100% 760px, 28px 28px, 28px 28px;
+  background-repeat: no-repeat, repeat, repeat;
+}
+body:has(.jol.is-ljos), body:has(.jol.is-ljos) .body-bg { background: #fff8ea; }
+body:has(.jol.is-ljos) .snar-ft__wave { background: #fff8ea; }
+/* Perur og aðrir ljóskeldur halda skínandi litunum, eisini tá ið teksturin gerst myrkari */
+.is-ljos .jm-leds, .is-ljos .jm-bulb, .is-ljos .jm-legend i, .is-ljos .jm-straum { --red: #ff5a5a; --green: #2fc874; --gold: #ffb820; --cyan: #35b9f0; --pink: #ff7cc4; --violet: #a98bff; --mint: #4bdca8; }
+.is-ljos .jm-hero h1 span, .is-ljos .jm-outro h2 span { color: var(--red); }
+.is-ljos .jm-crumb { color: var(--muted); border-bottom-color: var(--cyan); }
+.is-ljos .jm-crumb:hover { color: var(--cyan); }
+.jol.is-ljos .jm-btn--solid { color: #fff; }
+.jol.is-ljos .jm-btn--solid:hover { background: #085f8b; }
+.jol.is-ljos .jm-btn--goldsolid, .is-ljos .jm-sw__arm circle { background: #ffc83d; border-color: #e0a400; color: #2a2000; }
+.is-ljos .jm-sw__arm circle { fill: #ffc83d; }
+.jol.is-ljos .jm-btn--goldsolid:hover { background: #ffd86b; }
+.jol.is-ljos .jm-btn--mintsolid { color: #fff; }
+.is-ljos .jm-door, .is-ljos .jm-open, .is-ljos .jm-list a, .is-ljos .jm-song { box-shadow: 0 2px 10px rgba(130, 95, 30, .1); }
+.is-ljos .jm-door.is-locked { box-shadow: none; }
+.is-ljos .jm-door.is-open { box-shadow: 0 0 0 1px var(--c) inset, 0 4px 18px color-mix(in srgb, var(--c) 30%, transparent); }
+.is-ljos .jm-door:not(.is-locked):hover { box-shadow: 0 8px 22px rgba(130, 95, 30, .22), 0 0 0 1px var(--c) inset; }
+.is-ljos .jm-det, .is-ljos .jm-src { background: rgba(130, 95, 30, .05); }
+.is-ljos .jm-git textarea, .is-ljos .jm-msg { background: #fff; }
+.is-ljos .jm-und, .is-ljos .jm-aftur, .is-ljos .jm-spael { background: rgba(255, 200, 61, .13); }
+.is-ljos .jm-bulb .g { fill: #f3e7cd; }
+.is-ljos .jm-bulb.is-on .g { fill: var(--b); stroke: rgba(90, 60, 10, .35); }
+.is-ljos .jm-win { background: rgba(70, 50, 15, .55); }
+.is-ljos .jm-dog img { box-shadow: 0 0 14px rgba(255, 190, 60, .7); }
+@media (prefers-reduced-motion: reduce) { .is-straumur .jm-node { opacity: 1; } }
 </style>
 <style>body { margin: 0; }</style>
 <style>.kal-goym { margin-left: 14px; cursor: pointer; } .kal-goym__note { display: block; margin: -4px 0 10px; font-size: .8rem; opacity: .85; }</style>
@@ -371,6 +441,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </head>
 <body>
 <div class="jol jm">
+  <script>try { if (localStorage.getItem('snar-jol-middeild-ljos-2026') === '1') document.currentScript.parentNode.classList.add('is-straumur', 'is-ljos'); } catch (e) {}</script>
   <!-- Strikutekningar sum í eini tekniskari tekning -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
@@ -406,21 +477,23 @@ document.addEventListener('DOMContentLoaded', function () {
           <p class="jm-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka hevur ein næmingatekst, spurningar at tosa um og eina uppgávu. Harumframt eru eykauppgávur til 5.–6. flokk. Hvør lúka byrjar við einum spurningi at undrast á. Næmingarnir gita fyrst, og aftast í lúkuni undrast tey aftur. Lærugreinirnar eru føroyskt, danskt, enskt, støddfrøði, náttúra og tøkni, søga og samtíð, kristnikunnleiki og átrúnaður og handaverk og list.</p>
           <div class="jm-hero__btns">
             <a class="jm-btn jm-btn--solid" href="#kalendari">Far til lúkurnar ↓</a>
+            <button class="jm-btn jm-btn--tendra" type="button" id="jm-tendra" aria-pressed="false"><svg class="jm-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M8.5 14.5C7 13.300 6 11.700 6 10a6 6 0 0 1 12 0c0 1.700-1 3.300-2.500 4.500-.6.5-1 1.300-1 2h-5c0-.7-.4-1.500-1-2z"/></svg><span class="jm-t--off">Tendra ljósið</span><span class="jm-t--on">Sløkk ljósið</span></button>
             <button class="jm-btn" type="button" id="jm-alt" title="Til læraran, sum leggur til rættis">Lat allar lúkur upp</button>
             <span class="jm-mono" id="jm-count"></span>
           </div>
         </div>
         <div class="jm-hero__art">
           <!-- Jólatræ sum ringrás: leiðningar, knútar og perur -->
-          <svg viewBox="0 0 320 300" aria-hidden="true">
-            <g fill="none" stroke="#3f6a8f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 320 312">
+            <g fill="none" stroke="#3f6a8f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M160 40 L110 110 L130 110 L90 180 L115 180 L70 250 L250 250 L205 180 L230 180 L190 110 L210 110 Z"/>
               <path d="M150 250 v30 h20 v-30"/>
               <path d="M160 40 v70 M160 110 L120 180 M160 110 L200 180 M160 110 v140 M120 180 L100 250 M200 180 L220 250 M120 180 h80 M100 250 h120"/>
               <path d="M70 250 L40 250 M40 250 v-20 M40 230 h-14 M26 230 v40 M26 270 h14 M40 270 v-20" />
-              <path d="M250 250 L290 250 M290 250 v-30 M284 220 h12 M284 226 h12 M290 226 v24"/>
+              <path d="M250 250 H268 M302 250 V288 H40 V270"/>
             </g>
-            <g class="jm-nodes">
+            <path class="jm-straum" id="jm-straum" pathLength="100" d="M40 230 V250 H268 L302 250 V288 H40 V270" aria-hidden="true"/>
+            <g class="jm-nodes" aria-hidden="true">
               <circle class="jm-node" cx="160" cy="40" r="7" fill="#ffd166" style="--d:0s"/>
               <circle class="jm-node" cx="160" cy="110" r="5" fill="#5ed3ff" style="--d:.5s"/>
               <circle class="jm-node" cx="120" cy="180" r="5" fill="#ff5a5a" style="--d:1s"/>
@@ -432,7 +505,12 @@ document.addEventListener('DOMContentLoaded', function () {
               <circle class="jm-node" cx="190" cy="110" r="4" fill="#b69cff" style="--d:1.8s"/>
               <circle class="jm-node" cx="160" cy="180" r="4" fill="#5ed3ff" style="--d:2.3s"/>
             </g>
-            <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#9fbdd4"><text x="12" y="222">BATTARÍ</text><text x="254" y="212">AVBRÓTARI</text><text x="176" y="36">LED 1</text><text x="12" y="290">jólatræ v.2026 · lokað elringrás</text></g>
+            <g class="jm-svgtxt" aria-hidden="true"><text x="12" y="222">BATTARÍ</text><text x="254" y="212">AVBRÓTARI</text><text x="176" y="36">LED 1</text><text x="12" y="306">jólatræ v.2026 · <tspan class="jm-krins--off">opin elringrás</tspan><tspan class="jm-krins--on">lokað elringrás</tspan></text></g>
+            <g class="jm-sw" id="jm-sw" role="button" tabindex="0" aria-label="Avbrótarin: tendra ella sløkk ljósið">
+              <rect class="jm-sw__hit" x="252" y="216" width="66" height="44" rx="6"/>
+              <circle class="jm-sw__pin" cx="268" cy="250" r="3.500"/><circle class="jm-sw__pin" cx="302" cy="250" r="3.500"/>
+              <g class="jm-sw__arm"><line x1="268" y1="250" x2="302" y2="250"/><circle cx="304" cy="250" r="5"/></g>
+            </g>
           </svg>
           <button class="jm-dog" type="button" aria-label="Snar-hundurin" data-dog>
             <img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar_hundur.png" alt="" loading="lazy">
@@ -659,7 +737,7 @@ aldri kann eg fulltakka tær
   if (!root) return;
   root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
 
-  var FAK = { fo: ['Føroyskt', 'var(--red)'], da: ['Danskt', 'var(--gold)'], en: ['Enskt', 'var(--green)'], st: ['Støddfrøði', 'var(--cyan)'], nt: ['Náttúra og tøkni', 'var(--mint)'], so: ['Søga og samtíð', 'var(--violet)'], kr: ['Kristnikunnleiki og átrúnaður', '#ffffff'], hv: ['Handaverk og list', 'var(--pink)'] };
+  var FAK = { fo: ['Føroyskt', 'var(--red)'], da: ['Danskt', 'var(--gold)'], en: ['Enskt', 'var(--green)'], st: ['Støddfrøði', 'var(--cyan)'], nt: ['Náttúra og tøkni', 'var(--mint)'], so: ['Søga og samtíð', 'var(--violet)'], kr: ['Kristnikunnleiki og átrúnaður', 'var(--kr)'], hv: ['Handaverk og list', 'var(--pink)'] };
   var LABELS = { fo: ['Tekstur til næmingarnar', 'Tosið saman', 'Uppgáva'], da: ['Tekst til eleverne', 'Tal sammen', 'Opgave'], en: ['Text for the pupils', 'Talk together', 'Task'] };
   var MONTHS = ['januar', 'februar', 'mars', 'apríl', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
   var DAYS = ['sunnudagur', 'mánadagur', 'týsdagur', 'mikudagur', 'hósdagur', 'fríggjadagur', 'leygardagur'];
@@ -1051,6 +1129,62 @@ aldri kann eg fulltakka tær
     var dd = Math.round((t - d0) / 86400000);
     root.querySelector('#jm-count').textContent = dd === 0 ? 'Í dag er jólaaftan' : dd + (dd === 1 ? ' dagur' : ' dagar') + ' til jólaaftan';
   })();
+  /* ------------------------------------------------------------ Tendra ljósið (4.11.2026) */
+  (function () {
+    var KEY = 'snar-jol-middeild-ljos-2026', btn = root.querySelector('#jm-tendra'), sw = root.querySelector('#jm-sw'), busy = false, ac = null;
+    function sync() { var on = root.classList.contains('is-ljos'); btn.setAttribute('aria-pressed', on ? 'true' : 'false'); sw.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+    function tone(f, at, dur, vol, type, f2) {
+      try {
+        ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+        var t = ac.currentTime + at, o = ac.createOscillator(), g = ac.createGain();
+        o.type = type || 'sine'; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+        g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + Math.min(.02, dur / 3)); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + dur + .02);
+      } catch (e) {}
+    }
+    function fx(cls) { var d = document.createElement('div'); d.className = 'jm-fx ' + cls; d.setAttribute('aria-hidden', 'true'); root.appendChild(d); return d; }
+    function hold(el, frames, ms, delay) { return el.animate(frames, { duration: ms, delay: delay || 0, fill: 'both', easing: 'ease-out' }); }
+    function tendra() {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { root.classList.add('is-straumur', 'is-ljos'); store(KEY, '1'); sync(); return; }
+      busy = true; store(KEY, '1');
+      root.classList.add('is-straumur', 'is-tendrar');
+      tone(1500, 0, .05, .12, 'square', 300);
+      tone(55, .15, 1.45, .05, 'sawtooth', 170);
+      var dark = fx('jm-fx--dark'), burst = fx('jm-fx--burst');
+      hold(dark, [{ opacity: 0 }, { opacity: .94 }], 260);
+      var straum = root.querySelector('#jm-straum').animate([{ strokeDasharray: '100 100', strokeDashoffset: 100 }, { strokeDasharray: '100 100', strokeDashoffset: 0 }], { duration: 800, delay: 150, fill: 'both', easing: 'linear' });
+      // Perurnar tendrast nerrifrá og uppeftir; stjørnan ovast kemur seinast.
+      var nodes = Array.prototype.slice.call(root.querySelectorAll('.jm-node')).sort(function (a, b) { return b.getAttribute('cy') - a.getAttribute('cy'); });
+      var anims = nodes.map(function (n, i) { return hold(n, [{ opacity: .22 }, { opacity: 1 }], 120, 450 + i * 75); });
+      var star = nodes[nodes.length - 1].getBoundingClientRect();
+      var x = Math.max(0, Math.min(innerWidth, star.left + star.width / 2)) + 'px', y = Math.max(0, Math.min(innerHeight, star.top + star.height / 2)) + 'px';
+      burst.style.setProperty('--x', x); burst.style.setProperty('--y', y);
+      // Tvey veik flikk, sum ein gamal ljósrør, áðrenn tað tekur við.
+      dark.animate([{ opacity: .94 }, { opacity: .7 }, { opacity: .94 }, { opacity: .6 }, { opacity: .94 }], { duration: 360, delay: 1250 });
+      [1047, 1319, 1568, 2093].forEach(function (f, i) { tone(f, 1.62 + i * .09, .7, .07); });
+      burst.animate([{ clipPath: 'circle(0 at ' + x + ' ' + y + ')' }, { clipPath: 'circle(150vmax at ' + x + ' ' + y + ')' }], { duration: 700, delay: 1620, fill: 'both', easing: 'cubic-bezier(.5, 0, .9, .4)' });
+      setTimeout(function () {
+        root.classList.add('is-ljos'); root.classList.remove('is-tendrar');
+        anims.forEach(function (a) { a.cancel(); }); straum.cancel(); dark.remove(); sync();
+        burst.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1100, fill: 'both', easing: 'ease-out' }).onfinish = function () { burst.remove(); busy = false; };
+        Array.prototype.forEach.call(root.querySelectorAll('.jm-door'), function (d, i) { d.animate([{ transform: 'scale(.9)', filter: 'brightness(1.5)' }, { transform: 'scale(1.03)', offset: .6 }, { transform: 'scale(1)', filter: 'none' }], { duration: 520, delay: 180 + i * 45, easing: 'ease-out' }); });
+      }, 2330);
+    }
+    function slokk() {
+      store(KEY, '0'); root.classList.remove('is-straumur');
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { root.classList.remove('is-ljos'); sync(); return; }
+      busy = true; tone(420, 0, .07, .12, 'square', 90);
+      var dark = fx('jm-fx--dark');
+      dark.animate([{ opacity: 0 }, { opacity: 1, offset: .22 }, { opacity: 1, offset: .35 }, { opacity: 0 }], { duration: 640 }).onfinish = function () { dark.remove(); busy = false; };
+      setTimeout(function () { root.classList.remove('is-ljos'); sync(); }, 170);
+    }
+    function skift() { if (busy) return; if (root.classList.contains('is-ljos')) slokk(); else tendra(); }
+    btn.addEventListener('click', skift);
+    sw.addEventListener('click', skift);
+    sw.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); skift(); } });
+    sync();
+  })();
+
   var dog = root.querySelector('[data-dog]');
   if (dog) dog.addEventListener('click', function () { var nodes = root.querySelectorAll('.jm-node'); Array.prototype.forEach.call(nodes, function (n) { n.style.animationDuration = '.5s'; }); setTimeout(function () { Array.prototype.forEach.call(nodes, function (n) { n.style.animationDuration = ''; }); }, 3000); });
 
