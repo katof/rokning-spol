@@ -219,6 +219,12 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
 @media (max-width: 640px) { .jx-hero__in { grid-template-columns: 1fr; } .jx-dog { width: 110px; } .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: 1fr; } .jx-filter span.jx-mono { min-width: 0; width: 100%; } .jx-search__go { padding: 0 1rem; } }
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } .jx-plane { transform: translateX(calc(var(--jol-vw, 100vw) * .42)); } }
 
+/* ---- Kalendarin á pappíri (4.11.2026) ---- */
+.jx-paper { margin-top: 22px; padding: 20px 22px; border: 1.5px solid rgba(255, 210, 122, .35); border-radius: 14px; background: var(--card); }
+.jx-paper__art { display: block; width: min(100%, 420px); height: auto; margin-bottom: 12px; }
+.jx-paper h3 { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 1.35rem; margin-bottom: 6px; }
+.jx-paper p { max-width: 75ch; color: #dde3ee; font-size: .97rem; }
+.jx-paper__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 /* ---- Jólabókin: gongdin í fýra stigum (3.11.2026) ---- */
 .jx-flow { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr 34px 1fr; align-items: center; gap: 6px; }
 .jx-flow__step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 14px 16px; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; text-align: center; height: 100%; }
@@ -398,6 +404,16 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
         </article>
       </div>
       <p class="jx-cal__new">Eyka virkni: <a href="#jolabok">Jólabókin hjá flokkinum</a> · <a href="#saman">Jólasøgan, sum ferðast</a></p>
+      <div class="jx-paper" id="papir">
+        <svg class="jx-paper__art" viewBox="0 0 348 84" aria-hidden="true"><path d="M2 12 Q174 34 346 12" fill="none" stroke="#f2b84b" stroke-width="2"/><g transform="rotate(-2 30 17)"><rect x="11" y="17" width="38" height="50" rx="1.5" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><text x="30" y="52" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="27" fill="#d4213a">1</text></g><g transform="rotate(2 78 21)"><rect x="59" y="21" width="38" height="50" rx="1.5" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><text x="78" y="56" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="27" fill="#2f6b45">2</text></g><g transform="rotate(-2 126 23)"><rect x="107" y="23" width="38" height="50" rx="1.5" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><text x="126" y="58" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="27" fill="#2f74e6">3</text></g><g transform="rotate(2 174 24)"><rect x="155" y="24" width="38" height="50" rx="1.5" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><text x="174" y="59" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="27" fill="#f2b84b">4</text></g><g transform="rotate(-2 222 23)"><rect x="203" y="23" width="38" height="50" rx="1.5" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><text x="222" y="58" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="27" fill="#d4213a">5</text></g><g transform="rotate(2 270 21)"><rect x="251" y="21" width="38" height="50" rx="1.5" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><text x="270" y="56" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="27" fill="#2f6b45">6</text></g><g transform="rotate(-2 318 17)"><rect x="299" y="17" width="38" height="50" rx="1.5" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><text x="318" y="52" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="27" fill="#2f74e6">7</text></g></svg>
+        <h3>Kalendarin á pappíri</h3>
+        <p>Vilja tit heldur hava kalendaran á pappíri? Prentið eitt A4-ark til hvørja lúku, boygið tað á miðjuni, og hongið tað á eitt band, so bert talið sæst. Uppgávan hongur fjald aftanfyri. Á arkunum eru tær uppgávur, sum ikki krevja teldu, og QR-kotur til tilfarið.</p>
+        <div class="jx-paper__btns">
+          <a class="jx-btn jx-btn--sm" href="https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/J%C3%B3lakalendari_%C3%A1_papp%C3%ADri_%E2%80%93_grunddeild.pdf" target="_blank" rel="noopener">Grunddeild · 1.–3. flokkur (PDF)</a>
+          <a class="jx-btn jx-btn--sm" href="https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/J%C3%B3lakalendari_%C3%A1_papp%C3%ADri_%E2%80%93_mi%C3%B0deild.pdf" target="_blank" rel="noopener">Miðdeild · 4.–6. flokkur (PDF)</a>
+          <a class="jx-btn jx-btn--sm" href="https://snardev.ctrl.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/J%C3%B3lakalendari_%C3%A1_papp%C3%ADri_%E2%80%93_h%C3%A1deild.pdf" target="_blank" rel="noopener">Hádeild · 7.–9. flokkur (PDF)</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -643,6 +659,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   Array.prototype.forEach.call(root.querySelectorAll('#meira details.jx-det'), function (d) { (d.querySelector('.jx-films').getAttribute('data-films') || '').split(',').forEach(function (f) { add('Filmur', TAGC.film, f.split('|')[1] || '', d.querySelector('summary').textContent, '#meira', d); }); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-funkur a'), function (a) { add('Funka í jólabúna', TAGC.funka, a.querySelector('b').textContent, a.querySelector('span').textContent, a.getAttribute('href')); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-steps > div'), function (d) { add('Til læraran', TAGC.laer, d.querySelector('b').textContent, d.textContent.replace(d.querySelector('b').textContent, ''), '#laerari'); });
+  add('Á pappíri', TAGC.kal, 'Kalendarin á pappíri', 'Prentið eitt A4-ark til hvørja lúku og hongið tey á eitt band – grunddeild, miðdeild og hádeild (PDF)', '#papir');
   add('Skapa saman', TAGC.fo, 'Jólabókin hjá flokkinum', 'Prentið forsíðuna og ørkini á A4 og savnið síðurnar til eina felags jólabók', '#jolabok');
   add('Felags uppgáva', TAGC.kal, 'Jólasøgan, sum ferðast', 'Hádeildin skrivar, miðdeildin lesur upp, og grunddeildin teknar', '#saman');
   var q = root.querySelector('#jx-q'), res = root.querySelector('#jx-res'), clr = root.querySelector('#jx-q-clear');
