@@ -140,7 +140,7 @@
 .kv-tag code{font-size:14px;background:var(--w);border:1.5px solid var(--line);white-space:nowrap}
 .kv-tag span{line-height:1.45}
 
-/* ---- ritilin (Kanna koturnar) ---- */
+/* ---- ritilin (Kanna kodurnar) ---- */
 .kv-lab{background:var(--w);border:2px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);margin-top:clamp(22px,3vw,30px)}
 /* ikki overflow:hidden á .kv-lab – tá teknar kagin ikki altíð úrslitið í rammuni; hornini verða rundaði á innara partinum */
 .kv-lab__bar{border-radius:16px 16px 0 0}
@@ -351,7 +351,7 @@
 .kv-lab__ask .kv-btn{min-height:38px}
 
 
-/* ---- Kotukortið: kotan og síðan lið um lið ---- */
+/* ---- Kodukortið: kodan og síðan lið um lið ---- */
 .kv-kort{margin:clamp(6px,1vw,10px) 0 clamp(26px,3.5vw,40px);background:var(--w);border:2px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);overflow:hidden;color:var(--ink)}
 .kv-kort__bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;border-bottom:2px solid var(--ink);background:var(--yel2)}
 .kv-kort__bar strong{font:800 16px/1.2 Fraunces,serif;margin-right:auto}

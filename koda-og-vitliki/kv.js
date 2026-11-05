@@ -1,7 +1,7 @@
 
-/* ---- einstakar síður: leinkjur, ramman á Snar (/kota-og-vitliki/kotuskulin#stig-N) og aftur til hubbin ---- */
-/* SNAR_ORIGIN: Snar-síðan, sum allar aftur-leinkjur fara til. SKIFT TIL https://snar.fo, TÁ IÐ SNARDEV VERÐUR UMDOYPT. */
-var KV_SNAR={origin:'https://snardev.ctrl.fo',hub:'/temasavn/nattura-og-visindi/kota-og-vitliki',skuli:'/kota-og-vitliki/kotuskulin'};
+/* ---- einstakar síður: leinkjur, ramman á Snar (/temasavn/nattura-og-visindi/koda-og-vitliki/koduskulin#stig-N) og aftur til hubbin ---- */
+/* SNAR_ORIGIN: Snar-síðan, sum allar aftur-leinkjur fara til. */
+var KV_SNAR={origin:'https://snar.fo',hub:'/temasavn/nattura-og-visindi/koda-og-vitliki',skuli:'/temasavn/nattura-og-visindi/koda-og-vitliki/koduskulin'};
 (function(){
  var framed=window.top!==window;
  var here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
@@ -21,9 +21,9 @@ var KV_SNAR={origin:'https://snardev.ctrl.fo',hub:'/temasavn/nattura-og-visindi/
  if(m&&m[1]!==here)location.replace(m[1]+'.html');
 })();
 (function(){var b=document.querySelector('[data-kv-source]');if(!b)return;var box=document.querySelector('[data-kv-source-box]'),pre=document.querySelector('[data-kv-source-pre]'),got=false;
- b.addEventListener('click',function(){if(!box.hidden){box.hidden=true;b.lastChild.textContent='Vís kotuna aftan fyri síðuna';return;}
-  box.hidden=false;b.lastChild.textContent='Fjal kotuna';if(got)return;pre.textContent='Heinti kotuna …';
-  fetch(location.pathname,{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){got=true;pre.textContent=t;}).catch(function(){pre.textContent='Kundi ikki heinta kotuna. Royn at høgraklikkja á síðuna og velja «Vís kelduna á rammuni».';});});})();
+ b.addEventListener('click',function(){if(!box.hidden){box.hidden=true;b.lastChild.textContent='Vís koduna aftan fyri síðuna';return;}
+  box.hidden=false;b.lastChild.textContent='Fjal koduna';if(got)return;pre.textContent='Heinti koduna …';
+  fetch(location.pathname,{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){got=true;pre.textContent=t;}).catch(function(){pre.textContent='Kundi ikki heinta koduna. Royn at høgraklikkja á síðuna og velja «Vís kelduna á rammuni».';});});})();
 window.kvPageLinks=function(){
  var framed=window.top!==window,at=KV_SNAR.at;
  var here=(location.pathname.split('/').pop()||'index.html').replace(/\.html$/,'')||'index';
@@ -77,7 +77,7 @@ window.kvPageLinks=function(){
  var URIS={};Object.keys(SVGS).forEach(function(k){URIS[k]='data:image/svg+xml;utf8,'+encodeURIComponent(SVGS[k]);});
  function withPics(code){return code.replace(/(src\s*=\s*["'])(mynd[1-6]\.png)(["'])/gi,function(m,a,n,b){return a+(URIS[n.toLowerCase()]||n)+b;});}
 
- /* ---------------------------------------------------------------- kotulitir í dømunum */
+ /* ---------------------------------------------------------------- kodulitir í dømunum */
  function hl(src){return esc(src).replace(/(&lt;!--[\s\S]*?--&gt;)|(\/\*[\s\S]*?\*\/|\/\/[^\n]*)|(&lt;\/?)([a-zA-Z][\w-]*)([^&]*?)(\/?&gt;)|("[^"]*")|(\b(?:function|var|let|const|return|if|else|document|window)\b)|(\b\d+(?:\.\d+)?(?:px|%|em|rem|s)?\b)/g,function(m,cm,cm2,lt,tag,attrs,gt,str,kw,num){
   if(cm||cm2)return '<span class="c">'+(cm||cm2)+'</span>';
   if(lt)return lt+'<span class="t">'+tag+'</span>'+attrs.replace(/([\w-]+)(=)("[^"]*")/g,'<span class="a">$1</span>$2<span class="s">$3</span>')+gt;
@@ -86,7 +86,7 @@ window.kvPageLinks=function(){
   if(num)return '<span class="n">'+num+'</span>';return m;});}
  $$('.kv-code[data-hl]').forEach(function(el){var small=el.querySelector('small'),label=small?small.outerHTML:'';if(small)small.remove();var txt=el.textContent.replace(/^\n/,'');el.innerHTML=label+hl(txt);el.setAttribute('data-src',txt);});
  /* «Royn í ritlinum»: hvørt lítla dømið kann koyrast í ritlinum í stiginum (w3schools-leistur) */
- function wrapSnippet(t){if(/<html[\s>]/i.test(t))return t;var st='',rest=t.replace(/<style[^>]*>[\s\S]*?<\/style>/gi,function(m){st+='    '+m.replace(/\n/g,'\n    ')+'\n';return '';}).trim();if(!rest&&st)rest='<h1>Yvirskrift</h1>\n<p>Hetta er eitt tekstbrot. Broyt CSS-reglurnar og trýst á Koyr.</p>';else if(!/<[a-z][\s\S]*>/i.test(rest))rest='<p id="svar">Trýst á knøttin.</p>\n<button onclick="royn()">Royn</button>\n<script>\nfunction royn() {\n'+rest.replace(/^/gm,'  ')+'\n}\n<\/script>';return '<!DOCTYPE html>\n<html lang="fo">\n  <head>\n    <title>Royn kotuna</title>\n'+st+'  </head>\n  <body>\n'+rest.replace(/^/gm,'    ')+'\n  </body>\n</html>';}
+ function wrapSnippet(t){if(/<html[\s>]/i.test(t))return t;var st='',rest=t.replace(/<style[^>]*>[\s\S]*?<\/style>/gi,function(m){st+='    '+m.replace(/\n/g,'\n    ')+'\n';return '';}).trim();if(!rest&&st)rest='<h1>Yvirskrift</h1>\n<p>Hetta er eitt tekstbrot. Broyt CSS-reglurnar og trýst á Koyr.</p>';else if(!/<[a-z][\s\S]*>/i.test(rest))rest='<p id="svar">Trýst á knøttin.</p>\n<button onclick="royn()">Royn</button>\n<script>\nfunction royn() {\n'+rest.replace(/^/gm,'  ')+'\n}\n<\/script>';return '<!DOCTYPE html>\n<html lang="fo">\n  <head>\n    <title>Royn koduna</title>\n'+st+'  </head>\n  <body>\n'+rest.replace(/^/gm,'    ')+'\n  </body>\n</html>';}
  $$('.kv-stig .kv-code[data-hl]').forEach(function(el){var sec=el.closest('.kv-stig'),id='s'+sec.getAttribute('data-stig');var b=document.createElement('button');b.type='button';b.className='kv-try';b.innerHTML='<svg aria-hidden="true"><use href="#kv-i-play"/></svg>Royn í ritlinum';el.classList.add('has-try');el.appendChild(b);
   b.addEventListener('click',function(){var lab=labs[id];if(!lab)return;function go(){lab.ta.value=wrapSnippet(el.getAttribute('data-src'));state.code[id]=lab.ta.value;save();lab.run(true);lab.host.scrollIntoView({behavior:reduce.matches?'auto':'smooth',block:'start'});}if(lab.ta.value!==lab.start){lab.host.scrollIntoView({behavior:reduce.matches?'auto':'smooth',block:'start'});kvAsk(lab.host,'Vilt tú seta dømið í ritilin? Tað, tú hevur skrivað har, fer burtur.','Ja, set dømið inn',go);}else go();});});
 
@@ -94,13 +94,13 @@ window.kvPageLinks=function(){
  function kvAsk(host,text,yes,onYes){
   var old=host.querySelector('.kv-lab__ask');if(old)old.remove();
   var box=document.createElement('div');box.className='kv-lab__ask';box.setAttribute('role','alertdialog');
-  box.innerHTML='<span><b>Snar sigur:</b> '+text+'</span><button type="button" class="kv-btn kv-btn--red kv-btn--sm" data-ja>'+yes+'</button><button type="button" class="kv-btn kv-btn--sm" data-nei>Nei, varðveit mína kotu</button>';
+  box.innerHTML='<span><b>Snar sigur:</b> '+text+'</span><button type="button" class="kv-btn kv-btn--red kv-btn--sm" data-ja>'+yes+'</button><button type="button" class="kv-btn kv-btn--sm" data-nei>Nei, varðveit mína kodu</button>';
   var bar=host.querySelector('.kv-lab__bar');bar.parentNode.insertBefore(box,bar.nextSibling);
   box.querySelector('[data-ja]').addEventListener('click',function(){box.remove();onYes();});
   box.querySelector('[data-nei]').addEventListener('click',function(){box.remove();});
   box.querySelector('[data-ja]').focus();
  }
- /* ---------------------------------------------------------------- ritilin (Kanna koturnar) */
+ /* ---------------------------------------------------------------- ritilin (Kanna kodurnar) */
  var labs={};
  var ERRJS='<script>window.addEventListener("error",function(e){try{parent.postMessage({kv:"err",id:"__ID__",m:String(e.message||e),l:e.lineno||0},"*")}catch(x){}});<\/script>';
  var KV_TOMT='<div style="font:600 16px/1.5 Arial,sans-serif;color:#5b6775;border:2px dashed #c9c1aa;border-radius:12px;padding:14px 16px;margin:16px;background:#fff"><b style="color:#1b2430">Síðan er tóm.</b> Tað, sum skal síggjast, skrivar tú inni í <code>&lt;body&gt;</code> – til dømis <code>&lt;h1&gt;Hey!&lt;/h1&gt;</code>. Trýst so á <b>Koyr</b>.</div>';
@@ -113,14 +113,14 @@ window.kvPageLinks=function(){
   host.className='kv-lab'+(big?' kv-lab--big':'');host.innerHTML=
    '<div class="kv-lab__bar"><strong><svg aria-hidden="true"><use href="#kv-i-code"/></svg>'+esc(title)+'</strong>'+
    '<button class="kv-btn kv-btn--red kv-btn--sm" type="button" data-run><svg aria-hidden="true"><use href="#kv-i-play"/></svg>Koyr</button>'+
-   '<button class="kv-btn kv-btn--sm" type="button" data-dl title="Tak kotuna niður sum .html-fílu"><svg aria-hidden="true"><use href="#kv-i-down"/></svg>Tak niður fílu</button>'+
+   '<button class="kv-btn kv-btn--sm" type="button" data-dl title="Tak koduna niður sum .html-fílu"><svg aria-hidden="true"><use href="#kv-i-down"/></svg>Tak niður fílu</button>'+
    '<button class="kv-btn kv-btn--sm kv-btn--ico" type="button" data-lay title="Lið um lið / undir hvørjum øðrum" aria-label="Skift uppseting"><svg aria-hidden="true"><use href="#kv-i-stack"/></svg></button>'+
    '<button class="kv-btn kv-btn--sm kv-btn--ico" type="button" data-full title="Fullskíggi" aria-label="Fullskíggi"><svg aria-hidden="true"><use href="#kv-i-full"/></svg></button>'+
    '<button class="kv-btn kv-btn--sm" type="button" data-reset title="Fá dømið aftur"><svg aria-hidden="true"><use href="#kv-i-reset"/></svg>Byrja umaftur</button></div>'+
-   '<div class="kv-lab__work"><div class="kv-lab__pane kv-lab__pane--code"><div class="kv-lab__pt">Kota <span data-saved></span></div><textarea spellcheck="false" aria-label="Kota" placeholder="Skriva HTML-kotu her …"></textarea></div>'+
-   '<div class="kv-lab__pane"><div class="kv-lab__pt">Úrslit</div><iframe title="Úrslitið av kotuni" sandbox="allow-scripts allow-modals allow-forms"></iframe></div></div>'+
+   '<div class="kv-lab__work"><div class="kv-lab__pane kv-lab__pane--code"><div class="kv-lab__pt">Koda <span data-saved></span></div><textarea spellcheck="false" aria-label="Koda" placeholder="Skriva HTML-kodu her …"></textarea></div>'+
+   '<div class="kv-lab__pane"><div class="kv-lab__pt">Úrslit</div><iframe title="Úrslitið av koduni" sandbox="allow-scripts allow-modals allow-forms"></iframe></div></div>'+
    '<div class="kv-lab__msg" data-msg role="status"></div>'+
-   '<div class="kv-lab__hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> koyrir eisini. Kotan verður goymd í kaganum á hesi eindini.</div>';
+   '<div class="kv-lab__hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> koyrir eisini. Kodan verður goymd í kaganum á hesi eindini.</div>';
   var ta=$('textarea',host),fr=$('iframe',host),msg=$('[data-msg]',host),savedEl=$('[data-saved]',host),lay=$('[data-lay]',host);
   ta.value=(typeof saved==='string')?saved:start;
   if(big)ta.style.minHeight='460px';
@@ -137,7 +137,7 @@ window.kvPageLinks=function(){
   var FUNKA={f1:'Teljari',f2:'Tilvildarligur spurningur',f3:'Lítið kviss'},FSLUG={f1:'teljari',f2:'spurningur',f3:'kviss'};
   function slug(t){return String(t||'').toLowerCase().replace(/ð/g,'d').replace(/ø/g,'o').replace(/æ/g,'ae').replace(/[áà]/g,'a').replace(/í/g,'i').replace(/ó/g,'o').replace(/ú/g,'u').replace(/ý/g,'y').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
   $('[data-dl]',host).addEventListener('click',function(){
-   if(id[0]!=='f'){dlFile(withPics(ta.value),(id==='s8'?'min-heimasida':id==='sand'?'sandkassi':'kota-stig-'+id.slice(1))+'.html');return;}
+   if(id[0]!=='f'){dlFile(withPics(ta.value),(id==='s8'?'min-heimasida':id==='sand'?'sandkassi':'koda-stig-'+id.slice(1))+'.html');return;}
    var old=host.querySelector('.kv-lab__ask');if(old)old.remove();
    var nv=state.navn||{};var box=document.createElement('div');box.className='kv-lab__ask';
    box.innerHTML='<span><b>Snar sigur:</b> Skriva fornavn og flokk, so veit lærarin, hvør gjørdi funkuna. Bert fornavnið – ikki eftirnavnið.</span>'
@@ -148,7 +148,7 @@ window.kvPageLinks=function(){
    var fn=box.querySelector('[data-fn]'),fl=box.querySelector('[data-fl]');fn.value=nv.fornavn||'';fl.value=nv.flokkur||'';fn.focus();
    function go(){var f=fn.value.trim().split(/\s+/)[0]||'',k=fl.value.trim();if(!f||!k){(f?fl:fn).focus();return;}
     state.navn={fornavn:f,flokkur:k};save();box.remove();
-    var head='<!-- Funka: '+FUNKA[id]+' · Gjørd av: '+f.replace(/--/g,'-')+', '+k.replace(/--/g,'-')+' · Kota og vitlíki, Snar -->\n';
+    var head='<!-- Funka: '+FUNKA[id]+' · Gjørd av: '+f.replace(/--/g,'-')+', '+k.replace(/--/g,'-')+' · Koda og vitlíki, Snar -->\n';
     dlFile(head+withPics(ta.value),'funka-'+FSLUG[id]+'-'+slug(f)+'-'+slug(k)+'.html');}
    box.querySelector('[data-ja]').addEventListener('click',go);
    box.querySelector('[data-nei]').addEventListener('click',function(){box.remove();});
@@ -165,7 +165,7 @@ window.kvPageLinks=function(){
  var FS=function(){$$('.kv-lab').forEach(function(l){var u=$('[data-full] use',l);if(u)u.setAttribute('href','#kv-i-full');});};document.addEventListener('fullscreenchange',FS);
 
 
- /* ---------------------------------------------------------------- Kotukortið */
+ /* ---------------------------------------------------------------- Kodukortið */
  (function(){
   var INFO={
    doctype:['&lt;!DOCTYPE html&gt;','Sigur kaganum, at hetta er ein HTML-síða. Stendur altíð allar ovast og sæst ikki á síðuni.'],
@@ -239,7 +239,7 @@ window.kvPageLinks=function(){
    {t:'Ein talmerktur listi <code>&lt;ol&gt;</code> við minst tveimum <code>&lt;li&gt;</code>.',h:'<code>&lt;ol&gt;</code> virkar sum <code>&lt;ul&gt;</code>, men punktini fáa tøl. T.d. «Soleiðis geri eg …».',f:function(c){var o=part(body(c),'ol');return o&&count(/<li(\s|>)/gi,o)>=2;}}],
   s3:[
    {t:'Grundbygnaðurin er í lagi.',h:'<code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> og <code>&lt;body&gt;</code> skulu vera við.',f:structure},
-   {t:'Minst tvær myndir <code>&lt;img&gt;</code>.',h:'Legg eina <code>&lt;img&gt;</code> afturat. Trýst á eina av myndunum omanfyri fyri at kopiera kotuna.',f:function(c){return count(/<img(\s|>)/gi,body(c))>=2;}},
+   {t:'Minst tvær myndir <code>&lt;img&gt;</code>.',h:'Legg eina <code>&lt;img&gt;</code> afturat. Trýst á eina av myndunum omanfyri fyri at kopiera koduna.',f:function(c){return count(/<img(\s|>)/gi,body(c))>=2;}},
    {t:'Allar myndirnar hava eitt <code>src</code>, sum finst (mynd1.png … mynd6.png).',h:'Skriva <code>src="mynd2.png"</code> ella eina aðra av seks myndunum.',f:function(c){var imgs=body(c).match(/<img\b[^>]*>/gi)||[];return imgs.length>0&&imgs.every(function(i){return /\bsrc\s*=\s*["']mynd[1-6]\.png["']/i.test(i);});}},
    {t:'Allar myndirnar hava ein alt-tekst, sum sigur, hvat tær vísa.',h:'Hvør <code>&lt;img&gt;</code> skal hava <code>alt="…"</code> við teksti – og ikki bert «Ein seyður» á teimum øllum.',f:function(c){var imgs=body(c).match(/<img\b[^>]*>/gi)||[],alts=imgs.map(function(i){var m=i.match(/\balt\s*=\s*["']([^"']*)["']/i);return m?m[1].trim():'';});return imgs.length>0&&alts.every(function(a){return a.length>2;})&&alts.some(function(a){return a!=='Ein seyður';});}},
    {t:'Minst tvær leinkjur <code>&lt;a href="…"&gt;</code> við teksti.',h:'Legg eina leinkju afturat, t.d. til <code>https://nam.fo</code>. Teksturin ímillum merkini er tað, sum brúkarin trýstir á.',f:function(c){var as=body(c).match(/<a\b[^>]*href\s*=\s*["'][^"']+["'][^>]*>[\s\S]*?<\/a>/gi)||[];return as.length>=2&&as.every(function(a){return a.replace(/<[^>]+>/g,'').trim().length>0;});}},
@@ -264,7 +264,7 @@ window.kvPageLinks=function(){
    {t:'Minst tvær funktiónir <code>function</code> í <code>&lt;script&gt;</code>.',h:'Ger eina nýggja funktión: <code>function skift() { … }</code>. Navnið skal vera tað sama sum í <code>onclick</code>.',f:function(c){return count(/function\s+[\w$]+\s*\(/g,part(c,'script'))>=2;}},
    {t:'Teksturin, sum kemur fram, er broyttur.',h:'Broyt tekstin «Hey! Tú hevur trýst á knøttin!» í funktiónini til okkurt annað.',f:function(c){var s=part(c,'script');return /textContent\s*=/.test(s)&&!/Hey! Tú hevur trýst á knøttin!/.test(s);}},
    {t:'Ein funktión broytir ein lit við <code>style</code>.',h:'T.d. <code>document.body.style.backgroundColor = "pink";</code>',f:function(c){return /\.style\.(backgroundColor|color|background)\s*=/.test(part(c,'script'));}},
-   {t:'Kotan koyrir uttan villur.',h:'Trýst á <b>Koyr</b> og les villuboðið undir úrslitinum, um eitt kemur. Er funktiónsnavnið stavað eins í <code>onclick</code> og í <code>function</code>?',f:function(c){return noErr('s6');}}],
+   {t:'Kodan koyrir uttan villur.',h:'Trýst á <b>Koyr</b> og les villuboðið undir úrslitinum, um eitt kemur. Er funktiónsnavnið stavað eins í <code>onclick</code> og í <code>function</code>?',f:function(c){return noErr('s6');}}],
   s7:[
    {t:'Heitið í <code>&lt;title&gt;</code> er á føroyskum.',h:'«Min side om hunde» er danskt. Skriva t.d. «Mín síða um hundar».',f:function(c){var t=inner(c,'title');return t&&!/min side|hunde/i.test(t);}},
    {t:'Yvirskriftin verður latin aftur við <code>&lt;/h1&gt;</code> – ikki <code>&lt;/h2&gt;</code>.',h:'Vitlíkið lat <code>&lt;h1&gt;</code> aftur við skeivum merki. Byrjanarmerki og endamerki skulu vera eins.',f:function(c){var b=body(c);return /<h1[^>]*>[\s\S]*?<\/h1>/i.test(b)&&closed(b,'h1')&&count(/<\/h2>/gi,b)===count(/<h2(\s|>)/gi,b);}},
@@ -281,24 +281,24 @@ window.kvPageLinks=function(){
    {t:'Ein mynd við alt-teksti.',h:'Brúka eina av myndunum í stigi 3, ella eina egna.',f:function(c){return /<img\b[^>]*alt\s*=\s*["'][^"']{3,}["']/i.test(body(c))&&/<img\b[^>]*src\s*=\s*["'][^"']+["']/i.test(body(c));}},
    {t:'CSS við minst trimum reglum.',h:'Legg reglur afturat fyri t.d. <code>h1</code>, <code>p</code> og ein kassa.',f:function(c){return count(/\{/g,part(c,'style'))>=3;}},
    {t:'Ein knøttur við <code>onclick</code> og ein funktión, sum brúkar <code>getElementById</code>.',h:'Hygg at stigi 6: knøttur, funktión og eitt element við id.',f:function(c){return /<button\b[^>]*onclick\s*=/i.test(body(c))&&/function\s+[\w$]+\s*\(/.test(part(c,'script'))&&/getElementById/.test(part(c,'script'));}},
-   {t:'Viðmerkingar í kotuni siga, hvat tú sjálv ella sjálvur skrivaði, og hvat kom frá vitlíkinum.',h:'Skriva t.d. <code>&lt;!-- Hetta skrivaði eg sjálv/ur --&gt;</code> ella <code>&lt;!-- Frá SkoleGPT – kannað av mær --&gt;</code> í kotuna.',f:function(c){var cm=c.match(/<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*/g)||[];return cm.some(function(x){return /(\beg\b|\bmær\b|\bmín|\bmítt\b|sjálv|vitlík|skolegpt|\bAI\b)/i.test(x);});}}]
+   {t:'Viðmerkingar í koduni siga, hvat tú sjálv ella sjálvur skrivaði, og hvat kom frá vitlíkinum.',h:'Skriva t.d. <code>&lt;!-- Hetta skrivaði eg sjálv/ur --&gt;</code> ella <code>&lt;!-- Frá SkoleGPT – kannað av mær --&gt;</code> í koduna.',f:function(c){var cm=c.match(/<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*/g)||[];return cm.some(function(x){return /(\beg\b|\bmær\b|\bmín|\bmítt\b|sjálv|vitlík|skolegpt|\bAI\b)/i.test(x);});}}]
  };
- var BADGENAME={s1:'Kotubyrjari',s2:'Tekstmeistari',s3:'Myndasmiður',s4:'Litameistari',s5:'Byggimeistari',s6:'Forritari',s7:'Kritiskur hugsari',s8:'Heimasíðusmiður',f1:'',f2:'',f3:''};
+ var BADGENAME={s1:'Kodubyrjari',s2:'Tekstmeistari',s3:'Myndasmiður',s4:'Litameistari',s5:'Byggimeistari',s6:'Forritari',s7:'Kritiskur hugsari',s8:'Heimasíðusmiður',f1:'',f2:'',f3:''};
  function renderChecks(id,results){var ol=$('[data-checks="'+id+'"]');if(!ol)return;ol.innerHTML=CHECKS[id].map(function(ch,i){var r=results?results[i]:null;return '<li class="'+(r===true?'ok':r===false?'no':'')+'"><span>'+ch.t+(r===false?'<small>Prei: '+ch.h+'</small>':'')+'</span></li>';}).join('');}
- Object.keys(CHECKS).forEach(function(id){renderChecks(id,null);var done=$('[data-done="'+id+'"]');if(done&&state.done[id]){done.hidden=false;done.innerHTML='Liðugt! Tú hevur steypið <b>'+BADGENAME[id]+'</b>. Tú kanst framvegis broyta kotuna og kanna umaftur.';}});
+ Object.keys(CHECKS).forEach(function(id){renderChecks(id,null);var done=$('[data-done="'+id+'"]');if(done&&state.done[id]){done.hidden=false;done.innerHTML='Liðugt! Tú hevur steypið <b>'+BADGENAME[id]+'</b>. Tú kanst framvegis broyta koduna og kanna umaftur.';}});
  $$('[data-check]').forEach(function(btn){btn.addEventListener('click',function(){var id=btn.getAttribute('data-check'),lab=labs[id];if(!lab)return;var code=lab.ta.value;if(lab.lastRun!==code)lab.run(false);
   var res=CHECKS[id].map(function(ch){try{return !!ch.f(code);}catch(e){return false;}});renderChecks(id,res);
   var all=res.every(Boolean),done=$('[data-done="'+id+'"]'),n=res.filter(Boolean).length;
   if(all){done.hidden=false;if(!state.done[id]){state.done[id]=true;save();done.innerHTML=BADGENAME[id]?'Liðugt! Tú hevur fingið steypið <b>'+BADGENAME[id]+'</b>. Hygg í skápið – ella far víðari til næsta stig.':'Liðugt! Funkan riggar. Lat nú ein annan royna hana.';award(id);if(id[0]==='f'&&state.done.f1&&state.done.f2&&state.done.f3&&!state.special.x6){state.special.x6=true;save();setTimeout(function(){award('x6');},1800);}if(id==='s7'&&!state.special.x3){state.special.x3=true;save();setTimeout(function(){award('x3');},2200);}
     if(doneCount()===8&&!state.special.x5){state.special.x5=true;save();setTimeout(function(){award('x5');},id==='s7'?4400:2200);}refresh();}
    else done.innerHTML='Framvegis liðugt – '+n+' av '+res.length+' punktum eru grøn.';}
-  else{done.hidden=false;done.style.background='#fff4e0';done.style.borderColor='#e3a21a';done.innerHTML=n+' av '+res.length+' punktum eru grøn. Les preiini við teimum gulu, rætta kotuna og kanna umaftur.';}
+  else{done.hidden=false;done.style.background='#fff4e0';done.style.borderColor='#e3a21a';done.innerHTML=n+' av '+res.length+' punktum eru grøn. Les preiini við teimum gulu, rætta koduna og kanna umaftur.';}
   if(all){done.style.background='';done.style.borderColor='';}});});
 
  /* ---------------------------------------------------------------- kviss */
  var QUIZ={
   s1:[{q:'Hvat er HTML?',a:['Eitt merkingarmál, sum sigur kaganum, hvat er á síðuni','Eitt myndaforrit','Ein app til at skriva teldupost'],ok:0,fb:'HTML skipar innihaldið á síðuni: yvirskriftir, tekst, myndir og listar.'},
-      {q:'Hvat ger <code>&lt;!DOCTYPE html&gt;</code>?',a:['Sigur kaganum, at skjalið er HTML5','Vísir eina mynd','Ger allan tekstin reyðan'],ok:0,fb:'Tað stendur altíð ovast og sigur kaganum, hvussu kotan skal lesast.'},
+      {q:'Hvat ger <code>&lt;!DOCTYPE html&gt;</code>?',a:['Sigur kaganum, at skjalið er HTML5','Vísir eina mynd','Ger allan tekstin reyðan'],ok:0,fb:'Tað stendur altíð ovast og sigur kaganum, hvussu kodan skal lesast.'},
       {q:'Hvar stendur tað, sum sæst á síðuni?',a:['Í <code>&lt;body&gt;</code>','Í <code>&lt;head&gt;</code>','Í <code>&lt;title&gt;</code>'],ok:0,fb:'Alt, sum brúkarin sær, stendur í body. Í head standa upplýsingar um síðuna.'}],
   s2:[{q:'Hvørt merki brúka vit til størstu yvirskriftina?',a:['<code>&lt;h1&gt;</code>','<code>&lt;h6&gt;</code>','<code>&lt;p&gt;</code>'],ok:0,fb:'Á hesi síðuni brúka vit h1 til høvuðsyvirskriftina og CSS til at broyta støddina.'},
       {q:'Hvat er <code>&lt;li&gt;</code>?',a:['Ein punktur í einum lista','Ein leinkja','Ein lítil yvirskrift'],ok:0,fb:'li = list item. Tað stendur inni í ul ella ol.'},
@@ -325,7 +325,7 @@ window.kvPageLinks=function(){
       {q:'Hvat brúkar tú <code>&lt;ul&gt;</code> og <code>&lt;li&gt;</code> til?',a:['Ein lista við prikkum','Eina mynd','Eina yvirskrift'],ok:0,fb:'ul = unordered list, li = list item.'},
       {q:'Hvat ger <code>border-radius: 12px</code>?',a:['Rund horn','Ein skuggi','Størri skrift'],ok:0,fb:'box-shadow gevur skugga, font-size gevur størri skrift.'},
       {q:'Hvat ger <code>onclick="heilsa()"</code>?',a:['Koyrir funktiónina heilsa, tá ið brúkarin trýstir','Ger ein knøtt reyðan','Strikar funktiónina'],ok:0,fb:'onclick knýtir knøttin at funktiónini.'},
-      {q:'Hvat er týdningarmest, tá ið tú fært hjálp frá vitlíki við kotuni?',a:['At eg lesi, skilji og kanni kotuna','At kotan er long','At eg kopieri alt'],ok:0,fb:'Vitlíki kann hjálpa tær, men tú skalt sjálv ella sjálvur skilja og kanna kotuna.'}]
+      {q:'Hvat er týdningarmest, tá ið tú fært hjálp frá vitlíki við koduni?',a:['At eg lesi, skilji og kanni koduna','At kodan er long','At eg kopieri alt'],ok:0,fb:'Vitlíki kann hjálpa tær, men tú skalt sjálv ella sjálvur skilja og kanna koduna.'}]
  };
  function starSvg(n,max){var s='<span class="kv-stars" aria-label="'+n+' av '+max+'">';for(var i=0;i<max;i++)s+='<svg viewBox="0 0 24 24" fill="'+(i<n?'#e5b50a':'#d9d2bf')+'" aria-hidden="true"><use href="#kv-star"/></svg>';return s+'</span>';}
  function mountQuiz(card){var id=card.getAttribute('data-quiz'),qs=QUIZ[id],bodyEl=$('[data-quiz-body]',card),idx=0,score=0,order=[];
@@ -377,7 +377,7 @@ window.kvPageLinks=function(){
   {t:'Teljari',s:'Ein knøttur telur upp',c:'<!DOCTYPE html>\n<html lang="fo">\n<head>\n  <title>Teljari</title>\n  <style>\n    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; background: #f6f3ea; }\n    #tal { font-size: 80px; font-weight: bold; color: #2457d6; }\n    button { font-size: 20px; padding: 10px 24px; border-radius: 999px; border: 3px solid black; background: #ffc93c; cursor: pointer; margin: 6px; }\n  </style>\n</head>\n<body>\n  <h1>Hvussu ofta kanst tú trýsta?</h1>\n  <p id="tal">0</p>\n  <button onclick="upp()">+1</button>\n  <button onclick="nulla()">Byrja umaftur</button>\n  <script>\n    var tal = 0;\n    function upp() {\n      tal = tal + 1;\n      document.getElementById("tal").textContent = tal;\n    }\n    function nulla() {\n      tal = 0;\n      document.getElementById("tal").textContent = tal;\n    }\n  <\/script>\n</body>\n</html>'},
   {t:'Mini-framsýning',s:'Tríggir knøttar skifta tekstin',c:'<!DOCTYPE html>\n<html lang="fo">\n<head>\n  <title>Djór í Føroyum</title>\n  <style>\n    body { font-family: Arial, sans-serif; padding: 30px; background: #dff1fb; }\n    .kort { background: white; border: 3px solid black; border-radius: 16px; padding: 20px; max-width: 420px; box-shadow: 6px 6px 0 black; }\n    button { font-size: 16px; padding: 8px 16px; border-radius: 999px; border: 2px solid black; background: #ffc93c; cursor: pointer; margin: 4px; }\n  </style>\n</head>\n<body>\n  <h1>Vel eitt djór</h1>\n  <button onclick="vis(\'lundi\')">Lundi</button>\n  <button onclick="vis(\'seydur\')">Seyður</button>\n  <button onclick="vis(\'grind\')">Grindahvalur</button>\n  <div class="kort">\n    <h2 id="heiti">Trýst á ein knøtt</h2>\n    <p id="tekstur">Her kemur eitt fakta.</p>\n    <img id="mynd" src="mynd2.png" alt="Djór" width="160">\n  </div>\n  <script>\n    var fakta = {\n      lundi: ["Lundin", "Lundin kann kava 60 metrar niður eftir fiski.", "mynd2.png"],\n      seydur: ["Seyðurin", "Í Føroyum eru um 70.000 seyðir – fleiri enn fólk.", "mynd1.png"],\n      grind: ["Grindahvalurin", "Grindahvalurin er í roynd og veru ein stór delfin.", "mynd3.png"]\n    };\n    function vis(navn) {\n      document.getElementById("heiti").textContent = fakta[navn][0];\n      document.getElementById("tekstur").textContent = fakta[navn][1];\n      document.getElementById("mynd").src = fakta[navn][2];\n    }\n  <\/script>\n</body>\n</html>'},
   {t:'Ein tilvildarlig upplýsing',s:'Math.random velur eitt fakta',c:'<!DOCTYPE html>\n<html lang="fo">\n<head>\n  <title>Visti tú?</title>\n  <style>\n    body { font-family: Georgia, serif; text-align: center; padding: 40px; background: #14213d; color: white; }\n    #fakta { font-size: 24px; min-height: 60px; }\n    button { font-size: 18px; padding: 10px 24px; border-radius: 999px; border: 0; background: #ffc93c; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <h1>Visti tú?</h1>\n  <p id="fakta">Trýst á knøttin!</p>\n  <button onclick="nytt()">Nýtt fakta</button>\n  <script>\n    var fakta = [\n      "Føroyar hava 18 oyggjar.",\n      "Tað eru fleiri seyðir enn fólk í Føroyum.",\n      "Slættaratindur er 880 metrar høgur.",\n      "Lundin kann liva í 30 ár."\n    ];\n    function nytt() {\n      var tal = Math.floor(Math.random() * fakta.length);\n      document.getElementById("fakta").textContent = fakta[tal];\n    }\n  <\/script>\n</body>\n</html>'},
-  {t:'Hundurin telur til jóla',s:'Fyrsta JavaScript-kotan á Snar (2009), skrivað umaftur',c:'<!DOCTYPE html>\n<html lang="fo">\n<head>\n  <meta charset="utf-8">\n  <title>Hvussu leingi er til jóla?</title>\n  <style>\n    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; background: #14213d; color: white; }\n    .hundur { font-size: 90px; }\n    #dagar { font-size: 34px; font-weight: bold; color: #ffc93c; }\n  </style>\n</head>\n<body>\n  <div class="hundur">🐶</div>\n  <h1>Hvussu leingi er til jóla?</h1>\n  <p id="dagar"></p>\n  <script>\n    // Hundurin telur dagarnar til jólaaftan\n    var nu = new Date();\n    var jol = new Date(nu.getFullYear(), 11, 24);\n    if (nu > jol) {\n      jol = new Date(nu.getFullYear() + 1, 11, 24);\n    }\n    var dagar = Math.ceil((jol - nu) / (1000 * 60 * 60 * 24));\n    document.getElementById("dagar").textContent = dagar + " dagar til jólaaftan!";\n  <\/script>\n</body>\n</html>'},
+  {t:'Hundurin telur til jóla',s:'Fyrsta JavaScript-kodan á Snar (2009), skrivað umaftur',c:'<!DOCTYPE html>\n<html lang="fo">\n<head>\n  <meta charset="utf-8">\n  <title>Hvussu leingi er til jóla?</title>\n  <style>\n    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; background: #14213d; color: white; }\n    .hundur { font-size: 90px; }\n    #dagar { font-size: 34px; font-weight: bold; color: #ffc93c; }\n  </style>\n</head>\n<body>\n  <div class="hundur">🐶</div>\n  <h1>Hvussu leingi er til jóla?</h1>\n  <p id="dagar"></p>\n  <script>\n    // Hundurin telur dagarnar til jólaaftan\n    var nu = new Date();\n    var jol = new Date(nu.getFullYear(), 11, 24);\n    if (nu > jol) {\n      jol = new Date(nu.getFullYear() + 1, 11, 24);\n    }\n    var dagar = Math.ceil((jol - nu) / (1000 * 60 * 60 * 24));\n    document.getElementById("dagar").textContent = dagar + " dagar til jólaaftan!";\n  <\/script>\n</body>\n</html>'},
   {t:'Dagur og nátt',s:'Ein knøttur skiftir tema',c:'<!DOCTYPE html>\n<html lang="fo">\n<head>\n  <title>Dagur og nátt</title>\n  <style>\n    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; background: #bfe3f7; color: #1b2430; transition: background 0.6s, color 0.6s; }\n    button { font-size: 18px; padding: 10px 24px; border-radius: 999px; border: 3px solid #1b2430; background: #ffc93c; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <h1 id="heiti">Góðan dag!</h1>\n  <button onclick="skift()">Skift</button>\n  <script>\n    var natt = false;\n    function skift() {\n      natt = !natt;\n      document.body.style.backgroundColor = natt ? "#14213d" : "#bfe3f7";\n      document.body.style.color = natt ? "white" : "#1b2430";\n      document.getElementById("heiti").textContent = natt ? "Góða nátt!" : "Góðan dag!";\n    }\n  <\/script>\n</body>\n</html>'}];
  (function(){var box=$('[data-kv-examples]');if(!box)return;box.innerHTML=EX.map(function(e,i){return '<article><h3>'+e.t+'</h3><small>'+e.s+'</small><div class="kv-ex__pre">'+esc(e.c)+'</div><div class="kv-task__btns" style="margin-top:4px"><button class="kv-btn kv-btn--red kv-btn--sm" type="button" data-ex="'+i+'">Set í ritilin</button><button class="kv-btn kv-btn--sm" type="button" data-ex-copy="'+i+'">Kopiera</button></div></article>';}).join('');
   $$('[data-ex]',box).forEach(function(b){b.addEventListener('click',function(){var lab=labs.sand;if(!lab)return;lab.ta.value=EX[+b.getAttribute('data-ex')].c;state.code.sand=lab.ta.value;save();lab.run(true);lab.host.scrollIntoView({behavior:reduce.matches?'auto':'smooth',block:'start'});});});
@@ -385,9 +385,9 @@ window.kvPageLinks=function(){
 
  /* ---------------------------------------------------------------- steyp, toast, konfetti */
  var TROPHIES=[
-  {id:'s1',sym:'kv-b1',n:'Kotubyrjari',how:'Ger uppgávuna í stigi 1'},{id:'s2',sym:'kv-b2',n:'Tekstmeistari',how:'Ger uppgávuna í stigi 2'},{id:'s3',sym:'kv-b3',n:'Myndasmiður',how:'Ger uppgávuna í stigi 3'},{id:'s4',sym:'kv-b4',n:'Litameistari',how:'Ger uppgávuna í stigi 4'},
-  {id:'s5',sym:'kv-b5',n:'Byggimeistari',how:'Ger uppgávuna í stigi 5'},{id:'s6',sym:'kv-b6',n:'Forritari',how:'Ger uppgávuna í stigi 6'},{id:'s7',sym:'kv-b7',n:'Kritiskur hugsari',how:'Finn og rætta villurnar í kotuni á stigi 7'},{id:'s8',sym:'kv-b8',n:'Heimasíðusmiður',how:'Ger tína egnu heimasíðu í stigi 8'},
-  {id:'x1',sym:'kv-x1',n:'Fyrsta koyringin',how:'Trýst á Koyr fyrstu ferðina'},{id:'x2',sym:'kv-x2',n:'Kvissmeistari',how:'Svara øllum átta kanningunum heilt rætt'},{id:'x3',sym:'kv-x3',n:'Villufinnari',how:'Finn allar villurnar í kotuni (stig 7)'},{id:'x4',sym:'kv-x4',n:'Trygdarvørður',how:'Svara øllum rætt í «Er tað í lagi at skriva hetta til SkoleGPT?»'},{id:'x5',sym:'kv-x5',n:'Gullsteypið',how:'Klára øll átta stigini'},{id:'x6',sym:'kv-x6',n:'Funkusmiður',how:'Ger allar tríggjar funkurnar í Funkusmiðjuni'}];
+  {id:'s1',sym:'kv-b1',n:'Kodubyrjari',how:'Ger uppgávuna í stigi 1'},{id:'s2',sym:'kv-b2',n:'Tekstmeistari',how:'Ger uppgávuna í stigi 2'},{id:'s3',sym:'kv-b3',n:'Myndasmiður',how:'Ger uppgávuna í stigi 3'},{id:'s4',sym:'kv-b4',n:'Litameistari',how:'Ger uppgávuna í stigi 4'},
+  {id:'s5',sym:'kv-b5',n:'Byggimeistari',how:'Ger uppgávuna í stigi 5'},{id:'s6',sym:'kv-b6',n:'Forritari',how:'Ger uppgávuna í stigi 6'},{id:'s7',sym:'kv-b7',n:'Kritiskur hugsari',how:'Finn og rætta villurnar í koduni á stigi 7'},{id:'s8',sym:'kv-b8',n:'Heimasíðusmiður',how:'Ger tína egnu heimasíðu í stigi 8'},
+  {id:'x1',sym:'kv-x1',n:'Fyrsta koyringin',how:'Trýst á Koyr fyrstu ferðina'},{id:'x2',sym:'kv-x2',n:'Kvissmeistari',how:'Svara øllum átta kanningunum heilt rætt'},{id:'x3',sym:'kv-x3',n:'Villufinnari',how:'Finn allar villurnar í koduni (stig 7)'},{id:'x4',sym:'kv-x4',n:'Trygdarvørður',how:'Svara øllum rætt í «Er tað í lagi at skriva hetta til SkoleGPT?»'},{id:'x5',sym:'kv-x5',n:'Gullsteypið',how:'Klára øll átta stigini'},{id:'x6',sym:'kv-x6',n:'Funkusmiður',how:'Ger allar tríggjar funkurnar í Funkusmiðjuni'}];
  function won(t){return t.id[0]==='s'?!!state.done[t.id]:!!state.special[t.id];}
  var toast=$('[data-kv-toast]'),toastTimer;
  function award(id){var t=TROPHIES.filter(function(x){return x.id===id;})[0];if(!t)return;toast.innerHTML='<svg aria-hidden="true"><use href="#'+t.sym+'"/></svg><div><small>Nýtt steyp!</small><b>'+t.n+'</b><small>'+t.how+'</small></div>';toast.classList.add('is-on');clearTimeout(toastTimer);toastTimer=setTimeout(function(){toast.classList.remove('is-on');},5000);confetti();}
@@ -415,7 +415,7 @@ window.kvPageLinks=function(){
  window.addEventListener('beforeprint',printHead);
  var pr=$('[data-kv-print]');if(pr)pr.addEventListener('click',function(){printHead();window.print();});
  (function(){var b=$('[data-kv-reset]'),armed=false,t;if(!b)return;b.addEventListener('click',function(){if(!armed){armed=true;b.textContent='Ja, strika alt?';b.style.background='#ef2418';b.style.borderColor='#ef2418';t=setTimeout(function(){armed=false;b.textContent='Nullstilla alt';b.style.background='';b.style.borderColor='';},4000);return;}
-  clearTimeout(t);state={done:{},quiz:{},special:{},code:{},tried:{}};try{localStorage.removeItem(KEY);}catch(e){}Object.keys(labs).forEach(function(id){labs[id].ta.value=labs[id].start;labs[id].run(false);});Object.keys(CHECKS).forEach(function(id){renderChecks(id,null);var d=$('[data-done="'+id+'"]');if(d)d.hidden=true;});$$('[data-quiz]').forEach(mountQuiz);refresh();armed=false;b.textContent='Nullstilla alt';b.style.background='';b.style.borderColor='';toast.innerHTML='<svg aria-hidden="true"><use href="#kv-i-reset"/></svg><div><b>Alt er nullstillað</b><small>Steyp, kanningar og kota eru strikað á hesi eindini.</small></div>';toast.classList.add('is-on');clearTimeout(toastTimer);toastTimer=setTimeout(function(){toast.classList.remove('is-on');},4000);});})();
+  clearTimeout(t);state={done:{},quiz:{},special:{},code:{},tried:{}};try{localStorage.removeItem(KEY);}catch(e){}Object.keys(labs).forEach(function(id){labs[id].ta.value=labs[id].start;labs[id].run(false);});Object.keys(CHECKS).forEach(function(id){renderChecks(id,null);var d=$('[data-done="'+id+'"]');if(d)d.hidden=true;});$$('[data-quiz]').forEach(mountQuiz);refresh();armed=false;b.textContent='Nullstilla alt';b.style.background='';b.style.borderColor='';toast.innerHTML='<svg aria-hidden="true"><use href="#kv-i-reset"/></svg><div><b>Alt er nullstillað</b><small>Steyp, kanningar og koda eru strikað á hesi eindini.</small></div>';toast.classList.add('is-on');clearTimeout(toastTimer);toastTimer=setTimeout(function(){toast.classList.remove('is-on');},4000);});})();
 
  /* ---------------------------------------------------------------- síðuvalmyndin: føst undir Snar-valmyndini */
  var nav=$('.kv-nav'),tb=document.querySelector('.snar2026-topbar');

@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Stig 3: Myndir og leinkjur · Kota og vitlíki · Snar</title>
+<title>Stig 5: Uppseting · Koda og vitlíki · Snar</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="kv.css">
 </head>
 <body>
-<div class="kv-top"><a href="index.html" data-go="hub">← Kota og vitlíki</a><span class="kv-top__t">Stig 3 av 8 · Myndir og leinkjur</span><span class="kv-top__dots" data-kv-dots data-cur="3" aria-hidden="true"></span><a href="skapid.html" data-go="skapid">Skápið</a><a href="sandkassi.html" data-go="sandkassi">Sandkassin</a></div>
+<div class="kv-top"><a href="index.html" data-go="hub">← Koda og vitlíki</a><span class="kv-top__t">Stig 5 av 8 · Uppseting</span><span class="kv-top__dots" data-kv-dots data-cur="5" aria-hidden="true"></span><a href="skapid.html" data-go="skapid">Skápið</a><a href="sandkassi.html" data-go="sandkassi">Sandkassin</a></div>
 <section class="kv" lang="fo">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -44,57 +44,91 @@
    <symbol id="kv-i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
  </svg>
-<section class="kv-section kv-stig" id="kv-s3" data-stig="3" style="--s:var(--c3)" aria-labelledby="kv-s3-h">
+<section class="kv-section kv-stig" id="kv-s5" data-stig="5" style="--s:var(--c5)" aria-labelledby="kv-s5-h">
   <div class="kv-wrap">
-   <div class="kv-stig__top"><div class="kv-stig__num" aria-hidden="true">3</div><div><p class="kv-kicker">Stig 3 · HTML</p><h2 id="kv-s3-h">Myndir og leinkjur</h2><p>Set myndir inn, skriva góðan alt-tekst og leinkja til aðrar síður.</p></div><div class="kv-stig__badge"><svg aria-hidden="true"><use href="#kv-b3"/></svg><span>Steyp: Myndasmiður</span></div></div>
-   <div class="kv-goal"><svg aria-hidden="true"><use href="#kv-i-goal"/></svg><div><b>Mál</b><ul><li>Tú setir eina mynd inn við <code>img</code> og <code>src</code>.</li><li>Tú skrivar ein alt-tekst, sum sigur, hvat myndin vísir.</li><li>Tú gert eina leinkju við <code>a</code> og <code>href</code>.</li><li>Tú veitst, hvat ein eginleiki er.</li></ul></div></div>
-   <div class="kv-phases" aria-label="Rørslur í hesum stiginum"><span class="f1 on">Bygg</span><span class="f3">Brúka vitlíki</span><span class="f4">Deil og ger betri</span><span class="f2 on">Hygg afturum</span></div>
+   <div class="kv-stig__top"><div class="kv-stig__num" aria-hidden="true">5</div><div><p class="kv-kicker">Stig 5 · CSS</p><h2 id="kv-s5-h">Uppseting</h2><p>Lær at gera kassar við rammum, rundum hornum og skugga.</p></div><div class="kv-stig__badge"><svg aria-hidden="true"><use href="#kv-b5"/></svg><span>Steyp: Byggimeistari</span></div></div>
+   <div class="kv-goal"><svg aria-hidden="true"><use href="#kv-i-goal"/></svg><div><b>Mál</b><ul><li>Tú brúkar <code>div</code> og <code>class</code> til at skipa síðuna í kassar.</li><li>Tú skilir munin á <code>padding</code> og <code>margin</code>.</li><li>Tú gert rammur, rund horn og skugga.</li><li>Tú setir kassar lið um lið við <code>display: flex</code>.</li></ul></div></div>
+   <div class="kv-phases" aria-label="Rørslur í hesum stiginum"><span class="f1 on">Bygg</span><span class="f3">Brúka vitlíki</span><span class="f4">Deil og ger betri</span><span class="f2">Hygg afturum</span></div>
    <div class="kv-two">
     <div class="kv-prose">
-     <p class="kv-lead">Nú kanst tú seta myndir og leinkjur á síðuna. Í HTML kunnu merki hava <b>eginleikar</b> (á enskum <i>attributes</i>). Teir geva eyka upplýsingar. Í <code>src="mynd1.png"</code> er <code>src</code> navnið á eginleikanum, og <code>mynd1.png</code> er virðið.</p>
-     <h3>Myndir</h3>
-     <p>Við <code>&lt;img&gt;</code> setir tú eina mynd inn. <code>src</code> sigur, hvar myndin liggur. Í <code>alt</code> skrivar tú eina stutta lýsing av myndini. Hon hjálpir eitt nú fólki, sum brúka skíggjáupplesara, at skilja myndina. Um myndin ikki verður víst, kann alt-teksturin eisini koma fram. <code>&lt;img&gt;</code> hevur einki endamerki.</p>
-     <h3>Leinkir</h3>
-     <p>Við <code>&lt;a&gt;</code> gert tú eina leinkju. Eginleikin <code>href</code> sigur, hvagar hon førir. Orðini millum byrjanarmerkið og endamerkið eru tey, sum tú trýstir á. Skrivar tú <code>target="_blank"</code> í byrjanarmerkið, letur leinkjan seg vanliga upp í einum nýggjum fana.</p>
-     <div class="kv-code" data-hl><small>Mynd og leinkja</small>&lt;img src="mynd2.png" alt="Ein lundi við reyðgulum nevi"&gt;
+     <p class="kv-lead">Hugsa tær, at hvørt element á síðuni hevur ein kassa rundan um seg. Við CSS kanst tú geva honum lit, rammu og pláss. Tú kanst eisini savna fleiri element inni í einum <code>&lt;div&gt;</code> og geva tí eitt navn við <code>class</code>. Eitur tað <code>class="kassi"</code>, velur tú tað í CSS við <code>.kassi</code>.</p>
+     <h3>Luft inni og uttan</h3>
+     <p><code>padding</code> ger pláss <em>inni í</em> kassanum, millum innihaldið og rammuna. <code>margin</code> ger pláss <em>uttan um</em> kassan. Royn at broyta bæði tølini í koduni og hygg, hvat hendir.</p>
+     <h3>Lið um lið</h3>
+     <p>Kassar standa vanliga hvør undir øðrum. Vilt tú seta teir lið um lið, leggur tú teir í ein felags kassa og skrivar <code>display: flex</code> í CSS-regluna. Við <code>gap</code> ásetir tú frástøðuna millum kassarnar.</p>
+     <div class="kv-code" data-hl><small>Kassar lið um lið</small>&lt;style&gt;
+  .rað { display: flex; gap: 16px; }
+  .kassi {
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 6px 6px 0 black;
+  }
+&lt;/style&gt;
 
-&lt;p&gt;Les meira á &lt;a href="https://snar.fo"&gt;Snar&lt;/a&gt;.&lt;/p&gt;</div>
-     <h3>Myndir at brúka í ritlinum</h3>
-     <p>Niðanfyri finnur tú seks myndir, sum tú kanst brúka. Skriva myndarnavnið í <code>src</code>, til dømis <code>src="mynd3.png"</code>. Trýst á eina mynd fyri at avrita kotuna og set hana síðan inn í ritilin. Myndirnar eru gjørdar við kotu og fylgja við, tá ið tú tekur HTML-fíluna niður.</p>
-     <div class="kv-pics" data-kv-pics></div><div class="kv-copied" data-kv-pics-msg aria-live="polite"></div>
+&lt;div class="rað"&gt;
+  &lt;div class="kassi"&gt;Fyrsti kassi&lt;/div&gt;
+  &lt;div class="kassi"&gt;Annar kassi&lt;/div&gt;
+&lt;/div&gt;</div>
     </div>
     <div class="kv-side">
      <div class="kv-card"><h4>Orðabók</h4><div class="kv-tags">
-      <div class="kv-tag"><code>&lt;img&gt;</code><span>Vísir eina mynd. Hevur einki endamerki.</span></div>
-      <div class="kv-tag"><code>src</code><span>Sigur, hvar myndin liggur. Dømi: <code>src="mynd1.png"</code></span></div>
-      <div class="kv-tag"><code>alt</code><span>Stuttur tekstur, sum sigur, hvat myndin vísir. Dømi: <code>alt="Ein seyður í fjøllunum"</code></span></div>
-      <div class="kv-tag"><code>width</code><span>Breiddin á myndini í pikslum. Dømi: <code>width="200"</code></span></div>
-      <div class="kv-tag"><code>&lt;a&gt;</code><span>Ein leinkja. Teksturin ímillum er tað, sum tú trýstir á.</span></div>
-      <div class="kv-tag"><code>href</code><span>Sigur, hvagar leinkjan fer. Dømi: <code>href="https://snar.fo"</code></span></div>
-      <div class="kv-tag"><code>target="_blank"</code><span>Letur leinkjuna upp í nýggjum fana.</span></div>
+      <div class="kv-tag"><code>&lt;div&gt;</code><span>Ein kassi uttan serliga merking. Brúktur til at skipa síðuna.</span></div>
+      <div class="kv-tag"><code>class</code><span>Eitt navn, tú gevur elementi, so tú kanst velja tað í CSS. Dømi: <code>class="kassi"</code> → <code>.kassi { }</code></span></div>
+      <div class="kv-tag"><code>padding</code><span>Luft inni í kassanum.</span></div>
+      <div class="kv-tag"><code>margin</code><span>Luft uttan um kassan.</span></div>
+      <div class="kv-tag"><code>border</code><span>Ramman. Dømi: <code>border: 2px solid black;</code></span></div>
+      <div class="kv-tag"><code>border-radius</code><span>Rund horn. Dømi: <code>border-radius: 12px;</code></span></div>
+      <div class="kv-tag"><code>box-shadow</code><span>Skuggi. Dømi: <code>box-shadow: 4px 4px 10px gray;</code></span></div>
+      <div class="kv-tag"><code>display: flex</code><span>Setir kassarnar inni í elementinum lið um lið.</span></div>
+      <div class="kv-tag"><code>gap</code><span>Luft millum kassarnar í einum flex-kassa.</span></div>
+      <div class="kv-tag"><code>max-width</code><span>Mesta breidd. Dømi: <code>max-width: 600px;</code></span></div>
      </div></div>
-     <div class="kv-note"><b>Hví alt-tekstur?</b> Blind og sjónveik fólk brúka forrit, sum lesa síðuna upp. Uttan alt-tekst hoyra tey bert «mynd». Góður alt-tekstur sigur tað týdningarmesta: ikki «mynd», men «Ein lundi við fiski í nevinum».</div>
-     <div class="kv-note kv-note--yel"><b>Myndir á netinum</b> hava eigara. Brúka tínar egnu myndir, ella myndir, sum eru frælsar at brúka. Spyr læraran, um tú ert í iva.</div>
+     <div class="kv-note"><b>Prei:</b> Royn at skriva <code>* { outline: 1px solid red; }</code> ovast í CSS-koduni. Tá sært tú allar kassarnar á síðuni! Tak tað burtur aftur, tá ið tú ert liðug/ur.</div>
     </div>
    </div>
-   <script type="text/plain" data-code="s3"><!DOCTYPE html>
+   <script type="text/plain" data-code="s5"><!DOCTYPE html>
 <html lang="fo">
   <head>
-    <title>Djórini í Føroyum</title>
+    <title>Kassar</title>
+    <style>
+      body {
+        background-color: #f6f3ea;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .rað {
+        display: flex;
+        gap: 16px;
+      }
+      .kassi {
+        background-color: white;
+        border: 3px solid black;
+        padding: 16px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Seyðurin</h1>
-    <img src="mynd1.png" alt="Ein seyður" width="200">
-    <p>Í Føroyum eru fleiri seyðir enn fólk!</p>
-    <p>Les meira á <a href="https://snar.fo">Snar</a>.</p>
+    <h1>Mínir kassar</h1>
+    <div class="rað">
+      <div class="kassi">
+        <h2>Lundi</h2>
+        <img src="mynd2.png" alt="Ein lundi" width="120">
+      </div>
+      <div class="kassi">
+        <h2>Bátur</h2>
+        <img src="mynd3.png" alt="Ein bátur" width="120">
+      </div>
+    </div>
   </body>
 </html></script>
-   <div data-lab="s3" data-title="Royn kotuna: myndir og leinkjur"></div>
+   <div data-lab="s5" data-title="Royn koduna: kassar og luft"></div>
    <div class="kv-task">
-    <div><h3><svg aria-hidden="true"><use href="#kv-i-task"/></svg>Uppgáva: Ein síða við tveimum myndum</h3><ol class="kv-checks" data-checks="s3"></ol><div class="kv-task__btns"><button class="kv-btn kv-btn--s" type="button" data-check="s3">Kanna uppgávuna</button></div><div class="kv-task__done" data-done="s3" hidden></div><div class="kv-note kv-note--yel" style="margin-top:14px"><b>Greið frá, tá ið tú ert liðug ella liðugur:</b> «Eg broytti … Eg vænta, at … Eg roynd, og eg sá … Tí …» Brúkti tú vitlíki: «Hetta kom frá vitlíkinum, og hetta valdi eg at varðveita, tí …»</div></div>
-    <div class="kv-card kv-quiz" data-quiz="s3"><h3><svg aria-hidden="true" style="width:30px;height:30px;color:var(--s);display:inline-block;vertical-align:-6px;margin-right:8px"><use href="#kv-i-quiz"/></svg>Kanning</h3><p>Tríggir stuttir spurningar um myndir og leinkjur.</p><div data-quiz-body></div></div>
+    <div><h3><svg aria-hidden="true"><use href="#kv-i-task"/></svg>Uppgáva: Trý flott kort</h3><ol class="kv-checks" data-checks="s5"></ol><div class="kv-task__btns"><button class="kv-btn kv-btn--s" type="button" data-check="s5">Kanna uppgávuna</button></div><div class="kv-task__done" data-done="s5" hidden></div><div class="kv-note kv-note--yel" style="margin-top:14px"><b>Greið frá, tá ið tú ert liðug ella liðugur:</b> «Eg broytti … Eg vænta, at … Eg roynd, og eg sá … Tí …» Brúkti tú vitlíki: «Hetta kom frá vitlíkinum, og hetta valdi eg at varðveita, tí …»</div></div>
+    <div class="kv-card kv-quiz" data-quiz="s5"><h3><svg aria-hidden="true" style="width:30px;height:30px;color:var(--s);display:inline-block;vertical-align:-6px;margin-right:8px"><use href="#kv-i-quiz"/></svg>Kanning</h3><p>Tríggir stuttir spurningar um kassar.</p><div data-quiz-body></div></div>
    </div>
-   <div class="kv-next"><a class="kv-btn kv-btn--ghost" href="stig-2.html" data-go="stig-2" style="color:var(--ink)">← Stig 2</a><a class="kv-btn" href="stig-4.html" data-go="stig-4">Víðari til stig 4: CSS og litir <svg aria-hidden="true"><use href="#kv-i-arrow"/></svg></a></div>
+   <div class="kv-next"><a class="kv-btn kv-btn--ghost" href="stig-4.html" data-go="stig-4" style="color:var(--ink)">← Stig 4</a><a class="kv-btn" href="stig-6.html" data-go="stig-6">Víðari til stig 6: JavaScript <svg aria-hidden="true"><use href="#kv-i-arrow"/></svg></a></div>
   </div>
  </section>
 <div class="kv-toast" data-kv-toast role="status" aria-live="polite"></div>
