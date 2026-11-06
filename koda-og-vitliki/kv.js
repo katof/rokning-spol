@@ -357,7 +357,7 @@ window.kvPageLinks=function(){
   $('[data-kv-prompt-copy]').addEventListener('click',function(){copy(out.getAttribute('data-txt'),function(ok){msg.textContent=ok?'Boðið er kopierað. Set tað inn í SkoleGPT (Ctrl + V).':'Kundi ikki kopiera – merk tekstin og avrita hann á annan hátt.';setTimeout(function(){msg.textContent='';},3500);});});})();
 
  /* ---------------------------------------------------------------- SkoleGPT á síðuni */
- (function(){var b=$('[data-kv-ai-open]'),f=$('[data-kv-ai-frame]');if(!b)return;b.addEventListener('click',function(){if(f.hidden){f.hidden=false;if(!f.innerHTML)f.innerHTML='<iframe src="https://chat.skolegpt.dk/" title="Samrøða við SkoleGPT" allow="clipboard-read; clipboard-write; fullscreen" allowfullscreen loading="lazy"></iframe>';b.textContent='Fjal SkoleGPT';}else{f.hidden=true;b.textContent='Vís SkoleGPT her á síðuni';}});})();
+ (function(){var b=$('[data-kv-ai-open]'),f=$('[data-kv-ai-frame]');if(!b)return;b.addEventListener('click',function(){if(f.hidden){f.hidden=false;if(!f.innerHTML)f.innerHTML='<iframe src="https://chat.skolegpt.dk/" title="Samrøða við SkoleGPT" allow="clipboard-write; fullscreen" allowfullscreen loading="lazy"></iframe>';b.textContent='Fjal SkoleGPT';}else{f.hidden=true;b.textContent='Vís SkoleGPT her á síðuni';}});})();
 
  /* ---------------------------------------------------------------- myndasavn og litir */
  (function(){var box=$('[data-kv-pics]'),msg=$('[data-kv-pics-msg]');if(!box)return;box.innerHTML=Object.keys(SVGS).map(function(k){return '<button type="button" class="kv-pic" data-k="'+k+'"><img src="'+URIS[k]+'" alt="'+esc(PICALT[k])+'">'+k+'<small>'+PICNAMES[k]+'</small></button>';}).join('');
