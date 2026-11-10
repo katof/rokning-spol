@@ -163,6 +163,7 @@
 .jol .jh-und h3, .jol .jh-bok h3 { background: var(--ink); }
 /* ---- Gitið fyrst · Undrast aftur (2.11.2026) ---- */
 .jh-git { margin-top: 12px; }
+#jo-und-hold .jh-hold-box { margin: 10px 0 4px; }
 .jh-git__hint { font-size: .98rem; margin: 0 0 6px !important; }
 .jh-git label { display: block; font-weight: 800; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
 .jh-git textarea { width: 100%; min-height: 60px; padding: 10px 12px; border: 2px solid var(--ink); border-radius: 10px; background: #fff; color: var(--ink); font: inherit; font-size: 1rem; resize: vertical; }
@@ -433,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
         <div class="jh-open__body">
           <div class="jh-open__col">
-            <div class="jh-part jh-und" id="jo-und-w"><h3 id="jo-und-h">Undrast</h3><p class="jh-und__q" id="jo-und"></p><div class="jh-git"><p class="jh-git__hint" id="jo-git-hint"></p><label for="jo-git" id="jo-git-l">Okkara git</label><textarea id="jo-git" rows="2"></textarea><button class="jh-btn jh-btn--sm jh-btn--ink" type="button" id="jo-git-go">Vit hava gitið →</button></div></div>
+            <div class="jh-part jh-und" id="jo-und-w"><h3 id="jo-und-h">Undrast</h3><p class="jh-und__q" id="jo-und"></p><div id="jo-und-hold"></div><div class="jh-git"><p class="jh-git__hint" id="jo-git-hint"></p><label for="jo-git" id="jo-git-l">Okkara git</label><textarea id="jo-git" rows="2"></textarea><button class="jh-btn jh-btn--sm jh-btn--ink" type="button" id="jo-git-go">Vit hava gitið →</button></div></div>
             <div class="jh-part jh-gate"><div class="jh-src" id="jo-src"></div><p class="jh-tx" id="jo-tx" style="margin-top:12px"></p><div id="jo-hold"></div><div id="jo-media"></div></div>
             <div class="jh-part jh-gate"><h3 id="jo-upp-h">Uppgáva</h3><p class="jh-tx" id="jo-upp-intro" style="font-weight:800;margin:0 0 10px" hidden></p><ul class="jh-task" id="jo-upp"></ul><p class="jh-tx" id="jo-upp-after" style="font-size:1rem;margin-top:10px"></p><div class="jh-hint" id="jo-hint" hidden></div><div class="jh-src" id="jo-btns" style="margin-top:12px"></div><div class="jh-try" id="jo-try" lang="en" hidden></div></div>
             <div class="jh-part jh-und jh-aftur jh-gate" id="jo-aftur"><h3 id="jo-aftur-h">Undrast aftur</h3><p class="jh-und__q" id="jo-aftur-q"></p><p class="jh-aftur__git" id="jo-aftur-git"></p><p id="jo-aftur-t"></p></div>
@@ -641,7 +642,8 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
       btns: [['Lýsingarsmiðjan – gerið tykkara egnu lýsingar', 'https://snar.fo/funkur/lysingar-til-samfelagsfroedi#c236195']],
       laer: 'Næmingarnir skulu kanna, hvussu lýsingar royna at ávirka okkum við bæði upplýsingum og kenslum.\nLýsing A sigur nakað ítøkiligt um hettutroyggjuna: litir, støddir og vask. Orðið „bleyt“ er tó eisini ein lýsing, sum kann ávirka okkara fatan av vøruni.\nLýsing B sigur lítið um sjálva hettutroyggjuna. Í staðin verður hon knýtt at jólum og hugna. Orðingin „bert hesa vikuna“ kann fáa okkum at skunda okkum at keypa, men hon sigur ikki greitt, hvat bara er galdandi hesa vikuna.\nTað er ikki vist, at øll verða ávirkað á sama hátt. Summi leggja størri dent á upplýsingar um vøruna, meðan onnur verða meira hugtikin av hugnanum, sum lýsingin roynir at skapa.\nNæmingarnir skulu kunna greiða frá sínum tulkingum og vísa á orðingar í lýsingunum, sum stuðla teimum.' },
     { d: '2026-12-10', und: 'Hvat spæl gevur tær størri møguleika fyri at vinna – og ber til at finna útav tí uttan at rokna?', t: 'Hvat spæl er best?', fak: ['st'], min: '10–15', ic: 'k-dice', lang: 'fo',
-      src: [], hold: 'reglur',
+      src: [], hold: 'reglur', holdUnd: true,
+      gitHint: 'Í einum gávuspæli kunnu tit velja ímillum hesi spølini. Lesið reglurnar. Í hvørjum spæli er lættari at vinna? Gitið og skrivið í teigin, áðrenn tit fara at rokna.',
       tx: 'Í einum upphugsaðum gávuspæli kunnu tit velja millum tvey spøl.',
       upp: ['Hvat spæl høvdu tit valt, áðrenn tit fóru at rokna?', 'Finnið allar samansetingarnar av terningaeygum, sum geva seks, tá ið tit ringla við tveimum terningum.', 'Roknið út, hvussu stór líkindi eru fyri at vinna í hvørjum spæli.', 'Hvat spæl gevur størri møguleika at vinna? Var fyrsta gitingin hjá tykkum røtt?'],
       hint: 'Prei: Tá ið tit ringla við tveimum terningum, eru 36 møguligar samansetingar av terningaeygum, og allar eru líka sannlíkar. Til dømis telja (1, 5) og (5, 1) sum hvør sítt úrslit.',
@@ -734,7 +736,7 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
   }
   function md(s) { return esc(s || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*([^*\n]+)\*/g, '<em>$1</em>').replace(/\[([^\]]+)\]\((https?:[^)\s]+|\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>'); }
   function ytFacade(id, cap) { return '<button class="jh-yt" type="button" data-yt="' + id + '" aria-label="Spæl: ' + esc(cap) + '"><img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy"><span class="jh-yt__play">▶ Spæl</span></button><p class="jh-ytcap">' + esc(cap) + '</p>'; }
-  function returnHold() { Array.prototype.slice.call(root.querySelectorAll('#jo-hold [data-hold], #jo-upp [data-hold]')).forEach(function (c) { hold.appendChild(c); }); }
+  function returnHold() { Array.prototype.slice.call(root.querySelectorAll('#jo-hold [data-hold], #jo-upp [data-hold], #jo-und-hold [data-hold]')).forEach(function (c) { hold.appendChild(c); }); }
   /* Gitið verður goymt í kaganum á hesi teldu (ikki á Snar). Í fyrireikingini („Lat allar lúkur upp“) sær lærarin alt beinanvegin. */
   var GIT = {
     fo: { hint: 'Hvat halda tit? Tosið saman og skrivið niður, hvat tit halda, áðrenn tit lesa víðari.', l: 'Hetta halda vit', go: 'Vit hava gitið →', h: 'Undrast aftur', t: 'Halda tit framvegis tað sama, ella hava tit broytt hugsan? Hvat í tekstinum, á myndini, í tølunum ella í døminum fær tykkum at halda tað?', tomt: 'Tit hava ikki skrivað nakað niður enn. Hvat hildu tit, áðrenn tit byrjaðu?' },
@@ -775,7 +777,8 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
       root.querySelector('#jo-bok-byrj').innerHTML = (d.bok.byrj || []).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('');
       var ba = root.querySelector('#jo-bok-after'); ba.textContent = d.bok.after || ''; ba.hidden = !d.bok.after; }
     root.querySelector('#jo-tx').innerHTML = md(d.tx);
-    if (d.hold && d.uppHold == null) { var h = hold.querySelector('[data-hold="' + d.hold + '"]'); if (h) root.querySelector('#jo-hold').appendChild(h); }
+    /* holdUnd: tilfarið stendur í Undrast-kassanum, so næmingarnir síggja tað, áðrenn tey gita (t.d. reglurnar í lúku 8) */
+    if (d.hold && d.uppHold == null) { var h = hold.querySelector('[data-hold="' + d.hold + '"]'); if (h) root.querySelector(d.holdUnd ? '#jo-und-hold' : '#jo-hold').appendChild(h); }
     var m = root.querySelector('#jo-media'); m.innerHTML = (d.yt || []).map(function (y) { return ytFacade(y[0], y[1]); }).join(''); bindYt(m);
     root.querySelector('#jo-upp-h').innerHTML = (LABEL[d.lang] || LABEL.fo) + (d.lang !== 'fo' ? '<b>' + d.lang.toUpperCase() + '</b>' : '');
     var ul = root.querySelector('#jo-upp'); ul.innerHTML = d.upp.map(function (u, k) { return '<li><input type="checkbox" id="jo-c' + k + '" aria-label="Liðugt"><label for="jo-c' + k + '" lang="' + d.lang + '">' + md(u) + '</label></li>'; }).join('');
