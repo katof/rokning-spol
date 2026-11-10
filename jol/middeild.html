@@ -55,9 +55,7 @@
 .jm-hero__art { position: relative; }
 .jm-hero__art svg { width: 100%; height: auto; display: block; }
 .jm-node { animation: jm-blink 3s ease-in-out infinite; animation-delay: var(--d, 0s); }
-.jm-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 64px; height: 64px; right: 4px; top: 24px; }
-.jm-dog img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--cyan); background: #fff; box-shadow: 0 0 14px rgba(94,211,255,.5); }
-.jm-dog__hat { position: absolute; left: 50%; top: -34%; width: 78%; transform: translateX(-46%); pointer-events: none; }
+.jm-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 92px; height: 60px; right: 4px; top: 24px; }
 
 /* ---- Kalendarin -------------------------------------------------------- */
 .jm-cal { padding: 10px 0 36px; }
@@ -360,8 +358,16 @@ body:has(.jol.is-ljos) .snar-ft__wave { background: #fff8ea; }
 .is-ljos .jm-bulb .g { fill: #f3e7cd; }
 .is-ljos .jm-bulb.is-on .g { fill: var(--b); stroke: rgba(90, 60, 10, .35); }
 .is-ljos .jm-win { background: rgba(70, 50, 15, .55); }
-.is-ljos .jm-dog img { box-shadow: 0 0 14px rgba(255, 190, 60, .7); }
+
 @media (prefers-reduced-motion: reduce) { .is-straumur .jm-node { opacity: 1; } }
+
+/* Snar-pixelhundurin (sami sum í footaranum á Snar) */
+.snar-px { display: block; width: 100%; height: 100%; overflow: visible; }
+.snar-px__b { fill: var(--ink); } .snar-px__bak { fill: var(--ink); opacity: .55; } .snar-px__e { fill: var(--paper); }
+.snar-px__vel { transform-box: fill-box; transform-origin: 100% 100%; animation: snar-px-vel 5s ease-in-out infinite; }
+[data-dog]:hover .snar-px__vel { animation-duration: .5s; }
+@keyframes snar-px-vel { 0%, 70%, 100% { transform: rotate(0); } 75%, 85%, 95% { transform: rotate(14deg); } 80%, 90% { transform: rotate(-6deg); } }
+@media (prefers-reduced-motion: reduce) { .snar-px__vel { animation: none; } }
 </style>
 <style>body { margin: 0; }</style>
 <style>.kal-goym { margin-left: 14px; cursor: pointer; } .kal-goym__note { display: block; margin: -4px 0 10px; font-size: .8rem; opacity: .85; }</style>
@@ -375,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var file = location.pathname.split('/').pop() || '';
   var slug = Object.keys(NAVN).filter(function (k) { return file.indexOf(k) >= 0; })[0];
   if (!crumb || !slug) return;
-  var url = 'https://snar.fo/jol/' + slug;
+  var url = 'https://katof.github.io/rokning-spol/jol/' + slug + '.html';   // 10.11.2026: snar.fo/jol/<deild> finst ikki
   var a = document.createElement('a');
   a.className = crumb.className + ' kal-goym';
   a.href = '#';
@@ -416,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (['https://snar.fo', 'https://snardev.ctrl.fo'].indexOf(host) < 0) host = '';   // leinkjur til snar.fo fara til vertin, sum vísir rammuna
   // 3.11.2026: «← Jól á Snar» og leinkjur millum kalendararnar fara til Typo3-síðurnar á tí Snar, sum vísir rammuna
   // (snardev nú, snar.fo aftaná flytingina) – ikki til GitHub-síðurnar inni í rammuni.
-  // Virðini standa uttan 'index.html' – gh_page skiftir annars '/jol…' í JS-strongum út við GitHub-fílunøvn (index.html …).
+  // Virðini standa uttan 'https://snar.fo/jol' – gh_page skiftir annars '/jol…' í JS-strongum út við GitHub-fílunøvn (index.html …).
   var SIDUR = { 'index.html': '', 'grunddeild.html': '/grunddeild', 'middeild.html': '/middeild', 'hadeild.html': '/hadeild' };
   function snarSida(a) {
     var h = (a.getAttribute('href') || '').split('#'), sida = SIDUR[h[0]];
@@ -471,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
       <div class="jm-hero__in">
         <div>
-          <a class="jm-crumb" href="index.html">← Jól á Snar</a><br>
+          <a class="jm-crumb" href="https://snar.fo/jol">← Jól á Snar</a><br>
           <span class="jm-mono">Snar · 4.–6. flokkur · desember 2026</span>
           <h1>Jól í <span>miðdeildini</span></h1>
           <p class="jm-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka hevur ein næmingatekst, spurningar at tosa um og eina uppgávu. Harumframt eru eykauppgávur til 5.–6. flokk. Hvør lúka byrjar við einum spurningi at undrast á. Næmingarnir gita fyrst, og aftast í lúkuni undrast tey aftur. Lærugreinirnar eru føroyskt, danskt, enskt, støddfrøði, náttúra og tøkni, søga og samtíð, kristnikunnleiki og átrúnaður og handaverk og list.</p>
@@ -513,8 +519,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </g>
           </svg>
           <button class="jm-dog" type="button" aria-label="Snar-hundurin" data-dog>
-            <img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar.png" alt="" loading="lazy">
-            <svg class="jm-dog__hat" viewBox="0 0 90 64" aria-hidden="true"><use href="#s-hat"/></svg>
+            <svg class="snar-px" viewBox="10 -8 94 62" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><path class="snar-px__bak" d="M38 38h4v12h-4zm-2 10h8v4h-8zM62 38h4v12h-4zm0 10h8v4h-8z"/><path class="snar-px__b" d="M28 38h6v14h-6zm-4 12h12v4H24zM54 38h6v14h-6zm0 12h12v4H54z"/><path class="snar-px__b snar-px__vel" d="M24 28h8v12h-8zm-4-4h6v10h-6zm-4-6h6v10h-6zm-2-4h4v8h-4z"/><path class="snar-px__b" d="M30 26h32v18H30zm-4 4h8v10h-8zm12-6h22v6H38zm22-4h10v24H60zM66 10h12v4H66zm-4 4h20v20H62zm16 8h12v12H78zm10 0h4v6h-4zM60 12h6v18h-6zm-2 4h4v10h-4z"/><path class="snar-px__e" d="M74 16h4v4h-4zM82 30h8v2h-8z"/><path d="M62 30h10v4H62zM64 4h16v6H64zm4-4h10v4H68zm6-4h8v4h-8zm6 2h4v6h-4z" fill="#ef2418"/><path d="M62 8h20v4H62zM84 -6h6v6h-6z" fill="#fff"/></svg>
           </button>
         </div>
       </div>
@@ -1024,6 +1029,8 @@ aldri kann eg fulltakka tær
   var hm = /#luka-(\d+)/.exec(location.hash || '');
   if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }
   else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
+  /* 10.11.2026: lat lúkuna upp, eisini tá ið bert #luka-N broytist (t.d. frá hubburinum ella rammuni) */
+  window.addEventListener('hashchange', function () { var m = /#luka-(\d+)/.exec(location.hash || ''), i = m ? +m[1] - 1 : -1; if (!DOORS[i] || i === current) return; if (!unlocked(DOORS[i])) { DOORS[i].peek = true; renderGrid(); } openDoor(i, true); });
   root.querySelector('.jm-hero__btns a').addEventListener('click', function (e) { if (current >= 0) { e.preventDefault(); openEl.scrollIntoView({ behavior: 'smooth' }); } });
 
   /* ------------------------------------------------------------ Til jólabókina, prenting og avriting (31.10.2026)

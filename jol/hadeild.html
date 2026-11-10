@@ -55,10 +55,8 @@
 #jh-stick[data-mood="sour"] .jh-face--sour, #jh-stick[data-mood="happy"] .jh-face--happy { display: block; }
 .jh-memebox { position: absolute; left: 0; right: 0; bottom: -6px; text-align: center; font-size: clamp(1rem, 2.2vw, 1.5rem); }
 .jh-memebox .jh-meme { display: block; }
-.jh-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 70px; height: 70px; right: -6px; top: 6px; transform: rotate(8deg); }
-.jh-dog img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--ink); background: #fff; box-shadow: 2px 3px 0 var(--ink); }
-.jh-dog__hat { position: absolute; left: 50%; top: -34%; width: 80%; transform: translateX(-46%); pointer-events: none; }
-.jh-dog__say { position: absolute; right: 78px; top: 8px; white-space: nowrap; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 4px 10px; font-family: Caveat, cursive; font-weight: 700; font-size: 1.15rem; opacity: 0; transform: scale(.7); transition: .2s; pointer-events: none; }
+.jh-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 100px; height: 66px; right: -6px; top: 6px; }
+.jh-dog__say { position: absolute; right: 104px; top: 8px; white-space: nowrap; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 4px 10px; font-family: Caveat, cursive; font-weight: 700; font-size: 1.15rem; opacity: 0; transform: scale(.7); transition: .2s; pointer-events: none; }
 .jh-dog.is-saying .jh-dog__say { opacity: 1; transform: scale(1); }
 .jh-countdown { margin-top: 10px; padding: 10px 14px; border: 2px dashed var(--ink); border-radius: 12px; display: inline-flex; gap: 10px; align-items: center; font-weight: 700; font-size: .92rem; background: var(--yellow-l); }
 .jh-countdown b { font-family: "Permanent Marker", cursive; font-weight: 400; font-size: 1.25rem; }
@@ -246,6 +244,14 @@
 .jol-fold__btn .c, .jol-fold[open] .jol-fold__btn .o, .jol-fold[open] .jol-fold__t { display: none; }
 .jol-fold[open] .jol-fold__btn .c { display: inline; }
 .jol-fold[open] .jol-fold__in { justify-content: flex-end; margin-bottom: 10px; }
+
+/* Snar-pixelhundurin (sami sum í footaranum á Snar) */
+.snar-px { display: block; width: 100%; height: 100%; overflow: visible; }
+.snar-px__b { fill: var(--ink); } .snar-px__bak { fill: var(--ink); opacity: .55; } .snar-px__e { fill: var(--paper); }
+.snar-px__vel { transform-box: fill-box; transform-origin: 100% 100%; animation: snar-px-vel 5s ease-in-out infinite; }
+[data-dog]:hover .snar-px__vel { animation-duration: .5s; }
+@keyframes snar-px-vel { 0%, 70%, 100% { transform: rotate(0); } 75%, 85%, 95% { transform: rotate(14deg); } 80%, 90% { transform: rotate(-6deg); } }
+@media (prefers-reduced-motion: reduce) { .snar-px__vel { animation: none; } }
 </style>
 <style>body { margin: 0; }</style>
 <style>.kal-goym { margin-left: 14px; cursor: pointer; } .kal-goym__note { display: block; margin: -4px 0 10px; font-size: .8rem; opacity: .85; }</style>
@@ -259,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var file = location.pathname.split('/').pop() || '';
   var slug = Object.keys(NAVN).filter(function (k) { return file.indexOf(k) >= 0; })[0];
   if (!crumb || !slug) return;
-  var url = 'https://snar.fo/jol/' + slug;
+  var url = 'https://katof.github.io/rokning-spol/jol/' + slug + '.html';   // 10.11.2026: snar.fo/jol/<deild> finst ikki
   var a = document.createElement('a');
   a.className = crumb.className + ' kal-goym';
   a.href = '#';
@@ -300,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (['https://snar.fo', 'https://snardev.ctrl.fo'].indexOf(host) < 0) host = '';   // leinkjur til snar.fo fara til vertin, sum vísir rammuna
   // 3.11.2026: «← Jól á Snar» og leinkjur millum kalendararnar fara til Typo3-síðurnar á tí Snar, sum vísir rammuna
   // (snardev nú, snar.fo aftaná flytingina) – ikki til GitHub-síðurnar inni í rammuni.
-  // Virðini standa uttan 'index.html' – gh_page skiftir annars '/jol…' í JS-strongum út við GitHub-fílunøvn (index.html …).
+  // Virðini standa uttan 'https://snar.fo/jol' – gh_page skiftir annars '/jol…' í JS-strongum út við GitHub-fílunøvn (index.html …).
   var SIDUR = { 'index.html': '', 'grunddeild.html': '/grunddeild', 'middeild.html': '/middeild', 'hadeild.html': '/hadeild' };
   function snarSida(a) {
     var h = (a.getAttribute('href') || '').split('#'), sida = SIDUR[h[0]];
@@ -352,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="jh-wrap">
       <div class="jh-hero__in">
         <div>
-          <a class="jh-crumb" href="index.html">← Jól á Snar</a><br>
+          <a class="jh-crumb" href="https://snar.fo/jol">← Jól á Snar</a><br>
           <span class="jh-sticker jh-sticker--yellow">7.–9. flokkur · desember 2026</span>
           <h1 style="margin-top:14px">Desember undir <span>sjóneykuni</span></h1>
           <p class="jh-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka byrjar við onkrum, sum vekir forvitni: ein tekstur, ein mynd, ein pástandur ella ein trupulleiki. Tú skalt kanna, rokna, tulka og grundgeva fyri tínum sjónarmiðum. Flestu lúkurnar taka 10–15 minuttir, einstakar umleið 20.</p>
@@ -403,8 +409,7 @@ document.addEventListener('DOMContentLoaded', function () {
           </svg>
           <div class="jh-memebox"><span class="jh-meme" id="jh-meme">Eg, tá lúkan í dag er læst:</span></div>
           <button class="jh-dog" type="button" aria-label="Snar-hundurin" data-dog>
-            <img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/snar.png" alt="" loading="lazy">
-            <svg class="jh-dog__hat" viewBox="0 0 90 64" aria-hidden="true"><use href="#k-hat"/></svg>
+            <svg class="snar-px" viewBox="10 -8 94 62" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><path class="snar-px__bak" d="M38 38h4v12h-4zm-2 10h8v4h-8zM62 38h4v12h-4zm0 10h8v4h-8z"/><path class="snar-px__b" d="M28 38h6v14h-6zm-4 12h12v4H24zM54 38h6v14h-6zm0 12h12v4H54z"/><path class="snar-px__b snar-px__vel" d="M24 28h8v12h-8zm-4-4h6v10h-6zm-4-6h6v10h-6zm-2-4h4v8h-4z"/><path class="snar-px__b" d="M30 26h32v18H30zm-4 4h8v10h-8zm12-6h22v6H38zm22-4h10v24H60zM66 10h12v4H66zm-4 4h20v20H62zm16 8h12v12H78zm10 0h4v6h-4zM60 12h6v18h-6zm-2 4h4v10h-4z"/><path class="snar-px__e" d="M74 16h4v4h-4zM82 30h8v2h-8z"/><path d="M62 30h10v4H62zM64 4h16v6H64zm4-4h10v4H68zm6-4h8v4h-8zm6 2h4v6h-4z" fill="#ef2418"/><path d="M62 8h20v4H62zM84 -6h6v6h-6z" fill="#fff"/></svg>
             <span class="jh-dog__say">Vuff. Eg las ikki uppgávuna.</span>
           </button>
         </div>
@@ -808,6 +813,8 @@ Skalt tú fyrireika undirvísingina, kanst tú trýsta á „Lat allar lúkur up
   var hm = /#luka-(\d+)/.exec(location.hash || '');
   if (hm && DOORS[+hm[1] - 1]) { if (!unlocked(DOORS[+hm[1] - 1])) { DOORS[+hm[1] - 1].peek = true; renderGrid(); } openDoor(+hm[1] - 1, true); }
   else { var t = today(), idx = -1; DOORS.forEach(function (d, i) { if (d.d <= t) idx = i; }); if (idx >= 0 && unlocked(DOORS[idx])) openDoor(idx, false); }
+  /* 10.11.2026: lat lúkuna upp, eisini tá ið bert #luka-N broytist (t.d. frá hubburinum ella rammuni) */
+  window.addEventListener('hashchange', function () { var m = /#luka-(\d+)/.exec(location.hash || ''), i = m ? +m[1] - 1 : -1; if (!DOORS[i] || i === current) return; if (!unlocked(DOORS[i])) { DOORS[i].peek = true; renderGrid(); } openDoor(i, true); });
   root.querySelector('.jh-hero__btns a').addEventListener('click', function (e) { if (current >= 0) { e.preventDefault(); openEl.scrollIntoView({ behavior: 'smooth' }); } });
 
 
