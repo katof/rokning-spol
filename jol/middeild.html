@@ -47,13 +47,13 @@
 
 /* ---- Hero ------------------------------------------------------------ */
 .jol-hero { padding: 18px 0 28px; }
-.jm-hero__in { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; margin-top: 18px; }
+.jm-hero__in { display: grid; grid-template-columns: 1.5fr .9fr; gap: 28px; align-items: center; margin-top: 14px; }
 .jm-hero h1 { font-size: clamp(2.6rem, 6.5vw, 5rem); }
 .jm-hero h1 span { color: var(--cyan); }
 .jm-hero__lead { font-size: clamp(1rem, 1.5vw, 1.2rem); max-width: 60ch; margin-top: 14px; color: var(--muted); }
 .jm-hero__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 20px; }
 .jm-hero__art { position: relative; }
-.jm-hero__art svg { width: 100%; height: auto; display: block; }
+.jm-hero__art svg { width: 100%; height: auto; max-height: 240px; display: block; }   /* minni træ, so lúkurnar koma longri upp */
 .jm-node { animation: jm-blink 3s ease-in-out infinite; animation-delay: var(--d, 0s); }
 .jm-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 92px; height: 60px; right: 4px; top: 24px; }
 
@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <a class="jm-crumb" href="https://snar.fo/jol">← Jól á Snar</a><br>
           <span class="jm-mono">Snar · 4.–6. flokkur · desember 2026</span>
           <h1>Jól í <span>miðdeildini</span></h1>
-          <p class="jm-hero__lead">Fjúrtan lúkur – ein nýggj lúka hvønn skúladag. Hvør lúka hevur ein næmingatekst, spurningar at tosa um og eina uppgávu. Harumframt eru eykauppgávur til 5.–6. flokk. Hvør lúka byrjar við einum spurningi at undrast á. Næmingarnir gita fyrst, og aftast í lúkuni undrast tey aftur. Lærugreinirnar eru føroyskt, danskt, enskt, støddfrøði, náttúra og tøkni, søga og samtíð, kristnikunnleiki og átrúnaður og handaverk og list.</p>
+          <p class="jm-hero__lead">Lat eina nýggja lúku upp hvønn skúladag! Hvør lúka hevur ein tekst, spurningar at tosa um og eina uppgávu. Ein lúka tekur umleið 10–15 minuttir. Í 5.–6. flokki kunnu tit eisini taka framhaldið.</p>
           <div class="jm-hero__btns">
             <a class="jm-btn jm-btn--solid" href="#kalendari">Far til lúkurnar ↓</a>
             <button class="jm-btn jm-btn--tendra" type="button" id="jm-tendra" aria-pressed="false"><svg class="jm-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M8.5 14.5C7 13.300 6 11.700 6 10a6 6 0 0 1 12 0c0 1.700-1 3.300-2.500 4.500-.6.5-1 1.300-1 2h-5c0-.7-.4-1.500-1-2z"/></svg><span class="jm-t--off">Tendra ljósið</span><span class="jm-t--on">Sløkk ljósið</span></button>
@@ -665,7 +665,8 @@ aldri kann eg fulltakka tær
   </section>
 
   <!-- ============================================ Til læraran: nýggju partarnir -->
-  <section class="jm-section" id="laeravegleiding">
+  <section class="jm-section jm-new" id="laeravegleiding">
+    <details class="jol-fold"><summary><span class="jm-wrap jol-fold__in"><span class="jol-fold__t"><small>Til læraran</small><b>Soleiðis eru lúkurnar bygdar</b></span><span class="jol-fold__btn"><span class="o">Lat upp ▾</span><span class="c">Lat aftur ▴</span></span></span></summary>
     <div class="jm-wrap jm-section__in">
       <div>
         <span class="jm-mono">Til læraran</span>
@@ -679,6 +680,7 @@ aldri kann eg fulltakka tær
         <div><b>Eingin goymsla</b>Síðan goymir ongar upplýsingar um næmingarnar. Teir skriva og tekna á pappír.</div>
       </div>
     </div>
+    </details>
   </section>
 
   <!-- ============================================ Funkur -->
