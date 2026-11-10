@@ -50,49 +50,48 @@
     radial-gradient(1px 1px at 63% 12%, #fff 50%, transparent), radial-gradient(1.3px 1.3px at 78% 26%, #fff 50%, transparent), radial-gradient(1px 1px at 91% 9%, #fff 50%, transparent),
     radial-gradient(1px 1px at 36% 34%, rgba(255,255,255,.7) 50%, transparent), radial-gradient(1px 1px at 84% 40%, rgba(255,255,255,.7) 50%, transparent),
     linear-gradient(180deg, #0a1530 0%, #12285a 46%, #24467f 74%, #2f4f86 100%); }
-.jx-hero__in { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; }
+.jx-hero__in { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr; gap: 28px; align-items: end; }
 .jx-hero h1 { font-size: clamp(3.2rem, 8.5vw, 7rem); line-height: .92; letter-spacing: -.02em; font-weight: 900; text-shadow: 0 4px 30px rgba(0, 0, 0, .4); margin-top: 6px; }
-/* Stór, livandi skrift: bókstavirnir detta inn ein og ein (bert eina ferð, bert transform/opacity) */
-.jx-hero h1 .jx-l { display: inline-block; animation: jx-drop .8s cubic-bezier(.2, 1.5, .4, 1) both; animation-delay: calc(var(--i) * 70ms + .1s); }
-.jx-hero h1 .jx-sp { display: inline-block; width: .28em; }
-@keyframes jx-drop { from { opacity: 0; transform: translateY(-.7em) rotate(-10deg); } }
 .jx-hero h1 em { font-style: italic; color: var(--warm); text-shadow: 0 0 22px rgba(255, 196, 90, .45); }
 .jx-hero__lead { font-size: clamp(1.02rem, 1.5vw, 1.18rem); max-width: 62ch; margin-top: 14px; color: #e3e8f2; }
 .jx-hero__btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 /* Bento-kort: tað, sum er týdningarmest í dag, í smáum kortum */
-.jx-bento { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 12px; margin-top: 24px; max-width: 820px; }
-.jol .jx-tile { position: relative; display: flex; flex-direction: column; gap: 3px; padding: 13px 16px; border-radius: 16px; border: 1px solid rgba(255, 210, 122, .28); background: rgba(12, 28, 60, .72); color: var(--ink); text-decoration: none; transition: transform .15s, border-color .15s, background .15s; animation: jx-up .7s cubic-bezier(.2, .9, .3, 1) both; animation-delay: calc(var(--i, 0) * 90ms + .7s); }
-.jol a.jx-tile:hover { transform: translateY(-3px); border-color: var(--gold); background: rgba(20, 42, 84, .85); }
-@keyframes jx-up { from { opacity: 0; transform: translateY(14px); } }
-.jx-tile__k { font-weight: 800; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
-.jx-tile__t { font-family: Fraunces, Georgia, serif; font-weight: 800; font-size: 1.15rem; line-height: 1.15; }
-.jx-tile__x { font-size: .88rem; color: #c9d3e6; line-height: 1.35; }
-.jx-tile__go { margin-top: auto; padding-top: 6px; font-weight: 800; font-size: .85rem; color: var(--warm); }
-.jol .jx-tile--dag { grid-row: span 2; background: linear-gradient(160deg, rgba(212, 33, 58, .92), rgba(130, 16, 36, .92)); border-color: rgba(255, 210, 122, .45); }
-.jol .jx-tile--dag .jx-tile__k { color: #ffe3a0; }
-.jx-tile__big { font-family: Fraunces, Georgia, serif; font-weight: 900; font-size: clamp(2.6rem, 5vw, 3.6rem); line-height: 1; margin: 4px 0 2px; color: #fff; }
-.jx-tile__big small { font-size: .38em; font-weight: 800; margin-left: 6px; }
-.jol .jx-tile--dag .jx-tile__x { color: #ffe9d6; }
-.jx-dagchips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 10px; }
-.jol .jx-dagchips a { padding: 6px 11px; border-radius: 999px; background: #fff; color: #82101f; font-weight: 800; font-size: .8rem; text-decoration: none; }
-.jol .jx-dagchips a:hover { background: #ffe3a0; }
+.jx-bento { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 16px; margin-top: 26px; max-width: 840px; }
+/* Kassarnir í litunum á húsunum í Vágsbotni: kantaðir, ein mørk kantur og ein harður skuggi – sum eitt prentað plakat */
+.jol .jx-tile { --bg: #e2c05c; --fg: #13213f; --ac: #13213f; position: relative; display: flex; flex-direction: column; gap: 4px; padding: 16px 18px 18px; border-radius: 0; border: 2px solid #081226; background: var(--bg); color: var(--fg); box-shadow: 7px 7px 0 #081226; text-decoration: none; outline: 1.5px solid color-mix(in srgb, var(--fg) 28%, transparent); outline-offset: -8px; transition: transform .12s, box-shadow .12s; }
+.jol a.jx-tile:hover { transform: translate(-3px, -3px); box-shadow: 10px 10px 0 #081226; }
+.jol a.jx-tile:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 #081226; }
+.jx-tile__k { font: 900 .7rem/1.2 Nunito, "Segoe UI", sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--ac); }
+.jx-tile__t { font-family: Fraunces, Georgia, serif; font-weight: 900; font-size: 1.22rem; line-height: 1.1; }
+.jx-tile__x { font-size: .88rem; line-height: 1.35; opacity: .88; }
+.jx-tile__go { margin-top: auto; padding-top: 8px; font: 900 .78rem/1 Nunito, "Segoe UI", sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.jx-tile__go::after { content: ""; display: block; width: 28px; height: 3px; margin-top: 6px; background: currentColor; transition: width .15s; }
+.jol a.jx-tile:hover .jx-tile__go::after { width: 56px; }
+.jol .jx-tile--dag { --bg: #c8323a; --fg: #fff; --ac: #ffe3a0; grid-row: span 2; }
+.jol .jx-tile--adv { --bg: #2f5a48; --fg: #f4f1ea; --ac: #ffd27a; }
+.jol .jx-tile--kal { --bg: #e2c05c; }
+.jol .jx-tile--finn { --bg: #a9c8e6; }
+.jol .jx-tile--laer { --bg: #f1eee8; }
+.jx-tile__big { font-family: Fraunces, Georgia, serif; font-weight: 900; font-size: clamp(2.8rem, 5.2vw, 3.8rem); line-height: .95; margin: 6px 0 4px; }
+.jx-tile__big small { font-size: .36em; font-weight: 800; margin-left: 6px; }
+.jx-dagchips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 12px; }
+.jol .jx-dagchips a { padding: 7px 12px; border: 2px solid #081226; background: #fff; color: #13213f; font: 900 .74rem/1 Nunito, "Segoe UI", sans-serif; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; box-shadow: 3px 3px 0 #081226; }
+.jol .jx-dagchips a:hover { background: #ffe3a0; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #081226; }
 /* Adventsljósini: tendrað eftir dagfestingini */
 .jx-advent { display: flex; align-items: flex-end; gap: 9px; height: 54px; margin: 2px 0 4px; }
-.jx-advent i { position: relative; width: 12px; border-radius: 2px 2px 1px 1px; background: linear-gradient(90deg, #f4eee3, #d8cfbd); }
+.jx-advent i { position: relative; width: 12px; background: #f4eee3; box-shadow: inset -3px 0 0 #d8cfbd; }
 .jx-advent i:nth-child(1) { height: 30px; } .jx-advent i:nth-child(2) { height: 36px; } .jx-advent i:nth-child(3) { height: 42px; } .jx-advent i:nth-child(4) { height: 48px; }
-.jx-advent i::before { content: ""; position: absolute; left: 5.5px; top: -5px; width: 1.2px; height: 5px; background: #3a2a1c; }
+.jx-advent i::before { content: ""; position: absolute; left: 5.5px; top: -5px; width: 1.2px; height: 5px; background: #1b1b1b; }
 .jx-advent i.on::after { content: ""; position: absolute; left: 1px; top: -19px; width: 10px; height: 15px; border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%; background: radial-gradient(circle at 50% 70%, #fff8d8 0 22%, #ffd27a 40%, #ff9a3c 80%); box-shadow: 0 0 14px 4px rgba(255, 196, 90, .45); transform-origin: 50% 100%; animation: jx-loga 2.2s ease-in-out infinite alternate; will-change: transform; }
 .jx-advent i.on:nth-child(2)::after { animation-delay: -.6s; } .jx-advent i.on:nth-child(3)::after { animation-delay: -1.3s; } .jx-advent i.on:nth-child(4)::after { animation-delay: -1.8s; }
 @keyframes jx-loga { 0% { transform: scale(1, 1) rotate(-2deg); } 50% { transform: scale(.94, 1.06) rotate(2deg); } 100% { transform: scale(1.04, .96) rotate(-1deg); } }
-.jx-deildir { display: flex; gap: 5px; margin: 4px 0 2px; }
-.jx-deildir span { width: 14px; height: 14px; border-radius: 4px; }
-.jx-hero__meira { margin-top: 12px; font-size: .88rem; color: #c9d3e6; }
+.jx-deildir { display: flex; gap: 6px; margin: 4px 0 2px; }
+.jx-deildir span { width: 16px; height: 16px; border: 2px solid #081226; }
+.jx-hero__meira { position: relative; margin-top: 30px; font-size: .88rem; color: #c9d3e6; }
 .jol .jx-hero__meira a { color: var(--warm); font-weight: 800; }
-@media (max-width: 760px) { .jx-bento { grid-template-columns: 1fr 1fr; } .jol .jx-tile--dag { grid-row: auto; grid-column: 1 / -1; } .jx-scene { margin-top: 0; } }
+@media (max-width: 760px) { .jx-bento { grid-template-columns: 1fr 1fr; gap: 12px; } .jol .jx-tile--dag { grid-row: auto; grid-column: 1 / -1; } .jol .jx-tile { box-shadow: 5px 5px 0 #081226; } .jx-scene { margin-top: 0; } }
 /* Rullurørsla í CSS (ongin JS-lurtari): teksturin fer eitt sindur upp og bleiknar, havnin kemur nærri */
 @supports (animation-timeline: scroll()) {
-  .jx-hero__in > div:first-child { animation: jx-ut linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
-  @keyframes jx-ut { to { opacity: .25; transform: translateY(-36px); } }
   .jx-scene { animation: jx-nearri linear both; animation-timeline: scroll(root); animation-range: 0 80vh; }
   @keyframes jx-nearri { to { transform: translateY(-28px) scale(1.03); } }
 }
@@ -104,7 +103,8 @@
 @keyframes jx-vel { 0%, 70%, 100% { transform: rotate(0); } 75%, 85%, 95% { transform: rotate(14deg); } 80%, 90% { transform: rotate(-6deg); } }
 .jx-dog__vuff { position: absolute; left: -10%; top: -18%; padding: 6px 12px; background: #fff; border: 2px solid #0b1830; box-shadow: 4px 4px 0 #ef2418; font: 700 1.05rem/1 "Courier New", Courier, monospace; color: #1559e8; opacity: 0; transform: scale(.6); transform-origin: 80% 100%; transition: opacity .2s, transform .25s; pointer-events: none; }
 .jx-dog:hover .jx-dog__vuff, .jx-dog.is-glad .jx-dog__vuff, .jx-dog:focus-visible .jx-dog__vuff { opacity: 1; transform: scale(1); }
-.jx-scene { position: relative; height: calc(clamp(64px, 7vw, 110px) + clamp(220px, 26.4vw, 400px)); margin-top: clamp(-150px, -9vw, -40px); }
+/* Ein loftsbreddi millum kassarnar og húsini, so flogfarið hevur pláss at flúgva */
+.jx-scene { position: relative; height: calc(clamp(120px, 13vw, 200px) + clamp(220px, 26.4vw, 400px)); margin-top: 8px; }
 .jx-town { position: absolute; left: 0; bottom: 0; width: 100%; height: clamp(220px, 26.4vw, 400px); display: block; z-index: 1; }
 /* Havnin er ein stillmynd: allar rørslur inni í stóra SVG-num fáa kagan at tekna alla myndina (við glóð og spegling) av nýggjum í hvørjari mynd.
    Ljósketurnar blinka tí í einum egnum lagi (.jx-town--glim), sum bert skiftir opacity – tað klárar skíggjkortið einsamalt. */
@@ -112,7 +112,7 @@
 .jx-town--glim2 { animation-duration: 3.7s; animation-delay: -1.3s; }
 @keyframes jx-glim { to { opacity: .95; } }
 /* Flogfarið við útisetum á veg heim til jóla – flýgur aftanfyri kirkjutornið */
-.jx-plane { position: absolute; z-index: 0; left: 0; top: 0; width: clamp(320px, 40vw, 600px); animation: jx-fly 46s linear infinite; will-change: transform; }
+.jx-plane { position: absolute; z-index: 0; left: 0; top: clamp(6px, 2vw, 28px); width: clamp(320px, 40vw, 600px); animation: jx-fly 46s linear infinite; will-change: transform; }
 .jx-plane__in { animation: jx-float 4.5s ease-in-out infinite alternate; will-change: transform; }
 .jx-plane__svg { width: 100%; height: auto; display: block; overflow: visible; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .35)); }
 @keyframes jx-fly { from { transform: translateX(-105%); } to { transform: translateX(var(--jol-vw, 100vw)); } }
@@ -182,6 +182,26 @@
 .jx-chip.is-on { background: var(--gold); border-color: var(--gold); color: var(--dark); }
 .jx-count { font-size: .9rem; color: var(--muted); margin-bottom: 10px; }
 .jx-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+/* Teigar: bert ein partur sæst í senn (uttan JS sæst alt sum áður) */
+.jx-tabs { position: sticky; top: var(--jol-top, 0px); z-index: 20; background: #0b1830; border-top: 2px solid #081226; border-bottom: 2px solid #081226; box-shadow: 0 6px 16px rgba(0, 0, 0, .25); }
+.jx-tabs__in { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-top: 10px; padding-bottom: 10px; }
+.jx-tabs__in::-webkit-scrollbar { display: none; }
+.jol .jx-tabs a { flex: none; padding: 9px 14px; border: 2px solid #f4f1ea; background: transparent; color: #f4f1ea; font: 900 .78rem/1 Nunito, "Segoe UI", sans-serif; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background .12s, color .12s, transform .12s, box-shadow .12s; }
+.jol .jx-tabs a:hover { background: rgba(255, 255, 255, .1); }
+.jol .jx-tabs a[aria-current="true"] { background: #e2c05c; border-color: #081226; color: #13213f; box-shadow: 4px 4px 0 #081226; transform: translate(-2px, -2px); }
+.jol.jx-tabbed [data-panel]:not(.is-on) { display: none; }
+.jol [data-panel], .jol [data-panel] [id] { scroll-margin-top: calc(var(--jol-top, 0px) + 70px); }
+/* Finn jólatilfar: ein dálkur fyri hvørja deild */
+.jx-items:has(.jx-cols), .jx-items:has(.jx-empty) { display: block; }
+.jx-cols { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 22px; }
+.jx-col h3 { font: 900 .8rem/1.2 Nunito, "Segoe UI", sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--c); padding-bottom: 8px; margin-bottom: 8px; border-bottom: 2px solid var(--c); }
+.jx-col h3 small { font-weight: 700; letter-spacing: .04em; color: var(--muted); text-transform: none; margin-left: 6px; }
+.jx-col__list { display: grid; gap: 6px; }
+.jx-cols[style*="--n:1"] .jx-col__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.jol .jx-col .jx-item { text-decoration: none !important; background-image: none !important; flex-direction: row; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; border-left-width: 1.5px; }
+.jx-item__n { flex: none; width: 30px; height: 30px; display: grid; place-items: center; background: var(--c); color: #0b1830; font: 900 .95rem/1 Nunito, sans-serif; }
+.jx-col .jx-item b { display: block; font-size: .95rem; line-height: 1.2; }
+.jx-col .jx-item__fak { display: block; font-size: .76rem; margin-top: 2px; }
 .jx-item { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); text-decoration: none; color: var(--ink); border-left: 5px solid var(--c); }
 .jx-item:hover { border-color: var(--c); background: var(--card2); }
 .jx-item--g { --c: #ff6b5e; } .jx-item--m { --c: #5ed3ff; } .jx-item--h { --c: #ff5fa2; }
@@ -255,9 +275,9 @@
 @media (prefers-reduced-motion: reduce) { .jx-sea__glints path, .jx-sea__boat { animation: none; } }
 /* Footaraaldan á Snar: sjógvurin rennur beint niður í hana */
 body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
-.jx-outro__town { display: block; width: 100%; height: clamp(90px, 13vw, 190px); margin-top: 22px; }
+.jx-outro__town { display: block; width: 100%; height: clamp(110px, 16.7vw, 260px); margin-top: 22px; }   /* 1440:240 = viewBox, so kirkjuspíran ikki verður skorin burtur */
 
-@media (max-width: 960px) { .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: repeat(2, 1fr); } .jx-two { grid-template-columns: 1fr; } }
+@media (max-width: 960px) { .jx-cols { grid-template-columns: 1fr; } .jx-cols[style*="--n:1"] .jx-col__list { grid-template-columns: 1fr; } .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: repeat(2, 1fr); } .jx-two { grid-template-columns: 1fr; } }
 @media (max-width: 640px) { .jx-hero__in { grid-template-columns: 1fr; } .jx-dog { width: 110px; } .jx-cals, .jx-picks, .jx-items, .jx-funkur { grid-template-columns: 1fr; } .jx-filter span.jx-mono { min-width: 0; width: 100%; } .jx-search__go { padding: 0 1rem; } }
 @media (prefers-reduced-motion: reduce) { .jol *, .jol *::before, .jol *::after { animation: none !important; transition: none !important; } .jx-plane { transform: translateX(calc(var(--jol-vw, 100vw) * .42)); } }
 
@@ -314,54 +334,41 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
     <div class="jx-wrap jx-hero__in">
       <div>
         <span class="jx-mono">Snar · desember 2026</span>
-        <h1 aria-label="Jól á Snar"><span aria-hidden="true"><span class="jx-l" style="--i:0">J</span><span class="jx-l" style="--i:1">ó</span><span class="jx-l" style="--i:2">l</span><span class="jx-sp"></span><em><span class="jx-l" style="--i:4">á</span><span class="jx-sp"></span><span class="jx-l" style="--i:5">S</span><span class="jx-l" style="--i:6">n</span><span class="jx-l" style="--i:7">a</span><span class="jx-l" style="--i:8">r</span></em></span></h1>
+        <h1>Jól <em>á Snar</em></h1>
         <p class="jx-hero__lead">Lesið, lurtið, kannið og skapið í desember. Her finna tit tríggjar jólakalendarar, sum hvør hevur 14 lúkur. Í hvørjari lúku fáa næmingarnir ein spurning at undrast á og eina uppgávu at loysa. Savnið tað, tit skapa, í jólabókina hjá flokkinum, ella latið eina jólasøgu ferðast millum deildirnar. Tit kunnu eisini velja einstakar uppgávur eftir deild og lærugrein.</p>
         <div class="jx-bento">
-          <div class="jx-tile jx-tile--dag" style="--i:0" data-idag>
+          <div class="jx-tile jx-tile--dag" data-idag>
             <span class="jx-tile__k">Jólakalendararnir</span>
             <span class="jx-tile__big">14 <small>lúkur</small></span>
-            <span class="jx-tile__x">Ein nýggj lúka hvønn skúladag frá 1. til 18. desember.</span>
+            <span class="jx-tile__x">Ein nýggj lúka letur upp hvønn skúladag frá 1. til 18. desember.</span>
             <span class="jx-dagchips"></span>
           </div>
-          <div class="jx-tile" style="--i:1" data-advent>
+          <div class="jx-tile jx-tile--adv" data-advent>
             <span class="jx-tile__k">Advent</span>
             <span class="jx-advent" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             <span class="jx-tile__x" data-advent-tekst>Fýra ljós – eitt fyri hvønn sunnudag í advent.</span>
           </div>
-          <a class="jx-tile" style="--i:2" href="#kalendarar">
+          <a class="jx-tile jx-tile--kal" href="#kalendarar">
             <span class="jx-tile__k">Tríggir kalendarar</span>
             <span class="jx-deildir" aria-hidden="true"><span style="background:#c8102e"></span><span style="background:#5ed3ff"></span><span style="background:#ff4fa0"></span></span>
             <span class="jx-tile__t">Grunddeild, miðdeild og hádeild</span>
             <span class="jx-tile__go">Sí kalendararnar →</span>
           </a>
-          <a class="jx-tile" style="--i:3" href="#finn">
+          <a class="jx-tile jx-tile--finn" href="#finn">
             <span class="jx-tile__k">Leita</span>
             <span class="jx-tile__t">Finn jólatilfar</span>
-            <span class="jx-tile__x">Allar 42 lúkurnar eftir deild og lærugrein.</span>
+            <span class="jx-tile__x">Leita í teimum 42 lúkunum eftir deild ella lærugrein.</span>
             <span class="jx-tile__go">Leita →</span>
           </a>
-          <a class="jx-tile" style="--i:4" href="#laerari">
+          <a class="jx-tile jx-tile--laer" href="#laerari">
             <span class="jx-tile__k">Fyrireiking</span>
             <span class="jx-tile__t">Til læraran</span>
-            <span class="jx-tile__x">Soleiðis byrja tit.</span>
+            <span class="jx-tile__x">Soleiðis koma tit í gongd.</span>
             <span class="jx-tile__go">Les meira →</span>
           </a>
         </div>
-        <p class="jx-hero__meira">Leitar tú eftir gomlu jólafunkunum og -skjølunum? <a href="#meira">Tilfar frá jólasíðuni í fjør</a></p>
+        <p class="jx-hero__meira">Leitar tú eftir gomlum jólatilfari? <a href="#meira">Tilfar frá jólasíðuni í fjør →</a></p>
       </div>
-      <button class="jx-dog" type="button" aria-label="Snar-hundurin sigur vuff" data-dog>
-        <span class="jx-dog__vuff" aria-hidden="true">VUFF!</span>
-        <svg class="jx-dog__svg" viewBox="10 -8 94 64" shape-rendering="crispEdges" aria-hidden="true" focusable="false">
-          <path d="M38 38h4v12h-4zm-2 10h8v4h-8zM62 38h4v12h-4zm0 10h8v4h-8z" fill="#b9c4d8"/>
-          <path d="M28 38h6v14h-6zm-4 12h12v4H24zM54 38h6v14h-6zm0 12h12v4H54z" fill="#f4f1ea"/>
-          <path class="jx-dog__vel" d="M24 28h8v12h-8zm-4-4h6v10h-6zm-4-6h6v10h-6zm-2-4h4v8h-4z" fill="#f4f1ea"/>
-          <path d="M30 26h32v18H30zm-4 4h8v10h-8zm12-6h22v6H38zm22-4h10v24H60zM66 10h12v4H66zm-4 4h20v20H62zm16 8h12v12H78zm10 0h4v6h-4zM60 12h6v18h-6zm-2 4h4v10h-4z" fill="#f4f1ea"/>
-          <path d="M74 16h4v4h-4zM82 30h8v2h-8z" fill="#0b1830"/>
-          <path d="M62 30h10v4H62z" fill="#ef2418"/>
-          <path d="M64 4h16v6H64zm4-4h10v4H68zm6-4h8v4h-8zm6 2h4v6h-4z" fill="#ef2418"/><path d="M62 8h20v4H62zM84 -6h6v6h-6z" fill="#fff"/>
-          <path d="M14 54h86v2H14z" fill="#ffd27a" opacity=".5"/>
-        </svg>
-      </button>
     </div>
     <!-- Havnin á jólum: hús, ljós, fólk á kaiini, jólamenn á báti – og útisetar í flogfari á veg heim til jóla.
          Teknað við scratchpad havn_svg.py; flogfarið flýgur aftanfyri kirkjutornið. -->
@@ -415,7 +422,17 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   </section>
 
   <!-- ====================================================== Kalendararnir -->
-  <section class="jx-section" id="kalendarar">
+  <nav class="jx-tabs" aria-label="Partar á síðuni">
+    <div class="jx-wrap jx-tabs__in">
+      <a href="#kalendarar" data-tab="kal">Kalendararnir</a>
+      <a href="#finn" data-tab="finn">Finn jólatilfar</a>
+      <a href="#jolabok" data-tab="bok">Jólabók og søga</a>
+      <a href="#funkur" data-tab="fun">Funkur og tilfar í fjør</a>
+      <a href="#laerari" data-tab="laer">Til læraran</a>
+    </div>
+  </nav>
+
+  <section class="jx-section" id="kalendarar" data-panel="kal">
     <div class="jx-wrap">
       <h2>Jólakalendarar 2026</h2>
       <p class="jx-section__lead">Hvør kalendari hevur 14 lúkur – eina til hvønn skúladag frá 1. til 18. desember 2026. Ein nýggj lúka letur upp hvønn skúladag. Lúkurnar frá undanfarnum skúladøgum verða verandi opnar, men komandi lúkur eru læstar.</p>
@@ -434,7 +451,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
             <small>1.–3. flokkur</small>
             <h3>Jól í grunddeildini</h3>
             <p>Smáar søgur, tøl, spøl og skapandi løtur. Børnini lurta, tosa, syngja, telja og tekna. Í nøkrum lúkum kunnu tey eisini gera eina síðu til jólabókina.</p>
-            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="https://katof.github.io/rokning-spol/jol/grunddeild.html">Kom og hygg</a></div>
+            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="grunddeild.html">Kom og hygg</a></div>
           </div>
         </article>
         <article class="jx-cal jx-cal--m">
@@ -449,7 +466,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
             <small>4.–6. flokkur</small>
             <h3>Jól í miðdeildini</h3>
             <p>Mál, mentan, royndir og kanningar. Hvør lúka byrjar við einum undranarspurningi, og í summum lúkum kunnu næmingarnir gera eina síðu til jólabókina. Eyka uppgávur eru til 5. og 6. flokk.</p>
-            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="https://katof.github.io/rokning-spol/jol/middeild.html">Kom og hygg</a></div>
+            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="middeild.html">Kom og hygg</a></div>
           </div>
         </article>
         <article class="jx-cal jx-cal--h">
@@ -468,7 +485,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
             <small>7.–9. flokkur</small>
             <h3>Desember undir sjóneykuni</h3>
             <p>Bókmentir, miðlar og vísindi fáa næmingarnar at undrast, kanna, tulka og grundgeva. Í útvaldum lúkum kunnu tey savna sítt arbeiði í jólabókina. Læraraviðmerkingar og svar eru savnað í einum serligum parti.</p>
-            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="https://katof.github.io/rokning-spol/jol/hadeild.html">Kom og hygg</a></div>
+            <div class="jx-cal__btns"><a class="jx-btn jx-btn--red jx-btn--sm" href="hadeild.html">Kom og hygg</a></div>
           </div>
         </article>
       </div>
@@ -487,7 +504,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   </section>
 
   <!-- ====================================================== Jólabókin og Jólasøgan, sum ferðast -->
-  <section class="jx-section jx-bridge" id="jolabok">
+  <section class="jx-section jx-bridge" id="jolabok" data-panel="bok">
     <div class="jx-wrap">
       <div class="jx-bridge__header">
         <span class="jx-bridge__kicker">Skapið nakað saman</span>
@@ -503,10 +520,10 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
         <li class="jx-flow__arrow" aria-hidden="true"><svg viewBox="0 0 40 20"><path d="M2 10 h30 M24 3 l9 7 -9 7" fill="none" stroke="#f2b84b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></li>
         <li class="jx-flow__step"><span class="jx-flow__n">4</span><svg class="jx-flow__art" viewBox="0 0 180 130" aria-hidden="true"><path d="M30 30 q30 -8 60 4 q30 -12 60 -4 v84 q-30 -8 -60 4 q-30 -12 -60 -4z" fill="#152a50" stroke="#f2b84b" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 34 q27 -6 54 4 v78 q-27 -10 -54 -4z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><path d="M90 38 q27 -10 54 -4 v78 q-27 -6 -54 4z" fill="#fffdf7" stroke="#1f1d1a" stroke-width="1.2"/><path d="M90 38 v78" stroke="#1f1d1a" stroke-width="1.5"/><path d="M48 54 q8 -10 16 0 q-8 12 -16 0z" fill="#7fd19b"/><path d="M48 70 h30 M48 78 h30 M48 86 h22" stroke="#c9c2b4" stroke-width="2" stroke-linecap="round"/><path d="M104 58 h28 M104 66 h28 M104 74 h20" stroke="#c9c2b4" stroke-width="2" stroke-linecap="round"/><circle cx="118" cy="92" r="8" fill="none" stroke="#2d5ea8" stroke-width="2.5"/><path d="M126 30 v34 l-6 -6 l-6 6 v-34" fill="#d4213a" stroke="#1f1d1a" stroke-width="1.2"/><path class="jx-flow__star" d="M90 6 l4 9 10 1 -8 6 3 10 -9 -6 -9 6 3 -10 -8 -6 10 -1z" fill="#ffd27a"/></svg><b>Seinni kunnu tit gera eina jólabók</b></li>
       </ol>
-      <p class="jx-flow__dl">Prenta: <a href="https://katof.github.io/rokning-spol/jol/skjol/Jolabok_perma.pdf" target="_blank" rel="noopener">Perma</a> · <a href="https://katof.github.io/rokning-spol/jol/skjol/Jolabok_sida.pdf" target="_blank" rel="noopener">Síða til jólabókina</a> (PDF)</p>
+      <p class="jx-flow__dl">Prenta: <a href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/Jolabok_perma.pdf" target="_blank" rel="noopener">Perma</a> · <a href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/J%C3%B3l/Jolabok_sida.pdf" target="_blank" rel="noopener">Síða til jólabókina</a> (PDF)</p>
     </div>
   </section>
-  <section class="jx-section jx-bridge" id="saman">
+  <section class="jx-section jx-bridge" id="saman" data-panel="bok">
     <div class="jx-wrap">
       <span class="jx-bridge__kicker">Saman á skúlanum · valfrítt</span>
       <h2>Jólasøgan, sum ferðast</h2>
@@ -517,9 +534,9 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
         <div class="jx-bridge__step"><span class="jx-bridge__number">3</span><strong>Grunddeildin teknar</strong>Børnini lurta og tekna myndir til søguna.</div>
       </div>
       <div class="jx-bridge__links">
-        <a class="jx-btn jx-btn--sm" href="https://katof.github.io/rokning-spol/jol/hadeild.html#saman">Skriva søguna</a>
-        <a class="jx-btn jx-btn--sm" href="https://katof.github.io/rokning-spol/jol/middeild.html#saman">Lesa søguna upp</a>
-        <a class="jx-btn jx-btn--sm" href="https://katof.github.io/rokning-spol/jol/grunddeild.html#saman">Tekna myndirnar</a>
+        <a class="jx-btn jx-btn--sm" href="hadeild.html#saman">Skriva søguna</a>
+        <a class="jx-btn jx-btn--sm" href="middeild.html#saman">Lesa søguna upp</a>
+        <a class="jx-btn jx-btn--sm" href="grunddeild.html#saman">Tekna myndirnar</a>
       </div>
       <p class="jx-bridge__tip">Tað er ikki neyðugt, at aðrir flokkar eru við. Í kalendarunum eru eisini uppskot til, hvussu hvør flokkur kann arbeiða sjálvstøðugt.</p>
     </div>
@@ -527,7 +544,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
 
 
   <!-- ====================================================== Finn jólatilfar -->
-  <section class="jx-section" id="finn">
+  <section class="jx-section" id="finn" data-panel="finn">
     <div class="jx-wrap">
       <h2>Finn jólatilfar</h2>
       <p class="jx-section__lead">Her finnur tú allar 42 lúkurnar. Vel deild og lærugrein fyri at avmarka yvirlitið. Tú kanst eisini velja bæði í senn. Trýst á eina lúku fyri at fara beinleiðis til hana.</p>
@@ -551,7 +568,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
 
 
   <!-- ====================================================== Meira jólatilfar -->
-  <section class="jx-section jx-section--fold" id="meira">
+  <section class="jx-section jx-section--fold" id="meira" data-panel="fun">
     <div class="jx-wrap">
       <details class="jx-fold" id="jx-meira-fold">
         <summary><span><h2>Jólatilfar frá undanfarnum jólasíðum</h2><span class="jx-fold__lead">Aðrir kalendarar, undirvísingargongdir, tilfar at prenta, bøkur, sangir og upptøkur. Trýst fyri at lata upp.</span></span><span class="jx-fold__btn">Lat upp</span></summary>
@@ -576,10 +593,10 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
             <li><div><b>Jólarokning við Johann</b><span>Jólabók úr bókarøðini Kom og rokna (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Kom_og_rokna__jolabok.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Ein av søgunum um Jólalítla</b><span>Søga eftir Sverra Egholm (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/J%C3%B3latilfar/Ein_av_s%C3%B8gunum_um_J%C3%B3lal%C3%ADtla.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Floytan hjá seyðadreinginum</b><span>Eftir Dan Lindholm: Små sagn om store ting. Elin Henriksen týddi (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/J%C3%B3latilfar/Floytan.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li><div><b>Smágentan við svávulpinnunum</b><span>H.C. Andersen: «Den lille pige med svovlstikkerne». Marius Johannesen týddi (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/F%C3%B8royskt/Gentan_vi%C3%B0_sv%C3%A1vulpinnunum.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li><div><b>Smágentan við svávulpinnunum</b><span>H.C. Andersen: „Den lille pige med svovlstikkerne“. Marius Johannesen týddi (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/F%C3%B8royskt/Gentan_vi%C3%B0_sv%C3%A1vulpinnunum.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Jólagávur</b><span>Eftir Sólrún Michelsen. Astrid MacDonald teknaði (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/F%C3%B8royskt/J%C3%B3lag%C3%A1vur_Sn%C3%ADpa.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Músabilurin</b><span>Søga eftir Oskar Hermannsson (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Skj%C3%B8l/F%C3%B8royskt/M%C3%BAsabilurin.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li><div><b>Orðið «jól» í Evropa</b><span>Kort, sum vísir, hvat jól eita á málunum í Evropa (mynd).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Christmas-map-v2.png" target="_blank" rel="noopener">Mynd</a></li>
+            <li><div><b>Orðið „jól“ í Evropa</b><span>Kort, sum vísir, hvat jól eita á málunum í Evropa (mynd).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Christmas-map-v2.png" target="_blank" rel="noopener">Mynd</a></li>
           </ul>
         </div>
         <div>
@@ -588,17 +605,17 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
           <div class="jx-chips"><a class="jx-chip" href="https://snar.fo/skjol#jol">Jólaskjøl</a></div>
           <h3 class="jx-more__h" style="margin-top:18px">Filmar og sangupptøkur</h3>
           <details class="jx-det"><summary>Jólahjørtu við GeoGebra – fimm vegleiðingarfilmar (framleiddir av Nextfilmum)</summary><div class="jx-films" data-films="_cg0TPMRWP8|Jólahjarta við GeoGebra 1,CbF0UJRIves|Jólahjarta við GeoGebra 2,qvZJIW5WGO8|Jólahjarta við GeoGebra 3,tOusWvApOys|Jólahjarta við GeoGebra 4,jN8tJ_TPjWc|Jólahjarta við GeoGebra 5"></div></details>
-          <details class="jx-det"><summary>Lítla fitta nissa mín – við uppgávum</summary><div class="jx-films" data-films="IXOKSUHvrWw|Lítla fitta nissa mín"></div><p class="jx-det__task">Fastur táttur í føroysku jólatraditiónini er greytur við mandlu – og mandlugávan.<br><b>Lurta:</b> Hvussu nógv ørindi og niðurløg eru? <b>Orðalisti:</b> nissa, mandla, greytur, hugni. <b>Uppgáva:</b> Skriva eitt ørindi afturat til sangin. Ørindið skal hava orðið «nissa» við.</p></details>
-          <details class="jx-det"><summary>Ein kavamaður stendur í havanum – við uppgávum</summary><div class="jx-films" data-films="gGZFpZDjFD0|Ein kavamaður stendur í havanum,19W-MmheBYE|Im Garten steht ein Schneemann (týska útgávan)"></div><p class="jx-det__task">Týddur úr týskum: «Ein Schneemann steht im Garten».<br><b>Samanbering:</b> Lurta og samanber við týsku útgávuna. <b>Orðalisti:</b> kavamaður, havi, slítur í, brátt. <b>Uppgáva:</b> Finn 3 orð í sanginum, sum eru um kava ella vetur, og ger tekn við hondunum ella kroppinum.</p></details>
-          <details class="jx-det"><summary>Gleðilig jól! – við uppgávum</summary><div class="jx-films" data-films="pqiu4UyxKjo|Gleðilig jól"></div><p class="jx-det__task">Føroysk týðing av «Stille Nacht, heilige Nacht». Tekstur: Joseph Mohr (1816). Lag: Franz X. Gruber (1818). Føroyskt: Fríðrikur Petersen (1891).<br><b>Søga:</b> Leita á netinum og kanna: Hví varð lagið skrivað til gittar? <b>Orðalisti:</b> heilagur, friður, náði. <b>Uppgáva:</b> Samanber føroyska og enska týðing (vel 2 ørindi).</p></details>
-          <details class="jx-det"><summary>«Jingle Bells» – føroyskur tekstur, við uppgávum</summary><div class="jx-films" data-films="6g4AhrU5Yhs|Jólamenn («Jingle Bells» á føroyskum)"></div><p class="jx-det__task">Upprunalagið er eftir James L. Pierpont (1857). Føroyski teksturin setur sangin í føroyska náttúru og føroyskt veður.<br><b>Tónleikagreining:</b> Hvussu er taktin í sanginum? Klappið taktina. <b>Orðalisti:</b> sleða, bjølla, kavi, ferð. <b>Uppgáva:</b> Ger eitt nýtt ørindi við einum føroyskum veðurfyribrigdi.</p></details>
+          <details class="jx-det"><summary>Lítla fitta nissa mín – við uppgávum</summary><div class="jx-films" data-films="IXOKSUHvrWw|Lítla fitta nissa mín"></div><p class="jx-det__task">Fastur táttur í føroysku jólatraditiónini er greytur við mandlu – og mandlugávan.<br><b>Lurta:</b> Hvussu nógv ørindi og niðurløg eru? <b>Orðalisti:</b> nissa, mandla, greytur, hugni. <b>Uppgáva:</b> Skriva eitt ørindi afturat til sangin. Ørindið skal hava orðið „nissa“ við.</p></details>
+          <details class="jx-det"><summary>Ein kavamaður stendur í havanum – við uppgávum</summary><div class="jx-films" data-films="gGZFpZDjFD0|Ein kavamaður stendur í havanum,19W-MmheBYE|Im Garten steht ein Schneemann (týska útgávan)"></div><p class="jx-det__task">Týddur úr týskum: „Ein Schneemann steht im Garten“.<br><b>Samanbering:</b> Lurta og samanber við týsku útgávuna. <b>Orðalisti:</b> kavamaður, havi, slítur í, brátt. <b>Uppgáva:</b> Finn 3 orð í sanginum, sum eru um kava ella vetur, og ger tekn við hondunum ella kroppinum.</p></details>
+          <details class="jx-det"><summary>Gleðilig jól! – við uppgávum</summary><div class="jx-films" data-films="pqiu4UyxKjo|Gleðilig jól"></div><p class="jx-det__task">Føroysk týðing av „Stille Nacht, heilige Nacht“. Tekstur: Joseph Mohr (1816). Lag: Franz X. Gruber (1818). Føroyskt: Fríðrikur Petersen (1891).<br><b>Søga:</b> Leita á netinum og kanna: Hví varð lagið skrivað til gittar? <b>Orðalisti:</b> heilagur, friður, náði. <b>Uppgáva:</b> Samanber føroyska og enska týðing (vel 2 ørindi).</p></details>
+          <details class="jx-det"><summary>„Jingle Bells“ – føroyskur tekstur, við uppgávum</summary><div class="jx-films" data-films="6g4AhrU5Yhs|Jólamenn („Jingle Bells“ á føroyskum)"></div><p class="jx-det__task">Upprunalagið er eftir James L. Pierpont (1857). Føroyski teksturin setur sangin í føroyska náttúru og føroyskt veður.<br><b>Tónleikagreining:</b> Hvussu er taktin í sanginum? Klappið taktina. <b>Orðalisti:</b> sleða, bjølla, kavi, ferð. <b>Uppgáva:</b> Ger eitt nýtt ørindi við einum føroyskum veðurfyribrigdi.</p></details>
           <details class="jx-det"><summary>Eg vil telja stjørnurnar – sangupptøkur á føroyskum og donskum</summary><div class="jx-films" data-films="YxjIDUSI-B0|Eg vil telja stjørnurnar – Barnasangbók Føroya,i46OFEd2ZKk|Jeg vil tælle stjernerne – Dansk Sang"></div></details>
           <details class="jx-det"><summary>Jólaprýði úr grønmeti – tveir vegleiðingarfilmar</summary><div class="jx-films" data-films="9GYivyDcqtU|Jólatræ úr gularót,1fWJ_Vu1Few|Kavamaður og jólatræ úr grønmeti"></div></details>
         </div>
         <div>
           <h3 class="jx-more__h">Spøl og ítriv</h3>
           <ul class="jx-list">
-            <li><div><b>Heingja mann</b><span>Telduspæl av tí klassiska skúlaspælinum «Heingja mann».</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/funkur/heingja-mann" target="_blank" rel="noopener">Spæl</a></li>
+            <li><div><b>Heingja mann</b><span>Telduspæl av tí klassiska skúlaspælinum „Heingja mann“.</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/funkur/heingja-mann" target="_blank" rel="noopener">Spæl</a></li>
             <li><div><b>Jólalastik</b><span>Sandra Sørensen, sum hevur skrivað bókina Binda, hevur bundið eitt vakurt hárlastik við litríkum perlum. Síður úr bókini (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Harlastik.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Oktaetur</b><span>Leistur at prenta á A3 (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Jolarokning/Avskorid_oktaetur__A3-1.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li><div><b>Jólastjørna</b><span>Leistur at prenta (PDF).</span></div><a class="jx-btn jx-btn--sm" href="https://snar.fo/fileadmin/00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/Jol/Jolarokning/Jolastjoerna.pdf" target="_blank" rel="noopener">PDF</a></li>
@@ -610,7 +627,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   </section>
 
   <!-- ====================================================== Funkur og skjøl -->
-  <section class="jx-section" id="funkur">
+  <section class="jx-section" id="funkur" data-panel="fun">
     <div class="jx-wrap jx-two">
       <div>
         <span class="jx-mono">Amboðini</span>
@@ -637,7 +654,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   </section>
 
   <!-- ====================================================== Til læraran -->
-  <section class="jx-section" id="laerari">
+  <section class="jx-section" id="laerari" data-panel="laer">
     <div class="jx-wrap jx-two">
       <div>
         <span class="jx-mono">Fyrireiking</span>
@@ -675,22 +692,22 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   root.addEventListener('error', function (e) { var img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.fb) return; var src = img.getAttribute('src') || ''; if (src.indexOf('/fileadmin/') === 0) { img.dataset.fb = '1'; img.src = 'https://snar.fo' + src; } }, true);
 
   /* ------------------------------------------------------------ Allar 42 lúkurnar */
-  var DEILD = { g: ['Grunddeild', '1.–3. flokkur', 'https://katof.github.io/rokning-spol/jol/grunddeild.html'], m: ['Miðdeild', '4.–6. flokkur', 'https://katof.github.io/rokning-spol/jol/middeild.html'], h: ['Hádeild', '7.–9. flokkur', 'https://katof.github.io/rokning-spol/jol/hadeild.html'] };
+  var DEILD = { g: ['Grunddeild', '1.–3. flokkur', 'grunddeild.html'], m: ['Miðdeild', '4.–6. flokkur', 'middeild.html'], h: ['Hádeild', '7.–9. flokkur', 'hadeild.html'] };
   var EVNI = { sogur: 'Søgur, mál og miðlar', sidir: 'Jól, siðir og søga', stodd: 'Støddfrøði og spøl', ljos: 'Ljós, myrkur og náttúra', gavur: 'Gávur, nýtsla og samfelag', sangur: 'Sangur og leikur', hand: 'Handverk, list og talgild skapan', matur: 'Bakstur og matur' };
   var FAK = { fo: 'Føroyskt', da: 'Danskt', en: 'Enskt', st: 'Støddfrøði', nt: 'Náttúra og tøkni', hl: 'Heimstaðarlæra', al: 'Alis- og evnafrøði', la: 'Landafrøði', sa: 'Samfelagsfrøði', so: 'Søga og samtíð', kr: 'Kristnikunnleiki og átrúnaður', hv: 'Handaverk og list', ml: 'Myndlist og tónleikur' };
   /* [deild, lúka, heiti, lærugreinir, evni, tíð] */
   var ITEMS = [
-    ['g', 1, 'Vit syngja jólini inn', ['fo', 'hv'], 'sangur', '10–15'], ['g', 2, 'Eru nóg mikið av brævbjálvum?', ['st'], 'stodd', '10'], ['g', 3, 'Hvussu sæst, at tað eru jól?', ['hl'], 'sidir', '10–15'], ['g', 4, 'Vit byggja jólaorð', ['fo'], 'sogur', '10–15'],
+    ['g', 1, 'Vit syngja jólini inn', ['fo', 'hv'], 'sangur', '10–15'], ['g', 2, 'Eru nóg mikið av brævbjálvum?', ['st'], 'stodd', '10'], ['g', 3, 'Hvussu sæst, at tað eru jól?', ['hl'], 'sidir', '10–15', 'kirkja Kirkjubøur'], ['g', 4, 'Vit byggja jólaorð', ['fo'], 'sogur', '10–15'],
     ['g', 5, 'Ein heilsan til onkran', ['fo', 'hv'], 'hand', '15'], ['g', 6, 'Hvat er reglan?', ['st', 'hv'], 'stodd', '10–15'], ['g', 7, 'Eitt jólaminni frá fyrr', ['hl', 'fo'], 'sidir', '15'], ['g', 8, 'Øll skulu fáa líka nógv', ['st'], 'stodd', '10'],
-    ['g', 9, 'Kann pappírið standa sjálvt?', ['hv', 'hl'], 'hand', '15'], ['g', 10, 'Hvat sæst í myrkrinum?', ['hl'], 'ljos', '10'], ['g', 11, 'Kortið fór við vindinum', ['fo'], 'sogur', '10–15'], ['g', 12, 'Hvønn fugl sóu vit?', ['hl'], 'ljos', '15'],
+    ['g', 9, 'Kann pappírið standa sjálvt?', ['hv', 'hl'], 'hand', '15'], ['g', 10, 'Hvat sæst í myrkrinum?', ['hl'], 'ljos', '10'], ['g', 11, 'Eitt ljós til grannan', ['kr', 'fo'], 'sogur', '15', 'Jesus Kristus Bíblian ljós heimsins Matteus skeppumál næstakærleiki Nóra'], ['g', 12, 'Hvønn fugl sóu vit?', ['hl'], 'ljos', '15'],
     ['g', 13, 'Kanst tú lýsa skapið?', ['st', 'hv'], 'stodd', '10–15'], ['g', 14, 'Hetta komu vit fram til', ['fo', 'hv'], 'sangur', '15'],
     ['m', 1, 'Gávan hjá Marini', ['fo'], 'sogur', '10–15'], ['m', 2, 'Bollar til fleiri', ['st'], 'matur', '10–15'], ['m', 3, 'Et træ, der altid ønsker sig mere', ['da'], 'sogur', '10–15'], ['m', 4, 'Fá jólaljósið at lýsa', ['nt'], 'ljos', '15'],
-    ['m', 5, 'What is a Christmas cracker?', ['en'], 'sidir', '10–15'], ['m', 6, 'At bera jólini á baki', ['fo'], 'sogur', '10–15'], ['m', 7, 'Ein jólasangur á ferð', ['so'], 'sidir', '15'], ['m', 8, 'Fra gårdnisse til julenisse', ['da'], 'sidir', '10–15'],
+    ['m', 5, 'What is a Christmas cracker?', ['en'], 'sidir', '10–15'], ['m', 6, 'At bera jólini á baki', ['fo'], 'sogur', '10–15'], ['m', 7, 'Ein jólasangur á ferð', ['so'], 'sidir', '15', 'jólasálmur sálmur Stille Nacht Glade jul Gleðilig jól Jesus Kristus jólabarnið'], ['m', 8, 'Fra gårdnisse til julenisse', ['da'], 'sidir', '10–15'],
     ['m', 9, 'Eitt jólakort við symmetri', ['st'], 'stodd', '15'], ['m', 10, 'Ein heilsan við einum boðskapi', ['fo'], 'sogur', '15'], ['m', 11, 'Hví er dagurin so stuttur?', ['nt'], 'ljos', '15'], ['m', 12, 'Føroysk jól á einum frímerki', ['hv'], 'hand', '15'],
-    ['m', 13, 'Christmas in summer', ['en'], 'sidir', '10–15'], ['m', 14, 'Hvat stendur í jólaevangeliinum?', ['kr'], 'sidir', '15'],
+    ['m', 13, 'Christmas in summer', ['en'], 'sidir', '10–15'], ['m', 14, 'Hvat stendur í jólaevangeliinum?', ['kr'], 'sidir', '15', 'Jesus Kristus Bíblian Betlehem Lukas jólaevangeliið evangelistarnir hirðarnir Maria Jósef krubba eingil'],
     ['h', 1, 'Hvussu ljóða føroysk jól?', ['fo'], 'sangur', '10–15'], ['h', 2, 'Fært tú 30 % í avsláttri, tá ið tú fyrst fært 20 % og síðan 10 %?', ['st'], 'stodd', '10–15'], ['h', 3, 'Hvem har mandlen?', ['da'], 'sogur', '10–15'], ['h', 4, 'Hvussu nógva orku brúka jólaljósini?', ['al'], 'ljos', '10–15'],
-    ['h', 5, 'Scrooge: What is Christmas worth?', ['en'], 'sogur', '10–15'], ['h', 6, 'Jólakvøldið í 1950 – lýst í 2004', ['so'], 'sidir', '10–15'], ['h', 7, 'Ein hettutroyggja – tvær lýsingar', ['sa'], 'gavur', '10–15'], ['h', 8, 'Hvat spæl er best?', ['st'], 'stodd', '10–15'],
-    ['h', 9, 'Ferðin hjá einari jólagávu', ['la'], 'gavur', '10–15'], ['h', 10, 'Hvat sigur jólamyndin okkum?', ['kr'], 'sidir', '15–20'], ['h', 11, 'Ein søga við í mesta lagi 60 orðum', ['fo'], 'sogur', '10–15'], ['h', 12, 'Hvør arbeiðir, meðan onnur halda jól?', ['sa'], 'gavur', '10–15'],
+    ['h', 5, 'Scrooge: What is Christmas worth?', ['en'], 'sogur', '10–15'], ['h', 6, 'Jólakvøldið í 1950 – lýst í 2004', ['so'], 'sidir', '10–15', 'kirkja'], ['h', 7, 'Ein hettutroyggja – tvær lýsingar', ['sa'], 'gavur', '10–15'], ['h', 8, 'Hvat spæl er best?', ['st'], 'stodd', '10–15'],
+    ['h', 9, 'Ferðin hjá einari jólagávu', ['la'], 'gavur', '10–15'], ['h', 10, 'Hvat sigur jólamyndin okkum?', ['kr'], 'sidir', '15–20', 'Jesus Kristus Bíblian jólaevangeliið hirðarnir Maria krubba list málning'], ['h', 11, 'Ein søga við í mesta lagi 60 orðum', ['fo'], 'sogur', '10–15'], ['h', 12, 'Hvør arbeiðir, meðan onnur halda jól?', ['sa'], 'gavur', '10–15'],
     ['h', 13, 'Can a story make us want to shop?', ['en'], 'gavur', '10–15'], ['h', 14, 'Hvat taka vit við okkum úr desember?', ['fo'], 'hand', '20–25']
   ];
   var sel = { deild: '', evni: '', fak: '' };
@@ -713,9 +730,14 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   function render() {
     var list = ITEMS.filter(function (it) { return (!sel.deild || it[0] === sel.deild) && (!sel.evni || it[4] === sel.evni) && (!sel.fak || it[3].indexOf(sel.fak) >= 0); });
     root.querySelector('#jx-count').textContent = 'Vísir ' + list.length + ' av ' + ITEMS.length + ' lúkum.';
-    root.querySelector('#jx-items').innerHTML = list.length ? list.map(function (it) {
-      return '<a class="jx-item jx-item--' + it[0] + '" href="' + DEILD[it[0]][2] + '#luka-' + it[1] + '"><span class="jx-item__meta">' + DEILD[it[0]][0] + ' · lúka ' + it[1] + ' · ' + it[5] + ' minuttir</span><b>' + esc(it[2]) + '</b><span class="jx-item__fak">' + it[3].map(function (f) { return FAK[f]; }).join(' · ') + '</span></a>';
-    }).join('') : '<div class="jx-empty">Ongar lúkur samsvara við valini. Vel „Allar deildir“ ella „Allar lærugreinir“ fyri at víðka yvirlitið.</div>';
+    var box = root.querySelector('#jx-items');
+    if (!list.length) { box.innerHTML = '<div class="jx-empty">Ongar lúkur samsvara við valini. Vel „Allar deildir“ ella „Allar lærugreinir“ fyri at víðka yvirlitið.</div>'; return; }
+    var deildir = ['g', 'm', 'h'].filter(function (k) { return list.some(function (it) { return it[0] === k; }); });
+    box.innerHTML = '<div class="jx-cols" style="--n:' + deildir.length + '">' + deildir.map(function (k) {
+      return '<div class="jx-col jx-item--' + k + '"><h3>' + DEILD[k][0] + '<small>' + DEILD[k][1] + '</small></h3><div class="jx-col__list">' + list.filter(function (it) { return it[0] === k; }).map(function (it) {
+        return '<a class="jx-item jx-item--' + it[0] + '" href="' + DEILD[it[0]][2] + '#luka-' + it[1] + '"><span class="jx-item__n">' + it[1] + '</span><span><b>' + esc(it[2]) + '</b><span class="jx-item__fak">' + it[3].map(function (f) { return FAK[f]; }).join(' · ') + ' · ' + it[5] + ' min.</span></span></a>';
+      }).join('') + '</div></div>';
+    }).join('') + '</div>';
   }
   render();
 
@@ -723,8 +745,9 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   var TAGC = { luka: '#2f6b45', kal: '#c8102e', fo: '#8a3fb0', meira: '#1f6f8b', skjol: '#6f4e37', film: '#b5451b', funka: '#d9a521', laer: '#555' };
   var INDEX = [];
   function fold(t) { return String(t).toLowerCase().replace(/á/g, 'a').replace(/ð/g, 'd').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ý/g, 'y').replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a').replace(/é/g, 'e').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
-  function add(tag, tc, title, desc, href, el) { if (!title) return; INDEX.push({ tag: tag, tc: tc, title: title.trim(), desc: (desc || '').trim(), href: href, el: el || null, key: fold(title + ' ' + (desc || '') + ' ' + tag) }); }
-  ITEMS.forEach(function (it) { add('Lúka · ' + DEILD[it[0]][0], TAGC.luka, it[2], DEILD[it[0]][1] + ' · ' + it[3].map(function (f) { return FAK[f]; }).join(', ') + ' · ' + it[5] + ' minuttir', DEILD[it[0]][2] + '#luka-' + it[1]); });
+  /* ord (valfrítt): fjald leitiorð, t.d. Jesus og Kristus í lúkum við kristnum innihaldi */
+  function add(tag, tc, title, desc, href, el, ord) { if (!title) return; INDEX.push({ tag: tag, tc: tc, title: title.trim(), desc: (desc || '').trim(), href: href, el: el || null, key: fold(title + ' ' + (desc || '') + ' ' + tag + ' ' + (ord || '')) }); }
+  ITEMS.forEach(function (it) { add('Lúka · ' + DEILD[it[0]][0], TAGC.luka, it[2], DEILD[it[0]][1] + ' · ' + it[3].map(function (f) { return FAK[f]; }).join(', ') + ' · ' + it[5] + ' minuttir', DEILD[it[0]][2] + '#luka-' + it[1], null, it[6]); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-cal'), function (c) { add('Jólakalendari', TAGC.kal, c.querySelector('h3').textContent, c.querySelector('small').textContent + ' · ' + c.querySelector('p').textContent, c.querySelector('.jx-cal__btns a').getAttribute('href')); });
   Array.prototype.forEach.call(root.querySelectorAll('#foroyar .jx-list li'), function (li) { var a = li.querySelector('a'); add('Jól í Føroyum', TAGC.fo, li.querySelector('b').textContent, li.querySelector('span').textContent, a.getAttribute('href')); });
   var meiraLabel = 'Tilfar frá jólasíðuni í fjør · ';
@@ -786,19 +809,19 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
       var k = t.querySelector('.jx-tile__k'), big = t.querySelector('.jx-tile__big'), x = t.querySelector('.jx-tile__x'), ch = t.querySelector('.jx-dagchips');
       var i = LUKUR.indexOf(dag), naesta = LUKUR.filter(function (d) { return d > dag; })[0], seinasta = LUKUR.filter(function (d) { return d <= dag; }).length;
       if (i >= 0) {
-        k.textContent = 'Í dag'; big.innerHTML = 'Lúka ' + (i + 1); x.textContent = 'Opna lúkuna í kalendaranum hjá tykkara deild:'; ch.innerHTML = chips(i + 1);
+        k.textContent = 'Í dag'; big.innerHTML = 'Lúka ' + (i + 1); x.textContent = 'Latið dagsins lúku upp í kalendaranum hjá tykkara deild.'; ch.innerHTML = chips(i + 1);
       } else if (!seinasta) {
         var n = dagar(LUKUR[0]);
-        k.textContent = 'Fyrsta lúkan'; big.innerHTML = n + ' <small>' + (n === 1 ? 'dagur' : 'dagar') + '</small>';
-        x.textContent = 'til fyrsta lúkan letur upp ' + langt(LUKUR[0]) + '. Tá kemur ein nýggj lúka hvønn skúladag.';
+        k.textContent = 'Fyrsta lúkan'; big.innerHTML = n + ' <small>' + (n === 1 ? 'dagur eftir' : 'dagar eftir') + '</small>';
+        x.textContent = 'Fyrsta lúkan letur upp ' + langt(LUKUR[0]) + '. Síðan kemur ein nýggj lúka hvønn skúladag.';
       } else if (naesta) {
         k.textContent = 'Næsta lúka'; big.innerHTML = 'Lúka ' + (seinasta + 1);
-        x.textContent = 'letur upp ' + langt(naesta) + '. Ella opna lúku ' + seinasta + ':'; ch.innerHTML = chips(seinasta);
+        x.textContent = 'Næsta lúka letur upp ' + langt(naesta) + '. Meðan tit bíða, kunnu tit lata upp tær lúkurnar, sum longu eru opnar.'; ch.innerHTML = chips(seinasta);
       } else {
         var j = dagar(dag.slice(0, 4) + '-12-24');
-        k.textContent = j > 0 ? 'Jólaaftan' : 'Gleðilig jól';
-        big.innerHTML = j > 0 ? j + ' <small>' + (j === 1 ? 'dagur' : 'dagar') + '</small>' : '🎄';
-        x.textContent = j > 0 ? 'til jólaaftan. Allar 14 lúkurnar eru opnar.' : 'Allar 14 lúkurnar eru opnar.';
+        k.textContent = j > 0 ? 'Jólaaftan' : 'Gleðilig jól!';
+        big.innerHTML = j > 0 ? j + ' <small>' + (j === 1 ? 'dagur eftir' : 'dagar eftir') + '</small>' : '🎄';
+        x.textContent = j > 0 ? 'Allar 14 lúkurnar eru opnar. Nú telja vit niður til jólaaftan.' : 'Allar 14 lúkurnar eru opnar.';
         ch.innerHTML = chips(14);
       }
     }
@@ -807,10 +830,11 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
     var a = root.querySelector('[data-advent]');
     if (a) {
       Array.prototype.forEach.call(a.querySelectorAll('.jx-advent i'), function (c, n) { c.classList.toggle('on', n < tal); });
-      var ORD = ['fyrsta', 'annað', 'triðja', 'fjórða'];
-      a.querySelector('[data-advent-tekst]').textContent = tal === 0 ? 'Fyrsta ljósið verður tendrað sunnudagin 29. november.'
-        : dag > '2026-12-26' ? 'Øll fýra ljósini hava brunnið. Gleðilig jól!'
-        : 'Nú brennur ' + ORD[tal - 1] + ' ljósið' + (tal < 4 ? '. Næsta verður tendrað ' + langt(ADV[tal]) + '.' : '. Jólini eru tætt við.');
+      var ORD = ['Fyrsta', 'Annað', 'Triðja'];
+      a.querySelector('[data-advent-tekst]').textContent = tal === 0 ? 'Fyrsta adventsljósið verður tendrað sunnudagin 29. november.'
+        : dag > '2026-12-26' ? 'Advent er av. Gleðilig jól!'
+        : tal === 4 ? 'Øll fýra adventsljósini eru tendrað. Nú nærkast jólini.'
+        : ORD[tal - 1] + ' adventsljósið er tendrað. Næsta ljós verður tendrað ' + langt(ADV[tal]) + '.';
     }
   })();
 
@@ -848,14 +872,34 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle('jx-off', !e.isIntersecting); }); }, { rootMargin: '80px' });
     Array.prototype.forEach.call(root.querySelectorAll('[data-anim]'), function (el) { io.observe(el); });
   }
+  /* ------------------------------------------------------------ Teigar: bert ein partur sæst í senn */
+  var tabbar = root.querySelector('.jx-tabs'), panels = root.querySelectorAll('[data-panel]');
+  function panelOf(el) { var p = el && el.closest ? el.closest('[data-panel]') : null; return p ? p.getAttribute('data-panel') : ''; }
+  function visTeig(k) {
+    Array.prototype.forEach.call(panels, function (p) { p.classList.toggle('is-on', p.getAttribute('data-panel') === k); });
+    Array.prototype.forEach.call(tabbar.querySelectorAll('a'), function (a) { a.setAttribute('aria-current', a.getAttribute('data-tab') === k ? 'true' : 'false'); });
+  }
+  if (tabbar && panels.length) {
+    root.classList.add('jx-tabbed');
+    var h0 = (location.hash || '').slice(1), t0 = null;
+    try { t0 = h0 ? root.querySelector('#' + CSS.escape(decodeURIComponent(h0))) : null; } catch (err) {}
+    visTeig(panelOf(t0) || 'kal');
+    if (panelOf(t0)) { if (h0 === 'meira' && meiraFold) meiraFold.open = true; setTimeout(function () { t0.scrollIntoView({ block: 'start' }); }, 60); }
+    window.addEventListener('hashchange', function () { var t = null; try { t = root.querySelector('#' + CSS.escape(location.hash.slice(1))); } catch (err) {} if (panelOf(t)) visTeig(panelOf(t)); });
+  }
+
   window.addEventListener('click', function (e) {
     if (!root.contains(e.target)) return;
     var a = e.target.closest ? e.target.closest('a[href^="#"]') : null; if (!a) return;
     var id = a.getAttribute('href').slice(1), target = root.querySelector('#' + id); if (!target) return;
     if (id === 'meira' && meiraFold) meiraFold.open = true;
+    /* skift teig: hopp beinleiðis til byrjanina (sideinnihaldið broytist, so mjúk rulling fer skeivt) */
+    var skift = tabbar && panelOf(target) && !target.closest('.is-on');
+    if (tabbar && panelOf(target)) visTeig(panelOf(target));
     if (a.closest('#jx-res')) { var en = INDEX[+a.getAttribute('data-i')]; if (en && en.el) en.el.open = true; }
     e.preventDefault(); e.stopPropagation();
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (skift) { var y = target.getBoundingClientRect().top + window.pageYOffset - parseFloat(getComputedStyle(target).scrollMarginTop || 0); window.scrollTo(0, Math.max(0, y)); }
+    else target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (history.replaceState) history.replaceState(null, '', '#' + id);
   }, true);
 })();

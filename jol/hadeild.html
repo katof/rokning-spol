@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var file = location.pathname.split('/').pop() || '';
   var slug = Object.keys(NAVN).filter(function (k) { return file.indexOf(k) >= 0; })[0];
   if (!crumb || !slug) return;
-  var url = 'https://katof.github.io/rokning-spol/jol/' + slug + '.html';   // 10.11.2026: snar.fo/jol/<deild> finst ikki
+  var url = 'https://snar.fo/jol/' + slug;
   var a = document.createElement('a');
   a.className = crumb.className + ' kal-goym';
   a.href = '#';
