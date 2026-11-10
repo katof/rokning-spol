@@ -47,15 +47,16 @@
 
 /* ---- Hero ------------------------------------------------------------ */
 .jol-hero { padding: 18px 0 28px; }
-.jm-hero__in { display: grid; grid-template-columns: 1.5fr .9fr; gap: 28px; align-items: center; margin-top: 14px; }
+.jm-hero__in { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; margin-top: 18px; }
 .jm-hero h1 { font-size: clamp(2.6rem, 6.5vw, 5rem); }
 .jm-hero h1 span { color: var(--cyan); }
 .jm-hero__lead { font-size: clamp(1rem, 1.5vw, 1.2rem); max-width: 60ch; margin-top: 14px; color: var(--muted); }
 .jm-hero__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 20px; }
 .jm-hero__art { position: relative; }
-.jm-hero__art svg { width: 100%; height: auto; max-height: 240px; display: block; }   /* minni træ, so lúkurnar koma longri upp */
+.jm-hero__art svg { width: 100%; height: auto; display: block; }
 .jm-node { animation: jm-blink 3s ease-in-out infinite; animation-delay: var(--d, 0s); }
 .jm-dog { position: absolute; border: 0; padding: 0; background: none; cursor: pointer; width: 92px; height: 60px; right: 4px; top: 24px; }
+.jm-dog .snar-px { transform: scaleX(-1); }
 
 /* ---- Kalendarin -------------------------------------------------------- */
 .jm-cal { padding: 10px 0 36px; }
@@ -121,6 +122,21 @@
 .jm-list b { font-family: "Space Grotesk", sans-serif; }
 .jm-list span span { display: block; font-size: .86rem; color: var(--muted); }
 .jm-list i { font-style: normal; color: var(--cyan); }
+/* Funkur í jólabúna: fýrakantar á rað, sum modulir á einari leidning – peran ovast tendrast */
+#funkur .jm-section__in { grid-template-columns: 1fr; }
+.jm-list.jm-perur { --c: var(--cyan); position: relative; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 26px 16px; padding-top: 22px; }
+.jm-perur::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 2px; background: repeating-linear-gradient(90deg, var(--line) 0 14px, transparent 14px 20px); }
+.jm-perur li:nth-child(7n+1) { --c: var(--cyan); } .jm-perur li:nth-child(7n+2) { --c: var(--gold); } .jm-perur li:nth-child(7n+3) { --c: var(--pink); }
+.jm-perur li:nth-child(7n+4) { --c: var(--mint); } .jm-perur li:nth-child(7n+5) { --c: var(--violet); } .jm-perur li:nth-child(7n+6) { --c: var(--red); } .jm-perur li:nth-child(7n+7) { --c: var(--green); }
+.jol .jm-perur a { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 8px; height: 100%; min-height: 170px; padding: 30px 12px 14px; border: 1.5px solid var(--line); border-radius: 4px; background: var(--panel); text-align: center; transition: border-color .15s, transform .15s; }
+.jol .jm-perur a::before { content: ""; position: absolute; left: 50%; top: -16px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; border: 2px solid var(--line); background: #1b3350; transition: background .15s, box-shadow .15s, border-color .15s; }
+.jol .jm-perur a::after { content: ""; position: absolute; left: 14%; right: 14%; bottom: -9px; height: 8px; background: repeating-linear-gradient(90deg, var(--line) 0 4px, transparent 4px 12px); }
+.jol .jm-perur a:hover, .jol .jm-perur a:focus-visible { border-color: var(--c); transform: translateY(-3px); }
+.jol .jm-perur a:hover::before, .jol .jm-perur a:focus-visible::before, .is-ljos .jm-perur a::before { background: var(--c); border-color: var(--c); box-shadow: 0 0 16px 4px color-mix(in srgb, var(--c) 55%, transparent); }
+.jm-perur svg { width: 40px; height: 40px; stroke: var(--c); }
+.jm-perur b { font-size: 1rem; line-height: 1.15; }
+.jm-perur span span { font-size: .78rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.jm-perur i { display: none; }
 .jm-song { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); padding: 18px 20px; max-width: 520px; }
 .jm-song h3 { font-size: 1.4rem; }
 .jm-song__by { font-family: "IBM Plex Mono", monospace; font-size: .72rem; letter-spacing: .06em; color: var(--muted); margin: 4px 0 10px; }
@@ -691,7 +707,7 @@ aldri kann eg fulltakka tær
         <h2>Funkur í jólabúna</h2>
         <p style="color:var(--muted)">Funkurnar á Snar, sum lúkurnar brúka. Í desember eru tær í jólabúna.</p>
       </div>
-      <ul class="jm-list">
+      <ul class="jm-list jm-perur">
         <li><a href="https://snar.fo/funkur/jolafunkur/jolakotur"><svg viewBox="0 0 64 64"><use href="#s-circuit"/></svg><span><b>Jólaperur</b><span>Spæl við kotur: fá perur at hanga og blinka – lúka 4</span></span><i>→</i></a></li>
         <li><a href="https://snar.fo/funkur/spoel/finn-ord-1"><svg viewBox="0 0 64 64"><use href="#s-speech"/></svg><span><b>Finn orð</b><span>Venjingin Jólaorð: navnorð, sagnorð, lýsingarorð – lúka 6</span></span><i>→</i></a></li>
         <li><a href="https://snar.fo/funkur/ger-fyrisoegn-1-1"><svg viewBox="0 0 64 64"><use href="#s-paper"/></svg><span><b>Ger fyrisøgn</b><span>Jólatekstir á trimum stigum – lúka 7</span></span><i>→</i></a></li>
