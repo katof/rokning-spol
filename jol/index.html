@@ -761,7 +761,7 @@ body:has(.jol) footer.snar-ft .snar-ft__wave { background: #1d4f8c; }
   Array.prototype.forEach.call(root.querySelectorAll('#meira details.jx-det'), function (d) { (d.querySelector('.jx-films').getAttribute('data-films') || '').split(',').forEach(function (f) { add('Filmur', TAGC.film, f.split('|')[1] || '', d.querySelector('summary').textContent, '#meira', d); }); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-funkur a'), function (a) { add('Funka í jólabúna', TAGC.funka, a.querySelector('b').textContent, a.querySelector('span').textContent, a.getAttribute('href')); });
   Array.prototype.forEach.call(root.querySelectorAll('.jx-steps > div'), function (d) { add('Til læraran', TAGC.laer, d.querySelector('b').textContent, d.textContent.replace(d.querySelector('b').textContent, ''), '#laerari'); });
-  add('Á pappíri', TAGC.kal, 'Pappírsútgáva', 'Prentið allar lúkurnar og hongið tær á eitt band – grunddeild, miðdeild og hádeild (PDF)', '#papir');
+  add('Á pappíri', TAGC.kal, 'Pappírsútgáva', 'Prentið allar lúkurnar og heingið tær á eitt band – grunddeild, miðdeild og hádeild (PDF)', '#papir');
   add('Skapa saman', TAGC.fo, 'Jólabókin hjá flokkinum', 'Prentið forsíðuna og ørkini á A4 og savnið síðurnar til eina felags jólabók', '#jolabok');
   add('Felags uppgáva', TAGC.kal, 'Jólasøgan, sum ferðast', 'Hádeildin skrivar, miðdeildin lesur upp, og grunddeildin teknar', '#saman');
   var q = root.querySelector('#jx-q'), res = root.querySelector('#jx-res'), clr = root.querySelector('#jx-q-clear');
