@@ -91,7 +91,8 @@
     '</footer>';
 
   var onSnar = !!document.querySelector('.snar2026-topbar');
-  root.className = 'av';
+  /* Á síðum við Snar-toppi liggur toppurin fastur oman á síðuni: høvdið fær meira pláss ovast, og „← Snar“ verður fjalt, tí logoið er har. */
+  root.className = 'av' + (onSnar ? ' av-snartop' : '');
   root.innerHTML =
     (onSnar ? '' :
     '<nav class="av-top" aria-label="Snar"><div class="av-wrap av-top-in">' +

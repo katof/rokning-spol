@@ -31,6 +31,8 @@ html:has(#snar-ambod),body:has(#snar-ambod),body:has(#snar-ambod)>.body-bg,body:
 /* Høvd */
 #snar-ambod .av-hero{padding:clamp(34px,5vw,64px) 0 clamp(20px,3vw,34px)}
 #snar-ambod .av-hero-in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:24px 48px;align-items:center}
+#snar-ambod.av-snartop .av-hero{padding-top:clamp(104px,11vw,132px)}
+#snar-ambod.av-snartop a.av-back{display:none}
 #snar-ambod a.av-back{display:inline-block;color:var(--muted)!important;font-weight:700;font-size:.92rem;margin-bottom:22px}
 #snar-ambod a.av-back:hover{color:var(--ink)!important}
 #snar-ambod .av-bar{display:block;width:72px;height:5px;background:var(--red);margin-bottom:22px}
