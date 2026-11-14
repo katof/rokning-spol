@@ -7,11 +7,23 @@
     "url": "https://kortal.fo/",
     "hvor": "Føroyakort",
     "c": "gron",
+    "ikon": "kort",
     "stutt": "Kortal er kortið hjá Føroyakorti á netinum. Har ber til at skifta bakgrundskort, tendra og sløkkja løg, leita eftir støðum, lesa koordinatar og prenta kortið.",
     "royn": "Lat næmingarnar finna skúlan á kortinum og skifta bakgrundskort. Hvat sæst á einum korti, sum ikki sæst á hinum? Lat tey síðani lesa koordinatarnar hjá skúlanum.",
-    "deild": ["Miðdeild", "Hádeild"],
-    "grein": ["Landalæra", "Náttúra og tøkni"],
-    "vita": ["Á føroyskum", "Eingin innritan", "Ókeypis", "Kortið tekur eina løtu at lesa inn"],
+    "deild": [
+      "Miðdeild",
+      "Hádeild"
+    ],
+    "grein": [
+      "Landalæra",
+      "Náttúra og tøkni"
+    ],
+    "vita": [
+      "Á føroyskum",
+      "Eingin innritan",
+      "Ókeypis",
+      "Kortið tekur eina løtu at lesa inn"
+    ],
     "kannad": "2026-11-14"
   },
   {
@@ -22,11 +34,24 @@
     "url": "https://stellarium-web.org/",
     "hvor": "Stellarium Labs",
     "c": "bla",
+    "ikon": "stjornur",
     "stutt": "Stellarium Web vísir stjørnuhimmalin frá tí staðnum, tú ert, og á tí klokkutíðini, tú velur. Tá ið amboðið varð roynt, setti tað seg sjálvt til Føroyar.",
     "royn": "Set klokkuna til í kvøld klokkan 21, og kanna, hvørjar gongustjørnur eru at síggja. Tendra stjørnumyndirnar, og lat næmingarnar finna Karlsvognin.",
-    "deild": ["Miðdeild", "Hádeild"],
-    "grein": ["Náttúra og tøkni", "Alisfrøði"],
-    "vita": ["Á enskum, og leitingin nýtir ensk og latínsk nøvn", "Eingin innritan", "Ókeypis í kaganum", "Ein knøttur lýsir við eini app, sum kostar", "Síðan finnur sjálv, hvar tú ert"],
+    "deild": [
+      "Miðdeild",
+      "Hádeild"
+    ],
+    "grein": [
+      "Náttúra og tøkni",
+      "Alisfrøði"
+    ],
+    "vita": [
+      "Á enskum, og leitingin nýtir ensk og latínsk nøvn",
+      "Eingin innritan",
+      "Ókeypis í kaganum",
+      "Ein knøttur lýsir við eini app, sum kostar",
+      "Síðan finnur sjálv, hvar tú ert"
+    ],
     "kannad": "2026-11-14"
   },
   {
@@ -37,11 +62,23 @@
     "url": "https://polypad.amplify.com/p",
     "hvor": "Amplify",
     "c": "reydgult",
+    "ikon": "form",
     "stutt": "Polypad er eitt talgilt borð við brikkum til støddfrøði. Har eru skap, tangram, rúmskap, brot, tøl, algebra og sannlíkindi, og brikkurnar kunnu flytast, snarast og litast.",
     "royn": "Lat „Tangram“ upp undir „Geometry“, og bið næmingarnar leggja eitt kvadrat av øllum sjey brikkunum. Vís tað á stóra skíggjanum, tá ið onkur hevur funnið loysnina.",
-    "deild": ["Grunddeild", "Miðdeild", "Hádeild"],
-    "grein": ["Støddfrøði"],
-    "vita": ["Á enskum, men við lítlum teksti", "Innritan er ikki neyðug – knøttarnir „Log in“ og „Sign up“ kunnu latast vera", "Ókeypis", "Fyrst kemur ein gluggi við valum, sum kann latast aftur"],
+    "deild": [
+      "Grunddeild",
+      "Miðdeild",
+      "Hádeild"
+    ],
+    "grein": [
+      "Støddfrøði"
+    ],
+    "vita": [
+      "Á enskum, men við lítlum teksti",
+      "Innritan er ikki neyðug – knøttarnir „Log in“ og „Sign up“ kunnu latast vera",
+      "Ókeypis",
+      "Fyrst kemur ein gluggi við valum, sum kann latast aftur"
+    ],
     "kannad": "2026-11-14"
   }
 ]
