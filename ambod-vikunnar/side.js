@@ -22,7 +22,13 @@
     kort: '<path d="M6 12 18 7l12 5 12-5v30l-12 5-12-5-12 5z"/><path d="M18 7v30M30 12v30"/><circle cx="36" cy="22" r="3.2" class="f"/>',
     stjornur: '<path d="M8 34 17 22l10 6 13-16"/><circle cx="8" cy="34" r="2.6" class="f"/><circle cx="17" cy="22" r="2.6" class="f"/><circle cx="27" cy="28" r="2.6" class="f"/><circle cx="40" cy="12" r="2.6" class="f"/><path d="M33 38v6M30 41h6M12 8v4M10 10h4"/>',
     form: '<path d="M6 40 24 22v18z"/><path d="M24 22h16v16H24z" transform="rotate(0)"/><path d="M8 8h18l-8 10H0z" transform="translate(6 2)"/>',
-    skrua: '<path d="M30 6a10 10 0 0 0-9 14L7 34a4 4 0 0 0 6 6l14-14a10 10 0 0 0 14-9l-6 6-6-2-2-6z"/>'
+    skrua: '<path d="M30 6a10 10 0 0 0-9 14L7 34a4 4 0 0 0 6 6l14-14a10 10 0 0 0 14-9l-6 6-6-2-2-6z"/>',
+    atom: '<ellipse cx="24" cy="24" rx="19" ry="7"/><ellipse cx="24" cy="24" rx="19" ry="7" transform="rotate(60 24 24)"/><ellipse cx="24" cy="24" rx="19" ry="7" transform="rotate(120 24 24)"/><circle cx="24" cy="24" r="3" class="f"/>',
+    sulur: '<path d="M6 42h36"/><path d="M10 42V30h6v12M21 42V20h6v22M32 42V10h6v32"/>',
+    vit: '<circle cx="10" cy="14" r="3"/><circle cx="10" cy="34" r="3"/><circle cx="24" cy="10" r="3"/><circle cx="24" cy="24" r="3"/><circle cx="24" cy="38" r="3"/><circle cx="38" cy="24" r="3.4" class="f"/><path d="M13 14l8-3M13 15l8 8M13 33l8-8M13 34l8 3M27 11l9 11M27 24h8M27 37l9-11"/>',
+    tonar: '<path d="M18 36V10l20-4v26"/><circle cx="13" cy="36" r="5"/><circle cx="33" cy="32" r="5"/>',
+    klokka: '<circle cx="24" cy="27" r="16"/><path d="M24 27V17M24 27l7 5M20 5h8M24 5v6"/>',
+    ord: '<path d="M8 8h22l10 10v22H8z"/><path d="M30 8v10h10M14 24h14M14 30h20M14 36h10"/>'
   };
   function ikon(k, cls) { return '<svg class="' + (cls || 'av-ico') + '" viewBox="0 0 48 48" aria-hidden="true" focusable="false">' + (IKON[k] || IKON.skrua) + '</svg>'; }
 
