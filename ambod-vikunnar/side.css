@@ -1,0 +1,70 @@
+/* Amboðið hesa vikuna: savnssíðan. Snar heintar hesa fílu frá GitHub (sí LÍM INN – síða.html). */
+
+/* Síðan fyllir alla breiddina á Snar, eins og hinar temasíðurnar */
+html:has(#snar-ambod),body:has(#snar-ambod),body:has(#snar-ambod)>.body-bg,body:has(#snar-ambod)>.snar-background,#page-content:has(#snar-ambod){background:#fff!important}
+#page-content:has(#snar-ambod){margin-block:0!important;padding-block:0!important;border-bottom:0!important}
+#page-content:has(#snar-ambod) :is(.container,.row,.content-wrapper,.section){background:transparent!important}
+#page-content :is(.container,.row,.content-wrapper,.section):has(#snar-ambod){width:100%;max-width:none;margin-inline:0;padding-inline:0}
+#page-content :is(.frame,.frame-container,.frame-inner):has(#snar-ambod){width:100%!important;max-width:none!important;margin:0!important;padding:0!important;background:transparent!important;left:auto!important;right:auto!important;border-bottom:0!important}
+#page-content .section:has(#snar-ambod),#page-content .content-wrapper:has(#snar-ambod){margin-block:0!important;padding-block:0!important}
+body:has(#snar-ambod) .snar2026-topbar__offset{display:none}
+body:has(#snar-ambod) .snar2026-topbar{background:#f6f6f3}
+
+#snar-ambod{--ink:#1b1b1b;--muted:#5f5f5b;--line:#e2e2de;--soft:#f6f6f3;--red:#ef2418;--a:#1f8a5b;--a-soft:#e6f4ec;
+ color:var(--ink);font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif;font-size:1rem;line-height:1.55;text-align:left;padding-bottom:70px;background:#fff}
+#snar-ambod *,#snar-ambod *::before,#snar-ambod *::after{box-sizing:border-box}
+#snar-ambod [hidden]{display:none!important}
+#snar-ambod :is(h1,h2,h3,p,ul,li){margin:0;padding:0;letter-spacing:0;text-transform:none;font-family:inherit}
+#snar-ambod button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;border-radius:0;text-transform:none;letter-spacing:0}
+#snar-ambod :is(a,button):focus-visible{outline:3px solid #1b5aa6;outline-offset:2px}
+#snar-ambod a:not([class]){color:#14584a!important;text-decoration:underline}
+#snar-ambod [data-c=gron]{--a:#1f8a5b;--a-soft:#e6f4ec}
+#snar-ambod [data-c=bla]{--a:#2a5fb0;--a-soft:#e8effa}
+#snar-ambod [data-c=reydgult]{--a:#c9600f;--a-soft:#fdf0e3}
+#snar-ambod [data-c=lilla]{--a:#7a4bb5;--a-soft:#f1eafa}
+#snar-ambod .av-wrap{max-width:1040px;margin-inline:auto;padding-inline:clamp(16px,3vw,40px)}
+#snar-ambod .av-wait{padding:120px 20px 60px;text-align:center;color:var(--muted)}
+
+#snar-ambod .av-hero{background:var(--soft);border-bottom:1px solid var(--line);padding:clamp(100px,11vw,128px) 0 clamp(26px,4vw,40px)}
+#snar-ambod .av-kick{font-weight:700;color:#c81d12;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+#snar-ambod .av-hero h1{font-size:clamp(2.3rem,6vw,3.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.02;margin-top:8px;color:var(--ink)}
+#snar-ambod .av-lead{font-size:clamp(1.03rem,1.6vw,1.2rem);color:#3c3c39;max-width:38em;margin-top:14px}
+#snar-ambod .av-rules{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+#snar-ambod .av-rules span{background:#fff;border:1px solid var(--line);padding:5px 12px;font-weight:600;font-size:.92rem}
+#snar-ambod .av-rules span::before{content:"✓ ";color:#1f8a5b}
+
+#snar-ambod .av-main{padding-top:28px}
+#snar-ambod .av-filter{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:22px}
+#snar-ambod .av-filter b{font-size:.9rem;margin-right:4px}
+#snar-ambod .av-chip{border:1.5px solid var(--line);padding:6px 13px;font-weight:600;font-size:.93rem;background:#fff}
+#snar-ambod .av-chip:hover{border-color:var(--ink)}
+#snar-ambod .av-chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+#snar-ambod .av-sep{width:1px;height:26px;background:var(--line);margin:0 6px}
+
+#snar-ambod .av-card{border:1.5px solid var(--line);border-left:8px solid var(--a);background:#fff;margin-bottom:18px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);scroll-margin-top:100px}
+#snar-ambod .av-card.new{box-shadow:0 10px 30px rgba(0,0,0,.08)}
+#snar-ambod .av-l{padding:20px clamp(16px,2.5vw,26px) 22px}
+#snar-ambod .av-r{padding:20px clamp(16px,2.5vw,24px) 22px;background:var(--a-soft)}
+#snar-ambod .av-meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:.88rem;color:var(--muted);font-weight:600}
+#snar-ambod .av-new{background:var(--red);color:#fff;font-weight:800;padding:2px 9px;font-size:.78rem;letter-spacing:.05em}
+#snar-ambod .av-card h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:8px;color:var(--ink)}
+#snar-ambod .av-under{font-weight:600;color:var(--a);font-size:1.05rem;margin-top:2px}
+#snar-ambod .av-stutt{margin-top:10px;font-size:1.03rem}
+#snar-ambod .av-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+#snar-ambod .av-tags span{border:1px solid var(--line);padding:2px 9px;font-size:.84rem;font-weight:600;background:#fff}
+#snar-ambod .av-tags span.g{background:var(--a-soft);border-color:transparent;color:var(--a)}
+#snar-ambod .av-go{display:inline-flex;align-items:center;gap:.4rem;min-height:46px;padding:.5rem 1.2rem;margin-top:16px;background:var(--a);color:#fff!important;font-weight:700;text-decoration:none!important}
+#snar-ambod .av-go:hover{filter:brightness(.92)}
+#snar-ambod .av-hvor{font-size:.85rem;color:var(--muted);margin-top:10px}
+#snar-ambod .av-r h3{font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--a);margin-bottom:4px}
+#snar-ambod .av-r p{font-size:.98rem}
+#snar-ambod .av-r ul{list-style:none;display:grid;gap:4px;margin-top:2px}
+#snar-ambod .av-r li{font-size:.94rem;padding-left:16px;position:relative;list-style:none}
+#snar-ambod .av-r li::before{content:"";position:absolute;left:0;top:.6em;width:7px;height:7px;background:var(--a)}
+#snar-ambod .av-r p+h3{margin-top:16px}
+
+#snar-ambod .av-next{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;border:1.5px dashed #c4c4be;padding:14px 18px;margin-bottom:26px;color:var(--muted)}
+#snar-ambod .av-next b{color:var(--ink);font-size:1.08rem}
+#snar-ambod .av-empty{color:var(--muted);padding:20px 0}
+#snar-ambod .av-foot{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;font-size:.92rem;color:var(--muted);max-width:54em}
+@media (max-width:760px){#snar-ambod .av-card{grid-template-columns:minmax(0,1fr)}#snar-ambod .av-sep{display:none}}
