@@ -27,9 +27,6 @@ html:has(#snar-ambod),body:has(#snar-ambod),body:has(#snar-ambod)>.body-bg,body:
 #snar-ambod .av-top{border-bottom:1px solid var(--line);background:#fff}
 #snar-ambod .av-top-in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px}
 #snar-ambod .av-logo img{display:block;height:34px;width:auto}
-#snar-ambod .av-top-links{display:flex;gap:22px;flex-wrap:wrap}
-#snar-ambod a.av-tl{color:var(--ink)!important;font-weight:700;font-size:.95rem;padding:4px 0;background:linear-gradient(var(--red),var(--red)) 0 100%/0 2px no-repeat;transition:background-size .2s ease}
-#snar-ambod a.av-tl:hover{background-size:100% 2px}
 
 /* Høvd */
 #snar-ambod .av-hero{padding:clamp(34px,5vw,64px) 0 clamp(20px,3vw,34px)}
@@ -96,7 +93,7 @@ html:has(#snar-ambod),body:has(#snar-ambod),body:has(#snar-ambod)>.body-bg,body:
 #snar-ambod .av-next{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:16px;color:var(--muted);font-weight:600}
 #snar-ambod .av-next-l{border:1.5px dashed #b9b9b4;padding:3px 10px;color:var(--ink);font-weight:700;font-size:.9rem}
 
-/* Fyrri amboð */
+/* Amboð frá undanfarnum vikum */
 #snar-ambod .av-filter{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px}
 #snar-ambod .av-filter b{font-size:.9rem;margin-right:4px}
 #snar-ambod .av-chip{border:1.5px solid var(--line);padding:6px 13px;font-weight:600;font-size:.93rem;background:#fff}
@@ -129,7 +126,68 @@ html:has(#snar-ambod),body:has(#snar-ambod),body:has(#snar-ambod)>.body-bg,body:
 #snar-ambod .av-close{position:absolute;top:10px;right:12px;z-index:2;background:#fff;border:1.5px solid var(--line);padding:6px 12px;font-weight:700;font-size:.9rem}
 #snar-ambod .av-close:hover{border-color:var(--ink)}
 
+/* Síðufóturin: málistokkur ovast, strikumyndir av amboðum og standandi hundurin í svørtum */
+#snar-ambod .av-ft{position:relative;background:var(--soft);overflow:hidden;color:#2f2f2c}
+#snar-ambod .av-ft-ruler{position:relative;height:34px;background:#fff;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;padding:0 clamp(16px,3.5vw,44px);
+ background-image:linear-gradient(90deg,var(--ink) 1.5px,transparent 1.5px),linear-gradient(90deg,#8a8a86 1px,transparent 1px);
+ background-size:100px 16px,10px 8px;background-position:clamp(16px,3.5vw,44px) 100%,clamp(16px,3.5vw,44px) 100%;background-repeat:repeat-x}
+#snar-ambod .av-ft-ruler span{display:none}
+#snar-ambod .av-ft-art{position:absolute;inset:36px 0 66px;pointer-events:none}
+#snar-ambod .av-ft-i{position:absolute;width:64px;height:64px;fill:none;stroke:#a9a9a4;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
+#snar-ambod .av-ft-i .f{fill:#a9a9a4;stroke:none}
+/* strikumyndirnar liggja niðast í fótinum, so tær ikki fara inn í tekstin */
+#snar-ambod .av-ft-i.a1{left:29%;bottom:14px;width:54px;height:54px;transform:rotate(-8deg)}
+#snar-ambod .av-ft-i.a2{right:2%;bottom:10px;width:70px;height:70px}
+#snar-ambod .av-ft-i.a3{left:2%;bottom:12px;width:52px;height:52px;transform:rotate(10deg)}
+#snar-ambod .av-ft-i.a4{right:25%;bottom:12px;width:46px;height:46px;transform:rotate(18deg)}
+#snar-ambod .av-ft-i.a5{left:50%;bottom:10px;width:42px;height:42px}
+#snar-ambod .av-ft-main{padding-bottom:clamp(76px,7vw,92px)!important}
+#snar-ambod .av-ft-plane{position:absolute;left:24%;top:2px;width:260px;height:60px;fill:none}
+#snar-ambod .av-ft-plane .t{stroke:#c9c9c4;stroke-width:2;stroke-dasharray:2 7;stroke-linecap:round}
+#snar-ambod .av-ft-plane .p{stroke:var(--blue);stroke-width:2;stroke-linejoin:round;opacity:.7}
+#snar-ambod .av-ft-main{position:relative;display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:30px 40px;padding-top:clamp(40px,5vw,60px);padding-bottom:clamp(34px,4vw,50px)}
+#snar-ambod .av-ft-eye{font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#snar-ambod a.av-ft-word{display:inline-block;margin:4px 0 8px;font-size:2.7rem;font-weight:900;letter-spacing:-.05em;line-height:1;color:var(--ink)!important}
+#snar-ambod a.av-ft-word span{color:var(--red)}
+#snar-ambod .av-ft-brand p:last-child{max-width:20em;color:#3c3c39}
+#snar-ambod .av-ft-col h2{font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #d6d6d1}
+#snar-ambod .av-ft-col ul{list-style:none;display:grid;gap:6px}
+#snar-ambod .av-ft-col li{list-style:none}
+#snar-ambod .av-ft-col address{font-style:normal;line-height:1.6;color:#3c3c39}
+#snar-ambod a.av-fl{color:#2f2f2c!important;font-weight:600;background:linear-gradient(var(--red),var(--red)) 0 100%/0 2px no-repeat;padding-bottom:2px;transition:background-size .2s ease}
+#snar-ambod a.av-fl:hover{background-size:100% 2px;color:var(--ink)!important}
+#snar-ambod a.av-ft-fb{display:inline-block;margin-top:10px}
+#snar-ambod .av-ft-bottom{position:relative;border-top:1px solid #d6d6d1;background:#fff}
+#snar-ambod .av-ft-bottom-in{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;min-height:64px;padding-top:10px}
+#snar-ambod .av-ft-bottom p{font-size:.88rem;color:var(--muted);padding-bottom:16px}
+#snar-ambod .av-dog{position:relative;display:block;width:76px;padding:0 0 4px;cursor:pointer}
+#snar-ambod .av-dog svg{display:block;width:76px;height:auto;overflow:visible}
+#snar-ambod .av-dog .body{fill:#292825}
+#snar-ambod .av-dog .legs-back{fill:#77746f}
+#snar-ambod .av-dog .eye-shut,#snar-ambod .av-dog .eye-open{fill:#fff}
+#snar-ambod .av-dog .eye-open,#snar-ambod .av-dog.awake .eye-shut{display:none}
+#snar-ambod .av-dog.awake .eye-open{display:inline}
+#snar-ambod .av-dog .mouth{fill:#fff}
+#snar-ambod .av-dog .collar,#snar-ambod .av-dog .mball,#snar-ambod .av-dog .gball{fill:var(--red)}
+#snar-ambod .av-dog .mball,#snar-ambod .av-dog.ball .gball{display:none}
+#snar-ambod .av-dog.ball .mball{display:inline}
+#snar-ambod .av-dog .tail{transform-box:fill-box;transform-origin:100% 100%}
+#snar-ambod .av-dog.awake .tail{animation:av-wag .45s ease-in-out infinite alternate}
+#snar-ambod .av-dog.bark .av-dog-s{animation:av-hopp .35s ease-out 1}
+@keyframes av-wag{from{transform:rotate(-8deg)}to{transform:rotate(10deg)}}
+@keyframes av-hopp{0%,100%{transform:translateY(0)}45%{transform:translateY(-5px)}}
+#snar-ambod .av-zzz{position:absolute;left:52px;bottom:42px;font-weight:800;color:#8a8a86;pointer-events:none}
+#snar-ambod .av-zzz i{position:absolute;font-style:normal;opacity:0;animation:av-z 3s ease-in infinite}
+#snar-ambod .av-zzz i:nth-child(2){animation-delay:1s;font-size:1.1em}
+#snar-ambod .av-zzz i:nth-child(3){animation-delay:2s;font-size:1.3em}
+#snar-ambod .av-dog.awake .av-zzz{display:none}
+@keyframes av-z{0%{opacity:0;transform:translate(0,0)}25%{opacity:.9}100%{opacity:0;transform:translate(14px,-26px)}}
+#snar-ambod .av-woof{position:absolute;right:-6px;bottom:52px;font-weight:900;font-size:.9rem;color:var(--red);opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;pointer-events:none}
+#snar-ambod .av-dog.bark .av-woof{opacity:1;transform:none}
+
 @media (max-width:860px){
+ #snar-ambod .av-ft-main{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #snar-ambod .av-ft-brand{grid-column:1/-1}
  #snar-ambod .av-hero-in,#snar-ambod .av-card-top,#snar-ambod .av-card-b{grid-template-columns:minmax(0,1fr)}
  #snar-ambod .av-art{max-width:420px;justify-self:center}
  #snar-ambod .av-browser{margin:18px 18px 0;min-height:180px}
@@ -137,8 +195,8 @@ html:has(#snar-ambod),body:has(#snar-ambod),body:has(#snar-ambod)>.body-bg,body:
  #snar-ambod .av-sep{display:none}
 }
 @media (max-width:560px){
- #snar-ambod .av-top-links{display:none}
- #snar-ambod .av-grid{grid-template-columns:minmax(0,1fr)}
+  #snar-ambod .av-grid{grid-template-columns:minmax(0,1fr)}
+ #snar-ambod .av-ft-i.a1,#snar-ambod .av-ft-i.a5{display:none}
 }
 @media (prefers-reduced-motion:reduce){
  #snar-ambod *{transition:none!important;animation:none!important}

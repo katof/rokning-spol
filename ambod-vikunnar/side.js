@@ -49,13 +49,53 @@
       '<circle cx="470" cy="256" r="6" class="rd"/>' +
     '</svg>';
 
+  /* Síðufóturin. Temasavn 2 hevur ikki Snar-síðufótin, so síðan hevur sín egna:
+     sama innihald sum á snar.fo, men við málistokki, strikumyndum av amboðum og standandi hundinum í svørtum. */
+  var FOOTER =
+    '<footer class="av-ft" aria-label="Snar">' +
+      '<div class="av-ft-ruler" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>' +
+      '<div class="av-ft-art" aria-hidden="true">' +
+        ikon('kort', 'av-ft-i a1') + ikon('stjornur', 'av-ft-i a2') + ikon('form', 'av-ft-i a3') + ikon('skrua', 'av-ft-i a4') +
+        '<svg class="av-ft-i a5" viewBox="0 0 48 48"><circle cx="20" cy="20" r="12"/><path d="M29 29l12 12"/></svg>' +
+        '<svg class="av-ft-plane" viewBox="0 0 260 60"><path class="t" d="M4 50c60-30 140-44 220-34"/><path class="p" d="M226 6l26 12-26 10 7-11z"/></svg>' +
+      '</div>' +
+      '<div class="av-wrap av-ft-main">' +
+        '<div class="av-ft-brand"><p class="av-ft-eye">Undirvísingarportalur</p>' +
+          '<a class="av-ft-word" href="' + SNAR + '/forsidan" aria-label="Snar – forsíða">Sna<span>r.</span></a>' +
+          '<p>Tilfar, hugskot og amboð til læring og undirvísing.</p></div>' +
+        '<nav class="av-ft-col" aria-label="Finn tilfar"><h2>Finn tilfar</h2><ul>' +
+          '<li><a class="av-fl" href="' + SNAR + '/temasavn">Temasavn</a></li><li><a class="av-fl" href="' + SNAR + '/skjol">Skjøl</a></li><li><a class="av-fl" href="' + SNAR + '/funkur">Funkur</a></li>' +
+          '<li><a class="av-fl" href="' + SNAR + '/ambodid-hesa-vikuna">Amboðið hesa vikuna</a></li></ul></nav>' +
+        '<nav class="av-ft-col" aria-label="Snar"><h2>Snar</h2><ul>' +
+          '<li><a class="av-fl" href="' + SNAR + '/um-snar">Um Snar</a></li><li><a class="av-fl" href="' + SNAR + '/forsidan">Forsíðan</a></li><li><a class="av-fl" href="mailto:snar@snar.fo">Skriva til okkara</a></li></ul></nav>' +
+        '<div class="av-ft-col"><h2>Samband &amp; miðlar</h2><address>Nám · Hoyvíksvegur 72<br>100 Tórshavn<br><a class="av-fl" href="mailto:snar@snar.fo">snar@snar.fo</a></address>' +
+          '<a class="av-fl av-ft-fb" href="https://www.facebook.com/SnarUndirvisingarsida/" target="_blank" rel="noopener noreferrer">Facebook ↗</a></div>' +
+      '</div>' +
+      '<div class="av-ft-bottom"><div class="av-wrap av-ft-bottom-in"><p>© Snar · Útgivið av Námi</p>' +
+        '<button class="av-dog" type="button" aria-label="Vekja Snar">' +
+          '<span class="av-zzz" aria-hidden="true"><i>z</i><i>z</i><i>Z</i></span><span class="av-woof" aria-hidden="true">VUFF!</span>' +
+          '<svg viewBox="0 8 104 48" aria-hidden="true" focusable="false"><g class="av-dog-s">' +
+            '<path class="legs-back" d="M38 38h4v12h-4zm-2 10h8v4h-8zM62 38h4v12h-4zm0 10h8v4h-8z"/>' +
+            '<g class="body">' +
+              '<path d="M28 38h6v14h-6zm-4 12h12v4H24zM54 38h6v14h-6zm0 12h12v4H54z"/>' +
+              '<g class="tail"><path d="M24 28h8v12h-8zm-4-4h6v10h-6zm-4-6h6v10h-6zm-2-4h4v8h-4z"/></g>' +
+              '<path d="M30 26h32v18H30zm-4 4h8v10h-8zm12-6h22v6H38zm22-4h10v24H60z"/>' +
+              '<path d="M66 10h12v4H66zm-4 4h20v20H62zm16 8h12v12H78zm10 0h4v6h-4z"/>' +
+              '<path d="M60 12h6v18h-6zm-2 4h4v10h-4z"/>' +
+            '</g>' +
+            '<path class="eye-shut" d="M73 18h6v2h-6z"/><path class="eye-open" d="M74 16h4v4h-4z"/>' +
+            '<path class="mouth" d="M82 30h8v2h-8z"/><path class="collar" d="M62 30h10v4H62z"/>' +
+            '<circle class="mball" cx="95" cy="32" r="6"/><circle class="gball" cx="97" cy="49" r="5"/>' +
+          '</g></svg></button>' +
+      '</div></div>' +
+    '</footer>';
+
   var onSnar = !!document.querySelector('.snar2026-topbar');
   root.className = 'av';
   root.innerHTML =
     (onSnar ? '' :
     '<nav class="av-top" aria-label="Snar"><div class="av-wrap av-top-in">' +
       '<a class="av-logo" href="' + SNAR + '/" aria-label="Snar forsíða"><img src="' + LOGO + '" alt="Snar"></a>' +
-      '<span class="av-top-links"><a class="av-tl" href="' + SNAR + '/temasavn">Temasíður</a><a class="av-tl" href="' + SNAR + '/skjol">Skjøl</a><a class="av-tl" href="' + SNAR + '/funkur">Funkur</a><a class="av-tl" href="' + SNAR + '/um-snar">Um Snar</a></span>' +
     '</div></nav>') +
     '<header class="av-hero"><div class="av-wrap av-hero-in"><div class="av-hero-t">' +
       '<a class="av-back" href="' + SNAR + '/">← Snar</a>' +
@@ -67,11 +107,12 @@
     '<main class="av-wrap av-main">' +
       '<section aria-labelledby="av-h-now"><div class="av-sec-h"><h2 id="av-h-now">Hesa vikuna</h2><span id="av-week"></span></div>' +
         '<div id="av-feature"><p class="av-empty">Amboðini verða lisin inn …</p></div><div id="av-next"></div></section>' +
-      '<section id="av-old" aria-labelledby="av-h-old" hidden><div class="av-sec-h"><h2 id="av-h-old">Fyrri amboð</h2><span id="av-n"></span></div>' +
+      '<section id="av-old" aria-labelledby="av-h-old" hidden><div class="av-sec-h"><h2 id="av-h-old">Amboð frá undanfarnum vikum</h2><span id="av-n"></span></div>' +
         '<div class="av-filter" id="av-filter" hidden></div><div class="av-grid" id="av-grid"></div></section>' +
       '<section class="av-tip"><div><h2>Veitst tú um eitt gott amboð?</h2><p>Skriva til okkara, so royna vit tað og kanska vísa á tað ein mánadag.</p></div>' +
         '<div class="av-tip-b"><a class="av-btn" href="mailto:snar@snar.fo?subject=Amboðið%20hesa%20vikuna">Skriva til Snar</a><a class="av-btn ghost" href="' + SNAR + '/">← Aftur til Snar</a></div></section>' +
     '</main>' +
+    FOOTER +
     '<dialog class="av-dlg" id="av-dlg" aria-labelledby="av-dlg-h"></dialog>';
 
   var $ = function (s) { return root.querySelector(s); };
@@ -166,6 +207,21 @@
     if (!b) return;
     if (b.dataset.k === 'd') fd = b.dataset.v; else fg = b.dataset.v;
     grid();
+  });
+
+  /* Hundurin: svevur, vaknar tá ið músin kemur, sigur VUFF! og tekur bóltin, tá ið trýst verður á hann */
+  var dog = $('.av-dog'), sov = null;
+  function vakna() { clearTimeout(sov); dog.classList.add('awake'); }
+  function sovna() { clearTimeout(sov); sov = setTimeout(function () { dog.classList.remove('awake', 'ball'); }, 3000); }
+  dog.addEventListener('mouseenter', vakna);
+  dog.addEventListener('focus', vakna);
+  dog.addEventListener('mouseleave', sovna);
+  dog.addEventListener('blur', sovna);
+  dog.addEventListener('click', function () {
+    vakna();
+    dog.classList.add('ball', 'bark');
+    setTimeout(function () { dog.classList.remove('bark'); }, 900);
+    sovna();
   });
 
   fetch(DATA_URL, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (all) {
