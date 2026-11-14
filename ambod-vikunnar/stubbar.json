@@ -21,7 +21,6 @@
     "vita": [
       "Á føroyskum",
       "Eingin innritan",
-      "Ókeypis",
       "Kortið tekur eina løtu at lesa inn"
     ],
     "kannad": "2026-11-14"
@@ -48,8 +47,7 @@
     "vita": [
       "Á enskum, og leitingin nýtir ensk og latínsk nøvn",
       "Eingin innritan",
-      "Ókeypis í kaganum",
-      "Ein knøttur lýsir við eini app, sum kostar",
+      "Síðan í kaganum er ókeypis, men ein knøttur lýsir við eini app, sum kostar pengar",
       "Síðan finnur sjálv, hvar tú ert"
     ],
     "kannad": "2026-11-14"
@@ -76,8 +74,135 @@
     "vita": [
       "Á enskum, men við lítlum teksti",
       "Innritan er ikki neyðug – knøttarnir „Log in“ og „Sign up“ kunnu latast vera",
-      "Ókeypis",
       "Fyrst kemur ein gluggi við valum, sum kann latast aftur"
+    ],
+    "kannad": "2026-11-14"
+  },
+  {
+    "nr": 4,
+    "d": "2026-11-23",
+    "heiti": "PhET: Bygg eitt atom",
+    "undir": "Simulatiónir í alisfrøði og evnafrøði – hendan er á føroyskum",
+    "url": "https://phet.colorado.edu/sims/html/build-an-atom/latest/build-an-atom_fo.html",
+    "hvor": "University of Colorado Boulder",
+    "c": "bla",
+    "ikon": "atom",
+    "stutt": "PhET er eitt savn við simulatiónum í alisfrøði, evnafrøði og støddfrøði. Í „Bygg eitt atom“ leggja næmingarnir protonir, nevtronir og elektronir í eitt atom og síggja beinanvegin, hvat grundevni tað verður, og um atomið er støðugt. Hendan simulatiónin er týdd til føroyskt.",
+    "royn": "Bið næmingarnar byggja eitt atom við seks protonum. Hvat grundevni verður tað? Hvat hendir, tá ið tey leggja eina nevtron afturat, og tá ið tey taka eina elektron burtur? Tit kunnu eisini royna teigin „Spæl“.",
+    "deild": [
+      "Miðdeild",
+      "Hádeild"
+    ],
+    "grein": [
+      "Alisfrøði",
+      "Evnafrøði"
+    ],
+    "vita": [
+      "Á føroyskum, men summir partar eru enn á enskum, til dømis „Periodic Table“",
+      "Eingin innritan",
+      "Flest allar simulatiónir hjá PhET eru á donskum og enskum"
+    ],
+    "kannad": "2026-11-14"
+  },
+  {
+    "nr": 5,
+    "d": "2026-11-30",
+    "heiti": "Hagstova Føroya",
+    "undir": "Nýggjastu tølini um Føroyar",
+    "url": "https://hagstova.fo/fo",
+    "hvor": "Hagstova Føroya",
+    "c": "gron",
+    "ikon": "sulur",
+    "stutt": "Á heimasíðuni hjá Hagstovu Føroya eru nýggjastu tølini um fólkatal, flyting, arbeiðsloysi, útflutning og nógv annað. Tølini verða víst sum myndrit, og í hagtalsgrunninum kunnu tey takast út sum talvur.",
+    "royn": "Hyggið at fólkatalinum. Hvussu nógv búgva í Føroyum í dag, og hvussu nógv vóru tey fyri fýra árum síðani? Lat næmingarnar rokna vøksturin í prosentum og meta um, nær vit verða 60.000.",
+    "deild": [
+      "Miðdeild",
+      "Hádeild"
+    ],
+    "grein": [
+      "Støddfrøði",
+      "Samfelagsfrøði"
+    ],
+    "vita": [
+      "Á føroyskum",
+      "Eingin innritan",
+      "Tølini verða dagførd regluliga, so svarini broytast"
+    ],
+    "kannad": "2026-11-14"
+  },
+  {
+    "nr": 6,
+    "d": "2026-12-07",
+    "heiti": "Teachable Machine",
+    "undir": "Lær eina teldu at kenna myndir aftur",
+    "url": "https://teachablemachine.withgoogle.com/",
+    "hvor": "Google",
+    "c": "lilla",
+    "ikon": "vit",
+    "stutt": "Við Teachable Machine venja næmingarnir sítt egna vitlíki. Tey taka myndir við myndatólinum í telduni, síðan lærir teldan at síggja mun á ymsum myndum. Soleiðis síggja tey, hvussu vitlíki lærir av dømum.",
+    "royn": "Ven vitlíki skilja, um tað sær ein blýant ella eitt viskileður. Royn so við øðrum lutum. Hvat hendir, tá ið teldan sær nakað, sum hon ikki hevur sæð áður? Tosið um, hví vitlíki kann taka feil.",
+    "deild": [
+      "Miðdeild",
+      "Hádeild"
+    ],
+    "grein": [
+      "Náttúra og tøkni",
+      "Tvørfakligt"
+    ],
+    "vita": [
+      "Á enskum",
+      "Eingin innritan",
+      "Nýtir myndatólið í telduni – tey skulu helst ikki taka myndir av fólki"
+    ],
+    "kannad": "2026-11-14"
+  },
+  {
+    "nr": 7,
+    "d": "2026-12-14",
+    "heiti": "Chrome Music Lab",
+    "undir": "Ger títt egna lag við at trýsta á rútar",
+    "url": "https://musiclab.chromeexperiments.com/Song-Maker/",
+    "hvor": "Google",
+    "c": "reydgult",
+    "ikon": "tonar",
+    "stutt": "Í Song Maker gera næmingarnir eitt lag við at trýsta á rútar í einum neti. Hvør rekkja er ein tóni, og hvør súla er eitt slag. Í Chrome Music Lab eru eisini aðrar smáar royndir við ljóði, rútmu og ljóðbylgjum.",
+    "royn": "Lat næmingarnar gera eitt stutt lag og spæla tað fyri flokkinum. Duga tey at gera eitt kent jólalag?",
+    "deild": [
+      "Grunddeild",
+      "Miðdeild"
+    ],
+    "grein": [
+      "Tónleikur"
+    ],
+    "vita": [
+      "Á enskum, men nærum uttan tekst",
+      "Eingin innritan",
+      "Fyrst kemur eitt boð um cookies – trýst á „OK, got it“"
+    ],
+    "kannad": "2026-11-14"
+  },
+  {
+    "nr": 8,
+    "d": "2027-01-04",
+    "heiti": "Føroyski bendingargrunnurin",
+    "undir": "Allar bendingar av føroyskum orðum",
+    "url": "https://bendingar.fo/",
+    "hvor": "Fróðskaparsetur Føroya og Árnastovnurin í Íslandi",
+    "c": "gron",
+    "ikon": "ord",
+    "stutt": "Í bendingargrunninum kanst tú leita eftir einum føroyskum orði og síggja allar bendingar av tí. Við teknunum * og _ kanst tú eisini finna orð, sum byrja ella enda á ávísan hátt.",
+    "royn": "Lat næmingarnar finna øll orð, sum enda við -hestur (skriva *hestur í leititeigin). Hvussu nógv finna tey? Kannið síðani, hvussu eitt torført orð, til dømis „fjørður“, verður bent.",
+    "deild": [
+      "Miðdeild",
+      "Hádeild"
+    ],
+    "grein": [
+      "Føroyskt"
+    ],
+    "vita": [
+      "Á føroyskum",
+      "Eingin innritan",
+      "Á síðuni stendur, at bendingardømini ikki mugu avritast"
     ],
     "kannad": "2026-11-14"
   }
