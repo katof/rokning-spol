@@ -250,7 +250,9 @@ body.pdfback #w-pdf{left:0!important;top:0!important;width:100%!important;height
 body.pdfback #w-pdf .w-head{display:none}
 body.pdfback #w-pdf .w-body{padding:0}
 body.pdfback #w-pdf .pdf-view{background:transparent;max-height:none;min-height:0}
-body.pdfback #w-pdf .pdf-tools{position:absolute;left:20px;bottom:20px;z-index:6;padding:4px;border:1px solid var(--line);box-shadow:0 10px 24px -14px rgba(32,33,36,.45)}
+.pdf-tools.pdf-float{position:fixed;left:14px;top:80px;z-index:19;padding:5px 8px;background:#fff;border:0;border-radius:14px;box-shadow:0 6px 20px -8px rgba(0,0,0,.45)}
+.pdf-float #pdfBack{background:var(--ink);color:#fff;border-radius:10px;padding:0 14px}
+body.pen .pdf-float{display:none}
 body.pdfback #w-pdf .w-rs{display:none}
 body.pdfback #w-pdf .w-head{cursor:default}
 
@@ -948,7 +950,7 @@ var SETS={
   tern:[['Tal av terningum',['#diceMinus','#diceN','#dicePlus']]],
   larm:[['Hvussu hart má vera?',['#noiseLimL']],['',['#noiseNote']]],
   aetlan:[['Skriftstødd',['#fsDown','#fsUp']],['',['#planNote']]],
-  pdf:[['Síður í senn',['#ppSeg']],['Pláss á talvuni',['#pdfBack']]],
+  pdf:[['Síður í senn',['#ppSeg']]],
   poll:'egin'};
 /* Har kann ein ikki byrja at flyta amboðið, tí har verður arbeitt */
 var NODRAG='button,input,textarea,select,a,label,summary,details,iframe,canvas,[contenteditable],.ball,.pile,.jar,.dice,.pdf-view,.sn-list,.bk-grid,.plan,.groups,.tl-txt,.poll-ans,.w-rs,.w-head';
@@ -1487,7 +1489,11 @@ function pdfLib(){return new Promise(function(res,rej){if(window.pdfjsLib)return
 function idb(mode,fn){return new Promise(function(res){try{var rq=indexedDB.open('snar-flokskiggi',1);rq.onupgradeneeded=function(){rq.result.createObjectStore('f');};
   rq.onsuccess=function(){try{var tx=rq.result.transaction('f',mode),st=tx.objectStore('f'),r=fn(st);tx.oncomplete=function(){res(r&&r.result);};tx.onerror=function(){res(null);};}catch(e){res(null);}};rq.onerror=function(){res(null);};}catch(e){res(null);}});}
 function pdfUI(){var has=!!pdfDoc;$('#pdfEmpty').hidden=has;$('#pdfWrap').hidden=!has;
-  document.body.classList.toggle('pdfback',!!(S.pdfBack&&S.vis.pdf&&has));
+  var back=!!(S.pdfBack&&S.vis.pdf&&has);document.body.classList.toggle('pdfback',back);
+  /* Aftast: PDF-bjálkin verður fljótandi í erva til vinstru, omanfyri øll amboðini, so tú altíð kanst bláa og leggja PDF'in fremst aftur */
+  var tools=$('#pdfTools');if(back&&tools.parentNode!==document.body)document.body.appendChild(tools);
+  else if(!back&&tools.parentNode===document.body)$('#pdfWrap').insertBefore(tools,$('#pdfWrap').firstChild);
+  tools.classList.toggle('pdf-float',back);
   var bb=$('#pdfBack');bb.setAttribute('aria-pressed',S.pdfBack?'true':'false');bb.textContent=S.pdfBack?'Legg fremst':'Legg aftast';
   $$('[data-pp]').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.pp===S.pdfTwo?'true':'false')});
   $('#pdfFit').textContent=Math.round(S.pdfZoom*100)+' %';$('#pdfOut').disabled=S.pdfZoom<=.41;$('#pdfIn').disabled=S.pdfZoom>=4.9;}
