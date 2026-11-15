@@ -78,13 +78,43 @@ body.pen .penc{pointer-events:auto;touch-action:none;cursor:crosshair}
 .penbar #penOn[aria-pressed=true]{background:#1d4ed8;color:#fff}
 body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
 @media (max-width:760px){.penbar{left:8px;right:8px;justify-content:center}.penbar button{padding:10px 12px}.sheet{margin-bottom:84px}}
+/* Liðugt, yvirlit og prógv */
+.done{display:flex;justify-content:center;margin:2mm 0 4mm}
+.done button{border:0;border-radius:999px;padding:12px 22px;font:800 1.05rem inherit;cursor:pointer;background:#16a34a;color:#fff;box-shadow:0 8px 20px -10px rgba(22,163,74,.8)}
+.done button.is{background:#dcfce7;color:#166534;box-shadow:none}
+.yv h2{margin:0 0 4mm;font-size:16pt}
+.yv .big{font-size:20pt;font-weight:900;margin:0 0 2mm}.yv .big b{color:#16a34a}
+.yv .sub{margin:0 0 6mm;color:#475569;font-size:12pt}
+.grid200{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin-bottom:5mm}
+.grid200 a{aspect-ratio:1;display:grid;place-items:center;border-radius:4px;font-size:8pt;font-weight:700;text-decoration:none;color:#334155;background:#e2e8f0}
+.grid200 a.ok{background:#16a34a;color:#fff}.grid200 a.fut{background:#f8fafc;color:#cbd5e1}.grid200 a.now{outline:2.5px solid var(--red);outline-offset:1px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:10.5pt;color:#475569;margin-bottom:6mm}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.kinds{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:6mm}
+.kinds div{background:var(--soft);border-radius:10px;padding:8px 10px;font-size:10.5pt}.kinds b{display:block;font-size:16pt}
+.pg{display:flex;flex-wrap:wrap;gap:8px}
+.pg button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font:700 .95rem inherit;cursor:pointer}
+.pg button:not(:disabled){background:#fef3c7;border-color:#f59e0b}
+.pg button:disabled{opacity:.45;cursor:default}
+.cert{justify-content:center;align-items:center;text-align:center;border:0;position:relative}
+.cert:before{content:"";position:absolute;inset:10mm;border:3px solid var(--red);border-radius:6mm;box-shadow:inset 0 0 0 4mm #fff,inset 0 0 0 5mm #fca5a5}
+.cert .st{font-size:40pt;color:#f59e0b;letter-spacing:8px}
+.cert h1{margin:4mm 0 2mm;font-size:52pt;font-weight:900;letter-spacing:-.02em}
+.cert .who{margin:10mm 0 2mm;font-size:13pt;color:#475569}
+.cert .nmc{font:italic 700 34pt Georgia,serif;border-bottom:2px solid var(--ink);min-width:120mm;padding:0 6mm 2mm;margin:0 auto}
+.cert .why{margin:8mm 0 4mm;font-size:16pt;font-weight:700}
+.cert .kl{font-size:11pt;color:#475569;max-width:150mm;margin:0 auto;line-height:1.6}
+.cert .sig{display:flex;justify-content:space-between;gap:20mm;width:150mm;margin:22mm auto 0;font-size:10.5pt;color:#475569}
+.cert .sig span{flex:1;border-top:1.5px solid var(--ink);padding-top:2mm}
+@media (max-width:760px){.grid200{grid-template-columns:repeat(10,1fr)}.kinds{grid-template-columns:repeat(2,1fr)}.cert{min-height:150vw;padding:14vw 8vw}.cert:before{inset:4vw}.cert h1{font-size:13vw}.cert .st{font-size:9vw}.cert .nmc{min-width:0;width:100%;font-size:8vw}.cert .why{font-size:5vw}.cert .sig{width:100%;gap:8vw;margin-top:10vw}}
 @media print{
   @page{size:A4;margin:0}
   html,body{background:#fff}
   .bar,.screen-only,.clr{display:none!important}
   .sheet{margin:0;box-shadow:none;width:210mm;height:297mm;break-after:page;overflow:hidden}
   .sheet:last-child{break-after:auto}
-  input.a,input.ans{color:transparent}
+  body.blank input.a,body.blank input.ans{color:transparent}
+  .penbar,.done{display:none!important}
   .ws span.on{background:none}
 }
 /* Telefon og iPad á langs: alt innan fyri arkið */
@@ -115,7 +145,10 @@ body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
   <button type="button" id="next" aria-label="Næsta ark">›</button>
   <button type="button" id="today">Í dag</button>
   <span class="sep"></span>
-  <button type="button" class="pr" id="prentBtn">Prenta</button>
+  <button type="button" id="yvBtn">Mítt yvirlit</button>
+  <button type="button" id="mittBtn">Prenta mítt ark</button>
+  <span class="sep"></span>
+  <button type="button" class="pr" id="prentBtn" title="Tómt ark til at prenta">Prenta tómt ark</button>
   <button type="button" id="prent5">Prenta 5 ørk</button>
 </div>
 <div id="sheets"></div>
@@ -270,10 +303,44 @@ function sheet(num){setSeed('ark'+num+DL);tn=0;var KD=Q.get('k')||KIND[(num-1)%K
   var dt=num===TODAYN&&!Q.get('n')?DGD[T.getDay()]+' '+T.getDate()+'. '+DGM[T.getMonth()]+' '+T.getFullYear()+'<br>':'';
   return '<main class="sheet"><div class="hd"><div><h1>Morgunark</h1><div class="kd">'+KN[KD]+'</div></div><div class="dt">'+dt+'Ark '+num+' · '+DLN[DL]+'</div></div>'
     +'<div class="nm">Navn:'+(SCREEN?'<input aria-label="Navn">':'<span class="l"></span>')+'</div>'+h
+    +(SCREEN?'<div class="done screen-only"><button type="button" class="doneBtn" data-n="'+num+'">Eg havi gjørt arkið ✓</button></div>':'')
     +'<div class="ft"><span>Snar · Talvan</span><span>Arbeið kvirt, til lærarin byrjar tíman.</span></div></main>';}
 
-var V=Math.min(10,Math.max(1,+Q.get('v')||1)),out='';for(var k=0;k<V&&N+k<=MAX;k++)out+=sheet(N+k);
-document.getElementById('sheets').innerHTML=out;
+/* Goymt á iPadinum hjá næminginum */
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var DONEK='morgunark-gjort-'+DL,DONE=lsGet(DONEK,{}),NAME=lsGet('morgunark-navn','');
+function kindOf(n){return KIND[(n-1)%KIND.length];}
+function fmtD(t){return t.getDate()+'. '+DGM[t.getMonth()]+' '+t.getFullYear();}
+function arkTal(x){return x===1?'1 ark':x+' ørk';}
+var MS=[10,25,50,100,150,200];
+function overview(){var done=Object.keys(DONE).map(Number).filter(function(n){return n>=1&&n<=MAX;}),miss=[],i,h='',kc={};
+  var first=done.length?Math.min.apply(null,done):TODAYN;/* bert ørkini frá tí fyrsta, næmingurin gjørdi */
+  for(i=first;i<=Math.min(TODAYN,MAX);i++)if(!DONE[i])miss.push(i);
+  done.forEach(function(n){var k=kindOf(n);kc[k]=(kc[k]||0)+1;});
+  h+='<div class="hd"><div><h1>Mítt yvirlit</h1><div class="kd">Morgunark</div></div><div class="dt">'+DLN[DL]+(NAME?'<br>'+esc(NAME):'')+'</div></div><div class="yv">';
+  h+='<p class="big">Tú hevur gjørt <b>'+arkTal(done.length)+'</b>.</p><p class="sub">'+(miss.length?(miss.length===1?'1 ark manglar':miss.length+' ørk mangla')+' fram til í dag. Trýst á eina gráa rútu fyri at gera tað.':'Tú hevur gjørt øll ørkini fram til í dag. Flott!')+'</p>';
+  h+='<div class="grid200">';for(i=1;i<=MAX;i++){var cl=DONE[i]?'ok':i>TODAYN?'fut':i<first?'fut':'';h+='<a href="?dl='+DL+'&n='+i+'" class="'+cl+(i===TODAYN?' now':'')+'" title="Ark '+i+': '+KN[kindOf(i)]+(DONE[i]?' – gjørt':'')+'">'+i+'</a>';}h+='</div>';
+  h+='<div class="legend"><span><i style="background:#16a34a"></i>Gjørt</span><span><i style="background:#e2e8f0"></i>Manglar</span><span><i style="background:#f8fafc;border:1px solid #e2e8f0"></i>Áðrenn tú byrjaði ella kemur seinni</span><span><i style="background:#fff;outline:2px solid #ef2418"></i>Í dag</span></div>';
+  h+='<h2>Hvat hevur tú gjørt?</h2><div class="kinds">'+KIND.map(function(k){return '<div><b>'+(kc[k]||0)+'</b>'+KN[k]+'</div>'}).join('')+'</div>';
+  h+='<h2>Prógv</h2><div class="pg">'+MS.map(function(m){return '<button type="button" data-progv="'+m+'"'+(done.length>=m?'':' disabled')+'>'+(done.length>=m?'🏅 ':'')+'Prógv: '+m+' ørk</button>'}).join('')+'</div>';
+  return '<main class="sheet">'+h+'</div><div class="ft"><span>Snar · Talvan</span><span>Goymt á hesum iPadinum</span></div></main>';}
+function certificate(m){var kc={};Object.keys(DONE).forEach(function(n){var k=kindOf(+n);kc[k]=(kc[k]||0)+1;});
+  return '<main class="sheet cert"><div class="st">★ ★ ★</div><h1>Prógv</h1><div class="who">Hetta prógvið fær</div><div class="nmc">'+(esc(NAME)||'&nbsp;')+'</div>'
+    +'<div class="why">fyri at hava gjørt '+m+' morgunørk</div><div class="kl">'+KIND.filter(function(k){return kc[k]}).map(function(k){return KN[k]+': '+kc[k]}).join(' · ')+'</div>'
+    +'<div class="sig"><span>'+fmtD(new Date())+'</span><span>Lærari</span></div></main>';}
+var V=Math.min(10,Math.max(1,+Q.get('v')||1)),out='',MODE=Q.get('yvirlit')?'yv':Q.get('progv')?'pg':'ark';
+if(MODE==='yv')out=overview();else if(MODE==='pg')out=certificate(+Q.get('progv')||10);else for(var k=0;k<V&&N+k<=MAX;k++)out+=sheet(N+k);
+document.getElementById('sheets').innerHTML=out;if(!SCREEN)document.body.classList.add('blank');
+/* Navn og svar verða goymd, so arkið kann prentast ella gerast lidnað seinni */
+if(SCREEN&&MODE==='ark')Array.prototype.forEach.call(document.querySelectorAll('.sheet'),function(sh){
+  var nm=sh.querySelector('.nm input');if(nm){nm.value=NAME;nm.addEventListener('input',function(){NAME=nm.value;lsSet('morgunark-navn',NAME);});}
+  var F=Array.prototype.slice.call(sh.querySelectorAll('input,textarea')).filter(function(x){return x!==nm;}),SK='morgunark-svar-'+DL+'-'+N,SV=lsGet(SK,[]);
+  F.forEach(function(x,i){if(SV[i])x.value=SV[i];x.addEventListener('input',function(){SV[i]=x.value;lsSet(SK,SV);});});
+  var db=sh.querySelector('.doneBtn');if(db){var n=+db.dataset.n;function upd(){var on=!!DONE[n];db.classList.toggle('is',on);db.textContent=on?'✓ Arkið er gjørt – trýst fyri at taka merkið burtur':'Eg havi gjørt arkið ✓';}upd();
+    db.addEventListener('click',function(){if(DONE[n])delete DONE[n];else DONE[n]=dgIso();lsSet(DONEK,DONE);upd();});}});
+function dgIso(){var t=new Date();return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();}
+Array.prototype.forEach.call(document.querySelectorAll('[data-progv]'),function(b){b.addEventListener('click',function(){var u=new URLSearchParams();u.set('dl',DL);u.set('progv',b.dataset.progv);u.set('print','1');location.search=u.toString();});});
 
 /* Tekna við fingrinum á iPad */
 Array.prototype.forEach.call(document.querySelectorAll('.box,.draw'),function(bx){var c=bx.querySelector('canvas');if(!c)return;var g=c.getContext('2d'),dr=false;
@@ -287,18 +354,23 @@ Array.prototype.forEach.call(document.querySelectorAll('.box,.draw'),function(bx
 if(SCREEN)Array.prototype.forEach.call(document.querySelectorAll('.ws span'),function(s){s.addEventListener('click',function(){s.classList.toggle('on');});});
 /* Knøttar ovast */
 function go(o){Object.keys(o).forEach(function(k){if(o[k]==null)Q.delete(k);else Q.set(k,o[k]);});location.search=Q.toString();}
-Array.prototype.forEach.call(document.querySelectorAll('[data-dl]'),function(b){b.setAttribute('aria-pressed',b.dataset.dl===DL?'true':'false');b.addEventListener('click',function(){go({dl:b.dataset.dl});});});
-document.getElementById('nr').textContent='Ark '+N+' av '+MAX;
+Array.prototype.forEach.call(document.querySelectorAll('[data-dl]'),function(b){b.setAttribute('aria-pressed',b.dataset.dl===DL?'true':'false');b.addEventListener('click',function(){go({dl:b.dataset.dl,progv:null});});});
+document.getElementById('nr').textContent=MODE==='ark'?'Ark '+N+' av '+MAX:MODE==='yv'?'Yvirlit':'Prógv';
 document.getElementById('prev').disabled=N<=1;document.getElementById('next').disabled=N>=MAX;
 document.getElementById('prev').addEventListener('click',function(){go({n:N-1});});
 document.getElementById('next').addEventListener('click',function(){go({n:N+1});});
-document.getElementById('today').addEventListener('click',function(){go({n:null,d:null});});
-document.getElementById('prentBtn').addEventListener('click',function(){if(SCREEN&&V===1)go({print:1,n:N});else window.print();});
+document.getElementById('today').addEventListener('click',function(){go({n:null,d:null,yvirlit:null,progv:null,print:null,v:null});});
+document.getElementById('yvBtn').addEventListener('click',function(){go({yvirlit:1,n:null,progv:null,print:null,v:null});});
+document.getElementById('mittBtn').addEventListener('click',function(){window.print();});
+if(MODE!=='ark'){['mittBtn','prent5'].concat(MODE==='yv'?['prentBtn']:[]).forEach(function(id){document.getElementById(id).style.display='none';});}
+if(MODE==='pg'){var pbn=document.getElementById('prentBtn');pbn.textContent='Prenta prógv';pbn.onclick=function(e){e.stopImmediatePropagation();window.print();};}
+document.getElementById('prentBtn').addEventListener('click',function(){if(SCREEN)go({print:1,n:N,v:null});else window.print();});
 document.getElementById('prent5').addEventListener('click',function(){go({print:1,n:N,v:5});});
 if(!SCREEN)setTimeout(function(){window.print();},500);
 
 /* ---------- Blýanturin yvir allt arkið (navn, uppgávur og tekningar) ---------- */
-if(SCREEN){var KEYP='morgunark-'+DL+'-'+N,PEN=[];
+if(MODE!=='ark'){document.querySelector('.penbar').style.display='none';['prev','next'].forEach(function(id){document.getElementById(id).style.display='none';});}
+if(SCREEN&&MODE==='ark'){var KEYP='morgunark-'+DL+'-'+N,PEN=[];
   Array.prototype.forEach.call(document.querySelectorAll('.sheet'),function(sh,si){
     var c=document.createElement('canvas');c.className='penc';sh.appendChild(c);var g=c.getContext('2d'),W=1,cur=null,hist=[],strokes=[];
     try{strokes=JSON.parse(localStorage.getItem(KEYP+'-'+si)||'[]');}catch(e){}
