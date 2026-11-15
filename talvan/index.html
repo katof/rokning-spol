@@ -901,6 +901,19 @@ body.locked .dday-ws button:not([aria-pressed=true]){visibility:hidden}
 .mu-b button[data-mu=sv]{background:var(--mc);color:#fff}
 .mu-cats{flex-wrap:wrap}
 body.locked .mu-b{visibility:hidden}
+/* Morgunark */
+.mk{--u:min(1cqi,1.2cqh);width:100%;height:100%;display:flex;flex-direction:column;gap:calc(var(--u)*2.4);padding:calc(var(--u)*4);border-radius:20px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);color:#1f2937}
+.mk-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.mk-h b{font-weight:900;font-size:max(1rem,calc(var(--u)*7))}.mk-h span{font-weight:700;color:#64748b;font-size:max(.7rem,calc(var(--u)*3.4))}
+.mk-body{flex:1;min-height:0;display:flex;gap:calc(var(--u)*4);align-items:center}
+.mk-qr{height:100%;aspect-ratio:1;max-width:48%;display:grid;place-items:center}
+.mk-qr svg{width:100%;height:100%}
+.mk-txt{flex:1;font-size:max(.75rem,calc(var(--u)*4));line-height:1.35}
+.mk-txt p{margin:0 0 .7em}
+.mk-b{display:flex;gap:10px;justify-content:flex-end}
+.mk-b button{border:0;border-radius:999px;padding:.55em 1.2em;font:700 max(.75rem,calc(var(--u)*3)) inherit;cursor:pointer;background:#f1f5f9;color:#1f2937}
+.mk-b button[data-mk=print]{background:#ef2418;color:#fff}
+body.locked .mk-b{visibility:hidden}
 /* QR-kota */
 .qr{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;gap:2.5cqi;padding:5cqi;border-radius:20px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);text-align:center}
 .qr-ti{font-weight:900;font-size:clamp(1rem,8cqi,3rem);line-height:1.1;color:#1f2937;max-width:100%;overflow-wrap:anywhere}
@@ -1300,6 +1313,7 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
   <button class="dk" type="button" data-tool="klokka" data-t="klokka"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12.5"/><path d="M16 5.5v2M16 24.5v2M5.5 16h2M24.5 16h2"/><path d="M16 10v6l4.5 3"/><circle style="fill:#ef2418" cx="16" cy="16" r="1.8"/></svg><span>Klokkan</span></button>
   <button class="dk" type="button" data-tool="tid" data-t="tid"><svg viewBox="0 0 32 32"><path d="M8 3h16M8 29h16M10 3c0 7 6 9 6 13s-6 6-6 13M22 3c0 7-6 9-6 13s6 6 6 13"/><path style="fill:#ffd23f" d="M11.5 27c1-3 3.5-5 4.5-5s3.5 2 4.5 5z"/></svg><span>Stoppur</span></button>
   <button class="dk" type="button" data-tool="dagur" data-add-stk="dagur"><svg viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="22" rx="3"/><path style="fill:#ef2418;stroke:#ef2418" d="M4 9a3 3 0 0 1 3-3h18a3 3 0 0 1 3 3v4H4z"/><path d="M10 3v6M22 3v6"/><circle style="fill:#ffd23f" cx="16" cy="20" r="3.5"/></svg><span>Dagurin í dag</span></button>
+  <button class="dk" type="button" data-tool="mark" data-add-stk="mark"><svg viewBox="0 0 32 32"><path style="fill:#fff" d="M8 3h12l6 6v20H8z"/><path d="M20 3v6h6M12 15h10M12 19h10M12 23h6"/><circle style="fill:#ffd23f;stroke:#f59e0b" cx="7" cy="8" r="4.5"/></svg><span>Morgunark</span></button>
   <button class="dk" type="button" data-tool="skra" data-t="skra"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="20" height="24" rx="3"/><path d="M8 10h10M8 15h7M8 20h5"/><circle style="fill:#c4b5fd" cx="23" cy="22" r="6.5"/><path d="M23 19v3l2 1.5"/></svg><span>Ætlan</span></button>
   <button class="dk" type="button" data-tool="ljos" data-t="ljos"><svg viewBox="0 0 32 32"><rect x="10" y="3" width="12" height="26" rx="5"/><circle style="fill:#ef2418" cx="16" cy="9" r="2.6"/><circle style="fill:#f5b301" cx="16" cy="16" r="2.6"/><circle style="fill:#1f9d55" cx="16" cy="23" r="2.6"/></svg><span>Ferðsluljós</span></button>
   <button class="dk" type="button" data-tool="larm" data-t="larm"><svg viewBox="0 0 32 32"><path d="M3 17h3l2-6 3 13 3-18 3 16 3-9 2 4h7"/><circle style="fill:#ef2418" cx="27" cy="9" r="2.4"/></svg><span>Ljóðmátari</span></button>
@@ -1331,6 +1345,7 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
     <div class="amb-it"><button class="dk" type="button" data-tool="klokka" data-t="klokka"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12.5"/><path d="M16 5.5v2M16 24.5v2M5.5 16h2M24.5 16h2"/><path d="M16 10v6l4.5 3"/><circle style="fill:#ef2418" cx="16" cy="16" r="1.8"/></svg><span>Klokkan</span></button><button class="amb-pin" type="button" data-pin="klokka" aria-pressed="false" title="Fest í dokkina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 6 4 4H6l4-4z"/><path d="M12 14v6"/></svg></button></div>
     <div class="amb-it"><button class="dk" type="button" data-tool="tid" data-t="tid"><svg viewBox="0 0 32 32"><path d="M8 3h16M8 29h16M10 3c0 7 6 9 6 13s-6 6-6 13M22 3c0 7-6 9-6 13s6 6 6 13"/><path style="fill:#ffd23f" d="M11.5 27c1-3 3.5-5 4.5-5s3.5 2 4.5 5z"/></svg><span>Stoppur</span></button><button class="amb-pin" type="button" data-pin="tid" aria-pressed="false" title="Fest í dokkina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 6 4 4H6l4-4z"/><path d="M12 14v6"/></svg></button></div>
     <div class="amb-it"><button class="dk" type="button" data-tool="dagur" data-add-stk="dagur"><svg viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="22" rx="3"/><path style="fill:#ef2418;stroke:#ef2418" d="M4 9a3 3 0 0 1 3-3h18a3 3 0 0 1 3 3v4H4z"/><path d="M10 3v6M22 3v6"/><circle style="fill:#ffd23f" cx="16" cy="20" r="3.5"/></svg><span>Dagurin í dag</span></button><button class="amb-pin" type="button" data-pin="dagur" aria-pressed="false" title="Fest í dokkina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 6 4 4H6l4-4z"/><path d="M12 14v6"/></svg></button></div>
+    <div class="amb-it"><button class="dk" type="button" data-tool="mark" data-add-stk="mark"><svg viewBox="0 0 32 32"><path style="fill:#fff" d="M8 3h12l6 6v20H8z"/><path d="M20 3v6h6M12 15h10M12 19h10M12 23h6"/><circle style="fill:#ffd23f;stroke:#f59e0b" cx="7" cy="8" r="4.5"/></svg><span>Morgunark</span></button><button class="amb-pin" type="button" data-pin="mark" aria-pressed="false" title="Fest í dokkina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 6 4 4H6l4-4z"/><path d="M12 14v6"/></svg></button></div>
     <div class="amb-it"><button class="dk" type="button" data-tool="skra" data-t="skra"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="20" height="24" rx="3"/><path d="M8 10h10M8 15h7M8 20h5"/><circle style="fill:#c4b5fd" cx="23" cy="22" r="6.5"/><path d="M23 19v3l2 1.5"/></svg><span>Ætlan</span></button><button class="amb-pin" type="button" data-pin="skra" aria-pressed="false" title="Fest í dokkina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 6 4 4H6l4-4z"/><path d="M12 14v6"/></svg></button></div>
   </div>
   <p class="amb-g">Flokkurin</p>
@@ -2561,6 +2576,8 @@ var LAYOUTS=[
  {n:'Tóm talva',d:'Einki á talvuni. Tú velur sjálv ella sjálvur amboðini.',bg:'strik',w:{}},
  {n:'Spøl',d:'Tríggjar funkur frá Snar at spæla á talvuni.',bg:'spol',w:{snar:[24,90,505,660],snar2:[547,90,505,660],snar3:[1070,90,505,660]},f:{snar:'Heingja mann',snar2:'Hoppandi tøl',snar3:'Fiskarnir kava'}},
  {n:'Byrjan á degnum',d:'Klokkan, dagurin í dag, ætlanin fyri dagin og ein spurnarkanning um, hvussu tey hava tað.',bg:'summar',w:{skra:[40,100,540,660],klokka:[620,100,520,250],poll:[620,380,520,380],ljos:[1180,100,380,300]},sm:'tid',pq:'Hvussu hevur tú tað?',stk:[['dagur',[1180,420,380,340]]]},
+ {n:'Morgunstund',d:'Næmingarnir koma inn, taka eitt morgunark (ella skanna tað við iPadinum) og arbeiða kvirt í 15 minuttir.',bg:'dyr',w:{klokka:[40,560,560,220],tid:[620,560,440,220]},tsec:900,
+   stk:[['tekst',[40,90,560,450],{h:'Góðan morgun!',b:'1. Heingið jakkan upp.\n2. Takið eitt morgunark.\n3. Setið tykkum og arbeiðið kvirt.',bg:'y',fs:1.25}],['dagur',[620,90,440,450],{noWk:1}],['mark',[1080,90,480,450]],['amerki',[1080,560,240,220],{k:'kvirt'}]]},
  {n:'Felags uppgáva',d:'Dagurin í dag, ein stutt uppgáva, sum flokkurin loysir saman, klokkan og eitt stoppur við fimm minuttum.',bg:'dyr',w:{klokka:[40,560,470,220],tid:[530,560,470,220]},tsec:300,stk:[['dagur',[40,90,470,450]],['morgun',[530,90,1030,450]],['amerki',[1020,560,260,220],{k:'par'}]]},
  {n:'Arbeiðsfriður',d:'Stoppur, ferðsluljós og ljóðmátari, meðan flokkurin arbeiðir.',bg:'fjord',w:{tid:[60,110,600,430],ljos:[700,110,420,320],larm:[700,460,420,280],skra:[1160,110,400,620]},sm:'frii'},
  {n:'Bólkaarbeiði',d:'Ger bólkar, set tíðina og savna smileykúlur saman.',bg:'talva',w:{tid:[568,90,480,400],glas:[1072,90,504,400],tern:[568,510,1008,250]},stk:[['tilv',[24,90,520,670],{ti:'Bólkar',mode:'bolkar',gn:3,th:'hvitt',items:'@flokkur'}]]},
@@ -2918,6 +2935,23 @@ STK.morgun.settings=function(id,d,sec){
   var o=$('#muOwn',sec),on=$('#muOnly',sec);o.value=d.own||'';on.checked=!!d.only;
   o.addEventListener('input',function(){if(o.value.trim())d.own=o.value;else delete d.own;save();drawStk(id);});
   on.addEventListener('change',function(){if(on.checked)d.only=1;else delete d.only;d.off=0;save();drawStk(id);});};
+
+/* ---------- Morgunark: næmingarnir arbeiða sjálvi fyrsta korterið (pappír ella iPad) ---------- */
+var MKD={g:'1.–3. flokkur',m:'4.–6. flokkur',h:'7.–9. flokkur'};
+function mkUrl(d,pr){var t=new Date(),u=location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/,'')+'morgunark.html?dl='+(d.dl||'m')+'&d='+dgKey(t);return pr?u+'&print=1':u;}
+STK.mark={n:'Morgunark',sz:[520,440],set:1,lib:false,tool:1,r:function(d){var u=mkUrl(d),qr=!d.noQr;
+  return '<div class="mk"><div class="mk-h"><b>Morgunark</b><span>'+MKD[d.dl||'m']+'</span></div>'
+    +'<div class="mk-body">'+(qr?'<div class="mk-qr">'+(window.qrcode?qrSvg(u):'<span class="qr-wait">…</span>')+'</div>':'')
+    +'<div class="mk-txt">'+(qr?'<p><b>iPad:</b> Skanna kotuna og arbeið á skíggjanum.</p>':'')+'<p><b>Pappír:</b> Tak eitt ark og set teg at arbeiða.</p></div></div>'
+    +'<div class="mk-b"><button type="button" data-mk="print">Prenta ørk</button><button type="button" data-mk="open">Vís arkið</button></div></div>';},
+  after:function(id,b){var d=S.stk[id];$$('[data-mk]',b).forEach(function(x){x.addEventListener('click',function(){window.open(mkUrl(S.stk[id],x.dataset.mk==='print'),'_blank');});});
+    if(d&&!d.noQr&&!window.qrcode)qrLoad(function(){if(window.qrcode)drawStk(id);});}};
+STK.mark.settings=function(id,d,sec){
+  sec.innerHTML='<div class="set-row"><h4>Hvør flokkur?</h4><div class="seg tx-seg" id="mkDl">'+Object.keys(MKD).map(function(k){return '<button type="button" data-v="'+k+'" aria-pressed="'+((d.dl||'m')===k?'true':'false')+'">'+MKD[k]+'</button>'}).join('')+'</div></div>'
+   +'<div class="set-row"><label class="chk"><input type="checkbox" id="mkQr"> Vís QR-kotu til iPad</label></div>'
+   +'<p class="note">Arkið er nýtt hvønn dag, men tað sama allan dagin. Á pappíri eru linjur og kassar, á iPadinum skriva og tekna næmingarnir á skíggjanum.</p>';
+  $$('#mkDl button',sec).forEach(function(b){b.addEventListener('click',function(){d.dl=b.dataset.v;$$('#mkDl button',sec).forEach(function(z){z.setAttribute('aria-pressed',z===b?'true':'false')});save();drawStk(id);});});
+  var q=$('#mkQr',sec);q.checked=!d.noQr;q.addEventListener('change',function(){if(q.checked)delete d.noQr;else d.noQr=1;save();drawStk(id);});};
 /* ---------- QR-kota: næmingarnir skanna eitt leinki ---------- */
 var QRW=[];
 function qrLoad(cb){if(window.qrcode)return cb();QRW.push(cb);if(QRW.length>1)return;var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
