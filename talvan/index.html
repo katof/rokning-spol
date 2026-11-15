@@ -832,7 +832,8 @@ body.pen .pg-nav{bottom:112px}
 .gbhue{border:2px solid var(--line);border-radius:10px;background:#fff;padding:4px;aspect-ratio:1;display:grid;place-items:center}
 .gbhue[aria-pressed=true]{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,89,232,.18)}
 .gbhue span{display:block;width:100%;height:100%}.gbhue svg{width:100%;height:100%;overflow:visible}
-#jarPalRow,#diceThRow{width:100%}
+#jarPalRow,#jarBgRow,#diceThRow{width:100%}
+#jarBgRow .sp-dots i{width:22px;height:22px;border-radius:7px}
 #dice[data-th=hv] .die,#dice[data-th=hv] .die.red{border-color:var(--ink);background:#fff}#dice[data-th=hv] .die i{background:var(--ink)}
 #dice[data-th=bl] .die{background:#2563eb;border-color:#1e3a8a}#dice[data-th=gr] .die{background:#16a34a;border-color:#14532d}
 #dice[data-th=bl] .die i,#dice[data-th=gr] .die i,#dice[data-th=lit] .die i{background:#fff}
@@ -1009,6 +1010,7 @@ body.locked .dk[data-files],body.locked .dk[data-open-stk],body.locked .dk[data-
           <button class="btn sm lk" type="button" id="jarEmpty">Tøm glasið</button>
         </div>
         <div class="stkpals" id="jarPalRow"></div>
+        <div class="stkpals" id="jarBgRow"></div>
         <details class="jar-goal">
           <summary>Hvussu nógvar kúlur skulu í glasið?</summary>
           <div class="row" id="jarGoalRow">
@@ -1366,7 +1368,7 @@ var SETS={
   tid:[['Skjót val',['#presets']],['Byrjanartíð',['#tmrDefRow']],['Ávaring',['#tmrWarnRow']],['Litur',['#tmrThRow']],['Ljóð, tá ið tíðin er farin',['#tmrSound']]],
   navn:[['Hvat skal gerast?',['#navnTabs']],['Persónar í hvørjum bólki',['#grpN']],['Nøvnini',['#names','#namesNote']],['Tá ið tú velur',['#pickOnceL']]],
   ljos:[['Tekstirnir',['#ljosSet','#ljosNote']]],
-  glas:[['Litur á kúlunum',['#jarPalRow']],['Kúlur í fullum glasi',['#jarGoalRow']],['Glasið',['#jarSub','#jarEmpty']]],
+  glas:[['Litur á kúlunum',['#jarPalRow']],['Bakgrund',['#jarBgRow']],['Kúlur í fullum glasi',['#jarGoalRow']],['Glasið',['#jarSub','#jarEmpty']]],
   tern:[['Tal av terningum',['#diceMinus','#diceN','#dicePlus']],['Litur',['#diceThRow']]],
   larm:[['Hvussu hart má vera?',['#noiseLimL']],['',['#noiseNote']]],
   pdf:'pdflib',
@@ -1659,6 +1661,10 @@ function swatchRow(box,map,key,def,after){box.innerHTML='';Object.keys(map).forE
     b.innerHTML='<span class="sp-dots">'+c.slice(0,6).map(function(x){return '<i style="background:'+(Array.isArray(x)?x[0]:x)+';box-shadow:inset 0 0 0 2px '+(Array.isArray(x)?x[1]:'rgba(0,0,0,.15)')+'"></i>'}).join('')+'</span><small>'+map[p][0]+'</small>';
     b.setAttribute('aria-pressed',(S[key]||def)===p?'true':'false');b.addEventListener('click',function(){S[key]=p;save();swatchRow(box,map,key,def,after);after();});box.appendChild(b);});}
 swatchRow($('#jarPalRow'),JARPAL,'jarPal','pastell',function(){layoutJar();});
+/* Bakgrundslitur á kúluglasinum */
+var JARBG={hv:['Hvít',['#ffffff']],gul:['Gul',['#fef3c7']],bla:['Blá',['#dbeafe']],gron:['Grøn',['#dcfce7']],ljosreyd:['Ljósreyð',['#fce7f3']],lilla:['Lilla',['#ede9fe']],reydgul:['Reyðgul',['#ffedd5']],gra:['Grá',['#e5e7eb']]};
+function applyJarBg(){var c=(JARBG[S.jarBg]||JARBG.hv)[1][0];$('#w-glas').style.background=S.jarBg&&S.jarBg!=='hv'?c:'';}
+swatchRow($('#jarBgRow'),JARBG,'jarBg','hv',applyJarBg);applyJarBg();
 
 /* ---------- Terningar ---------- */
 var PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
