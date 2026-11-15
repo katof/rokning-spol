@@ -6,7 +6,7 @@
 <title>Talvan – Snar</title>
 <meta name="description" content="Amboð til stóra skíggjan í flokkinum: klokka, stoppur, nøvn, ferðsluljós, smileyglas, terningar, ljóðmátari, pennar, PDF, myndir, klistrimerki, YouTube, ætlan, linjal og vinkulmátari. Einki verður sent nakran stað.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Serif+Display&family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@500;600;700&family=DM+Serif+Display&family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap">
 <style>
 /* Talvan (áður Floksskíggin) – útgáva 2 (15.11.2026). Ein fíla við øllum. Verður víst í Funku-rammuni á Snar,
    sum hevur knøttin til fullan skíggja, so funkan hevur ikki sín egna.
@@ -694,7 +694,7 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
 
 .lay-pv i.st{background:rgba(255,255,255,.55);border:1.5px dashed #fff;box-shadow:none}
 /* Tekstur */
-.tx{width:100%;height:100%;border-radius:14px;padding:6cqi 7cqi;overflow:auto;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);font-size:calc(var(--txs,1) * clamp(.85rem,5cqi,1.6rem));color:#1f2937}
+.tx{width:100%;height:100%;border-radius:14px;padding:clamp(14px,4cqi,36px) clamp(16px,5cqi,56px);overflow:auto;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);font-size:calc(var(--txs,1) * clamp(.85rem,5cqi,1.6rem));color:#1f2937}
 .txbg-w{background:#fff}.txbg-y{background:#fff3b0}.txbg-b{background:#dbeafe}.txbg-g{background:#dcfce7}.txbg-n{background:transparent;box-shadow:none}
 .tx-h{font-weight:800;font-size:1.4em;line-height:1.2;margin-bottom:.45em;outline:none;min-height:1.2em}
 .tx-t{line-height:1.5;white-space:pre-wrap;outline:none;color:#374151;min-height:3em}
@@ -895,7 +895,7 @@ body.focus .w.big{top:calc(80px * var(--isc))!important;height:calc(100% - 80px 
             <label class="tmr-w"><input type="radio" name="tmrW" value="p"> tað eru <input class="set-num" type="number" id="tmrWp" min="1" max="99"> % eftir av tíðini</label>
             <label class="tmr-w"><input type="radio" name="tmrW" value="s"> tað eru <input class="set-num" type="number" id="tmrWs" min="1" max="600"> sekund eftir av tíðini</label></div>
           <div class="row cfg" id="tmrThRow"></div>
-          <button class="ic cfg" type="button" id="tmrSound" title="Ljóð tá ið tíðin er úti" aria-pressed="true"></button>
+          <button class="ic cfg" type="button" id="tmrSound" title="Ljóð tá ið tíðin er farin" aria-pressed="true"></button>
         </div>
       </div>
     </section>
@@ -1303,7 +1303,7 @@ var SEL=null,SETK=null;
 /* Hvat verður flutt út í feltið høgrumegin: [yvirskrift, [elementir]] */
 var SETS={
   klokka:[['Slag av klokku',['#cmSeg']],['Vísaraklokkan vísir',['#cfSeg']]],
-  tid:[['Skjót val',['#presets']],['Byrjanartíð',['#tmrDefRow']],['Ávaring',['#tmrWarnRow']],['Litur',['#tmrThRow']],['Ljóð, tá ið tíðin er úti',['#tmrSound']]],
+  tid:[['Skjót val',['#presets']],['Byrjanartíð',['#tmrDefRow']],['Ávaring',['#tmrWarnRow']],['Litur',['#tmrThRow']],['Ljóð, tá ið tíðin er farin',['#tmrSound']]],
   navn:[['Hvat skal gerast?',['#navnTabs']],['Persónar í hvørjum bólki',['#grpN']],['Nøvnini',['#names','#namesNote']],['Tá ið tú velur',['#pickOnceL']]],
   ljos:[['Tekstirnir',['#ljosSet','#ljosNote']]],
   glas:[['Kúlur í fullum glasi',['#jarGoalRow']],['Glasið',['#jarSub','#jarEmpty']]],
@@ -1468,13 +1468,13 @@ function setT(s){stopT();total=left=base=Math.max(0,Math.min(s,5999));$('#tmr').
 function stopT(){running=false;clearInterval(tmrI);$('#tmr').classList.remove('run');}
 function startT(){if(left<=0)return;running=true;endAt=Date.now()+left*1000;$('#tmrMsg').textContent='';$('#tmr').classList.add('run');goBtn();
   tmrI=setInterval(function(){left=(endAt-Date.now())/1000;if(left<=0){left=0;stopT();drawT();doneT();return;}drawT();},200);}
-function doneT(){$('#tmr').classList.add('done');$('#tmrMsg').textContent='Tíðin er úti!';goBtn();if(S.sound)chime();}
+function doneT(){$('#tmr').classList.add('done');$('#tmrMsg').textContent='Tíðin er farin!';goBtn();if(S.sound)chime();}
 $('#tmrGo').addEventListener('click',function(){if(running){stopT();left=Math.ceil(left);drawT();goBtn();}else{if(left<=0)setT(base);ensureAudio();startT();}});
 $('#tmrReset').addEventListener('click',function(){setT(base)});
 $$('[data-add]').forEach(function(b){b.addEventListener('click',function(){var a=+b.dataset.add;
   if(running){endAt+=a*1000;left=(endAt-Date.now())/1000;if(left<1){left=1;endAt=Date.now()+1000;}total=Math.max(total+a,left);drawT();}
   else{var n=Math.max(0,Math.min(5999,Math.round(left)+a));setT(n);}})});
-function sndIcon(){var b=$('#tmrSound');b.innerHTML=S.sound?I.snd:I.mute;b.setAttribute('aria-pressed',S.sound?'true':'false');b.title=S.sound?'Ljóð tá ið tíðin er úti: tendrað':'Ljóð tá ið tíðin er úti: sløkt';}
+function sndIcon(){var b=$('#tmrSound');b.innerHTML=S.sound?I.snd:I.mute;b.setAttribute('aria-pressed',S.sound?'true':'false');b.title=S.sound?'Ljóð tá ið tíðin er farin: tendrað':'Ljóð tá ið tíðin er farin: sløkt';}
 $('#tmrSound').addEventListener('click',function(){S.sound=!S.sound;sndIcon();save();});
 /* Byrjanartíð: tíðin, sum Stoppurin byrjar við og fer aftur til við ↺ */
 (function(){var mi=$('#tmrDefM'),si=$('#tmrDefS');mi.value=Math.floor(S.secs/60);si.value=S.secs%60;
@@ -2313,7 +2313,7 @@ var LAYOUTS=[
  {n:'Bólkaarbeiði',d:'Ger bólkar, set tíðina og savna smileykúlur saman.',bg:'talva',w:{tid:[568,90,480,400],glas:[1072,90,504,400],tern:[568,510,1008,250]},stk:[['tilv',[24,90,520,670],{ti:'Bólkar',mode:'bolkar',gn:3,th:'hvitt',items:'@flokkur'}]]},
  {n:'Til lukku',d:'Stjørna við navninum á føðingardagsbarninum og sangurin „Til lukku til lukku“ frá Barnasangbók Føroya.',bg:'lukku',w:{yt:[960,380,600,360]},yt:{yt:{id:'cRPUkTEJDxg',s:0}},stk:[['star',[110,150,560,560]],['lukku',[700,120,620,200]]]},
  {n:'Finn orð',d:'Ein talva við bókstavum, ein vegleiðing og eitt stoppur við tveimum minuttum.',bg:'sand',w:{tid:[1150,330,420,300]},tsec:120,stk:[['finnt',[40,40,520,180]],['tekst',[40,250,440,500],{h:'Soleiðis spælir tú',b:'Finn so nógv orð, sum tú kanst, í talvuni.\n\nBókstavirnir í orðinum skulu liggja saman í talvuni, og hvør bókstavur kann bert brúkast eina ferð í hvørjum orði.'}],['finn',[540,150,580,580]]]},
- {n:'Hvør eri eg?',d:'Ein næmingur skal gita, hvat hann er, við at seta flokkinum ja/nei-spurningar. Tilvild velur næmingin og orðið, og Stoppurin telur ein minutt.',bg:'mariu',w:{tid:[1230,430,340,300]},tsec:60,stk:[['tekst',[70,30,1060,300],{h:'Hvør eri eg?',hs:2,b:'Ein næmingur stendur frammi. Hann hevur ein minutt at finna út av, hvat hann er, við at seta flokkinum spurningar, sum bert kunnu svarast við ja ella nei.',ff:'serif',bf:'hand',bd:2,bc:'#f59e0b',bg:'n',fs:1.2}],['tilv',[90,350,470,420],{ti:'Hvør eigur at gera?',th:'reytt',once:1,items:'@flokkur'}],['tilv',[640,340,560,470],{th:'gult',des:'mida',items:'Eitt skýggj\nEin sól\nEin bilur\nEitt træ\nEin fiskur\nEin bátur\nEitt hús\nEin blýantur\nEin bók\nEin hundur\nEin súkkla\nEitt flogfar\nEin seyður\nEin lundi'}]]},
+ {n:'Hvør eri eg?',d:'Ein næmingur skal gita, hvør ella hvat hann er, við at spyrja hini í flokkinum ja/nei-spurningar. Tilvild velur næmingin og orðið, og Stoppurin telur ein minutt.',bg:'mariu',w:{tid:[1230,430,340,300]},tsec:60,stk:[['tekst',[50,24,1140,326],{h:'Hvør eri eg?',hs:2.1,b:'Ein næmingur stendur framman fyri flokkinum, við rygginum til talvuna. Hann hevur ein minutt at gita, hvør ella hvat hann er, við at spyrja hini í flokkinum ymsar spurningar, sum bara kunnu svarast við ja ella nei.',ff:'serif',bf:'mjuk',bd:2,bc:'#f59e0b',bg:'n',fs:1.05}],['tilv',[80,372,470,410],{ti:'Hvør eigur at gera?',th:'reytt',once:1,items:'@flokkur'}],['tilv',[640,366,560,440],{th:'gult',des:'mida',items:'Eitt skýggj\nEin sól\nEin bilur\nEitt træ\nEin fiskur\nEin bátur\nEitt hús\nEin blýantur\nEin bók\nEin hundur\nEin súkkla\nEitt flogfar\nEin seyður\nEin lundi'}]]},
  {n:'Framløga',d:'Ein stórur PDF á talvuni, eitt stoppur og klokkan við síðuna av.',bg:'nordlys',w:{pdf:[24,84,1150,690],tid:[1196,84,380,380],klokka:[1196,490,380,230]}}];
 function applyLayout(L){unfocus();Object.keys(S.stk).forEach(function(id){var w=$('#w-'+id);if(w)w.remove();delete S.stk[id];delete S.vis[id];delete S.pos[id];delete S.z[id];delete SETS[id];});Object.keys(S.vis).forEach(function(k){S.vis[k]=0});['linjal','vinkul'].forEach(function(k){if(S.fl[k])S.fl[k].on=0;});
   S.z={};zTop=0;Object.keys(L.w).forEach(function(k){S.vis[k]=1;S.pos[k]=L.w[k].slice();S.z[k]=++zTop;});
@@ -2453,7 +2453,7 @@ $('#penMin').addEventListener('click',function(){S.dockMini=S.dockMini?0:1;apply
 applyMini();
 
 /* ---------- Tekstur: skrift, litir, kantur og stilling ---------- */
-var TXF={vanlig:['Vanlig','Inter,Arial,sans-serif'],rund:['Rundað','Fredoka,Inter,sans-serif'],serif:['Serif','"DM Serif Display",Georgia,serif'],hand:['Handskrift','Caveat,"Comic Sans MS",cursive']};
+var TXF={vanlig:['Vanlig','Inter,Arial,sans-serif'],rund:['Rundað','Fredoka,Inter,sans-serif'],serif:['Serif','"DM Serif Display",Georgia,serif'],mjuk:['Mjúk','Nunito,Inter,sans-serif'],hand:['Handskrift','Caveat,"Comic Sans MS",cursive']};
 var TXC=[['Myrkt','#1f2937'],['Hvítt','#ffffff'],['Reytt','#dc2626'],['Blátt','#1d4ed8'],['Grønt','#15803d'],['Lilla','#7c3aed']];
 var TXB=[['Reyðgult','#f59e0b'],['Reytt','#ef4444'],['Blátt','#3b82f6'],['Grønt','#22c55e'],['Myrkt','#1f2937']];
 STK.tekst.r=function(d){var st='--txs:'+(d.fs||1)+';--txh:'+(d.hs||1.4)+'em;text-align:'+(d.al==='c'?'center':'left')+';'+(d.tc?'--txc:'+d.tc+';':'')+(d.bd?'border:'+(d.bd===2?6:3)+'px solid '+(d.bc||'#f59e0b')+';':'');
@@ -2474,7 +2474,7 @@ STK.tekst.settings=function(id,d,sec){
     $$('button',g).forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});upd();})})});
   $$('[data-fs]',sec).forEach(function(b){b.addEventListener('click',function(){d.fs=Math.max(.6,Math.min(3,+((d.fs||1)+(+b.dataset.fs)*.15).toFixed(2)));upd();})});
   $$('[data-hs]',sec).forEach(function(b){b.addEventListener('click',function(){d.hs=Math.max(1,Math.min(4,+((d.hs||1.4)+(+b.dataset.hs)*.2).toFixed(2)));upd();})});};
-Object.keys(S.stk).forEach(function(id){if(S.stk[id].t==='tekst')drawStk(id);});
+Object.keys(S.stk).forEach(function(id){var d=S.stk[id];if(d.t==='tekst'&&d.b==='Ein næmingur stendur frammi. Hann hevur ein minutt at finna út av, hvat hann er, við at seta flokkinum spurningar, sum bert kunnu svarast við ja ella nei.'){d.b='Ein næmingur stendur framman fyri flokkinum, við rygginum til talvuna. Hann hevur ein minutt at gita, hvør ella hvat hann er, við at spyrja hini í flokkinum ymsar spurningar, sum bara kunnu svarast við ja ella nei.';if(d.bf==='hand')d.bf='mjuk';}if(d.t==='tekst')drawStk(id);});
 
 /* ---------- Tilvild: vel eitt ella ger bólkar úr einum lista (kann vera fleiri í senn) ---------- */
 var TVTH={reytt:['Reytt','#e63b3b','#fff','#111',['#ef4444','#f87171','#fecaca','#b91c1c']],gult:['Gult','#fcd34d','#1f2937','#111',['#facc15','#fde68a','#f59e0b','#fef3c7']],
