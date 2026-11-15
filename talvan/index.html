@@ -721,10 +721,12 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
 body.dockmini .penbar>:not(.pb-mode):not(.pb-min){display:none!important}
 body.dockmini .penbar{padding:6px 8px;gap:4px}
 body.dockmini .pb-mode{flex-direction:row}
+html:not(.ready) #grid,html:not(.ready) .dock,html:not(.ready) .top{visibility:hidden}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body data-bg="strik">
+<script>setTimeout(function(){document.documentElement.classList.add("ready")},4000);</script>
 
 <div id="bg" aria-hidden="true">
   <!-- Strikumynd í Snar-stíli: fjøll, hav, bygd og prikkar -->
@@ -2312,6 +2314,7 @@ $('#penMin').addEventListener('click',function(){S.dockMini=S.dockMini?0:1;apply
 applyMini();
 
 applySz();fit();applyVis();applyFl();applyLock();
+document.documentElement.classList.add('ready');
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layoutJar);
 })();
 </script>
