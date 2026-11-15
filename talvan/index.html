@@ -1284,6 +1284,7 @@ $$('#morePop .dk').forEach(function(b){b.addEventListener('click',function(){set
 function applyVis(){
   var any=false;
   $$('.w').forEach(function(w){var on=!!S.vis[w.dataset.w];w.hidden=!on;if(on)any=true;});
+  syncMedia();
   $$('.dk[data-t]').forEach(function(b){b.setAttribute('aria-pressed',S.vis[b.dataset.t]?'true':'false')});
   $$('.dk[data-m]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m.split(',').some(function(k){return S.vis[k]})?'true':'false')});
   $('#moreBtn').classList.toggle('on',$$('#morePop .dk').some(function(b){return b.getAttribute('aria-pressed')==='true'}));
@@ -1304,7 +1305,17 @@ function unfocus(keep){$$('.w.big').forEach(function(x){x.classList.remove('big'
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.body.classList.contains('pen'))setPen(false);else if($$('.panel').some(function(p){return !p.hidden})||!$('#morePop').hidden)closePanels();else if(document.body.classList.contains('focus'))unfocus();else if(POPUP&&!document.fullscreenElement)popClose();}});
 /* Opnað sum popup á snar.fo/funkur (?popup=1): egin knøttur til fullan skíggja og at lata aftur */
 var POPUP=/[?&]popup=1/.test(location.search)&&window.parent!==window;
-function popClose(){if(document.fullscreenElement)document.exitFullscreen().catch(function(){});try{window.parent.postMessage({snar:'talvan-close'},'*');}catch(e){}}
+/* Ljóð og filmar: eitt fjalt amboð við iframe (YouTube, funka, temasíða) verður tømt, so ljóðið steðgar.
+   Tá ið amboðið kemur aftur, verður tað heintað aftur. */
+var MEDIA_OFF=false;
+function syncMedia(){if(typeof YP==='undefined'||typeof SW==='undefined')return;
+  Object.keys(YP).forEach(function(k){var f=$('#'+YP[k]+'Frame');if(!f)return;if(MEDIA_OFF||!S.vis[k]){if(f.getAttribute('src'))f.removeAttribute('src');}else if(S.ytOf[k])drawYt(k);});
+  ['snar','snar2','snar3','tema'].forEach(function(k){var w=$('#w-'+k),f=w&&w.querySelector('iframe');if(!f)return;if(MEDIA_OFF||!S.vis[k]){if(f.getAttribute('src'))f.removeAttribute('src');}else if(S[k]&&SW[k])SW[k].show();});}
+function mediaOff(off){MEDIA_OFF=!!off;syncMedia();}
+/* Popup-gluggin á snar.fo sigur frá, tá ið Talvan verður fjald ella víst aftur */
+window.addEventListener('message',function(e){if(e.source!==window.parent||!/^https:\/\/(www\.)?snar\.fo$|^https:\/\/snardev\.ctrl\.fo$/.test(e.origin)||!e.data)return;
+  if(e.data.snar==='talvan-hidden')mediaOff(true);else if(e.data.snar==='talvan-shown')mediaOff(false);});
+function popClose(){mediaOff(true);if(document.fullscreenElement)document.exitFullscreen().catch(function(){});try{window.parent.postMessage({snar:'talvan-close'},'*');}catch(e){}}
 if(POPUP){var pc=$('#popClose');pc.hidden=false;pc.addEventListener('click',popClose);}
 /* Fullur skíggi: talvan og bakgrundin fylla allan skíggjan */
 (function(){var fb=$('#fullBtn');if(!document.fullscreenEnabled)return;fb.hidden=false;
