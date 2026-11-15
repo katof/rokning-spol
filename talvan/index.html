@@ -404,6 +404,9 @@ body.dark .top-logo{background:#fff;padding:0 14px}
 .w-rs.ne{right:calc(-10px * var(--isc));top:calc(-10px * var(--isc));cursor:nesw-resize}
 .w-rs.sw{left:calc(-10px * var(--isc));bottom:calc(-10px * var(--isc));cursor:nesw-resize}
 .w-rs.se{right:calc(-10px * var(--isc));bottom:calc(-10px * var(--isc));cursor:nwse-resize}
+/* Fyll skíggjan: bjálkin sæst altíð, í miðjuni ovast, so hann ikki fjalist undir knøttunum í hornunum */
+body.focus .w.big .w-head{display:flex;left:50%;right:auto;top:calc(14px * var(--isc));bottom:auto;margin:0;transform:translateX(-50%) scale(var(--isc));transform-origin:50% 0}
+body.focus .w.big .big-btn{background:var(--ink);color:#fff;border-radius:10px}
 body.focus .w.big .w-rs,body.pdfback #w-pdf .w-rs,body.locked .w-rs{display:none!important}
 body.focus .w.big{border-radius:0}
 .w .edit-note,.w .note#pickLeft:empty{display:none}
