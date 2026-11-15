@@ -717,6 +717,15 @@ html:not(.ready) #grid,html:not(.ready) .dock,html:not(.ready) .top{visibility:h
 .yt-b:has(iframe:not([hidden])) .yt-grip{display:flex}
 .yt-grip i{width:5px;height:5px;border-radius:50%;background:#9ca3af}
 .w.moving .yt-grip{cursor:grabbing}
+/* Klistrimerki: tekstur verður ikki markaður, tá ið tey verða drigin */
+.w.stk,.w.stk *{user-select:none;-webkit-user-select:none}
+.w.stk .tx [contenteditable]{user-select:text;-webkit-user-select:text}
+.stkpals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stkpal{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border:2px solid var(--line);border-radius:12px;background:#fff}
+.stkpal[aria-pressed=true]{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,89,232,.18)}
+.sp-dots{display:flex;gap:3px}
+.sp-dots i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.stkpal small{font-size:.78rem;font-weight:600;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1214,7 +1223,7 @@ var SETS={
   pdf:'pdflib',
   poll:'egin',skra:'egin',mynd:'lib',mynd2:'lib',mynd3:'lib'};
 /* Har kann ein ikki byrja at flyta amboðið, tí har verður arbeitt */
-var NODRAG='button,input,textarea,select,a,label,summary,details,iframe,canvas,[contenteditable],.ball,.pile,.jar,.dice,.pdf-view,.sn-list,.plan,.groups,.tl-txt,.poll-ans,.w-rs,.w-head';
+var NODRAG='button,input,textarea,select,a,label,summary,details,iframe,canvas,[contenteditable],.pile,.dice,.pdf-view,.sn-list,.plan,.groups,.tl-txt,.poll-ans,.w-rs,.w-head';
 function setupW(w){
   var h=w.querySelector('.w-head'),k=w.dataset.w;
   var st=el('button','ic set-btn',I.gear);st.type='button';st.title='Stillingar';st.hidden=!SETS[k];
@@ -2160,14 +2169,19 @@ $('#layBtn').addEventListener('click',function(){var p=$('#layPanel'),open=p.hid
 /* ---------- Klistrimerki: tekstir, stjørna við navni og Finn orð-talva, frítt á talvuni ---------- */
 if(!S.stk)S.stk={};
 var STKC=['#ef476f','#f78c6b','#f4b400','#06b386','#118ab2','#9b5de5','#00a6d6','#f15bb5'];
-function bub(lines,o){o=o||{};var pad=30,y=pad,W=0,rows=[];
+/* Litaval: palettan verður sett av drawStk, áðrenn klistrimerkið verður teknað */
+var STKPAL={litrikt:['Litríkt',null],pastell:['Pastell',['#f472b6','#f59e0b','#34d399','#60a5fa','#a78bfa']],sjogvur:['Sjógvur',['#0ea5e9','#06b6d4','#14b8a6','#2563eb','#6366f1']],
+  heyst:['Heyst',['#ea580c','#d97706','#b91c1c','#a16207','#c2410c']],jol:['Jól',['#dc2626','#16a34a','#dc2626','#16a34a','#ca8a04']],
+  reytt:['Reytt',['#ef2418']],blatt:['Blátt',['#1559e8']],gront:['Grønt',['#15803d']],lilla:['Lilla',['#7c3aed']],svart:['Svart',['#1f2937']],hvitt:['Hvítt',['#ffffff']]};
+var CURPAL=null;
+function bub(lines,o){o=o||{};var pad=30,y=pad,W=0,rows=[],PP=CURPAL&&STKPAL[CURPAL]&&STKPAL[CURPAL][1],one=PP&&PP.length===1;
   lines.forEach(function(L){var w=L.t.length*L.s*(L.w||.6);W=Math.max(W,w);y+=L.s*.92;rows.push({L:L,y:y});y+=L.s*.18;});
   var VW=W+pad*2,VH=y+pad*.6,ci=o.c0||0;
   var s='<svg viewBox="0 0 '+VW.toFixed(0)+' '+VH.toFixed(0)+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="ds" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".22"/></filter></defs>';
   if(o.bubble)s+='<path d="M14 10h'+(VW-28)+'a14 14 0 0 1 14 14v'+(VH-62)+'a14 14 0 0 1-14 14H'+(VW*.72)+'l22 30-46-30H24a14 14 0 0 1-14-14V24a14 14 0 0 1 14-14z" fill="#f8fafc" filter="url(#ds)"/>';
-  rows.forEach(function(r){var L=r.L;s+='<text x="'+(VW/2).toFixed(0)+'" y="'+r.y.toFixed(0)+'" text-anchor="middle" font-family="Fredoka,Inter,Arial,sans-serif" font-weight="'+(L.fw||700)+'" font-size="'+L.s+'" paint-order="stroke" stroke="'+(L.st||'#fff')+'" stroke-width="'+(L.sw!=null?L.sw:L.s*.2).toFixed(0)+'" stroke-linejoin="round"'+(o.bubble?'':' filter="url(#ds)"')+'>';
-    if(L.m)L.t.split('').forEach(function(ch){if(ch===' '){s+=' ';return;}s+='<tspan fill="'+STKC[ci++%STKC.length]+'">'+esc(ch)+'</tspan>';});
-    else s+='<tspan fill="'+(L.c||'#1f2937')+'">'+esc(L.t)+'</tspan>';
+  rows.forEach(function(r){var L=r.L;s+='<text x="'+(VW/2).toFixed(0)+'" y="'+r.y.toFixed(0)+'" text-anchor="middle" font-family="Fredoka,Inter,Arial,sans-serif" font-weight="'+(L.fw||700)+'" font-size="'+L.s+'" paint-order="stroke" stroke="'+(L.st||(CURPAL==='hvitt'?'rgba(0,0,0,.45)':'#fff'))+'" stroke-width="'+(L.sw!=null?L.sw:L.s*.2).toFixed(0)+'" stroke-linejoin="round"'+(o.bubble?'':' filter="url(#ds)"')+'>';
+    var PAL=PP||STKC;if(L.m)L.t.split('').forEach(function(ch){if(ch===' '){s+=' ';return;}s+='<tspan fill="'+PAL[ci++%PAL.length]+'">'+esc(ch)+'</tspan>';});
+    else s+='<tspan fill="'+(one?PP[0]:(L.c||'#1f2937'))+'">'+esc(L.t)+'</tspan>';
     s+='</text>';});
   return s+'</svg>';}
 function starSvg(d){var pts=[],cx=250,cy=262,R=232,r=118;for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,q=i%2?r:R;pts.push((cx+q*Math.cos(a)).toFixed(1)+','+(cy+q*Math.sin(a)).toFixed(1));}
@@ -2210,7 +2224,8 @@ var STK={
       if(S.lock){h.contentEditable='false';t.contentEditable='false';}}}};
 /* Gomul „Soleiðis spælir tú“-klistrimerki verða til tekstkassar */
 Object.keys(S.stk).forEach(function(id){var d=S.stk[id];if(d.t==='hjalp'){d.t='tekst';d.h='Soleiðis spælir tú';d.b='Finn so nógv orð, sum tú kanst, í talvuni.\n\nBókstavirnir í orðinum skulu liggja saman í talvuni, og hvør bókstavur kann bert brúkast eina ferð í hvørjum orði.';}});
-function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d&&b&&STK[d.t]){b.innerHTML=STK[d.t].r(d);if(STK[d.t].after)STK[d.t].after(id,b);}}
+['spurn','lukku','lesa','vael','gott','stedg','lurta','bolk','glas','finnt'].forEach(function(k){if(STK[k]){STK[k].set=1;STK[k].pal=1;}});
+function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d&&b&&STK[d.t]){CURPAL=d.pal||null;b.innerHTML=STK[d.t].r(d);CURPAL=null;if(STK[d.t].after)STK[d.t].after(id,b);}}
 function mkStk(id){var d=S.stk[id];if(!d||!STK[d.t])return null;var w=el('section','w stk');w.id='w-'+id;w.dataset.w=id;w.dataset.stk=d.t;w.setAttribute('aria-labelledby','h-'+id);
   w.innerHTML='<div class="w-head"><h2 id="h-'+id+'"></h2></div><div class="w-body stk-b"></div>';w.querySelector('h2').textContent=STK[d.t].n;
   $('#grid').appendChild(w);if(STK[d.t].set)SETS[id]='stk';setupW(w);drawStk(id);return w;}
@@ -2225,6 +2240,10 @@ function openStkSet(id){var d=S.stk[id];if(!d||S.lock)return;closeMore();['bgPan
   $$('#setBody .set').forEach(function(x){x.hidden=x.dataset.for!=='stk';});var sec=$('#setBody .set[data-for=stk]');sec.hidden=false;sec.innerHTML='';
   if(d.t==='star'){sec.innerHTML='<div class="set-row"><h4>Navn</h4><input class="set-in" id="stkName" maxlength="24" placeholder="Skriva navnið"></div><p class="note">Navnið verður bert goymt í kagaranum á hesi teldu.</p>';
     var i=$('#stkName');i.value=d.name||'';i.addEventListener('input',function(){d.name=i.value;drawStk(id);save();});setTimeout(function(){i.focus()},50);}
+  if(STK[d.t].pal){sec.innerHTML='<div class="set-row"><h4>Litir</h4><div class="stkpals">'+Object.keys(STKPAL).map(function(p){var c=STKPAL[p][1]||STKC.slice(0,5);
+      return '<button type="button" class="stkpal" data-pal="'+p+'" title="'+STKPAL[p][0]+'"><span class="sp-dots">'+c.slice(0,5).map(function(x){return '<i style="background:'+x+'"></i>'}).join('')+'</span><small>'+STKPAL[p][0]+'</small></button>';}).join('')+'</div></div>';
+    function markP(){$$('.stkpal',sec).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.pal===(d.pal||'litrikt')?'true':'false')});}markP();
+    $$('.stkpal',sec).forEach(function(b){b.addEventListener('click',function(){d.pal=b.dataset.pal==='litrikt'?null:b.dataset.pal;if(!d.pal)delete d.pal;drawStk(id);save();markP();})});}
   if(d.t==='tekst'){sec.innerHTML='<div class="set-row"><h4>Bakgrund</h4><div class="txbgs">'+[['w','Hvítt'],['y','Gult'],['b','Blátt'],['g','Grønt'],['n','Gjøgnumskygt']].map(function(x){return '<button type="button" class="txbg txbg-'+x[0]+'" data-bg="'+x[0]+'" title="'+x[1]+'"><span>'+x[1]+'</span></button>'}).join('')+'</div></div><div class="set-row"><h4>Skriftstødd</h4><div class="row"><button class="btn sm" type="button" data-fs="-1">A−</button><button class="btn sm" type="button" data-fs="1">A+</button></div></div><p class="note">Skriva beinleiðis í kassan á talvuni.</p>';
     function mark(){$$('.txbgs .txbg',sec).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.bg===(d.bg||'w')?'true':'false')});}mark();
     $$('.txbgs .txbg',sec).forEach(function(b){b.addEventListener('click',function(){d.bg=b.dataset.bg;drawStk(id);save();mark();})});
