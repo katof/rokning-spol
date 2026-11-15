@@ -726,6 +726,8 @@ html:not(.ready) #grid,html:not(.ready) .dock,html:not(.ready) .top{visibility:h
 .sp-dots{display:flex;gap:3px}
 .sp-dots i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
 .stkpal small{font-size:.78rem;font-weight:600;color:var(--muted)}
+.empty{transition:opacity .6s}
+.empty.gone{opacity:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1290,6 +1292,10 @@ $('#moreBtn').addEventListener('click',function(){var m=$('#morePop'),open=m.hid
 $$('#morePop .dk').forEach(function(b){b.addEventListener('click',function(){setTimeout(closeMore,0);});});
 
 /* ---------- Sjónligt / fjalt ---------- */
+/* „Skíggin er tómur“ sæst bert eina løtu, so talvan kann vera heilt tóm */
+var emptyT=0,wasEmpty=null;
+function showEmpty(on){var e=$('#empty');if(on===wasEmpty)return;wasEmpty=on;clearTimeout(emptyT);e.classList.remove('gone');e.hidden=!on;
+  if(on)emptyT=setTimeout(function(){e.classList.add('gone');emptyT=setTimeout(function(){e.hidden=true;},700);},4000);}
 function applyVis(){
   var any=false;
   $$('.w').forEach(function(w){var on=!!S.vis[w.dataset.w];w.hidden=!on;if(on)any=true;});
@@ -1297,7 +1303,7 @@ function applyVis(){
   $$('.dk[data-t]').forEach(function(b){b.setAttribute('aria-pressed',S.vis[b.dataset.t]?'true':'false')});
   $$('.dk[data-m]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m.split(',').some(function(k){return S.vis[k]})?'true':'false')});
   $('#moreBtn').classList.toggle('on',$$('#morePop .dk').some(function(b){return b.getAttribute('aria-pressed')==='true'}));
-  $('#empty').hidden=any;
+  showEmpty(!any);
   if(document.body.classList.contains('focus')){var big=$('.w.big');if(!big||big.hidden)unfocus();}
   if(!S.vis.larm)stopNoise();
   requestAnimationFrame(layoutJar);
