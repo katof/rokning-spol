@@ -257,9 +257,9 @@
 <style>body { margin: 0; }</style>
 <style>.kal-goym { margin-left: 14px; cursor: pointer; } .kal-goym__note { display: block; margin: -4px 0 10px; font-size: .8rem; opacity: .85; }</style>
 <script>
-// 3.11.2026: «Goym kalendaran í telduni (leinkið)» – ein lítil HTML-fíla, sum beinanvegin letur kalendaran upp á Snar.
-// (Ein .url-fíla varð steðgað av Chrome/Edge sum «vandamikil» og lá eftir sum .download.) Stendur við síðuna av
-// «← Jól á Snar». Vísir altíð á snar.fo (eisini meðan snardev verður brúkt).
+// 15.11.2026: «Leinki til kalendaran» – eitt vanligt leinki til síðuna á snar.fo (áður varð ein HTML-fíla tikin niður,
+// og tá sá man fílunavnið). Trýst = leinkið verður avritað; leinkið kann eisini dragast yvir á skriviborðið ella
+// goymast sum bókamerki. Vísir altíð á snar.fo.
 document.addEventListener('DOMContentLoaded', function () {
   var crumb = document.querySelector('.jg-crumb, .jm-crumb, .jh-crumb');
   var NAVN = { grunddeild: 'Jól í grunddeildini', middeild: 'Jól í miðdeildini', hadeild: 'Desember undir sjóneykuni' };
@@ -269,27 +269,29 @@ document.addEventListener('DOMContentLoaded', function () {
   var url = 'https://snar.fo/jol/' + slug;
   var a = document.createElement('a');
   a.className = crumb.className + ' kal-goym';
-  a.href = '#';
-  a.textContent = '⤓ Goym kalendaran í telduni (leinki)';
-  a.title = 'Tekur eina stytting niður, sum letur kalendaran upp á Snar';
+  a.href = url;
+  a.target = '_top';
+  a.textContent = '🔗 Avrita leinkið til kalendaran';
+  a.title = NAVN[slug] + ' – ' + url;
   crumb.insertAdjacentElement('afterend', a);
-  a.addEventListener('click', function (e) {
-    e.preventDefault(); e.stopPropagation();
-    var text = '<!DOCTYPE html><html lang="fo"><head><meta charset="utf-8"><title>' + NAVN[slug] + ' – Snar</title>'
-      + '<meta http-equiv="refresh" content="0; url=' + url + '"></head>'
-      + '<body style="font-family:Segoe UI,Arial,sans-serif;padding:2rem"><p>Kalendarin verður latin upp á Snar …</p>'
-      + '<p><a href="' + url + '">Trýst her, um hann ikki letur seg upp</a></p>'
-      + '<script>location.replace(' + JSON.stringify(url) + ');</' + 'script></body></html>';
-    var blob = new Blob([text], { type: 'text/html;charset=utf-8' });
-    var dl = document.createElement('a');
-    dl.href = URL.createObjectURL(blob);
-    dl.download = NAVN[slug] + '.html';
-    document.body.appendChild(dl); dl.click(); dl.remove();
-    setTimeout(function () { URL.revokeObjectURL(dl.href); }, 4000);
+  function vis(t) {
     var note = document.querySelector('.kal-goym__note');
     if (!note) { note = document.createElement('span'); note.className = 'kal-goym__note'; note.setAttribute('role', 'status'); a.insertAdjacentElement('afterend', note); }
-    note.textContent = 'Kalendarin liggur nú í Downloads. Flyt hann til skriviborðið ella aðrastaðni.';
+    note.textContent = t;
     clearTimeout(note._t); note._t = setTimeout(function () { note.remove(); }, 12000);
+  }
+  function gamalt() {
+    var ta = document.createElement('textarea'); ta.value = url; ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (err) {}
+    ta.remove(); return ok;
+  }
+  a.addEventListener('click', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    var ok = 'Leinkið er avritað: ' + url + '. Set tað inn, har tú vilt goyma tað. Tú kanst eisini draga leinkið yvir á skriviborðið.';
+    var ikki = 'Leinkið er ' + url + '. Høgraklikk á leinkið og vel at avrita tað, ella drag tað yvir á skriviborðið.';
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(function () { vis(ok); }, function () { vis(gamalt() ? ok : ikki); });
+    else vis(gamalt() ? ok : ikki);
   });
 });
 </script>
