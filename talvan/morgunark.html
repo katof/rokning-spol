@@ -265,7 +265,7 @@ function sheet(num){setSeed('ark'+num+DL);tn=0;var KD=Q.get('k')||KIND[(num-1)%K
     h+=task('Tekna eftir prikkum','<p class="rule">'+txt+'</p>'+dots(pts,lab));
   }else if(KD==='ordaleiting'){
     var ws=DL==='g'?wordsearch(8,5,[[0,1],[1,0]]):DL==='m'?wordsearch(10,7,[[0,1],[1,0],[1,1]]):wordsearch(12,9,[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,1]]);
-    h+=task('Orðaleiting: '+ws.th,'<p class="rule">Finn orðini í rútunetinum. '+(DL==='h'?'Tey kunnu standa vatnrætt, loddrætt og skákt, eisini aftureftir.':DL==='m'?'Tey standa vatnrætt, loddrætt ella skákt.':'Tey standa vatnrætt ella loddrætt.')+' Strika tey, tú finnur.</p>'+ws.html);
+    h+=task('Orðaleiting: '+ws.th,'<p class="rule">Finn orðini í rútunetinum. '+(DL==='h'?'Tey kunnu standa vatnrætt, loddrætt og skákt, eisini aftureftir.':DL==='m'?'Tey standa vatnrætt, loddrætt ella skákt.':'Tey standa vatnrætt ella loddrætt.')+' Tekna ein ring um tey, tú finnur.</p>'+ws.html);
   }else if(KD==='klokkan'){
     if(DL==='h'){S=[];for(i=0;i<6;i++){a=ri(7,13);b=pick([0,5,10,15,20,25,30,35,40,45,50,55]);c=ri(25,200);var e=a*60+b+c;S.push('Frá '+two(a)+':'+two(b)+' til '+two(Math.floor(e/60)%24)+':'+two(e%60));}
       h+=task('Hvussu long tíð er ímillum?','<p class="rule">Skriva, hvussu nógvir tímar og minuttir eru ímillum.</p>'+sums(S));
