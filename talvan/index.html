@@ -816,6 +816,16 @@ body.focus .w.big{top:calc(80px * var(--isc))!important;height:calc(100% - 80px 
 .pg-nav span{min-width:56px;text-align:center;font-weight:700;font-size:.95rem}
 @media (max-width:1560px){.pg-nav{bottom:112px}}
 body.pen .pg-nav{bottom:112px}
+/* Klistrimerki: halli og rørsla */
+.stk-b>*{transform:rotate(var(--srot,0deg));transform-origin:50% 50%}
+.stk-b[data-fx=vagga]>*{animation:fxv 2.6s ease-in-out infinite}
+@keyframes fxv{0%,100%{transform:rotate(calc(var(--srot,0deg) - 4deg))}50%{transform:rotate(calc(var(--srot,0deg) + 4deg))}}
+.stk-b[data-fx=hoppa]>*{animation:fxh 1.6s ease-in-out infinite}
+@keyframes fxh{0%,60%,100%{transform:rotate(var(--srot,0deg)) translateY(0)}30%{transform:rotate(var(--srot,0deg)) translateY(-7%)}}
+.stk-b[data-fx=bulta]>*{animation:fxb 1.5s ease-in-out infinite}
+@keyframes fxb{0%,40%,100%{transform:rotate(var(--srot,0deg)) scale(1)}12%{transform:rotate(var(--srot,0deg)) scale(1.08)}26%{transform:rotate(var(--srot,0deg)) scale(1.04)}}
+#stkPanel .stkpals{margin-bottom:4px}
+body.locked .dk[data-files],body.locked .dk[data-open-stk],body.locked .dk[data-add-stk]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1173,7 +1183,8 @@ body.pen .pg-nav{bottom:112px}
   <button class="dk" type="button" data-t="larm"><svg viewBox="0 0 32 32"><path d="M3 17h3l2-6 3 13 3-18 3 16 3-9 2 4h7"/><circle style="fill:#ef2418" cx="27" cy="9" r="2.4"/></svg><span>Ljóðmátari</span></button>
   <button class="dk" type="button" data-t="ljos"><svg viewBox="0 0 32 32"><rect x="10" y="3" width="12" height="26" rx="5"/><circle style="fill:#ef2418" cx="16" cy="9" r="2.6"/><circle style="fill:#f5b301" cx="16" cy="16" r="2.6"/><circle style="fill:#1f9d55" cx="16" cy="23" r="2.6"/></svg><span>Ferðsluljós</span></button>
   <button class="dk" type="button" data-t="skra"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="20" height="24" rx="3"/><path d="M8 10h10M8 15h7M8 20h5"/><circle style="fill:#c4b5fd" cx="23" cy="22" r="6.5"/><path d="M23 19v3l2 1.5"/></svg><span>Ætlan</span></button>
-  <button class="dk" type="button" data-m="mynd,mynd2,mynd3"><svg viewBox="0 0 32 32"><rect x="3" y="6" width="26" height="20" rx="3"/><circle style="fill:#ffd23f" cx="11" cy="12" r="2.5"/><path style="fill:#86efac" d="M3.5 23l7.5-7 6 5 4-3 7.5 5.5V23a3 3 0 0 1-3 3H6.5a3 3 0 0 1-3-3z"/></svg><span>Mynd</span></button>
+  <button class="dk" type="button" data-files aria-pressed="false"><svg viewBox="0 0 32 32"><path style="fill:#fde68a" d="M3 9a2 2 0 0 1 2-2h7l3 3h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect style="fill:#fff" x="9" y="13" width="9" height="10" rx="1"/><path d="M11 17h5M11 20h3"/><circle style="fill:#ef2418;stroke:none" cx="22" cy="18" r="3"/></svg><span>Fílur</span></button>
+  <button class="dk" type="button" data-open-stk><svg viewBox="0 0 32 32"><path style="fill:#fde68a" d="M5 6a2 2 0 0 1 2-2h18a2 2 0 0 1 2 2v12l-9 10H7a2 2 0 0 1-2-2z"/><path d="M27 18h-7a2 2 0 0 0-2 2v8"/><path d="M11 12h10M11 17h6"/></svg><span>Klistrimerki</span></button>
   <button class="dk" type="button" data-t="tid"><svg viewBox="0 0 32 32"><path d="M8 3h16M8 29h16M10 3c0 7 6 9 6 13s-6 6-6 13M22 3c0 7-6 9-6 13s6 6 6 13"/><path style="fill:#ffd23f" d="M11.5 27c1-3 3.5-5 4.5-5s3.5 2 4.5 5z"/></svg><span>Stoppur</span></button>
   <button class="dk" type="button" data-t="klokka"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12.5"/><path d="M16 5.5v2M16 24.5v2M5.5 16h2M24.5 16h2"/><path d="M16 10v6l4.5 3"/><circle style="fill:#ef2418" cx="16" cy="16" r="1.8"/></svg><span>Klokkan</span></button>
   <button class="dk" type="button" data-m="snar,snar2,snar3"><svg viewBox="0 0 32 32"><rect x="3" y="5" width="26" height="18" rx="3"/><path d="M11 28h10M16 23v5"/><path style="fill:#ef2418" d="M13 10l7 4-7 4z"/></svg><span>Funkur</span></button>
@@ -1187,11 +1198,9 @@ body.pen .pg-nav{bottom:112px}
   <p class="more-h" id="moreH">Fleiri amboð</p>
   <div class="more-grid">
     <button class="dk" type="button" data-add-stk="tekst"><svg viewBox="0 0 32 32"><rect x="4" y="5" width="24" height="22" rx="3"/><path style="fill:#fde68a;stroke:none" d="M5 6h22v6H5z"/><path d="M10 10h12M16 10v12M13 22h6"/></svg><span>Tekstur</span></button>
-    <button class="dk" type="button" data-open-stk><svg viewBox="0 0 32 32"><path style="fill:#fde68a" d="M5 6a2 2 0 0 1 2-2h18a2 2 0 0 1 2 2v12l-9 10H7a2 2 0 0 1-2-2z"/><path d="M27 18h-7a2 2 0 0 0-2 2v8"/><path d="M11 12h10M11 17h6"/></svg><span>Klistrimerki</span></button>
     <button class="dk" type="button" data-m="yt,yt2"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="5"/><path style="fill:#ef4444;stroke:#ef4444" d="M13.5 11.5v9l8-4.5z"/></svg><span>YouTube</span></button>
     <button class="dk" type="button" data-t="tern"><svg viewBox="0 0 32 32"><rect x="3" y="11" width="15" height="15" rx="3"/><rect style="fill:#ef2418" x="14" y="5" width="15" height="15" rx="3"/><circle cx="7.5" cy="15.5" r="1.3"/><circle cx="13" cy="21.5" r="1.3"/><circle style="fill:#fff;stroke:none" cx="18.5" cy="9.5" r="1.4"/><circle style="fill:#fff;stroke:none" cx="24.5" cy="15.5" r="1.4"/></svg><span>Terningar</span></button>
     <button class="dk" type="button" data-t="glas"><svg viewBox="0 0 32 32"><path d="M7 7v18a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4V7M5 7h22"/><circle style="fill:#ffd23f" cx="12.5" cy="23.5" r="3"/><circle style="fill:#ffd23f" cx="19.5" cy="23.5" r="3"/><circle style="fill:#ffd23f" cx="16" cy="17.5" r="3"/></svg><span>Smileyglas</span></button>
-    <button class="dk" type="button" data-t="pdf"><svg viewBox="0 0 32 32"><path d="M8 3h11l6 6v20H8z"/><path d="M19 3v6h6"/><rect style="fill:#ef2418" x="5" y="15" width="17" height="7" rx="1.5"/></svg><span>PDF</span></button>
     <button class="dk" type="button" data-f="linjal"><svg viewBox="0 0 32 32"><rect style="fill:#ffd23f" x="3" y="11" width="26" height="10" rx="1.5"/><path d="M7 11v4M11 11v3M15 11v4M19 11v3M23 11v4"/></svg><span>Linjal</span></button>
     <button class="dk" type="button" data-f="vinkul"><svg viewBox="0 0 32 32"><path style="fill:#bfdbfe" d="M3 24a13 13 0 0 1 26 0z"/><path d="M16 24l8-9M3 24h26"/></svg><span>Vinkulmátari</span></button>
   </div>
@@ -1203,13 +1212,19 @@ body.pen .pg-nav{bottom:112px}
 </div>
 
 <div class="panel" id="libPanel" hidden role="dialog" aria-labelledby="libH">
-  <h3><span class="set-ic"><svg viewBox="0 0 32 32"><rect x="3" y="6" width="26" height="20" rx="3"/><circle style="fill:#ffd23f" cx="11" cy="12" r="2.5"/><path style="fill:#86efac" d="M3.5 23l7.5-7 6 5 4-3 7.5 5.5V23a3 3 0 0 1-3 3H6.5a3 3 0 0 1-3-3z"/></svg></span><span id="libH">Savn</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
-  <div class="set-tabs" role="tablist"><button type="button" role="tab" data-libt="img" aria-selected="true">Myndir</button><button type="button" role="tab" data-libt="stk" aria-selected="false">Klistrimerki</button><button type="button" role="tab" data-libt="pdf" aria-selected="false">PDF</button></div>
+  <h3><span class="set-ic"><svg viewBox="0 0 32 32"><rect x="3" y="6" width="26" height="20" rx="3"/><circle style="fill:#ffd23f" cx="11" cy="12" r="2.5"/><path style="fill:#86efac" d="M3.5 23l7.5-7 6 5 4-3 7.5 5.5V23a3 3 0 0 1-3 3H6.5a3 3 0 0 1-3-3z"/></svg></span><span id="libH">Fílur</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
+  <div class="set-tabs" role="tablist"><button type="button" role="tab" data-libt="img" aria-selected="true">Myndir</button><button type="button" role="tab" data-libt="pdf" aria-selected="false">PDF</button></div>
   <div class="lib-grid" id="libGrid"></div>
-  <div class="stk-grid" id="stkGrid" hidden></div>
   <div class="lib-grid pdf-grid" id="pdfGrid" hidden></div>
   <input type="file" id="libFile" accept="image/*" multiple hidden>
   <p class="note" id="libNote">Trýst á eina mynd fyri at seta hana á talvuna. Myndirnar verða bert goymdar í kagaranum á hesi teldu.</p>
+</div>
+
+<div class="panel" id="stkPanel" hidden role="dialog" aria-labelledby="stkH">
+  <h3><span class="set-ic"><svg viewBox="0 0 32 32"><path style="fill:#fde68a" d="M5 6a2 2 0 0 1 2-2h18a2 2 0 0 1 2 2v12l-9 10H7a2 2 0 0 1-2-2z"/><path d="M27 18h-7a2 2 0 0 0-2 2v8"/><path d="M11 12h10M11 17h6"/></svg></span><span id="stkH">Klistrimerki</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
+  <div class="set-row"><h4>Litur</h4><div class="stkpals" id="stkPals"></div></div>
+  <div class="stk-grid" id="stkGrid"></div>
+  <p class="note" style="margin-top:14px">Trýst á eitt klistrimerki fyri at seta tað á talvuna. Við tannhjólinum á klistrimerkinum kanst tú halla tað, geva tí rørslu og broyta litin og kantin.</p>
 </div>
 
 <div class="panel" id="layPanel" hidden role="dialog" aria-labelledby="layH">
@@ -1407,6 +1422,7 @@ function applyVis(){
   syncMedia();
   $$('.dk[data-t]').forEach(function(b){b.setAttribute('aria-pressed',S.vis[b.dataset.t]?'true':'false')});
   $$('.dk[data-m]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m.split(',').some(function(k){return S.vis[k]})?'true':'false')});
+  var fb=$('.dk[data-files]');if(fb)fb.setAttribute('aria-pressed',['mynd','mynd2','mynd3','pdf'].some(function(k){return S.vis[k]})?'true':'false');
   $('#moreBtn').classList.toggle('on',$$('#morePop .dk').some(function(b){return b.getAttribute('aria-pressed')==='true'}));
   showEmpty(!any);
   if(document.body.classList.contains('focus')){var big=$('.w.big');if(!big||big.hidden)unfocus();}
@@ -2009,7 +2025,7 @@ $('#pdfFile').addEventListener('change',function(e){var f=e.target.files[0];e.ta
 function pdfShow(){if(!S.vis.pdf){pdfUI();return;}if(pdfDoc||pdfBusy){pdfUI();renderPdf();return;}pdfBusy=true;
   pdfMigrate().then(function(){pdfLibDraw();return S.pdfCur?idb('readonly',function(st){return st.get('pdf:'+S.pdfCur);}):null;})
   .then(function(buf){pdfBusy=false;if(buf)openPdf(buf,true);else pdfUI();});}
-$('[data-t=pdf]').addEventListener('click',function(){setTimeout(pdfShow,0)});
+/* PDF-knøtturin er nú í Fílum */
 $('#w-pdf .w-head').addEventListener('click',function(e){if(e.target.closest('.close-btn'))setTimeout(pdfUI,0);});
 pdfUI();pdfShow();
 
@@ -2059,7 +2075,7 @@ $('#bgFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f
 applyBg();
 
 /* Spjøld */
-function closePanels(){closeMore();var lb=$('#layBtn');if(lb)lb.setAttribute('aria-expanded','false');['bgPanel','infoPanel','setPanel','libPanel','layPanel'].forEach(function(id){$('#'+id).hidden=true});$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
+function closePanels(){closeMore();var lb=$('#layBtn');if(lb)lb.setAttribute('aria-expanded','false');['bgPanel','infoPanel','setPanel','libPanel','layPanel','stkPanel'].forEach(function(id){$('#'+id).hidden=true});$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
 function tog(btn,id){var p=$('#'+id),open=p.hidden;closePanels();p.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');}
 $('#bgBtn').addEventListener('click',function(){tog(this,'bgPanel')});
 $('#infoBtn').addEventListener('click',function(){tog(this,'infoPanel')});
@@ -2276,7 +2292,7 @@ function drawMynd(k){var p=MP[k];if(!p)return;var img=$('#'+p+'Img'),em=$('#'+p+
   if(!id){img.hidden=true;em.hidden=false;img.removeAttribute('src');return;}
   imgUrl(id).then(function(u){if(!u){delete S.myndOf[k];img.hidden=true;em.hidden=false;return;}img.src=u;img.hidden=false;em.hidden=true;
     var it=S.imgs.filter(function(x){return x.id===id})[0];img.alt=it?it.n:'';});}
-function openLib(k){if(S.lock)return;closeMore();['bgPanel','infoPanel','setPanel','layPanel'].forEach(function(id){$('#'+id).hidden=true});
+function openLib(k){if(S.lock)return;closeMore();['bgPanel','infoPanel','setPanel','layPanel','stkPanel'].forEach(function(id){$('#'+id).hidden=true});
   LIBK=k||null;$('#libPanel').hidden=false;drawLib();libTab(k?'img':LIBTAB);if(k){front(k);if(SEL!==k){SEL=k;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===k);});}}}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-open-lib]');if(!b)return;var w=b.closest('.w');openLib(w?w.dataset.w:null);});
 function drawLib(){var g=$('#libGrid');g.innerHTML='';
@@ -2368,13 +2384,13 @@ var STKC=['#ef476f','#f78c6b','#f4b400','#06b386','#118ab2','#9b5de5','#00a6d6',
 var STKPAL={litrikt:['Litríkt',null],pastell:['Pastell',['#f472b6','#f59e0b','#34d399','#60a5fa','#a78bfa']],sjogvur:['Sjógvur',['#0ea5e9','#06b6d4','#14b8a6','#2563eb','#6366f1']],
   heyst:['Heyst',['#ea580c','#d97706','#b91c1c','#a16207','#c2410c']],jol:['Jól',['#dc2626','#16a34a','#dc2626','#16a34a','#ca8a04']],
   reytt:['Reytt',['#ef2418']],blatt:['Blátt',['#1559e8']],gront:['Grønt',['#15803d']],lilla:['Lilla',['#7c3aed']],svart:['Svart',['#1f2937']],hvitt:['Hvítt',['#ffffff']]};
-var CURPAL=null;
+var CURPAL=null,CURST=null;
 function bub(lines,o){o=o||{};var pad=30,y=pad,W=0,rows=[],PP=CURPAL&&STKPAL[CURPAL]&&STKPAL[CURPAL][1],one=PP&&PP.length===1;
   lines.forEach(function(L){var w=L.t.length*L.s*(L.w||.6);W=Math.max(W,w);y+=L.s*.92;rows.push({L:L,y:y});y+=L.s*.18;});
   var VW=W+pad*2,VH=y+pad*.6,ci=o.c0||0;
   var s='<svg viewBox="0 0 '+VW.toFixed(0)+' '+VH.toFixed(0)+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="ds" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".22"/></filter></defs>';
   if(o.bubble)s+='<path d="M14 10h'+(VW-28)+'a14 14 0 0 1 14 14v'+(VH-62)+'a14 14 0 0 1-14 14H'+(VW*.72)+'l22 30-46-30H24a14 14 0 0 1-14-14V24a14 14 0 0 1 14-14z" fill="#f8fafc" filter="url(#ds)"/>';
-  rows.forEach(function(r){var L=r.L;s+='<text x="'+(VW/2).toFixed(0)+'" y="'+r.y.toFixed(0)+'" text-anchor="middle" font-family="Fredoka,Inter,Arial,sans-serif" font-weight="'+(L.fw||700)+'" font-size="'+L.s+'" paint-order="stroke" stroke="'+(L.st||(CURPAL==='hvitt'?'rgba(0,0,0,.45)':'#fff'))+'" stroke-width="'+(L.sw!=null?L.sw:L.s*.2).toFixed(0)+'" stroke-linejoin="round"'+(o.bubble?'':' filter="url(#ds)"')+'>';
+  rows.forEach(function(r){var L=r.L;s+='<text x="'+(VW/2).toFixed(0)+'" y="'+r.y.toFixed(0)+'" text-anchor="middle" font-family="Fredoka,Inter,Arial,sans-serif" font-weight="'+(L.fw||700)+'" font-size="'+L.s+'" paint-order="stroke" stroke="'+(L.st||(CURST==='d'?'#1f2937':CURST==='n'?'none':(CURPAL==='hvitt'?'rgba(0,0,0,.45)':'#fff')))+'" stroke-width="'+(L.sw!=null?L.sw:L.s*.2).toFixed(0)+'" stroke-linejoin="round"'+(o.bubble?'':' filter="url(#ds)"')+'>';
     var PAL=PP||STKC;if(L.m)L.t.split('').forEach(function(ch){if(ch===' '){s+=' ';return;}s+='<tspan fill="'+PAL[ci++%PAL.length]+'">'+esc(ch)+'</tspan>';});
     else s+='<tspan fill="'+(one?PP[0]:(L.c||'#1f2937'))+'">'+esc(L.t)+'</tspan>';
     s+='</text>';});
@@ -2420,18 +2436,26 @@ var STK={
 /* Gomul „Soleiðis spælir tú“-klistrimerki verða til tekstkassar */
 Object.keys(S.stk).forEach(function(id){var d=S.stk[id];if(d.t==='hjalp'){d.t='tekst';d.h='Soleiðis spælir tú';d.b='Finn so nógv orð, sum tú kanst, í talvuni.\n\nBókstavirnir í orðinum skulu liggja saman í talvuni, og hvør bókstavur kann bert brúkast eina ferð í hvørjum orði.';}});
 ['spurn','lukku','lesa','vael','gott','stedg','lurta','bolk','glas','finnt'].forEach(function(k){if(STK[k]){STK[k].set=1;STK[k].pal=1;}});
-function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d&&b&&STK[d.t]){CURPAL=d.pal||null;b.innerHTML=STK[d.t].r(d);CURPAL=null;if(STK[d.t].after)STK[d.t].after(id,b);}}
+function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d&&b&&STK[d.t]){CURPAL=d.pal||null;CURST=d.ol||null;b.innerHTML=STK[d.t].r(d);CURPAL=null;CURST=null;b.style.setProperty('--srot',(d.rot||0)+'deg');b.dataset.fx=d.fx||'';if(STK[d.t].after)STK[d.t].after(id,b);}}
 function mkStk(id){var d=S.stk[id];if(!d||!STK[d.t])return null;var w=el('section','w stk');w.id='w-'+id;w.dataset.w=id;w.dataset.stk=d.t;w.setAttribute('aria-labelledby','h-'+id);
   w.innerHTML='<div class="w-head"><h2 id="h-'+id+'"></h2></div><div class="w-body stk-b"></div>';w.querySelector('h2').textContent=STK[d.t].n;
-  $('#grid').appendChild(w);if(STK[d.t].set)SETS[id]='stk';setupW(w);drawStk(id);return w;}
+  $('#grid').appendChild(w);SETS[id]='stk';setupW(w);drawStk(id);return w;}
 function addStk(t,p,silent,x){var id='k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),sz=STK[t].sz;S.stk[id]={t:t};if(x)for(var q in x)S.stk[id][q]=x[q];
   S.pos[id]=p?p.slice():[Math.round((BW-sz[0])/2+Math.random()*80-40),Math.round((BH-sz[1])/2-40+Math.random()*60),sz[0],sz[1]];S.vis[id]=1;
   mkStk(id);if(!silent){front(id);select(id);applySz();applyVis();save();}return id;}
 function removeStk(id){var w=$('#w-'+id);if(w)w.remove();delete S.stk[id];delete S.vis[id];delete S.pos[id];delete S.z[id];delete SETS[id];if(SETK===id)closePanels();if(SEL===id)SEL=null;applyVis();save();}
 Object.keys(S.stk).forEach(mkStk);
 /* Stillingar til stjørnuna og Finn orð-talvuna */
+function stkFxRows(id,d,sec){
+  var h='<div class="set-row"><h4>Halla</h4><div class="row"><button class="btn sm" type="button" data-rot="-5" title="Halla til vinstru">↺</button><button class="btn sm" type="button" data-rot="0">Beint</button><button class="btn sm" type="button" data-rot="5" title="Halla til høgru">↻</button></div></div>'
+   +'<div class="set-row"><h4>Rørsla</h4><div class="seg tx-seg" id="stkFx">'+[['','Eingin'],['vagga','Vagga'],['hoppa','Hoppa'],['bulta','Bulta']].map(function(x){return '<button type="button" data-v="'+x[0]+'" aria-pressed="'+((d.fx||'')===x[0]?'true':'false')+'">'+x[1]+'</button>'}).join('')+'</div></div>'
+   +(STK[d.t].pal?'<div class="set-row"><h4>Kantur</h4><div class="seg tx-seg" id="stkOl">'+[['','Hvítur'],['d','Myrkur'],['n','Eingin']].map(function(x){return '<button type="button" data-v="'+x[0]+'" aria-pressed="'+((d.ol||'')===x[0]?'true':'false')+'">'+x[1]+'</button>'}).join('')+'</div></div>':'');
+  sec.insertAdjacentHTML('beforeend',h);
+  $$('[data-rot]',sec).forEach(function(b){b.addEventListener('click',function(){var v=+b.dataset.rot;d.rot=v?Math.max(-45,Math.min(45,(d.rot||0)+v)):0;if(!d.rot)delete d.rot;drawStk(id);save();})});
+  [['#stkFx','fx'],['#stkOl','ol']].forEach(function(p){var g=$(p[0],sec);if(!g)return;$$('button',g).forEach(function(b){b.addEventListener('click',function(){var v=b.dataset.v;if(v)d[p[1]]=v;else delete d[p[1]];
+    $$('button',g).forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});drawStk(id);save();})})});}
 function openStkSet(id){var d=S.stk[id];if(!d||S.lock)return;closeMore();['bgPanel','infoPanel','libPanel','layPanel'].forEach(function(x){$('#'+x).hidden=true});
-  SETK=id;$('#setH').textContent=STK[d.t].n;$('#setIc').innerHTML='<svg viewBox="0 0 32 32"><path style="fill:#ffd23f" d="M16 3l3.8 7.9 8.7 1.2-6.3 6 1.6 8.6L16 22.6l-7.8 4.1 1.6-8.6-6.3-6 8.7-1.2z"/></svg>';
+  ['stkPanel'].forEach(function(x){$('#'+x).hidden=true});SETK=id;$('#setH').textContent=STK[d.t].n;$('#setIc').innerHTML='<svg viewBox="0 0 32 32"><path style="fill:#ffd23f" d="M16 3l3.8 7.9 8.7 1.2-6.3 6 1.6 8.6L16 22.6l-7.8 4.1 1.6-8.6-6.3-6 8.7-1.2z"/></svg>';
   $$('#setBody .set').forEach(function(x){x.hidden=x.dataset.for!=='stk';});var sec=$('#setBody .set[data-for=stk]');sec.hidden=false;sec.innerHTML='';
   if(d.t==='star'){sec.innerHTML='<div class="set-row"><h4>Navn</h4><input class="set-in" id="stkName" maxlength="24" placeholder="Skriva navnið"></div><p class="note">Navnið verður bert goymt í kagaranum á hesi teldu.</p>';
     var i=$('#stkName');i.value=d.name||'';i.addEventListener('input',function(){d.name=i.value;drawStk(id);save();});setTimeout(function(){i.focus()},50);}
@@ -2446,19 +2470,28 @@ function openStkSet(id){var d=S.stk[id];if(!d||S.lock)return;closeMore();['bgPan
   if(d.t==='finn'){sec.innerHTML='<div class="set-row"><h4>Bókstavirnir</h4><div class="row"><button class="btn sm" type="button" id="stkNew">Nýggir bókstavir</button></div></div><div class="set-row"><h4>Stødd</h4><div class="seg" id="stkN"><button type="button" data-n="4">4 × 4</button><button type="button" data-n="5">5 × 5</button></div></div>';
     $('#stkNew').addEventListener('click',function(){d.l=newLetters(d.n||4);drawStk(id);save();});
     $$('#stkN button').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.n===(d.n||4)?'true':'false');b.addEventListener('click',function(){d.n=+b.dataset.n;d.l=newLetters(d.n);drawStk(id);save();$$('#stkN button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});});});}
+  if(d.t!=='tekst'&&d.t!=='tilv')stkFxRows(id,d,sec);
   if(STK[d.t].settings)STK[d.t].settings(id,d,sec);
   $('#setPanel').hidden=false;if(SEL!==id){front(id);SEL=id;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===id);});}}
 (function(){var sec=el('div','set');sec.dataset.for='stk';sec.hidden=true;$('#setBody').appendChild(sec);})();
 
 /* Savnið: teigar til myndir og klistrimerki */
 var LIBTAB='img';
-function libTab(t){LIBTAB=t;$$('[data-libt]').forEach(function(b){b.setAttribute('aria-selected',b.dataset.libt===t?'true':'false')});
+function libTab(t){if(t==='stk')t='img';LIBTAB=t;S.fileTab=t;$$('[data-libt]').forEach(function(b){b.setAttribute('aria-selected',b.dataset.libt===t?'true':'false')});
   $('#libGrid').hidden=t!=='img';$('#stkGrid').hidden=t!=='stk';$('#pdfGrid').hidden=t!=='pdf';if(t==='pdf')pdfLibDraw();
   $('#libNote').textContent=t==='img'?'Trýst á eina mynd fyri at seta hana á talvuna. Myndirnar verða bert goymdar í kagaranum á hesi teldu.':t==='pdf'?'Trýst á eina PDF-fílu fyri at lata hana upp á talvuni. PDF-fílurnar verða bert goymdar í kagaranum á hesi teldu.':'Trýst á eitt klistrimerki fyri at seta tað á talvuna. Tú kanst flyta tað og gera tað størri ella minni.';}
 $$('[data-libt]').forEach(function(b){b.addEventListener('click',function(){libTab(b.dataset.libt);})});
-(function(){var g=$('#stkGrid');Object.keys(STK).forEach(function(t){if(STK[t].lib===false)return;var b=el('button','stk-it');b.type='button';b.title=STK[t].n;b.innerHTML='<span class="stk-pv">'+STK[t].r({name:'Navn',n:4,l:'FINNORÐSPÆLIÐABA'.split('')})+'</span><small>'+esc(STK[t].n)+'</small>';
-  b.addEventListener('click',function(){addStk(t);});g.appendChild(b);});})();
-document.addEventListener('click',function(e){if(e.target.closest('[data-open-stk]')){openLib(null);libTab('stk');}var a=e.target.closest('[data-add-stk]');if(a){closeMore();var t=a.dataset.addStk,id=addStk(t,null,false,t==='tilv'?{ti:'Hvør eigur at gera?',th:'reytt',items:(S.lists[0]||{}).items||''}:null);setTimeout(function(){var h=$('#w-'+id+' .tx-h');if(h)h.focus();if(t==='tilv'&&!tvItems(S.stk[id]).length)openStkSet(id);},60);}});
+/* Klistrimerki-feltið: vel lit, og trýst á eitt klistrimerki */
+if(!S.stkPal)S.stkPal='litrikt';
+function drawStkGrid(){var g=$('#stkGrid');g.innerHTML='';CURPAL=S.stkPal==='litrikt'?null:S.stkPal;
+  Object.keys(STK).forEach(function(t){if(STK[t].lib===false)return;var b=el('button','stk-it');b.type='button';b.title=STK[t].n;
+    b.innerHTML='<span class="stk-pv">'+STK[t].r({name:'Navn',n:4,l:'FINNORÐSPÆLIÐABA'.split('')})+'</span><small>'+esc(STK[t].n)+'</small>';
+    b.addEventListener('click',function(){addStk(t,null,false,STK[t].pal&&S.stkPal!=='litrikt'?{pal:S.stkPal}:null);});g.appendChild(b);});CURPAL=null;
+  var pb=$('#stkPals');pb.innerHTML='';Object.keys(STKPAL).forEach(function(p){var c=STKPAL[p][1]||STKC.slice(0,5),b=el('button','stkpal');b.type='button';b.title=STKPAL[p][0];
+    b.innerHTML='<span class="sp-dots">'+c.slice(0,5).map(function(x){return '<i style="background:'+x+'"></i>'}).join('')+'</span><small>'+STKPAL[p][0]+'</small>';b.setAttribute('aria-pressed',S.stkPal===p?'true':'false');
+    b.addEventListener('click',function(){S.stkPal=p;save();drawStkGrid();});pb.appendChild(b);});}
+function openStkPanel(){if(S.lock)return;closeMore();['bgPanel','infoPanel','setPanel','layPanel','libPanel'].forEach(function(x){$('#'+x).hidden=true});$('#stkPanel').hidden=false;drawStkGrid();}
+document.addEventListener('click',function(e){if(e.target.closest('[data-open-stk]')){openStkPanel();}if(e.target.closest('[data-files]')){closeMore();openLib(null);libTab(S.fileTab||'img');}var a=e.target.closest('[data-add-stk]');if(a){closeMore();var t=a.dataset.addStk,id=addStk(t,null,false,t==='tilv'?{ti:'Hvør eigur at gera?',th:'reytt',items:(S.lists[0]||{}).items||''}:null);setTimeout(function(){var h=$('#w-'+id+' .tx-h');if(h)h.focus();if(t==='tilv'&&!tvItems(S.stk[id]).length)openStkSet(id);},60);}});
 
 /* ---------- YouTube: lím eina leinkju inn ---------- */
 if(!S.ytOf)S.ytOf={};
