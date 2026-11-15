@@ -4,8 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Morgunark – Snar</title>
-<!-- Morgunark til Talvuna: eitt nýtt ark hvønn dag til 1.–3., 4.–6. og 7.–9. flokk.
-     ?dl=g|m|h  (flokkur)   &d=ÁÁÁÁ-M-D (dagur, annars í dag)   &print=1 (prentar beinanvegin)
+<!-- Morgunark til Talvuna: 200 ørk til hvønn floksbólk, eitt til hvønn skúladag.
+     ?dl=g|m|h  (1.–3., 4.–6., 7.–9. flokkur)
+     &n=1–200   (arkið; annars arkið til skúladagin í dag – talt frá 1. august, uttan leygardagar og sunnudagar)
+     &d=ÁÁÁÁ-M-D (ein annar dagur)   &k=slag (bert til roynd)   &print=1 (prentar beinanvegin)   &v=5 (fimm ørk í senn)
+     Arkini verða gjørd við kotu: arkið nr. n er altíð tað sama, so lærarin kann prenta frammanundan.
      Á skíggja (iPad) eru svarteigar og ein tekniflati; á pappíri eru linjur og kassar. -->
 <style>
 :root{--ink:#1f2937;--muted:#64748b;--red:#ef2418;--line:#cbd5e1;--soft:#f1f5f9}
@@ -14,10 +17,14 @@ html,body{margin:0;background:#e9edf2;color:var(--ink);font-family:Inter,Arial,H
 .bar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line)}
 .bar button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font:600 .9rem inherit;cursor:pointer;color:var(--ink)}
 .bar button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.bar button:disabled{opacity:.35;cursor:default}
 .bar .pr{background:var(--red);border-color:var(--red);color:#fff}
+.bar .nr{font-weight:800;min-width:7em;text-align:center}
+.bar .sep{width:1px;height:26px;background:var(--line)}
 .sheet{width:min(210mm,100%);min-height:297mm;margin:16px auto 40px;padding:16mm 16mm 12mm;background:#fff;box-shadow:0 10px 40px -20px rgba(0,0,0,.4);display:flex;flex-direction:column}
 .hd{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;border-bottom:3px solid var(--red);padding-bottom:8px;margin-bottom:6mm}
 .hd h1{margin:0;font-size:28pt;font-weight:900;letter-spacing:-.02em}
+.hd .kd{font-size:14pt;font-weight:800;color:var(--red);margin-top:2px}
 .hd .dt{font-size:12pt;font-weight:600;color:var(--muted);text-align:right}
 .nm{display:flex;gap:10px;align-items:flex-end;font-size:12pt;font-weight:700;margin-bottom:7mm}
 .nm span.l{flex:1;border-bottom:1.5px solid var(--ink);min-height:1.4em}
@@ -25,33 +32,66 @@ html,body{margin:0;background:#e9edf2;color:var(--ink);font-family:Inter,Arial,H
 .t{margin-bottom:7mm;break-inside:avoid}
 .t h2{display:flex;gap:10px;align-items:center;margin:0 0 3mm;font-size:13pt}
 .t h2 b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-size:11pt;flex:none}
+.rule{margin:0 0 4mm;font-size:12pt;color:#334155;line-height:1.45}
 .sums{display:grid;grid-template-columns:repeat(2,1fr);gap:4mm 10mm;font-size:16pt;font-weight:700;font-variant-numeric:tabular-nums}
 .sums div{display:flex;align-items:flex-end;gap:8px;white-space:nowrap}
-.sums .a,.ans{flex:1;min-width:20mm;border-bottom:1.5px solid var(--ink);min-height:1.2em}
-input.a,input.ans,textarea.ans{border:0;border-bottom:1.5px solid var(--ink);font:600 15pt inherit;padding:2px 4px;background:transparent;color:#1d4ed8}
+.sums .a,.ans{flex:1;min-width:16mm;border-bottom:1.5px solid var(--ink);min-height:1.2em}
+input.a,input.ans,textarea.ans{border:0;border-bottom:1.5px solid var(--ink);font:600 15pt inherit;padding:2px 4px;background:transparent;color:#1d4ed8;min-width:0}
 .seq{font-size:16pt;font-weight:700;letter-spacing:.04em;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
 .seq .ans{flex:none;width:28mm}
 .lines{display:grid;gap:9mm;margin-top:2mm}
 .lines span{border-bottom:1px solid #94a3b8;height:1px}
-textarea.ans{width:100%;min-height:42mm;border:1px solid var(--line);border-radius:8px;font-size:13pt;line-height:1.6;resize:vertical;color:#1d4ed8}
+textarea.ans{width:100%;min-height:42mm;border:1px solid var(--line);border-radius:8px;font-size:13pt;line-height:1.6;resize:vertical}
 .box{border:1.5px solid var(--ink);border-radius:10px;height:62mm;position:relative;overflow:hidden;touch-action:none;background:#fff}
-.box canvas{position:absolute;inset:0;width:100%;height:100%}
-.box .clr{position:absolute;right:6px;top:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font:600 .8rem inherit}
+.box canvas,.draw canvas{position:absolute;inset:0;width:100%;height:100%}
+.clr{position:absolute;right:6px;top:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font:600 .8rem inherit;z-index:2}
 .stars{display:flex;flex-wrap:wrap;gap:6px;max-width:150mm;margin-bottom:3mm;color:#f59e0b;font-size:20pt;line-height:1}
 .words{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14pt;font-weight:700;margin-bottom:3mm}
 .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:4mm 10mm;font-size:14pt;font-weight:700}
 .pairs div{display:flex;gap:8px;align-items:flex-end}
+.sdk{display:grid;grid-template-columns:repeat(var(--n),1fr);width:min(100%,calc(var(--n) * 15mm));border:2.5px solid var(--ink);margin:0 auto}
+.sdk-row{display:flex;gap:12mm;justify-content:center;flex-wrap:wrap}.sdk-row .sdk{margin:0}
+.sc{aspect-ratio:1;border:1px solid #94a3b8;display:grid;place-items:center;font-size:18pt;font-weight:800}
+.sc.br{border-right:2.5px solid var(--ink)}.sc.bb{border-bottom:2.5px solid var(--ink)}
+.sc.giv{background:#f1f5f9}
+.sc input{width:100%;height:100%;border:0;text-align:center;font:700 18pt inherit;color:#1d4ed8;background:transparent;padding:0}
+.draw{position:relative;width:100%;margin:0 auto;touch-action:none}
+.draw svg{display:block;width:100%;height:auto;font-family:Inter,Arial,sans-serif}
+.ws{display:grid;grid-template-columns:repeat(var(--n),1fr);width:min(100%,calc(var(--n) * 12mm));margin:0 auto 5mm;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.ws span{aspect-ratio:1;display:grid;place-items:center;font-size:15pt;font-weight:800;border:.5px solid #e2e8f0;user-select:none;cursor:pointer}
+.ws span.on{background:#fde68a}
+.wl{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;font-size:13pt;font-weight:700}
+.wl span::before{content:"☐ ";color:var(--muted)}
+.clocks{display:grid;grid-template-columns:repeat(3,1fr);gap:6mm 8mm}
+.clocks div{display:flex;flex-direction:column;align-items:center;gap:3mm;font-size:15pt;font-weight:700}
+.clocks svg{width:42mm;height:42mm}
+.clocks .tm{display:flex;align-items:flex-end;gap:4px}
+.clocks .tm .ans{flex:none;width:12mm;min-width:12mm}
 .ft{margin-top:auto;padding-top:6mm;display:flex;justify-content:space-between;font-size:9pt;color:var(--muted)}
-.print-only{display:none}
 @media print{
   @page{size:A4;margin:0}
   html,body{background:#fff}
-  .bar,.screen-only,.box .clr{display:none!important}
-  .print-only{display:block}
-  .sheet{margin:0;box-shadow:none;width:210mm;height:297mm}
+  .bar,.screen-only,.clr{display:none!important}
+  .sheet{margin:0;box-shadow:none;width:210mm;height:297mm;break-after:page;overflow:hidden}
+  .sheet:last-child{break-after:auto}
   input.a,input.ans{color:transparent}
+  .ws span.on{background:none}
 }
-@media (max-width:700px){.sheet{padding:18px 16px;min-height:0}.hd h1{font-size:22pt}.sums{font-size:14pt}}
+/* Telefon og iPad á langs: alt innan fyri arkið */
+@media (max-width:760px){
+  .bar{gap:6px;padding:8px}.bar button{padding:6px 10px;font-size:.8rem}.bar .sep{display:none}.bar .nr{min-width:0}
+  .sheet{width:auto;min-height:0;margin:8px;padding:16px 14px 12px}
+  .hd{flex-direction:column;align-items:flex-start;gap:4px}.hd .dt{text-align:left;font-size:10.5pt}.hd h1{font-size:22pt}
+  .t h2{font-size:12pt}.rule{font-size:11pt}
+  .sums,.pairs{grid-template-columns:1fr;font-size:14pt;gap:4mm}
+  .sums div,.pairs div{white-space:normal}
+  .seq{font-size:14pt}
+  .clocks{grid-template-columns:repeat(2,1fr);gap:5mm}.clocks svg{width:34vw;height:34vw}.clocks div{font-size:13pt}
+  .ws{width:100%}.ws span{font-size:11pt}.wl{font-size:11pt}
+  .sc,.sc input{font-size:14pt}
+  .sdk-row{gap:6mm}
+  textarea.ans{min-height:30mm}
+}
 </style>
 </head>
 <body>
@@ -59,75 +99,188 @@ textarea.ans{width:100%;min-height:42mm;border:1px solid var(--line);border-radi
   <button type="button" data-dl="g">1.–3. flokkur</button>
   <button type="button" data-dl="m">4.–6. flokkur</button>
   <button type="button" data-dl="h">7.–9. flokkur</button>
+  <span class="sep"></span>
+  <button type="button" id="prev" aria-label="Undanfarna ark">‹</button>
+  <span class="nr" id="nr"></span>
+  <button type="button" id="next" aria-label="Næsta ark">›</button>
+  <button type="button" id="today">Í dag</button>
+  <span class="sep"></span>
   <button type="button" class="pr" id="prentBtn">Prenta</button>
+  <button type="button" id="prent5">Prenta 5 ørk</button>
 </div>
-<main class="sheet" id="sheet"></main>
+<div id="sheets"></div>
 <script>
 (function(){
-var Q=new URLSearchParams(location.search),DL=/^[gmh]$/.test(Q.get('dl')||'')?Q.get('dl'):'m';
+var Q=new URLSearchParams(location.search),DL=/^[gmh]$/.test(Q.get('dl')||'')?Q.get('dl'):'m',SCREEN=!Q.get('print'),MAX=200;
 var DGD=['sunnudagur','mánadagur','týsdagur','mikudagur','hósdagur','fríggjadagur','leygardagur'],
-  DGM=['januar','februar','mars','apríl','mai','juni','juli','august','september','oktober','november','desember'];
-function today(){var p=(Q.get('d')||'').split('-').map(Number);if(p.length===3&&p[0]>2000)return new Date(p[0],p[1]-1,p[2]);var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate());}
-var T=today(),KEY=T.getFullYear()+'-'+(T.getMonth()+1)+'-'+T.getDate();
-/* Sama ark allan dagin: tilvild úr degnum og flokkinum */
-var seed=0;(KEY+DL).split('').forEach(function(c){seed=(seed*31+c.charCodeAt(0))>>>0;});
+  DGM=['januar','februar','mars','apríl','mai','juni','juli','august','september','oktober','november','desember'],
+  DLN={g:'1.–3. flokkur',m:'4.–6. flokkur',h:'7.–9. flokkur'};
+function dayOf(){var p=(Q.get('d')||'').split('-').map(Number);if(p.length===3&&p[0]>2000)return new Date(p[0],p[1]-1,p[2]);var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate());}
+/* Skúladagur nr.: mánadagar–fríggjadagar frá 1. august (Talvan roknar tað sama) */
+function schoolDay(t){var y=t.getMonth()>=7?t.getFullYear():t.getFullYear()-1,d=new Date(y,7,1),n=0;while(d<=t){var w=d.getDay();if(w>0&&w<6)n++;d.setDate(d.getDate()+1);}return Math.max(1,((n-1)%MAX)+1);}
+var T=dayOf(),TODAYN=schoolDay(T),N=+Q.get('n')||TODAYN;N=Math.min(MAX,Math.max(1,N));
+var KIND=['rokning','sudoku','labyrint','tabell','prikkar','ordaleiting','klokkan','ord'],
+  KN={rokning:'Rokning',sudoku:'Sudoku',labyrint:'Labyrint',tabell:'Tabellvenjing',prikkar:'Tekna eftir prikkum',ordaleiting:'Orðaleiting',klokkan:'Klokkan',ord:'Lesa og skriva'};
+/* Tilvild, sum altíð gevur tað sama til sama ark */
+var seed=0;
+function setSeed(str){seed=0;str.split('').forEach(function(c){seed=(seed*31+c.charCodeAt(0))>>>0;});}
 function rnd(){seed=(seed+0x6D2B79F5)>>>0;var t=seed;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;}
 function ri(a,b){return a+Math.floor(rnd()*(b-a+1));}
 function pick(L){return L[Math.floor(rnd()*L.length)];}
 function shuffle(L){L=L.slice();for(var i=L.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1)),x=L[i];L[i]=L[j];L[j]=x;}return L;}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-var SCREEN=!Q.get('print');
-function ans(w){return SCREEN?'<input class="ans" inputmode="numeric" aria-label="Svar"'+(w?' style="width:'+w+'"':'')+'>':'<span class="ans"'+(w?' style="flex:none;width:'+w+'"':'')+'></span>';}
+function ans(w){return SCREEN?'<input class="ans" inputmode="numeric" aria-label="Svar"'+(w?' style="flex:none;width:'+w+'"':'')+'>':'<span class="ans"'+(w?' style="flex:none;width:'+w+'"':'')+'></span>';}
 function sums(L){return '<div class="sums">'+L.map(function(x){return '<div>'+x+' = '+(SCREEN?'<input class="a" inputmode="numeric" aria-label="Svar">':'<span class="a"></span>')+'</div>'}).join('')+'</div>';}
+function fill(L){return '<div class="sums">'+L.map(function(x){return '<div>'+x.replace('__',ans('18mm'))+'</div>'}).join('')+'</div>';}
 function lines(n){return SCREEN?'<textarea class="ans" aria-label="Skriva her"></textarea>':'<div class="lines">'+new Array(n+1).join('<span></span>')+'</div>';}
 function box(){return '<div class="box"><canvas></canvas><button type="button" class="clr screen-only">Strika</button></div>';}
-var n=0;function task(title,body){n++;return '<section class="t"><h2><b>'+n+'</b>'+title+'</h2>'+body+'</section>';}
-/* Føroyski stavraðurin */
-var ABC='aábdðefghiíjklmnoóprstuúvyýæø';
-function fsort(L){return L.slice().sort(function(a,b){for(var i=0;i<Math.min(a.length,b.length);i++){var x=ABC.indexOf(a[i]),y=ABC.indexOf(b[i]);if(x!==y)return x-y;}return a.length-b.length;});}
-var h='';
-if(DL==='g'){
-  var S=[];for(var i=0;i<3;i++){var a=ri(1,9),b=ri(1,10-a);S.push(a+' + '+b);}for(i=0;i<3;i++){var c=ri(4,10),d=ri(1,c-1);S.push(c+' − '+d);}
-  h+=task('Rokna',sums(shuffle(S)));
-  var st=ri(6,15);h+=task('Hvussu nógvar stjørnur eru her?','<div class="stars" aria-hidden="true">'+new Array(st+1).join('★')+'</div><div class="seq">Tað eru '+ans('28mm')+' stjørnur.</div>');
-  var L=pick(['A','B','D','E','F','G','H','K','L','M','N','O','R','S','T','V']);
-  h+=task('Skriva trý orð, ið byrja við '+L,lines(3));
-  h+=task(pick(['Tekna húsið, tú býrt í.','Tekna eitt dýr, tú dámar.','Tekna veðrið í dag.','Tekna morgunmatin, tú át.','Tekna ein vin.','Tekna tað, tú vilt gera í frítíðini.']),box());
-}else if(DL==='m'){
-  var S=[];for(var i=0;i<2;i++){S.push(ri(3,9)+' · '+ri(3,9));}for(i=0;i<2;i++){var b=ri(3,9),q=ri(3,9);S.push(b*q+' : '+b);}
-  S.push(ri(120,480)+' + '+ri(110,490));var x=ri(400,900);S.push(x+' − '+ri(120,x-100));
-  h+=task('Rokna',sums(shuffle(S)));
-  var s0=ri(2,9),k=pick([3,4,5,6,7,25]),dbl=rnd()<.3,seq=[];for(i=0;i<6;i++)seq.push(dbl?s0*Math.pow(2,i):s0+k*i);var hole=ri(2,5);
-  h+=task('Hvat tal manglar?','<div class="seq">'+seq.map(function(v,j){return j===hole?ans('24mm'):v;}).join(', ')+'</div>');
-  var W=shuffle(['bók','seyður','talva','epli','fiskur','hús','lundi','skúli','ferja','sól','vindur','blýantur','dagur','ørindi','drongur','áin']).slice(0,5);
-  h+=task('Set orðini í stavrað','<div class="words">'+W.join(' · ')+'</div>'+(SCREEN?'<input class="ans" style="width:100%" aria-label="Orðini í stavrað">':'<div class="lines"><span></span></div>'));
-  h+=task(pick(['Skriva tríggjar setningar um tað, tú gjørdi í gjár.','Skriva tríggjar setningar um eitt dýr, tú dámar.','Skriva eina stutta søgu, ið byrjar soleiðis: „Tá ið eg vaknaði í morgun …“','Skriva tríggjar setningar um veðrið í dag.','Skriva um ein dag, tú aldri fert at gloyma.']),lines(4));
-}else{
-  var S=[];var p=pick([10,20,25,50]),v=pick([40,80,120,200,360]);S.push(p+' % av '+v);
-  var a=ri(2,6),xx=ri(2,9),bb=ri(1,12);S.push(a+'x + '+bb+' = '+(a*xx+bb)+' &nbsp; x');
-  S.push('(−'+ri(3,12)+') + '+ri(2,15));S.push('¾ av '+(4*ri(3,12)));S.push(ri(11,19)+'²');S.push(pick([2,3,4,5])+'³');
-  h+=task('Rokna',sums(S));
-  var PR=[['heitur','kaldur'],['ljósur','myrkur'],['glaður','keddur'],['langur','stuttur'],['gamal','ungur'],['stórur','lítil'],['fyrst','seinast'],['ríkur','fátækur']];
-  h+=task('Skriva mótsetningin','<div class="pairs">'+shuffle(PR).slice(0,4).map(function(x){return '<div>'+x[0]+' – '+ans()+'</div>'}).join('')+'</div>');
-  h+=task('Skriva ein stuttan tekst (5–6 setningar) um '+pick(['tað, ið fær teg at gleðast.','hvussu skúlin kundi verið betri.','ein persón, tú hevur virðing fyri.','eitt stað í Føroyum, tú dámar.','framtíðina hjá tær.']),lines(7));
-}
-var dt=DGD[T.getDay()]+' '+T.getDate()+'. '+DGM[T.getMonth()]+' '+T.getFullYear();
-document.getElementById('sheet').innerHTML='<div class="hd"><h1>Morgunark</h1><div class="dt">'+esc(dt)+'<br>'+({g:'1.–3. flokkur',m:'4.–6. flokkur',h:'7.–9. flokkur'})[DL]+'</div></div>'
-  +'<div class="nm">Navn:'+(SCREEN?'<input aria-label="Navn">':'<span class="l"></span>')+'</div>'+h
-  +'<div class="ft"><span>Snar · Talvan</span><span>Arbeið kvirt, til lærarin byrjar tíman.</span></div>';
-/* Tekniflatin á iPad */
-Array.prototype.forEach.call(document.querySelectorAll('.box'),function(bx){var c=bx.querySelector('canvas'),g=c.getContext('2d'),dr=false;
+function draw(svg){return '<div class="draw">'+svg+(SCREEN?'<canvas></canvas><button type="button" class="clr">Strika</button>':'')+'</div>';}
+var tn=0;function task(title,body){tn++;return '<section class="t"><h2><b>'+tn+'</b>'+title+'</h2>'+body+'</section>';}
+
+/* ---------- Sudoku ---------- */
+function sudoku(br,bc,keep){var N=br*bc,r,c;
+  function perm(n){return shuffle(Array.from({length:n},function(_,i){return i;}));}
+  var rows=[],cols=[];perm(bc).forEach(function(b){perm(br).forEach(function(x){rows.push(b*br+x);});});perm(br).forEach(function(s){perm(bc).forEach(function(x){cols.push(s*bc+x);});});
+  var dig=perm(N),P=[];for(r=0;r<N;r++){P.push([]);for(c=0;c<N;c++){var rr=rows[r],cc=cols[c];P[r].push(dig[(bc*(rr%br)+Math.floor(rr/br)+cc)%N]+1);}}
+  function ok(B,r,c,v){for(var k=0;k<N;k++)if(B[r][k]===v||B[k][c]===v)return false;var r0=r-r%br,c0=c-c%bc;for(var a=0;a<br;a++)for(var b=0;b<bc;b++)if(B[r0+a][c0+b]===v)return false;return true;}
+  function count(B,lim){for(var r=0;r<N;r++)for(var c=0;c<N;c++)if(!B[r][c]){var n=0;for(var v=1;v<=N;v++)if(ok(B,r,c,v)){B[r][c]=v;n+=count(B,lim-n);B[r][c]=0;if(n>=lim)return n;}return n;}return 1;}
+  var left=N*N;shuffle(Array.from({length:N*N},function(_,i){return i;})).forEach(function(k){if(left<=keep)return;var r=Math.floor(k/N),c=k%N,v=P[r][c];P[r][c]=0;if(count(P.map(function(x){return x.slice();}),2)!==1)P[r][c]=v;else left--;});
+  var h='<div class="sdk" style="--n:'+N+'">';for(r=0;r<N;r++)for(c=0;c<N;c++){var v=P[r][c],cl=(c%bc===bc-1&&c<N-1?' br':'')+(r%br===br-1&&r<N-1?' bb':'');
+    h+='<div class="sc'+cl+(v?' giv':'')+'">'+(v?v:(SCREEN?'<input inputmode="numeric" maxlength="1" aria-label="Linja '+(r+1)+', rúta '+(c+1)+'">':''))+'</div>';}return h+'</div>';}
+function sdkRule(n){return 'Tølini 1–'+n+' skulu standa eina ferð í hvørjari linju, bæði vatnrætt og loddrætt, og í hvørjum tjúkkum kassa.';}
+
+/* ---------- Labyrint ---------- */
+function maze(W,H){var g=[],st=[[0,0]],i,x,y;for(i=0;i<W*H;i++)g.push({n:1,s:1,e:1,w:1,v:0});g[0].v=1;
+  while(st.length){var cu=st[st.length-1];x=cu[0];y=cu[1];var nb=[];
+    if(y>0&&!g[(y-1)*W+x].v)nb.push(['n',x,y-1]);if(y<H-1&&!g[(y+1)*W+x].v)nb.push(['s',x,y+1]);if(x<W-1&&!g[y*W+x+1].v)nb.push(['e',x+1,y]);if(x>0&&!g[y*W+x-1].v)nb.push(['w',x-1,y]);
+    if(!nb.length){st.pop();continue;}var m=pick(nb),a=g[y*W+x],b=g[m[2]*W+m[1]];a[m[0]]=0;b[{n:'s',s:'n',e:'w',w:'e'}[m[0]]]=0;b.v=1;st.push([m[1],m[2]]);}
+  var S=10,p='';for(y=0;y<H;y++)for(x=0;x<W;x++){var c=g[y*W+x],X=x*S,Y=y*S;if(c.n&&!(x===0&&y===0))p+='M'+X+' '+Y+'h'+S;if(c.w)p+='M'+X+' '+Y+'v'+S;if(y===H-1&&!(x===W-1))p+='M'+X+' '+(Y+S)+'h'+S;if(x===W-1&&!(y===H-1))p+='M'+(X+S)+' '+Y+'v'+S;}
+  return '<svg viewBox="-12 -12 '+(W*S+24)+' '+(H*S+24)+'" aria-hidden="true"><path d="'+p+'" stroke="#1f2937" stroke-width="1.4" stroke-linecap="square" fill="none"/>'
+    +'<text x="4" y="-4" font-size="5.5" font-weight="800" fill="#16a34a" text-anchor="start">Byrja</text><path d="M5 -2v5" stroke="#16a34a" stroke-width="1.6"/>'
+    +'<text x="'+(W*S-4)+'" y="'+(H*S+9)+'" font-size="5.5" font-weight="800" fill="#ef2418" text-anchor="end">Mál ★</text></svg>';}
+
+/* ---------- Tekna eftir prikkum ---------- */
+var SHAPES={
+  stjorna:(function(){var p=[];for(var i=0;i<10;i++){var a=Math.PI/5*i-Math.PI/2,q=i%2?19:46;p.push([50+q*Math.cos(a),54+q*Math.sin(a)]);}return p;})(),
+  hjarta:(function(){var p=[];for(var i=0;i<18;i++){var t=Math.PI*2*i/18;p.push([50+2.6*16*Math.pow(Math.sin(t),3),46-2.6*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))]);}return p;})(),
+  hus:[[22,90],[22,50],[34,38],[34,20],[42,20],[42,30],[50,22],[78,50],[78,90],[60,90],[60,64],[40,64],[40,90]],
+  batur:[[14,70],[47,70],[47,10],[84,64],[53,64],[53,70],[88,70],[76,88],[26,88]],
+  fiskur:[[10,50],[18,38],[30,30],[44,26],[58,26],[70,32],[78,40],[92,26],[88,50],[92,74],[78,60],[70,68],[58,74],[44,74],[30,70],[18,62]],
+  trae:[[50,6],[70,30],[61,30],[80,54],[70,54],[90,80],[56,80],[56,94],[44,94],[44,80],[10,80],[30,54],[20,54],[39,30],[30,30]],
+  maani:(function(){var p=[];for(var i=0;i<=10;i++){var a=-Math.PI/2+Math.PI*i/10;p.push([45+40*Math.cos(a),50+40*Math.sin(a)]);}for(i=9;i>=1;i--){var b=-Math.PI/2+Math.PI*i/10;p.push([45+24*Math.cos(b),50+38*Math.sin(b)]);}return p;})(),
+  seydur:[[14,46],[20,34],[30,30],[36,22],[48,20],[60,22],[70,20],[80,26],[86,36],[84,48],[78,56],[76,76],[70,76],[68,60],[40,60],[38,76],[32,76],[30,58],[22,56],[12,58]],
+  lundi:[[40,10],[52,8],[60,14],[74,18],[62,24],[64,40],[70,58],[66,76],[60,86],[64,94],[50,92],[40,94],[42,86],[34,74],[32,56],[36,38],[34,22]]};
+function dots(pts,lab){var W=170,H=150,sx=W/100,sy=H/100,sv='<svg viewBox="-8 -8 '+(W+16)+' '+(H+16)+'" aria-hidden="true">';
+  pts.forEach(function(p,i){var x=p[0]*sx,y=p[1]*sy,cx=x<W/2?-1:1,cy=y<H/2?-1:1;
+    sv+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(i?1.3:2)+'" fill="'+(i?'#1f2937':'#ef2418')+'"/><text x="'+(x+cx*3.2).toFixed(1)+'" y="'+(y+cy*3.4+1.2).toFixed(1)+'" text-anchor="'+(cx<0?'end':'start')+'" font-size="4.2" font-weight="700" fill="'+(i?'#334155':'#ef2418')+'">'+lab(i)+'</text>';});
+  return draw(sv+'</svg>');}
+
+/* ---------- Orðaleiting ---------- */
+var WTH={'Dýr':['SEYÐUR','HESTUR','KÚGV','HUNDUR','KETTA','LUNDI','KÓPUR','HVALUR','TJALDUR','RAVNUR','TOSKUR','SÍLD','HARI','GÁS'],
+  'Veður':['REGN','KAVI','SÓL','VINDUR','MJØRKI','SKÝGGJ','HAGL','STORMUR','FROST','LOGN'],
+  'Skúlin':['TALVA','BÓK','BLÝANTUR','PENNUR','SKÚLI','LÆRARI','FRÍTÍÐ','STÓLUR','BORÐ','TASKA','LINJALUR'],
+  'Matur':['EPLI','FISKUR','BREYÐ','MJÓLK','OSTUR','SMØR','SÚPA','KJØT','EGG','RÍSUR'],
+  'Litir':['REYTT','BLÁTT','GRØNT','GULT','SVART','HVÍTT','LILLA','BRÚNT','GRÁTT'],
+  'Havið':['ALDA','FJØRÐUR','BÁTUR','SKIP','NET','KRABBI','TARI','SANDUR','FJØRA','VÍK']};
+var LET='AÁBDÐEFGHIÍJKLMNOÓPRSTUÚVYÝÆØ';
+function wordsearch(n,cnt,dirs){var th=pick(Object.keys(WTH)),W=shuffle(WTH[th].filter(function(w){return w.length<=n;})).slice(0,cnt),G=[],r,c,placed=[];
+  for(r=0;r<n;r++){G.push([]);for(c=0;c<n;c++)G[r].push('');}
+  W.forEach(function(w){for(var tries=0;tries<200;tries++){var d=pick(dirs),L=w.length,r0=ri(0,n-1),c0=ri(0,n-1),okk=true;
+    for(var i=0;i<L;i++){var rr=r0+d[0]*i,cc=c0+d[1]*i;if(rr<0||cc<0||rr>=n||cc>=n||(G[rr][cc]&&G[rr][cc]!==w[i])){okk=false;break;}}
+    if(okk){for(i=0;i<L;i++)G[r0+d[0]*i][c0+d[1]*i]=w[i];placed.push(w);return;}}});
+  for(r=0;r<n;r++)for(c=0;c<n;c++)if(!G[r][c])G[r][c]=LET[ri(0,LET.length-1)];
+  return {th:th,html:'<div class="ws" style="--n:'+n+'">'+G.map(function(row){return row.map(function(ch){return '<span>'+ch+'</span>'}).join('')}).join('')+'</div><div class="wl">'+placed.map(function(w){return '<span>'+w+'</span>'}).join('')+'</div>'};}
+
+/* ---------- Klokkan ---------- */
+function clockSvg(h,m){var s='<svg viewBox="-52 -52 104 104" aria-hidden="true"><circle r="48" fill="#fff" stroke="#1f2937" stroke-width="3"/>';
+  for(var i=0;i<60;i++){var a=i*Math.PI/30,l=i%5?44:39;s+='<line x1="'+(46*Math.sin(a)).toFixed(1)+'" y1="'+(-46*Math.cos(a)).toFixed(1)+'" x2="'+(l*Math.sin(a)).toFixed(1)+'" y2="'+(-l*Math.cos(a)).toFixed(1)+'" stroke="#1f2937" stroke-width="'+(i%5?.8:2)+'"/>';}
+  for(i=1;i<=12;i++){var b=i*Math.PI/6;s+='<text x="'+(31*Math.sin(b)).toFixed(1)+'" y="'+(-31*Math.cos(b)+4).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">'+i+'</text>';}
+  var ha=((h%12)+m/60)*Math.PI/6,ma=m*Math.PI/30;
+  s+='<line x2="'+(22*Math.sin(ha)).toFixed(1)+'" y2="'+(-22*Math.cos(ha)).toFixed(1)+'" stroke="#1f2937" stroke-width="4.5" stroke-linecap="round"/><line x2="'+(36*Math.sin(ma)).toFixed(1)+'" y2="'+(-36*Math.cos(ma)).toFixed(1)+'" stroke="#ef2418" stroke-width="3" stroke-linecap="round"/><circle r="3" fill="#1f2937"/></svg>';
+  return s;}
+function two(n){return (n<10?'0':'')+n;}
+
+/* ---------- Eitt ark ---------- */
+function sheet(num){setSeed('ark'+num+DL);tn=0;var KD=Q.get('k')||KIND[(num-1)%KIND.length],h='',i,S,a,b,c,x,t;
+  if(KD==='sudoku'){
+    if(DL==='g')h+=task('Sudoku','<p class="rule">'+sdkRule(4)+'</p><div class="sdk-row">'+sudoku(2,2,7)+sudoku(2,2,6)+'</div>');
+    else if(DL==='m'){h+=task('Lítil sudoku','<p class="rule">'+sdkRule(4)+'</p>'+sudoku(2,2,6));h+=task('Stór sudoku','<p class="rule">'+sdkRule(6)+'</p>'+sudoku(2,3,15));}
+    else h+=task('Sudoku','<p class="rule">'+sdkRule(9)+'</p>'+sudoku(3,3,num%3?32:28));
+  }else if(KD==='labyrint'){
+    var sz=DL==='g'?[9,9]:DL==='m'?[14,13]:[20,18];
+    h+=task('Finn vegin gjøgnum labyrintina','<p class="rule">Byrja við grønu pílina ovast til vinstru, og finn vegin til stjørnuna niðast til høgru.</p>'+draw(maze(sz[0],sz[1])));
+  }else if(KD==='prikkar'){
+    var keys=Object.keys(SHAPES),sk=keys[(Math.floor((num-1)/KIND.length)+(DL==='g'?0:DL==='m'?3:6))%keys.length],pts=SHAPES[sk],st,lab,txt;
+    if(DL==='g'){lab=function(i){return i+1;};txt='Byrja við 1, og drag strikur frá prikki til prikk. Enda aftur við 1. Lita so myndina.';}
+    else if(DL==='m'){st=pick([2,3,4,5,10]);lab=function(i){return st*(i+1);};txt='Byrja við '+st+', og tel við '+st+'. Drag strikur frá prikki til prikk, og enda aftur við '+st+'. Lita so myndina.';}
+    else{st=pick([6,7,8,9,11,12]);lab=function(i){return st*(i+1);};txt='Prikkarnir fylgja '+st+'-tabellini. Byrja við '+st+', og drag strikur frá prikki til prikk. Enda aftur við '+st+'. Lita so myndina.';}
+    h+=task('Tekna eftir prikkum','<p class="rule">'+txt+'</p>'+dots(pts,lab));
+  }else if(KD==='ordaleiting'){
+    var ws=DL==='g'?wordsearch(8,5,[[0,1],[1,0]]):DL==='m'?wordsearch(10,7,[[0,1],[1,0],[1,1]]):wordsearch(12,9,[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,1]]);
+    h+=task('Orðaleiting: '+ws.th,'<p class="rule">Finn orðini í rútunetinum. '+(DL==='h'?'Tey kunnu standa vatnrætt, loddrætt og skákt, eisini aftureftir.':DL==='m'?'Tey standa vatnrætt, loddrætt ella skákt.':'Tey standa vatnrætt ella loddrætt.')+' Strika tey, tú finnur.</p>'+ws.html);
+  }else if(KD==='klokkan'){
+    if(DL==='h'){S=[];for(i=0;i<6;i++){a=ri(7,13);b=pick([0,5,10,15,20,25,30,35,40,45,50,55]);c=ri(25,200);var e=a*60+b+c;S.push('Frá '+two(a)+':'+two(b)+' til '+two(Math.floor(e/60)%24)+':'+two(e%60));}
+      h+=task('Hvussu langt er tað?','<p class="rule">Skriva, hvussu nógvar tímar og minuttir tað eru.</p>'+sums(S));
+      S=[];for(i=0;i<4;i++){a=ri(1,4);b=pick([0,15,30,45]);S.push(a+' t. '+b+' min. = __ min.');}h+=task('Umrokna til minuttir',fill(S));}
+    else{var mins=DL==='g'?[0,30]:[0,5,10,15,20,25,30,35,40,45,50,55];t='';for(i=0;i<6;i++){a=ri(1,12);b=pick(mins);
+      t+='<div>'+clockSvg(a,b)+'<span class="tm">'+ans('12mm')+' : '+ans('12mm')+'</span></div>';}
+      h+=task('Hvat er klokkan?','<p class="rule">Skriva, hvat klokkan er. Stutti vísarin vísir tímarnar, og langi vísarin vísir minuttirnar.</p><div class="clocks">'+t+'</div>');}
+  }else if(KD==='tabell'){
+    if(DL==='g'){S=[];shuffle([1,2,3,4,5,6,7,8,9]).forEach(function(a){S.push(a+' + __ = 10');});h+=task('Tíggjuvinir',fill(S.slice(0,8)));
+      S=shuffle([1,2,3,4,5,6,7,8,9,10]).slice(0,6).map(function(a){return a+' + '+a;});h+=task('Tvífalt',sums(S));}
+    else if(DL==='m'){t=[2,3,4,5,6,7,8,9][Math.floor((num-1)/KIND.length)%8];S=shuffle([1,2,3,4,5,6,7,8,9,10]).map(function(a){return a+' · '+t;});h+=task(t+'-tabellin',sums(S));
+      S=shuffle([2,3,4,5,6,7,8,9]).slice(0,4).map(function(a){return t+' · __ = '+(a*t);});h+=task('Hvat manglar?',fill(S));}
+    else{S=[];for(i=0;i<10;i++)S.push(ri(6,12)+' · '+ri(6,12));h+=task('Blandaðar tabellir',sums(S));
+      S=[];for(i=0;i<6;i++){a=ri(6,12);b=ri(6,12);S.push(a*b+' : '+a);}h+=task('Být',sums(S));}
+  }else if(KD==='ord'){
+    if(DL==='g'){h+=task('Skriva trý orð, ið byrja við '+pick(['A','B','D','E','F','G','H','K','L','M','N','O','R','S','T','V']),lines(3));
+      a=ri(6,15);h+=task('Hvussu nógvar stjørnur eru her?','<div class="stars" aria-hidden="true">'+new Array(a+1).join('★')+'</div><div class="seq">Tað eru '+ans('28mm')+' stjørnur.</div>');
+      h+=task(pick(['Tekna húsið, tú býrt í.','Tekna eitt dýr, tú dámar.','Tekna veðrið í dag.','Tekna morgunmatin, tú át.','Tekna ein vin.','Tekna tað, tú vilt gera í frítíðini.','Tekna eitt skip á havinum.','Tekna teg sjálva ella sjálvan.']),box());}
+    else if(DL==='m'){var Wd=shuffle(['bók','seyður','talva','epli','fiskur','hús','lundi','skúli','ferja','sól','vindur','blýantur','dagur','ørindi','drongur','áin','hav','oyggj','fjall','gøta','ætt','ýsa']).slice(0,6);
+      h+=task('Set orðini í stavrað','<div class="words">'+Wd.join(' · ')+'</div>'+(SCREEN?'<input class="ans" style="width:100%" aria-label="Orðini í stavrað">':'<div class="lines"><span></span></div>'));
+      h+=task(pick(['Skriva tríggjar setningar um tað, tú gjørdi í gjár.','Skriva tríggjar setningar um eitt dýr, tú dámar.','Skriva eina stutta søgu, ið byrjar soleiðis: „Tá ið eg vaknaði í morgun …“','Skriva tríggjar setningar um veðrið í dag.','Skriva um ein dag, tú aldri fert at gloyma.','Skriva eitt bræv til ein vin.','Skriva um tað, tú dámar best at gera úti.']),lines(6));}
+    else{var PR=[['heitur','kaldur'],['ljósur','myrkur'],['glaður','keddur'],['langur','stuttur'],['gamal','ungur'],['stórur','lítil'],['fyrst','seinast'],['ríkur','fátækur'],['tungur','léttur'],['sterkur','veikur']];
+      h+=task('Skriva mótsetningin','<div class="pairs">'+shuffle(PR).slice(0,4).map(function(x){return '<div>'+x[0]+' – '+ans()+'</div>'}).join('')+'</div>');
+      h+=task('Skriva ein stuttan tekst (5–6 setningar) um '+pick(['tað, ið fær teg at gleðast.','hvussu skúlin kundi verið betri.','ein persón, tú hevur virðing fyri.','eitt stað í Føroyum, tú dámar.','framtíðina hjá tær.','eina bók ella ein film, tú dámar.','ein dag uttan telefon.']),lines(8));}
+  }else{ /* rokning */
+    if(DL==='g'){S=[];for(i=0;i<6;i++){a=ri(1,9);b=ri(1,10-a);S.push(a+' + '+b);}for(i=0;i<6;i++){c=ri(4,10);S.push(c+' − '+ri(1,c-1));}h+=task('Rokna',sums(shuffle(S)));
+      a=ri(1,5);b=pick([1,2,5,10]);x=ri(2,5);h+=task('Hvat tal manglar?','<div class="seq">'+[0,1,2,3,4,5].map(function(j){return j===x?ans('22mm'):a+b*j;}).join(', ')+'</div>');}
+    else if(DL==='m'){S=[];for(i=0;i<3;i++)S.push(ri(3,9)+' · '+ri(3,9));for(i=0;i<3;i++){b=ri(3,9);S.push(b*ri(3,9)+' : '+b);}
+      for(i=0;i<2;i++){S.push(ri(120,480)+' + '+ri(110,490));x=ri(400,900);S.push(x+' − '+ri(120,x-100));}h+=task('Rokna',sums(shuffle(S)));
+      a=ri(2,9);b=pick([3,4,5,6,7,25]);var dbl=rnd()<.3;x=ri(2,5);h+=task('Hvat tal manglar?','<div class="seq">'+[0,1,2,3,4,5].map(function(j){return j===x?ans('24mm'):(dbl?a*Math.pow(2,j):a+b*j);}).join(', ')+'</div>');}
+    else{S=[];S.push(pick([10,20,25,50])+' % av '+pick([40,80,120,200,360]));a=ri(2,6);x=ri(2,9);b=ri(1,12);S.push(a+'x + '+b+' = '+(a*x+b)+' &nbsp; x');
+      S.push('(−'+ri(3,12)+') + '+ri(2,15));S.push(ri(4,15)+' − '+ri(16,30));S.push('¾ av '+(4*ri(3,12)));S.push('⅖ av '+(5*ri(3,12)));S.push(ri(11,19)+'²');S.push(pick([2,3,4,5])+'³');
+      h+=task('Rokna',sums(S));a=ri(2,5);x=ri(3,9);b=ri(2,9);h+=task('Loys líkningina',sums([a+'x − '+b+' = '+(a*x-b)+' &nbsp; x']));}
+  }
+  var dt=num===TODAYN&&!Q.get('n')?DGD[T.getDay()]+' '+T.getDate()+'. '+DGM[T.getMonth()]+' '+T.getFullYear()+'<br>':'';
+  return '<main class="sheet"><div class="hd"><div><h1>Morgunark</h1><div class="kd">'+KN[KD]+'</div></div><div class="dt">'+dt+'Ark '+num+' · '+DLN[DL]+'</div></div>'
+    +'<div class="nm">Navn:'+(SCREEN?'<input aria-label="Navn">':'<span class="l"></span>')+'</div>'+h
+    +'<div class="ft"><span>Snar · Talvan</span><span>Arbeið kvirt, til lærarin byrjar tíman.</span></div></main>';}
+
+var V=Math.min(10,Math.max(1,+Q.get('v')||1)),out='';for(var k=0;k<V&&N+k<=MAX;k++)out+=sheet(N+k);
+document.getElementById('sheets').innerHTML=out;
+
+/* Tekna við fingrinum á iPad */
+Array.prototype.forEach.call(document.querySelectorAll('.box,.draw'),function(bx){var c=bx.querySelector('canvas');if(!c)return;var g=c.getContext('2d'),dr=false;
   function fit(){var r=bx.getBoundingClientRect(),k=window.devicePixelRatio||1;c.width=r.width*k;c.height=r.height*k;g.setTransform(k,0,0,k,0,0);g.lineWidth=3;g.lineCap='round';g.lineJoin='round';g.strokeStyle='#1d4ed8';}
   fit();function pt(e){var r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
   c.addEventListener('pointerdown',function(e){dr=true;var p=pt(e);g.beginPath();g.moveTo(p[0],p[1]);c.setPointerCapture(e.pointerId);});
   c.addEventListener('pointermove',function(e){if(!dr)return;var p=pt(e);g.lineTo(p[0],p[1]);g.stroke();});
   ['pointerup','pointercancel'].forEach(function(t){c.addEventListener(t,function(){dr=false;});});
-  bx.querySelector('.clr').addEventListener('click',function(){g.clearRect(0,0,c.width,c.height);});});
+  var cl=bx.querySelector('.clr');if(cl)cl.addEventListener('click',function(){g.clearRect(0,0,c.width,c.height);});});
+/* Orðaleiting á skíggja: trýst á bókstavirnar */
+if(SCREEN)Array.prototype.forEach.call(document.querySelectorAll('.ws span'),function(s){s.addEventListener('click',function(){s.classList.toggle('on');});});
 /* Knøttar ovast */
-Array.prototype.forEach.call(document.querySelectorAll('[data-dl]'),function(b){b.setAttribute('aria-pressed',b.dataset.dl===DL?'true':'false');
-  b.addEventListener('click',function(){Q.set('dl',b.dataset.dl);location.search=Q.toString();});});
-document.getElementById('prentBtn').addEventListener('click',function(){if(SCREEN){Q.set('print','1');location.search=Q.toString();}else window.print();});
-if(!SCREEN)setTimeout(function(){window.print();},400);
+function go(o){Object.keys(o).forEach(function(k){if(o[k]==null)Q.delete(k);else Q.set(k,o[k]);});location.search=Q.toString();}
+Array.prototype.forEach.call(document.querySelectorAll('[data-dl]'),function(b){b.setAttribute('aria-pressed',b.dataset.dl===DL?'true':'false');b.addEventListener('click',function(){go({dl:b.dataset.dl});});});
+document.getElementById('nr').textContent='Ark '+N+' av '+MAX;
+document.getElementById('prev').disabled=N<=1;document.getElementById('next').disabled=N>=MAX;
+document.getElementById('prev').addEventListener('click',function(){go({n:N-1});});
+document.getElementById('next').addEventListener('click',function(){go({n:N+1});});
+document.getElementById('today').addEventListener('click',function(){go({n:null,d:null});});
+document.getElementById('prentBtn').addEventListener('click',function(){if(SCREEN&&V===1)go({print:1,n:N});else window.print();});
+document.getElementById('prent5').addEventListener('click',function(){go({print:1,n:N,v:5});});
+if(!SCREEN)setTimeout(function(){window.print();},500);
 })();
 </script>
 </body>

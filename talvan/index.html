@@ -905,6 +905,7 @@ body.locked .mu-b{visibility:hidden}
 .mk{--u:min(1cqi,1.2cqh);width:100%;height:100%;display:flex;flex-direction:column;gap:calc(var(--u)*2.4);padding:calc(var(--u)*4);border-radius:20px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);color:#1f2937}
 .mk-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .mk-h b{font-weight:900;font-size:max(1rem,calc(var(--u)*7))}.mk-h span{font-weight:700;color:#64748b;font-size:max(.7rem,calc(var(--u)*3.4))}
+.mk-k{font-size:max(.7rem,calc(var(--u)*3.4));color:#475569;margin-top:calc(var(--u)*-1)}.mk-k b{color:#ef2418}
 .mk-body{flex:1;min-height:0;display:flex;gap:calc(var(--u)*4);align-items:center}
 .mk-qr{height:100%;aspect-ratio:1;max-width:48%;display:grid;place-items:center}
 .mk-qr svg{width:100%;height:100%}
@@ -2939,18 +2940,21 @@ STK.morgun.settings=function(id,d,sec){
 
 /* ---------- Morgunark: næmingarnir arbeiða sjálvi fyrsta korterið (pappír ella iPad) ---------- */
 var MKD={g:'1.–3. flokkur',m:'4.–6. flokkur',h:'7.–9. flokkur'};
-function mkUrl(d,pr){var t=new Date(),u=location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/,'')+'morgunark.html?dl='+(d.dl||'m')+'&d='+dgKey(t);return pr?u+'&print=1':u;}
+/* Sama teljing sum í morgunark.html: skúladagur nr. frá 1. august (mánadagar–fríggjadagar), 200 ørk og átta sløg */
+var MKK=['Rokning','Sudoku','Labyrint','Tabellvenjing','Tekna eftir prikkum','Orðaleiting','Klokkan','Lesa og skriva'];
+function mkNum(){var t=new Date();t=new Date(t.getFullYear(),t.getMonth(),t.getDate());var y=t.getMonth()>=7?t.getFullYear():t.getFullYear()-1,d=new Date(y,7,1),n=0;while(d<=t){var w=d.getDay();if(w>0&&w<6)n++;d.setDate(d.getDate()+1);}return Math.max(1,((n-1)%200)+1);}
+function mkUrl(d,pr,v){var u=location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/,'')+'morgunark.html?dl='+(d.dl||'m');return u+(pr?'&print=1':'')+(v?'&v='+v:'');}
 STK.mark={n:'Morgunark',sz:[520,440],set:1,lib:false,tool:1,r:function(d){var u=mkUrl(d),qr=!d.noQr;
-  return '<div class="mk"><div class="mk-h"><b>Morgunark</b><span>'+MKD[d.dl||'m']+'</span></div>'
+  var nn=mkNum();return '<div class="mk"><div class="mk-h"><b>Morgunark</b><span>'+MKD[d.dl||'m']+'</span></div><div class="mk-k">Í dag: <b>'+MKK[(nn-1)%MKK.length]+'</b> · ark '+nn+' av 200</div>'
     +'<div class="mk-body">'+(qr?'<div class="mk-qr">'+(window.qrcode?qrSvg(u):'<span class="qr-wait">…</span>')+'</div>':'')
     +'<div class="mk-txt">'+(qr?'<p><b>iPad:</b> Skanna kotuna og arbeið á skíggjanum.</p>':'')+'<p><b>Pappír:</b> Tak eitt ark og set teg at arbeiða.</p></div></div>'
-    +'<div class="mk-b"><button type="button" data-mk="print">Prenta ørk</button><button type="button" data-mk="open">Vís arkið</button></div></div>';},
-  after:function(id,b){var d=S.stk[id];$$('[data-mk]',b).forEach(function(x){x.addEventListener('click',function(){window.open(mkUrl(S.stk[id],x.dataset.mk==='print'),'_blank');});});
+    +'<div class="mk-b"><button type="button" data-mk="open">Vís arkið</button><button type="button" data-mk="v5">Prenta 5 ørk</button><button type="button" data-mk="print">Prenta ørk</button></div></div>';},
+  after:function(id,b){var d=S.stk[id];$$('[data-mk]',b).forEach(function(x){x.addEventListener('click',function(){var k=x.dataset.mk;window.open(mkUrl(S.stk[id],k!=='open',k==='v5'?5:0),'_blank');});});
     if(d&&!d.noQr&&!window.qrcode)qrLoad(function(){if(window.qrcode)drawStk(id);});}};
 STK.mark.settings=function(id,d,sec){
   sec.innerHTML='<div class="set-row"><h4>Hvør flokkur?</h4><div class="seg tx-seg" id="mkDl">'+Object.keys(MKD).map(function(k){return '<button type="button" data-v="'+k+'" aria-pressed="'+((d.dl||'m')===k?'true':'false')+'">'+MKD[k]+'</button>'}).join('')+'</div></div>'
    +'<div class="set-row"><label class="chk"><input type="checkbox" id="mkQr"> Vís QR-kotu til iPad</label></div>'
-   +'<p class="note">Arkið er nýtt hvønn dag, men tað sama allan dagin. Á pappíri eru linjur og kassar, á iPadinum skriva og tekna næmingarnir á skíggjanum.</p>';
+   +'<p class="note">Tað eru 200 ørk, eitt til hvønn skúladag (talt frá 1. august). Átta sløg skifta: rokning, sudoku, labyrint, tabellvenjing, tekna eftir prikkum, orðaleiting, klokkan og lesa og skriva. Á pappíri eru linjur og kassar, á iPadinum skriva og tekna næmingarnir á skíggjanum.</p>';
   $$('#mkDl button',sec).forEach(function(b){b.addEventListener('click',function(){d.dl=b.dataset.v;$$('#mkDl button',sec).forEach(function(z){z.setAttribute('aria-pressed',z===b?'true':'false')});save();drawStk(id);});});
   var q=$('#mkQr',sec);q.checked=!d.noQr;q.addEventListener('change',function(){if(q.checked)delete d.noQr;else d.noQr=1;save();drawStk(id);});};
 /* ---------- QR-kota: næmingarnir skanna eitt leinki ---------- */
