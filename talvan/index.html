@@ -3242,7 +3242,7 @@ STK.qr.settings=function(id,d,sec){
   sec.innerHTML='<div class="set-row"><h4>Leinkið</h4><input class="set-in" id="qrU" placeholder="https://snar.fo/…" inputmode="url"></div>'
     +(open.length?'<div class="set-row"><h4>Ella brúka eitt, sum er opið á talvuni</h4><div class="qr-open">'+open.map(function(k){return '<button type="button" class="btn sm" data-qrk="'+k+'">'+esc(S[k].t||'Funka')+'</button>'}).join('')+'</div></div>':'')
     +'<div class="set-row"><h4>Yvirskrift</h4><input class="set-in" id="qrT" maxlength="40" placeholder="Skanna meg"></div>'
-    +'<p class="note">Næmingarnir skanna kotuna við myndavélini á iPadinum ella telefonini.</p>';
+    +'<p class="note">Næmingarnir skanna kotuna við myndatólinum á iPadinum ella telefonini.</p>';
   var ui=$('#qrU',sec),ti=$('#qrT',sec),tm;ui.value=d.u||'';ti.value=d.ti||'';
   ui.addEventListener('input',function(){clearTimeout(tm);tm=setTimeout(function(){var v=ui.value.trim();if(v&&!/^[a-z]+:/i.test(v)&&/\./.test(v))v='https://'+v;if(v)d.u=v;else delete d.u;save();drawStk(id);},300);});
   ti.addEventListener('input',function(){if(ti.value)d.ti=ti.value;else delete d.ti;save();drawStk(id);});
