@@ -948,6 +948,7 @@ body.locked .nl-b button{visibility:hidden}
 .td-ev:before{content:"";position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--tc);border:3px solid #fff;box-shadow:0 0 0 2px var(--tc)}
 .td-c{position:absolute;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;width:max-content;max-width:min(20cqi,240px)}
 .td-ev.up .td-c{bottom:18px;flex-direction:column-reverse}.td-ev.dn .td-c{top:18px}
+.td-ev.el .td-c{left:-12px;transform:none;align-items:flex-start;text-align:left}.td-ev.er .td-c{left:auto;right:-12px;transform:none;align-items:flex-end;text-align:right}
 .td-k{font-weight:900;color:var(--tc);font-size:max(.8rem,min(2.2cqi,6cqh))}
 .td-t{font-weight:600;color:#334155;font-size:max(.7rem,min(1.7cqi,4.6cqh));line-height:1.25}
 .td-empty{margin:auto;border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:14px 18px;font-weight:700;color:#334155;cursor:pointer}
@@ -3106,7 +3107,7 @@ STK.tidl={n:'Tíðarlinja',sz:[1200,420],set:1,lib:false,tool:1,r:function(d){va
   var nums=L.every(function(x){return /^−?-?\d+$/.test(x.k.replace('−','-'));}),vals=L.map(function(x,i){return nums?parseInt(x.k.replace('−','-'),10):i;}),mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals),sp=mx-mn||1;
   var h='<div class="td"><div class="td-ti">'+esc(d.ti||'Tíðarlinja')+'</div><div class="td-line">';
   L.forEach(function(x,i){var pos=nums?4+(vals[i]-mn)/sp*92:(L.length===1?50:4+i/(L.length-1)*92),up=i%2===0;
-    h+='<div class="td-ev '+(up?'up':'dn')+'" style="left:'+pos.toFixed(2)+'%;--tc:'+TDC[i%TDC.length]+'"><div class="td-c"><span class="td-k">'+esc(x.k)+'</span>'+(x.t?'<span class="td-t">'+esc(x.t)+'</span>':'')+'</div></div>';});
+    h+='<div class="td-ev '+(up?'up':'dn')+(pos<18?' el':pos>82?' er':'')+'" style="left:'+pos.toFixed(2)+'%;--tc:'+TDC[i%TDC.length]+'"><div class="td-c"><span class="td-k">'+esc(x.k)+'</span>'+(x.t?'<span class="td-t">'+esc(x.t)+'</span>':'')+'</div></div>';});
   return h+'</div></div>';},
   after:function(id,b){var e=b.querySelector('[data-td-set]');if(e)e.addEventListener('click',function(){openStkSet(id);});}};
 STK.tidl.settings=function(id,d,sec){sec.innerHTML='<div class="set-row"><h4>Yvirskrift</h4><input class="set-in" id="tdTi" maxlength="60" placeholder="Tíðarlinja"></div>'
