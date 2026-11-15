@@ -856,21 +856,37 @@ body.focus .w.big{top:calc(80px * var(--isc))!important;height:calc(100% - 80px 
 #stkPanel .set-row h4 small{font-weight:600;color:var(--muted);margin-left:6px}
 body.locked .dk[data-files],body.locked .dk[data-open-stk],body.locked .dk[data-add-stk]{display:none!important}
 /* Dagurin í dag */
-.dday{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6cqi;padding:5cqi;border-radius:20px;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);color:#1f2937;text-align:center}
+.dday{--u:min(1cqi,1.25cqh);width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*1.6);padding:calc(var(--u)*4);border-radius:20px;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);color:#1f2937;text-align:center;overflow:hidden}
 .dday-vetur{background:linear-gradient(160deg,#eff6ff,#dbeafe)}.dday-var{background:linear-gradient(160deg,#f0fdf4,#dcfce7)}.dday-summar{background:linear-gradient(160deg,#fefce8,#fef08a)}.dday-heyst{background:linear-gradient(160deg,#fff7ed,#fed7aa)}
-.dday-k{font-weight:700;font-size:clamp(.8rem,5cqi,1.8rem);color:#475569}
-.dday-d{font-weight:900;line-height:1;font-size:clamp(1.6rem,15cqi,6rem);letter-spacing:-.02em;color:#ef2418}
-.dday-n{font-weight:800;font-size:clamp(1rem,7.5cqi,3rem)}
-.dday-row{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;align-items:center;font-size:clamp(.8rem,5cqi,1.8rem);font-weight:700}
+.dday-k{font-weight:700;font-size:max(.7rem,calc(var(--u)*4.6));color:#475569}
+.dday-d{font-weight:900;line-height:1;font-size:max(1.2rem,calc(var(--u)*13));letter-spacing:-.02em;color:#ef2418}
+.dday-n{font-weight:800;font-size:max(.85rem,calc(var(--u)*6.6))}
+.dday-row{display:flex;flex-wrap:wrap;justify-content:center;gap:1em;align-items:center;font-size:max(.7rem,calc(var(--u)*4.6));font-weight:700}
 .dday-s{display:inline-flex;align-items:center;gap:.35em}
 .dday-s svg{width:1.4em;height:1.4em;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .dday-w b{color:var(--wc)}.dday-w i{font-style:normal;color:#64748b;font-weight:600}
-.dday-ws{display:flex;gap:1.4cqi}
-.dday-ws button{width:clamp(30px,10cqi,64px);aspect-ratio:1;border-radius:50%;border:2px solid transparent;background:rgba(255,255,255,.65);display:grid;place-items:center;cursor:pointer;color:var(--wc);padding:0}
-.dday-ws button svg{width:68%;height:68%;fill:none;stroke:currentColor;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+.dday-ws{display:flex;gap:calc(var(--u)*1.4)}
+.dday-ws button{width:max(26px,calc(var(--u)*9));aspect-ratio:1;border-radius:50%;border:2px solid transparent;background:rgba(255,255,255,.65);display:grid;place-items:center;cursor:pointer;color:var(--wc);padding:0}
+.dday-ws button svg,.dday-c svg,.dday-bar svg{fill:none;stroke:var(--wc,currentColor);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+.dday-ws button svg{width:68%;height:68%;stroke:currentColor}
 .dday-ws button[aria-pressed=true]{background:#fff;border-color:var(--wc);transform:scale(1.12);box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
-.dday-yt{font-size:clamp(.7rem,3.6cqi,1.3rem);color:#475569;font-weight:600}
+.dday-wk{display:flex;gap:calc(var(--u)*1);padding:calc(var(--u)*1.2) calc(var(--u)*1.6);background:rgba(255,255,255,.55);border-radius:14px}
+.dday-c{display:flex;flex-direction:column;align-items:center;gap:2px;width:max(24px,calc(var(--u)*8));padding:3px 0;border-radius:10px}
+.dday-c small{font-size:max(.55rem,calc(var(--u)*2.8));font-weight:700;color:#475569}
+.dday-c svg{width:80%;aspect-ratio:1}
+.dday-c em{display:block;width:30%;aspect-ratio:1;margin:35% 0;border-radius:50%;background:rgba(100,116,139,.3)}
+.dday-c.now{background:#fff;box-shadow:0 0 0 2px #ef2418}
+.dday-c.fut{opacity:.35}.dday-c.wkend small{color:#94a3b8}
+.dday-yt{font-size:max(.6rem,calc(var(--u)*3.3));color:#475569;font-weight:600}
+.dday-dark{color:#f8fafc}.dday-dark .dday-k,.dday-dark .dday-yt,.dday-dark .dday-c small,.dday-dark .dday-w i{color:#cbd5e1}.dday-dark .dday-d{color:#fca5a5}
+.dday-dark .dday-ws button{background:rgba(255,255,255,.12)}.dday-dark .dday-ws button[aria-pressed=true]{background:#f8fafc}.dday-dark .dday-wk{background:rgba(255,255,255,.08)}.dday-dark .dday-c.now{background:rgba(255,255,255,.15)}
 .dday-opts{display:grid;gap:6px}
+.dday-ths{grid-template-columns:repeat(4,1fr)}
+.dday-bars{display:grid;gap:6px;width:100%}
+.dday-bar{display:grid;grid-template-columns:22px 62px 1fr 24px;align-items:center;gap:8px;font-size:.85rem;font-weight:600}
+.dday-bar svg{width:22px;height:22px}
+.dday-bar i{display:block;height:12px;border-radius:6px;min-width:3px}
+.dday-bar b{text-align:right}
 body.locked .dday-ws button:not([aria-pressed=true]){visibility:hidden}
 /* QR-kota */
 .qr{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;gap:2.5cqi;padding:5cqi;border-radius:20px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);text-align:center}
@@ -2782,8 +2798,8 @@ function wheelSvg(d){var L=tvItems(d).slice(0,60),n=L.length||1,P=(TVTH[d.th]||T
   return s+'<circle cx="100" cy="100" r="12" fill="#fff" stroke="#1f2937" stroke-width="2"/></g><path d="M188 100l18-10v20z" fill="#1f2937"/></svg>';}
 
 
-/* ---------- Dagurin í dag: vikudagur, dagfesting, árstíð og veður ---------- */
-var DGD=['sunnudagur','mánadagur','týsdagur','mikudagur','hósdagur','fríggjadagur','leygardagur'],
+/* ---------- Dagurin í dag: vikudagur, dagfesting, árstíð og veður dag um dag ---------- */
+var DGD=['sunnudagur','mánadagur','týsdagur','mikudagur','hósdagur','fríggjadagur','leygardagur'],DGA=['Sun','Mán','Týs','Mik','Hós','Frí','Ley'],
   DGM=['januar','februar','mars','apríl','mai','juni','juli','august','september','oktober','november','desember'];
 var DGS={vetur:['Vetur','<path d="M24 6v36M8.4 15l31.2 18M8.4 33l31.2-18M19 8l5 5 5-5M19 40l5-5 5 5"/>'],var:['Vár','<path d="M24 44V24M24 32c-6 0-10-4-10-9 6 0 10 4 10 9zM16 10l4 6 4-8 4 8 4-6v8a8 8 0 0 1-16 0z"/>'],
   summar:['Summar','<circle cx="24" cy="24" r="8"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6M11 11l4 4M33 33l4 4M37 11l-4 4M15 33l-4 4"/>'],heyst:['Heyst','<path d="M10 38C10 20 22 8 40 8c0 18-12 30-30 30zM10 38l16-16"/>']};
@@ -2793,21 +2809,42 @@ var DGW=[['sol','Sól','#f59e0b','<circle cx="24" cy="24" r="8"/><path d="M24 6v
   ['kavi','Kavi','#0ea5e9','<path d="M14 28a8 8 0 0 1 0-16 11 11 0 0 1 21-2 8 8 0 0 1-1 18zM16 36v.1M24 40v.1M32 36v.1M20 44v.1M28 44v.1"/>'],
   ['vindur','Vindur','#0d9488','<path d="M6 18h24a5 5 0 1 0-5-5M6 26h32a5 5 0 1 1-5 5M6 34h16"/>'],
   ['mjorki','Mjørki','#94a3b8','<path d="M8 16h32M6 24h36M8 32h32M12 40h24"/>']];
+/* Litir á kortinum: '' fylgir árstíðini */
+var DDTH={'':['Árstíðin',null],bla:['Blátt',['#eff6ff','#bfdbfe']],gron:['Grønt',['#f0fdf4','#bbf7d0']],gul:['Gult',['#fefce8','#fde68a']],reyd:['Reytt',['#fff1f2','#fecdd3']],
+  lilla:['Lilla',['#faf5ff','#e9d5ff']],hvit:['Hvítt',['#ffffff','#f1f5f9']],myrk:['Myrkt',['#334155','#0f172a']]};
 function dgKey(t){return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();}
 function dgSeason(m){return m===11||m<2?'vetur':m<5?'var':m<8?'summar':'heyst';}
-STK.dagur={n:'Dagurin í dag',sz:[560,430],set:1,lib:false,tool:1,r:function(d){var t=new Date(),k=dgKey(t);if(d.wd!==k){delete d.w;d.wd=k;}
-  var se=dgSeason(t.getMonth()),y=new Date(t.getTime()-864e5),m=new Date(t.getTime()+864e5),w=null;DGW.forEach(function(x){if(x[0]===d.w)w=x;});
-  return '<div class="dday dday-'+se+'"><div class="dday-k">Í dag er</div><div class="dday-d">'+DGD[t.getDay()]+'</div><div class="dday-n">'+t.getDate()+'. '+DGM[t.getMonth()]+(d.noY?'':' '+t.getFullYear())+'</div>'
-    +'<div class="dday-row">'+(d.noS?'':'<span class="dday-s"><svg viewBox="0 0 48 48" aria-hidden="true">'+DGS[se][1]+'</svg>'+DGS[se][0]+'</span>')
-    +'<span class="dday-w">'+(w?'<b style="--wc:'+w[2]+'">'+w[1]+'</b>':'<i>Hvussu er veðrið?</i>')+'</span></div>'
-    +'<div class="dday-ws" role="group" aria-label="Veðrið í dag">'+DGW.map(function(x){return '<button type="button" data-dgw="'+x[0]+'" title="'+x[1]+'" aria-pressed="'+(d.w===x[0]?'true':'false')+'" style="--wc:'+x[2]+'"><svg viewBox="0 0 48 48" aria-hidden="true">'+x[3]+'</svg></button>'}).join('')+'</div>'
-    +(d.noYT?'':'<div class="dday-yt">Í gjár var '+DGD[y.getDay()]+' · Í morgin verður '+DGD[m.getDay()]+'</div>')+'</div>';},
-  after:function(id,b){$$('[data-dgw]',b).forEach(function(x){x.addEventListener('click',function(){var d=S.stk[id];d.w=d.w===x.dataset.dgw?null:x.dataset.dgw;if(!d.w)delete d.w;save();drawStk(id);});});}};
-STK.dagur.settings=function(id,d,sec){var o=[['noS','Vís árstíðina'],['noY','Vís árið'],['noYT','Vís í gjár og í morgin']];
-  sec.innerHTML='<div class="set-row"><h4>Hvat skal standa?</h4><div class="dday-opts">'+o.map(function(x){return '<label class="chk"><input type="checkbox" data-o="'+x[0]+'"'+(d[x[0]]?'':' checked')+'> '+x[1]+'</label>'}).join('')+'</div></div><p class="note">Veðrið velur flokkurin beinleiðis á kortinum. Tað verður tømt, tá ið ein nýggjur dagur byrjar.</p>';
-  $$('[data-o]',sec).forEach(function(x){x.addEventListener('change',function(){if(x.checked)delete d[x.dataset.o];else d[x.dataset.o]=1;save();drawStk(id);});});};
+function dgW(k){for(var i=0;i<DGW.length;i++)if(DGW[i][0]===k)return DGW[i];return null;}
+function dgLog(d){if(!d.log)d.log={};if(d.w&&d.wd){d.log[d.wd]=d.w;}delete d.w;delete d.wd;return d.log;}
+STK.dagur={n:'Dagurin í dag',sz:[600,520],set:1,lib:false,tool:1,r:function(d){var t=new Date(),k=dgKey(t),L=dgLog(d),se=dgSeason(t.getMonth()),w=dgW(L[k]);
+  var th=DDTH[d.th||'']||DDTH[''],bg=th[1]?'background:linear-gradient(160deg,'+th[1][0]+','+th[1][1]+')':'';
+  var y=new Date(t.getTime()-864e5),m=new Date(t.getTime()+864e5),h='<div class="dday dday-'+se+(d.th==='myrk'?' dday-dark':'')+'" style="'+bg+'">';
+  h+='<div class="dday-k">Í dag er</div><div class="dday-d">'+DGD[t.getDay()]+'</div><div class="dday-n">'+t.getDate()+'. '+DGM[t.getMonth()]+(d.noY?'':' '+t.getFullYear())+'</div>';
+  h+='<div class="dday-row">'+(d.noS?'':'<span class="dday-s"><svg viewBox="0 0 48 48" aria-hidden="true">'+DGS[se][1]+'</svg>'+DGS[se][0]+'</span>')
+    +'<span class="dday-w">'+(w?'<b style="--wc:'+w[2]+'">'+w[1]+'</b>':'<i>Hvussu er veðrið?</i>')+'</span></div>';
+  h+='<div class="dday-ws" role="group" aria-label="Veðrið í dag">'+DGW.map(function(x){return '<button type="button" data-dgw="'+x[0]+'" title="'+x[1]+'" aria-pressed="'+(L[k]===x[0]?'true':'false')+'" style="--wc:'+x[2]+'"><svg viewBox="0 0 48 48" aria-hidden="true">'+x[3]+'</svg></button>'}).join('')+'</div>';
+  if(!d.noWk){var mon=new Date(t.getFullYear(),t.getMonth(),t.getDate()-((t.getDay()+6)%7));h+='<div class="dday-wk" aria-label="Veðrið hesa vikuna">';
+    for(var i=0;i<7;i++){var dd=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+i),kk=dgKey(dd),ww=dgW(L[kk]),fut=dd>t&&kk!==k;
+      h+='<span class="dday-c'+(kk===k?' now':'')+(fut?' fut':'')+(i>4?' wkend':'')+'" title="'+DGD[dd.getDay()]+(ww?': '+ww[1]:'')+'"><small>'+DGA[dd.getDay()]+'</small>'+(ww?'<svg viewBox="0 0 48 48" style="--wc:'+ww[2]+'" aria-hidden="true">'+ww[3]+'</svg>':'<em></em>')+'</span>';}
+    h+='</div>';}
+  if(!d.noYT)h+='<div class="dday-yt">Í gjár var '+DGD[y.getDay()]+' · Í morgin verður '+DGD[m.getDay()]+'</div>';
+  return h+'</div>';},
+  after:function(id,b){$$('[data-dgw]',b).forEach(function(x){x.addEventListener('click',function(){var d=S.stk[id],L=dgLog(d),k=dgKey(new Date());if(L[k]===x.dataset.dgw)delete L[k];else L[k]=x.dataset.dgw;save();drawStk(id);
+    if(SETK===id&&!$('#setPanel').hidden)openStkSet(id);});});}};
+STK.dagur.settings=function(id,d,sec){var L=dgLog(d),t=new Date(),o=[['noS','Vís árstíðina'],['noY','Vís árið'],['noWk','Vís veðrið hesa vikuna'],['noYT','Vís í gjár og í morgin']];
+  var cnt={},tot=0;Object.keys(L).forEach(function(k){var p=k.split('-');if(+p[0]===t.getFullYear()&&+p[1]===t.getMonth()+1){cnt[L[k]]=(cnt[L[k]]||0)+1;tot++;}});
+  var mx=Math.max.apply(null,[1].concat(Object.keys(cnt).map(function(k){return cnt[k]})));
+  var h='<div class="set-row"><h4>Litur</h4><div class="stkpals dday-ths">'+Object.keys(DDTH).map(function(k){var c=DDTH[k][1];return '<button type="button" class="stkpal" data-ddth="'+k+'" aria-pressed="'+((d.th||'')===k?'true':'false')+'"><span class="sp-dots">'+(c?'<i style="width:26px;height:18px;border-radius:6px;background:linear-gradient(160deg,'+c[0]+','+c[1]+')"></i>':'<i style="background:#bfdbfe"></i><i style="background:#bbf7d0"></i><i style="background:#fde68a"></i><i style="background:#fed7aa"></i>')+'</span><small>'+DDTH[k][0]+'</small></button>'}).join('')+'</div></div>';
+  h+='<div class="set-row"><h4>Veðrið í '+DGM[t.getMonth()]+'</h4>'+(tot?'<div class="dday-bars">'+DGW.map(function(x){var n=cnt[x[0]]||0;return '<div class="dday-bar"><svg viewBox="0 0 48 48" style="--wc:'+x[2]+'" aria-hidden="true">'+x[3]+'</svg><span>'+x[1]+'</span><i style="width:'+(n/mx*100)+'%;background:'+x[2]+'"></i><b>'+n+'</b></div>'}).join('')+'</div><p class="note">'+tot+(tot===1?' dagur':' dagar')+' skrivaðir upp hendan mánaðin.</p>':'<p class="note">Enn einki veður skrivað upp hendan mánaðin. Trýst á eitt veður á kortinum.</p>')+'</div>';
+  h+='<div class="set-row"><h4>Hvat skal standa?</h4><div class="dday-opts">'+o.map(function(x){return '<label class="chk"><input type="checkbox" data-o="'+x[0]+'"'+(d[x[0]]?'':' checked')+'> '+x[1]+'</label>'}).join('')+'</div></div>';
+  h+='<div class="set-row"><div class="row"><button class="btn sm" type="button" data-ddclr>Strika veðurdagbókina</button></div></div>';
+  sec.innerHTML=h;
+  $$('[data-ddth]',sec).forEach(function(x){x.addEventListener('click',function(){if(x.dataset.ddth)d.th=x.dataset.ddth;else delete d.th;save();drawStk(id);$$('[data-ddth]',sec).forEach(function(z){z.setAttribute('aria-pressed',z===x?'true':'false')});});});
+  $$('[data-o]',sec).forEach(function(x){x.addEventListener('change',function(){if(x.checked)delete d[x.dataset.o];else d[x.dataset.o]=1;save();drawStk(id);});});
+  $('[data-ddclr]',sec).addEventListener('click',function(){ask('Strika alt veðrið, sum er skrivað upp á hesum kortinum?','Strika',function(){d.log={};save();drawStk(id);openStkSet(id);});});};
 /* Skift dag um midnátt */
-setInterval(function(){var k=dgKey(new Date());Object.keys(S.stk).forEach(function(id){var d=S.stk[id];if(d.t==='dagur'&&d.wd!==k)drawStk(id);});},60000);
+var DGLAST=dgKey(new Date());
+setInterval(function(){var k=dgKey(new Date());if(k===DGLAST)return;DGLAST=k;Object.keys(S.stk).forEach(function(id){if(S.stk[id].t==='dagur')drawStk(id);});},60000);
 
 /* ---------- QR-kota: næmingarnir skanna eitt leinki ---------- */
 var QRW=[];
