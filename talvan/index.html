@@ -806,6 +806,16 @@ body.focus .w.big{top:calc(80px * var(--isc))!important;height:calc(100% - 80px 
 .pdf-pages.scroll{flex-direction:column;justify-content:flex-start;gap:14px;padding:12px 20px}
 .pdf-pg{flex:none;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.18)}
 .pdf-pg canvas{display:block}
+/* Dias */
+.pg-nav{position:fixed;right:14px;bottom:10px;z-index:19;display:flex;align-items:center;gap:2px;padding:6px;background:#fff;border-radius:16px;box-shadow:0 6px 20px -8px rgba(0,0,0,.45)}
+.pg-nav button{width:44px;height:44px;border:0;border-radius:10px;background:none;font:400 1.8rem/1 Arial,sans-serif;color:var(--ink);display:grid;place-items:center}
+.pg-nav button:hover:not(:disabled){background:var(--soft)}
+.pg-nav button:disabled{opacity:.3;cursor:default}
+.pg-nav button svg{width:20px;height:20px}
+.pg-nav #pgAdd{font-size:1.6rem}
+.pg-nav span{min-width:56px;text-align:center;font-weight:700;font-size:.95rem}
+@media (max-width:1560px){.pg-nav{bottom:112px}}
+body.pen .pg-nav{bottom:112px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1213,6 +1223,7 @@ body.focus .w.big{top:calc(80px * var(--isc))!important;height:calc(100% - 80px 
   <div class="bgs" id="bgs"></div>
   <input type="file" id="bgFile" accept="image/*" hidden>
   <p class="note" style="margin-top:12px">Tín egna mynd verður bert goymd í hesum kaganum.</p>
+<div hidden>
   <h4 class="bg-h">Framløga (dias)</h4>
   <p class="note">Vel myndir í tí røð, tær skulu vísast. Tær verða bakgrund, ein í senn, og tú skiftir við pílunum niðast til høgru.</p>
   <div class="dias-pick" id="diasPick"></div>
@@ -1222,12 +1233,15 @@ body.focus .w.big{top:calc(80px * var(--isc))!important;height:calc(100% - 80px 
   <p class="note" id="diasMsg"></p>
   <button class="btn red" type="button" id="diasGo">Byrja framløguna</button>
 </div>
+</div>
+<div class="pg-nav" id="pgNav" role="navigation" aria-label="Dias"><button type="button" id="pgPrev" title="Fyrra dias" aria-label="Fyrra dias">‹</button><span id="pgN">1 / 1</span><button type="button" id="pgNext" title="Næsta dias" aria-label="Næsta dias">›</button><button type="button" id="pgAdd" class="lk" title="Nýtt dias" aria-label="Nýtt dias">+</button><button type="button" id="pgDel" class="lk" title="Strika hetta diasið" aria-label="Strika hetta diasið" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button></div>
 <div class="dias-nav" id="diasNav" hidden><button type="button" id="diasPrev" title="Fyrra mynd" aria-label="Fyrra mynd">‹</button><span id="diasN"></span><button type="button" id="diasNext" title="Næsta mynd" aria-label="Næsta mynd">›</button><button type="button" id="diasStop" title="Steðga framløguni" aria-label="Steðga framløguni">×</button></div>
 
 <div class="panel" id="infoPanel" hidden role="dialog" aria-labelledby="infoH">
   <h3 id="infoH">Um Talvuna<button class="ic close-p" type="button" title="Lat aftur"></button></h3>
   <p>Talvan er gjørd til stóra skíggjan í flokshølinum. Hon hevur somu lutføll sum ein vanlig krittalva, so amboðini altíð liggja á sama stað, sama hvussu stórur skíggin er. Við knappinum ovast í høgra horni kanst tú lata talvuna fylla allan skíggjan.</p>
   <p>Vel amboðini niðri á skíggjanum. Fleiri amboð eru undir <strong>Meira</strong>, og undir <strong>Uppsetingar</strong> ovast í vinstra horni eru talvur, sum eru klárar at brúka. Trýst á eitt amboð fyri at velja tað: tá kemur tað fremst, og ein lítil bjálki kemur omanfyri. Drag amboðið, hagar tú vilt, og drag í prikkunum í hornunum fyri at gera tað størri ella minni. Við <strong>tannhjólinum</strong> broytir tú stillingarnar í feltinum høgrumegin.</p>
+  <p>Við <strong>‹ ›</strong> niðast til høgru bláar tú millum dias, og <strong>+</strong> ger eitt nýtt dias. Hvørt dias er sín egna talva við sínum amboðum og sínari bakgrund. Ein framløgufjarstýring ella PageUp og PageDown bláa eisini.</p>
   <p><button class="btn sm" type="button" id="resetPos">Legg amboðini uppá pláss aftur</button></p>
   <h4>Linjalur og vinkulmátari</h4>
   <p>Linjalin og vinkulmátaran kanst tú bæði flyta og snara eftir tørvi.</p>
@@ -1261,7 +1275,8 @@ var S={vis:{klokka:1,tid:1,navn:1,ljos:1,glas:1,tern:1,larm:0,skra:1},sz:{},bg:'
   tlTxt:{r:'Friður',g:'Tosið spakuliga',n:'Tosið saman'},secs:300,sound:true,lim:60,mynd:'',cm:'t',jar:0,goal:20,dice:2,fl:{}};
 try{var o=JSON.parse(localStorage.getItem(KEY)||'null');if(o)for(var k in o)S[k]=o[k];}catch(e){}
 /* Flyt eldri goymslu yvir */
-['glas','tern'].forEach(function(k){if(S.vis[k]===undefined)S.vis[k]=1;});
+/* bert gamlar goymslur uttan dias: nýggj dias hava ikki hesi lyklarnar, og tey skulu vera tóm */
+if(!S.pages)['glas','tern'].forEach(function(k){if(S.vis[k]===undefined)S.vis[k]=1;});
 if(S.tlTxt){if(S.tlTxt.r==='Arbeiðið kvirt')S.tlTxt.r='Friður';if(S.tlTxt.g==='Hvískrið')S.tlTxt.g='Tosið spakuliga';}
 if(!S.planItems){S.planItems=(S.plan||'').split(/\r?\n/).map(function(t){return t.replace(/^\s*(\d+[.)]|[-•*])\s*/,'').trim()}).filter(Boolean).map(function(t){return {t:t,d:0}});delete S.plan;}
 if(!S.sz)S.sz={};for(var kk in DEF_SZ)if(!S.sz[kk])S.sz[kk]=DEF_SZ[kk];
@@ -2586,6 +2601,38 @@ S.vis.navn=0;
 /* Heitið „Hvørs tørn er tað?“ eitur nú „Hvør eigur at gera?“ (brúkarin 15.11.2026) */
 Object.keys(S.stk).forEach(function(id){var d=S.stk[id];if(d.t==='tilv'&&d.ti==='Hv'+'ørs tørn er tað?')d.ti='Hvør eigur at gera?';});
 Object.keys(S.stk).forEach(function(id){if(S.stk[id].t==='tilv'&&!$('#w-'+id))mkStk(id);});
+
+
+/* ---------- Dias: fleiri talvur, hvør við sínum amboðum, plásum, klistrimerkjum og bakgrund ---------- */
+var PGK=['vis','pos','z','bg','stk','ytOf','myndOf','snar','snar2','snar3','tema','fl','pdfBack','pdfCur','pdfPage'];
+function pgSnap(){var o={};PGK.forEach(function(k){if(S[k]!==undefined&&S[k]!==null)o[k]=JSON.parse(JSON.stringify(S[k]));});return o;}
+var pgInk={};
+if(S.bg==='dias')S.bg=S.diasBefore||'strik';
+if(!S.pages||!S.pages.length){S.pages=[pgSnap()];S.pg=0;}
+if(!(S.pg>=0&&S.pg<S.pages.length))S.pg=0;
+function pgLoad(p){var oldPdf=S.pdfCur;PGK.forEach(function(k){S[k]=p[k]!==undefined?JSON.parse(JSON.stringify(p[k])):null;});
+  ['vis','pos','z','stk','ytOf','myndOf','fl'].forEach(function(k){if(!S[k])S[k]={};});if(!S.bg)S.bg='strik';S.vis.navn=0;
+  if(S.pdfCur!==oldPdf){pdfDoc=null;$('#pdfPages').innerHTML='';}
+  $$('.w.stk').forEach(function(w){w.remove();});Object.keys(S.stk).forEach(mkStk);
+  zTop=0;for(var k in S.z)zTop=Math.max(zTop,S.z[k]||0);
+  unfocus();closePanels();select(null);applyBg();applySz();applyVis();applyFl();
+  Object.keys(MP).forEach(drawMynd);Object.keys(YP).forEach(drawYt);['snar','snar2','snar3','tema'].forEach(function(k){if(SW[k])SW[k].show();});
+  pdfShow();}
+function pgKeepInk(){pgInk[S.pg]=strokes;}
+function pgShowInk(){strokes=pgInk[S.pg]||[];inkHist=[];redrawInk();}
+function pgGo(i){if(i<0||i>=S.pages.length||i===S.pg)return;S.pages[S.pg]=pgSnap();pgKeepInk();S.pg=i;pgLoad(S.pages[i]);pgShowInk();save();pgUI();}
+function pgShift(from,d){var ni={};Object.keys(pgInk).forEach(function(k){var n=+k;if(n<from)ni[n]=pgInk[k];else if(d<0&&n===from){}else ni[n+d]=pgInk[k];});pgInk=ni;}
+function pgNew(){S.pages[S.pg]=pgSnap();pgKeepInk();var at=S.pg+1;pgShift(at,1);S.pages.splice(at,0,{vis:{},pos:{},z:{},bg:S.bg,stk:{},ytOf:{},myndOf:{},fl:{}});
+  S.pg=at;pgLoad(S.pages[at]);pgShowInk();save();pgUI();}
+function pgDel(){if(S.pages.length<2)return;if(!confirm('Strika dias '+(S.pg+1)+'? Tað, sum er á hesum diasinum, verður tikið burtur.'))return;
+  var at=S.pg;S.pages.splice(at,1);pgShift(at,-1);S.pg=Math.min(at,S.pages.length-1);pgLoad(S.pages[S.pg]);pgShowInk();save();pgUI();}
+function pgUI(){var n=S.pages.length;$('#pgN').textContent=(S.pg+1)+' / '+n;$('#pgPrev').disabled=S.pg<=0;$('#pgNext').disabled=S.pg>=n-1;$('#pgDel').hidden=n<2;}
+$('#pgPrev').addEventListener('click',function(){pgGo(S.pg-1);});$('#pgNext').addEventListener('click',function(){pgGo(S.pg+1);});
+$('#pgAdd').addEventListener('click',pgNew);$('#pgDel').addEventListener('click',pgDel);
+/* Framløgufjarstýringar senda PageUp/PageDown */
+document.addEventListener('keydown',function(e){if(e.key!=='PageDown'&&e.key!=='PageUp')return;if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable],.pdf-view'))return;
+  if(S.bg==='dias')return;e.preventDefault();pgGo(S.pg+(e.key==='PageDown'?1:-1));});
+pgUI();
 
 applySz();fit();applyVis();applyFl();applyLock();
 document.documentElement.classList.add('ready');
