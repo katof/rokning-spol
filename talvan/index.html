@@ -40,6 +40,9 @@ body.dark .top-logo{background:#fff;padding:4px 8px}
 body.dark .top-title span{color:rgba(255,255,255,.7)}
 
 /* ---------- Toppur ---------- */
+.top .lock-btn{flex:none}
+@media (max-width:1100px){.top .lock-btn span{display:none}.top .lock-btn{padding:0 10px}}
+@media (max-width:1180px){.dk{min-width:66px;font-size:.72rem;padding:8px 4px}.dk-sep{margin:16px 2px}}
 .top{position:fixed;top:0;left:0;right:0;height:var(--top-h);z-index:20;display:flex;align-items:center;gap:14px;padding:0 clamp(12px,2vw,28px);background:rgba(255,255,255,.86);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
 .top-logo{display:block;line-height:0}
 .top-logo img{height:26px;width:auto}
@@ -322,7 +325,7 @@ body.focus .bk-grid{max-height:none}
 /* ---------- Dokkin ---------- */
 .dock{position:fixed;left:0;right:0;bottom:0;height:var(--dock-h);z-index:20;background:#fff;border-top:1px solid var(--line);display:flex;align-items:stretch;justify-content:safe center;gap:0;padding:0 8px;overflow-x:auto;scrollbar-width:none}
 .dock::-webkit-scrollbar{display:none}
-.dk{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:84px;padding:8px 6px;border:0;background:none;font-size:.78rem;font-weight:600;color:var(--muted);position:relative;white-space:nowrap}
+.dk{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:76px;padding:8px 6px;border:0;background:none;font-size:.78rem;font-weight:600;color:var(--muted);position:relative;white-space:nowrap}
 .dk svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .dk:hover{background:var(--soft);color:var(--ink)}
 .dk[aria-pressed=true]{color:var(--ink)}
@@ -330,7 +333,7 @@ body.focus .bk-grid{max-height:none}
 .dk-sep{width:1px;background:var(--line);margin:16px 6px;flex:none}
 
 /* ---------- Spjøld (bakgrund, um) ---------- */
-.panel{position:fixed;z-index:50;right:clamp(8px,2vw,28px);bottom:calc(var(--dock-h) + 12px);width:min(440px,calc(100vw - 16px));max-height:calc(100vh - var(--dock-h) - var(--top-h) - 24px);overflow:auto;background:#fff;border:1px solid var(--line);box-shadow:0 16px 36px -16px rgba(32,33,36,.35);padding:20px}
+.panel{position:fixed;z-index:50;right:clamp(8px,2vw,28px);top:calc(var(--top-h) + 10px);width:min(440px,calc(100vw - 16px));max-height:calc(100vh - var(--dock-h) - var(--top-h) - 24px);overflow:auto;background:#fff;border:1px solid var(--line);box-shadow:0 16px 36px -16px rgba(32,33,36,.35);padding:20px}
 .panel h3{margin:0 0 12px;font-size:1.15rem;font-weight:900;letter-spacing:-.03em;display:flex;align-items:center}
 .panel h3::before{content:"";width:28px;height:4px;border-radius:999px;background:var(--red);margin-right:10px}
 .panel h3 .ic{margin-left:auto}
@@ -382,6 +385,8 @@ body.focus .bk-grid{max-height:none}
   <a class="top-logo" href="https://snar.fo" target="_top" title="Til Snar"><img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Logo_Snar/SnarLogoRed.png" alt="Snar" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'Snar'}))"></a>
   <h1 class="top-title">Talvan<span>til stóra skíggjan í flokkinum</span></h1>
   <div style="flex:1"></div>
+  <button class="lock-btn" type="button" id="bgBtn" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg><span>Bakgrund</span></button>
+  <button class="lock-btn" type="button" id="infoBtn" aria-expanded="false" aria-label="Um Talvuna" title="Um Talvuna"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>Um</span></button>
   <button class="lock-btn" type="button" id="penBtn" aria-pressed="false" title="Skriva og tekna á skíggjan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/></svg><span>Pennur</span></button>
   <button class="lock-btn" type="button" id="lockBtn" aria-pressed="false"></button>
   <button class="lock-btn" type="button" id="popFull" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Fullur skíggi</span></button>
@@ -679,9 +684,6 @@ body.focus .bk-grid{max-height:none}
   <span class="dk-sep"></span>
   <button class="dk" type="button" data-f="linjal"><svg viewBox="0 0 32 32"><rect x="3" y="11" width="26" height="10"/><path d="M7 11v4M11 11v3M15 11v4M19 11v3M23 11v4"/></svg>Linjal</button>
   <button class="dk" type="button" data-f="vinkul"><svg viewBox="0 0 32 32"><path d="M3 24a13 13 0 0 1 26 0zM16 24l8-9"/><path d="M8 24a8 8 0 0 1 16 0"/></svg>Vinkulmátari</button>
-  <span class="dk-sep"></span>
-  <button class="dk" type="button" id="bgBtn" aria-expanded="false"><svg viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="20"/><path d="M4 22l7-7 6 6 4-4 7 7"/><circle cx="21" cy="12" r="2"/></svg>Bakgrund</button>
-  <button class="dk" type="button" id="infoBtn" aria-expanded="false"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12"/><path d="M16 14v8M16 10v.5"/></svg>Um</button>
 </nav>
 
 <div class="panel" id="bgPanel" hidden role="dialog" aria-labelledby="bgH">
