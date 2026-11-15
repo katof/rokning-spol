@@ -709,6 +709,14 @@ body.dockmini .penbar>:not(.pb-mode):not(.pb-min){display:none!important}
 body.dockmini .penbar{padding:6px 8px;gap:4px}
 body.dockmini .pb-mode{flex-direction:row}
 html:not(.ready) #grid,html:not(.ready) .dock,html:not(.ready) .top{visibility:hidden}
+/* YouTube: dimm ramma við handfangi ovast, so filmurin kann flytast (iframe-urin fær annars øll trýstini) */
+.yt-b{padding:0!important}
+.yt-b:has(iframe:not([hidden])){padding:34px 8px 8px!important;background:#1f2937}
+.yt-b iframe{border-radius:6px}
+.yt-grip{display:none;position:absolute;left:0;right:0;top:0;height:34px;align-items:center;justify-content:center;gap:4px;cursor:grab}
+.yt-b:has(iframe:not([hidden])) .yt-grip{display:flex}
+.yt-grip i{width:5px;height:5px;border-radius:50%;background:#9ca3af}
+.w.moving .yt-grip{cursor:grabbing}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -997,6 +1005,7 @@ html:not(.ready) #grid,html:not(.ready) .dock,html:not(.ready) .top{visibility:h
           <p>Lím eina leinkju til ein film á YouTube inn</p>
           <div class="sn-search"><div class="sn-field"><input id="ytIn" type="text" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…" aria-label="Leinkja til ein film á YouTube"></div><button class="sn-go" type="submit">Vís</button></div>
           <p class="sn-msg" id="ytMsg" hidden></p></form>
+        <div class="yt-grip" aria-hidden="true" title="Drag her fyri at flyta filmin"><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <iframe id="ytFrame" hidden title="Filmur frá YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
     </section>
