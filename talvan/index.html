@@ -789,9 +789,11 @@ body.pen .dias-nav{display:none}
 .tv-go:hover{transform:scale(1.06)}
 .tv-go svg{width:48%;height:48%}
 .tv-empty{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:0;border-radius:999px;background:#fff;color:var(--ink);font-weight:700;padding:10px 18px;box-shadow:0 4px 14px -6px rgba(0,0,0,.4)}
-.tv-mida{background:var(--tvbg);transform:rotate(-1.5deg);border-radius:4px;box-shadow:0 18px 30px -18px rgba(0,0,0,.55)}
-.tv-mida::after{content:"";position:absolute;right:0;bottom:0;width:22%;aspect-ratio:1;background:linear-gradient(135deg,rgba(0,0,0,.12) 0 50%,transparent 50%) ,linear-gradient(315deg,transparent 0 48%,rgba(255,255,255,.0) 48%);
-  background:linear-gradient(315deg,transparent 50%,#f59e0b 50%,#fbbf24 75%);border-top-left-radius:30%;box-shadow:-4px -4px 10px -6px rgba(0,0,0,.35)}
+/* Lepi: hornið niðri til høgru er brett inn yvir lepan. Pappírið er skorið av har (clip-path), so einki kantað horn sæst aftanfyri;
+   skugin kemur frá filter, sum fylgir skapinum á lepanum. */
+.tv-mida{--fold:clamp(26px,15cqi,88px);background:transparent;transform:rotate(-1.5deg);border-radius:0;box-shadow:none;filter:drop-shadow(0 12px 12px rgba(0,0,0,.26))}
+.tv-mida::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--tvbg);border-radius:4px 4px 0 4px;clip-path:polygon(0 0,100% 0,100% calc(100% - var(--fold)),calc(100% - var(--fold)) 100%,0 100%)}
+.tv-mida::after{content:"";position:absolute;right:0;bottom:0;width:var(--fold);height:var(--fold);z-index:-1;background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(0,0,0,.2) 75%),var(--tvbg);border-top-left-radius:3px;clip-path:polygon(0 0,100% 0,0 100%)}
 .tv-mida .tv-go{position:absolute;bottom:6cqi;left:50%;margin-left:calc(clamp(44px,15cqi,96px) / -2)}
 .tv-mida .tv-out{padding-bottom:16cqi}
 .tv-hjol{padding-top:3cqi}
