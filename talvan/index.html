@@ -715,6 +715,12 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
 .txbg span{background:rgba(255,255,255,.85);width:100%;padding:2px 0}
 .txbg.txbg-n{background:repeating-conic-gradient(#eee 0 25%,#fff 0 50%) 0 0/14px 14px}
 .txbg[aria-pressed=true]{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,89,232,.18)}
+/* Lítil pennabjálki: bert Tekna, Vel og knøtturin at gera hann stóran aftur */
+.penbar .pb-min{align-self:center;width:44px;height:44px}
+.penbar .pb-min svg{width:22px;height:22px}
+body.dockmini .penbar>:not(.pb-mode):not(.pb-min){display:none!important}
+body.dockmini .penbar{padding:6px 8px;gap:4px}
+body.dockmini .pb-mode{flex-direction:row}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1081,6 +1087,7 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
   <div class="pb-w"><button type="button" class="pw" data-pw="3" title="Tunn strika"><i style="--d:6px"></i></button><button type="button" class="pw" data-pw="6" title="Miðal strika" aria-pressed="true"><i style="--d:11px"></i></button><button type="button" class="pw" data-pw="12" title="Tjúkk strika"><i style="--d:18px"></i></button></div>
   <span class="pb-sep"></span>
   <div class="pb-x"><button type="button" id="penUndo" title="Angra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button><button type="button" id="penClear" title="Strika alt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button></div>
+  <button class="pm pb-min" type="button" id="penMin"></button>
 </div>
 
 <nav class="dock" id="dock" aria-label="Amboð">
@@ -2299,8 +2306,9 @@ Object.keys(YP).forEach(function(k){var p=YP[k];
   drawYt(k);});
 
 /* ---------- Dokkin kann gerast lítil ---------- */
-function applyMini(){var m=!!S.dockMini;$('#dock').classList.toggle('mini',m);var b=$('#dockMin');b.innerHTML=m?I.fill:I.back;b.title=m?'Vís øll amboðini':'Ger amboðsbjálkan lítlan';b.setAttribute('aria-label',b.title);if(m)closeMore();}
+function applyMini(){var m=!!S.dockMini;$('#dock').classList.toggle('mini',m);document.body.classList.toggle('dockmini',m);var pm=$('#penMin');pm.innerHTML=m?I.fill:I.back;pm.title=m?'Vís øll pennaamboðini':'Ger pennabjálkan lítlan';pm.setAttribute('aria-label',pm.title);var b=$('#dockMin');b.innerHTML=m?I.fill:I.back;b.title=m?'Vís øll amboðini':'Ger amboðsbjálkan lítlan';b.setAttribute('aria-label',b.title);if(m)closeMore();}
 $('#dockMin').addEventListener('click',function(){S.dockMini=S.dockMini?0:1;applyMini();save();});
+$('#penMin').addEventListener('click',function(){S.dockMini=S.dockMini?0:1;applyMini();save();});
 applyMini();
 
 applySz();fit();applyVis();applyFl();applyLock();
