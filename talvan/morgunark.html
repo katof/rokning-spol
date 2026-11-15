@@ -68,6 +68,16 @@ textarea.ans{width:100%;min-height:42mm;border:1px solid var(--line);border-radi
 .clocks .tm{display:flex;align-items:flex-end;gap:4px}
 .clocks .tm .ans{flex:none;width:12mm;min-width:12mm}
 .ft{margin-top:auto;padding-top:6mm;display:flex;justify-content:space-between;font-size:9pt;color:var(--muted)}
+/* Blýanturin: skriva og tekna allastaðni á arkinum */
+.sheet{position:relative}
+.penc{position:absolute;left:0;top:0;pointer-events:none;z-index:4}
+body.pen .penc{pointer-events:auto;touch-action:none;cursor:crosshair}
+.penbar{position:fixed;right:14px;bottom:14px;z-index:10;display:flex;gap:6px;padding:6px;background:#fff;border-radius:16px;box-shadow:0 10px 30px -10px rgba(0,0,0,.45)}
+.penbar button{display:flex;align-items:center;gap:6px;border:0;border-radius:12px;background:var(--soft);padding:10px 14px;font:700 .95rem inherit;color:var(--ink);cursor:pointer}
+.penbar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.penbar #penOn[aria-pressed=true]{background:#1d4ed8;color:#fff}
+body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
+@media (max-width:760px){.penbar{left:8px;right:8px;justify-content:center}.penbar button{padding:10px 12px}.sheet{margin-bottom:84px}}
 @media print{
   @page{size:A4;margin:0}
   html,body{background:#fff}
@@ -109,6 +119,11 @@ textarea.ans{width:100%;min-height:42mm;border:1px solid var(--line);border-radi
   <button type="button" id="prent5">Prenta 5 ørk</button>
 </div>
 <div id="sheets"></div>
+<div class="penbar screen-only" role="toolbar" aria-label="Blýantur">
+  <button type="button" id="penOn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/></svg><span>Blýantur</span></button>
+  <button type="button" id="penUndo" aria-label="Angra"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg><span>Angra</span></button>
+  <button type="button" id="penClear"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg><span>Strika alt</span></button>
+</div>
 <script>
 (function(){
 var Q=new URLSearchParams(location.search),DL=/^[gmh]$/.test(Q.get('dl')||'')?Q.get('dl'):'m',SCREEN=!Q.get('print'),MAX=200;
@@ -281,6 +296,30 @@ document.getElementById('today').addEventListener('click',function(){go({n:null,
 document.getElementById('prentBtn').addEventListener('click',function(){if(SCREEN&&V===1)go({print:1,n:N});else window.print();});
 document.getElementById('prent5').addEventListener('click',function(){go({print:1,n:N,v:5});});
 if(!SCREEN)setTimeout(function(){window.print();},500);
+
+/* ---------- Blýanturin yvir allt arkið (navn, uppgávur og tekningar) ---------- */
+if(SCREEN){var KEYP='morgunark-'+DL+'-'+N,PEN=[];
+  Array.prototype.forEach.call(document.querySelectorAll('.sheet'),function(sh,si){
+    var c=document.createElement('canvas');c.className='penc';sh.appendChild(c);var g=c.getContext('2d'),W=1,cur=null,hist=[],strokes=[];
+    try{strokes=JSON.parse(localStorage.getItem(KEYP+'-'+si)||'[]');}catch(e){}
+    function save(){try{localStorage.setItem(KEYP+'-'+si,JSON.stringify(strokes));}catch(e){}}
+    function line(st){if(!st.length)return;g.beginPath();g.moveTo(st[0][0]*W,st[0][1]*W);for(var i=1;i<st.length;i++)g.lineTo(st[i][0]*W,st[i][1]*W);if(st.length===1)g.lineTo(st[0][0]*W+.1,st[0][1]*W);g.stroke();}
+    function redraw(){g.clearRect(0,0,c.width,c.height);strokes.forEach(line);}
+    function fit(){W=sh.offsetWidth;var H=sh.offsetHeight,k=window.devicePixelRatio||1;c.width=W*k;c.height=H*k;c.style.width=W+'px';c.style.height=H+'px';
+      g.setTransform(k,0,0,k,0,0);g.lineWidth=Math.max(2,W/280);g.lineCap='round';g.lineJoin='round';g.strokeStyle='#1d4ed8';redraw();}
+    fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+    function pt(e){var r=c.getBoundingClientRect();return[(e.clientX-r.left)/W,(e.clientY-r.top)/W];}
+    c.addEventListener('pointerdown',function(e){e.preventDefault();hist.push(strokes.slice());cur=[pt(e)];strokes.push(cur);try{c.setPointerCapture(e.pointerId);}catch(x){}line(cur);});
+    c.addEventListener('pointermove',function(e){if(!cur)return;var p=pt(e),l=cur[cur.length-1];g.beginPath();g.moveTo(l[0]*W,l[1]*W);g.lineTo(p[0]*W,p[1]*W);g.stroke();cur.push(p);});
+    ['pointerup','pointercancel','pointerleave'].forEach(function(t){c.addEventListener(t,function(){if(cur){cur=null;save();}});});
+    PEN.push({undo:function(){if(hist.length){strokes=hist.pop();redraw();save();}},clear:function(){if(strokes.length){hist.push(strokes.slice());strokes=[];redraw();save();}}});});
+  var pb=document.getElementById('penOn');
+  function setPen(on){document.body.classList.toggle('pen',on);pb.setAttribute('aria-pressed',on?'true':'false');try{localStorage.setItem('morgunark-pen',on?'1':'');}catch(e){}}
+  pb.addEventListener('click',function(){setPen(!document.body.classList.contains('pen'));});
+  document.getElementById('penUndo').addEventListener('click',function(){PEN.forEach(function(p){p.undo();});});
+  document.getElementById('penClear').addEventListener('click',function(){PEN.forEach(function(p){p.clear();});});
+  try{if(localStorage.getItem('morgunark-pen'))setPen(true);}catch(e){}
+}
 })();
 </script>
 </body>
