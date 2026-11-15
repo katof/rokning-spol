@@ -824,7 +824,11 @@ body.pen .pg-nav{bottom:112px}
 @keyframes fxh{0%,60%,100%{transform:rotate(var(--srot,0deg)) translateY(0)}30%{transform:rotate(var(--srot,0deg)) translateY(-7%)}}
 .stk-b[data-fx=bulta]>*{animation:fxb 1.5s ease-in-out infinite}
 @keyframes fxb{0%,40%,100%{transform:rotate(var(--srot,0deg)) scale(1)}12%{transform:rotate(var(--srot,0deg)) scale(1.08)}26%{transform:rotate(var(--srot,0deg)) scale(1.04)}}
-#stkPanel .stkpals{margin-bottom:4px}
+#stkPanel .stkpals{grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:4px}
+#stkPanel .stkpal{padding:9px 2px;border-radius:10px}
+#stkPanel .stkpal small{display:none}
+#stkPanel .sp-dots{gap:1px}#stkPanel .sp-dots i{width:8px;height:8px}
+#stkPanel .set-row h4 small{font-weight:600;color:var(--muted);margin-left:6px}
 body.locked .dk[data-files],body.locked .dk[data-open-stk],body.locked .dk[data-add-stk]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -2483,13 +2487,15 @@ function libTab(t){if(t==='stk')t='img';LIBTAB=t;S.fileTab=t;$$('[data-libt]').f
 $$('[data-libt]').forEach(function(b){b.addEventListener('click',function(){libTab(b.dataset.libt);})});
 /* Klistrimerki-feltið: vel lit, og trýst á eitt klistrimerki */
 if(!S.stkPal)S.stkPal='litrikt';
-function drawStkGrid(){var g=$('#stkGrid');g.innerHTML='';CURPAL=S.stkPal==='litrikt'?null:S.stkPal;
-  Object.keys(STK).forEach(function(t){if(STK[t].lib===false)return;var b=el('button','stk-it');b.type='button';b.title=STK[t].n;
-    b.innerHTML='<span class="stk-pv">'+STK[t].r({name:'Navn',n:4,l:'FINNORÐSPÆLIÐABA'.split('')})+'</span><small>'+esc(STK[t].n)+'</small>';
+function drawStkGrid(){var g=$('#stkGrid');g.innerHTML='';if(!STKPAL[S.stkPal])S.stkPal='litrikt';CURPAL=S.stkPal==='litrikt'?null:S.stkPal;
+  Object.keys(STK).forEach(function(t){if(STK[t].lib===false)return;var b=el('button','stk-it');b.type='button';b.title=STK[t].n;var pv='';
+    try{pv=STK[t].r({name:'Navn',n:4,l:'FINNORÐSPÆLIÐABA'.split('')});}catch(err){pv='';}
+    b.innerHTML='<span class="stk-pv">'+pv+'</span><small>'+esc(STK[t].n)+'</small>';
     b.addEventListener('click',function(){addStk(t,null,false,STK[t].pal&&S.stkPal!=='litrikt'?{pal:S.stkPal}:null);});g.appendChild(b);});CURPAL=null;
   var pb=$('#stkPals');pb.innerHTML='';Object.keys(STKPAL).forEach(function(p){var c=STKPAL[p][1]||STKC.slice(0,5),b=el('button','stkpal');b.type='button';b.title=STKPAL[p][0];
     b.innerHTML='<span class="sp-dots">'+c.slice(0,5).map(function(x){return '<i style="background:'+x+'"></i>'}).join('')+'</span><small>'+STKPAL[p][0]+'</small>';b.setAttribute('aria-pressed',S.stkPal===p?'true':'false');
-    b.addEventListener('click',function(){S.stkPal=p;save();drawStkGrid();});pb.appendChild(b);});}
+    b.addEventListener('click',function(){S.stkPal=p;save();drawStkGrid();});pb.appendChild(b);});
+  var lh=$('#stkPanel .set-row h4');if(lh)lh.innerHTML='Litur<small>'+esc(STKPAL[S.stkPal]?STKPAL[S.stkPal][0]:'')+'</small>';}
 function openStkPanel(){if(S.lock)return;closeMore();['bgPanel','infoPanel','setPanel','layPanel','libPanel'].forEach(function(x){$('#'+x).hidden=true});$('#stkPanel').hidden=false;drawStkGrid();}
 document.addEventListener('click',function(e){if(e.target.closest('[data-open-stk]')){openStkPanel();}if(e.target.closest('[data-files]')){closeMore();openLib(null);libTab(S.fileTab||'img');}var a=e.target.closest('[data-add-stk]');if(a){closeMore();var t=a.dataset.addStk,id=addStk(t,null,false,t==='tilv'?{ti:'Hvør eigur at gera?',th:'reytt',items:(S.lists[0]||{}).items||''}:null);setTimeout(function(){var h=$('#w-'+id+' .tx-h');if(h)h.focus();if(t==='tilv'&&!tvItems(S.stk[id]).length)openStkSet(id);},60);}});
 
