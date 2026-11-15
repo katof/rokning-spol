@@ -489,6 +489,10 @@ body.focus .w.big{border-radius:0}
 .amb-pin[aria-pressed=true] svg{fill:#fff}
 .amb-note{margin:12px 2px 0;font-size:.8rem;color:var(--muted)}
 body.locked .amb-pin,body.locked .amb-note{display:none!important}
+/* Læst talva: bert linjal og vinkulmátari eru eftir, so bólkayvirskriftirnar og tómu rúmini hvørva */
+body.locked .amb-g{display:none!important}
+body.locked .amb-it:not(:has(.dk[data-f])){display:none!important}
+body.locked .amb-pop .more-grid:not(:has(.dk[data-f])){display:none!important}
 #ink{top:0;height:100%}
 .w,.w-body{touch-action:none}
 .sn-list,.pdf-view,.panel,.more-pop{touch-action:pan-x pan-y}
