@@ -3215,21 +3215,23 @@ var PST={
 };
 /* Hvat skal til: [tal av terningum, heiti, treytin í reglutekstinum] */
 var PSR={seks1:[1,'Ein terningur: seks','Fært tú seks'],seks2:[2,'Tveir terningar: ein seks','Fært tú seks'],eins:[2,'Tveir terningar: báðir eins','Eru báðir terningarnir eins'],bada:[2,'Tveir terningar: seks ella báðir eins','Fært tú seks, ella eru báðir eins']};
-var PSRUN={},PSDV={};
+var PSRUN={},PSDV={},PSMISS={};
+/* Tá ið ein ikki fær tað, sum skal til: fyrst ein heil setningur, síðan stuttir, sum skiftast */
+var PSMT=['Nú eigur tann næsti at ringla','Næsti!','Nú eigur tú!','Ringla so!','Ringla, kom nú!'];
 function pslStop(id){var r=PSRUN[id];if(r)clearInterval(r.iv);delete PSRUN[id];}
 function pslFmt(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+('0'+s%60).slice(-2);}
 STK.pakka={n:'Pakkaspæl',sz:[960,640],set:1,lib:false,tool:1,r:function(d){var T=PST[d.th]||PST.jol,R=PSR[d.rule]||PSR.seks1,r=PSRUN[d.__id]||{ph:'klar'},
     m1=d.m1||10,m2=d.m2==null?5:d.m2,ph=r.ph,dice='';
   for(var i=0;i<R[0];i++){dice+='<div class="die psl-die'+(i?' red':'')+'">';for(var p=0;p<9;p++)dice+='<i></i>';dice+='</div>';}
-  var lab={klar:'Klárt',r1:'Umfar 1',p:'Umfar 1 er liðugt',r2:'Umfar 2',end:T.end}[ph],
+  var lab={klar:'Klárt',r1:'Fyrsta umfar í gongd',p:'Fyrsta umfar er liðugt',r2:'Næsta umfar í gongd',end:T.end}[ph],
     rule=ph==='end'?T.endt:R[2]+', tekur tú '+T.it+' '+(ph==='r2'||ph==='p'?'frá einum øðrum':T.src)+'.',
     sec=ph==='r1'||ph==='r2'?(r.end-Date.now())/1000:ph==='p'?m2*60:ph==='end'?0:m1*60,
-    act={klar:['start','Byrja'],r1:['end1','Enda umfarið'],p:['start2','Byrja umfar 2'],r2:['end2','Enda spælið'],end:['reset','Byrja av nýggjum']}[ph];
+    act={klar:['start','Byrja'],r1:['end1','Enda umfarið'],p:['start2','Byrja næsta umfar'],r2:['end2','Enda spælið'],end:['reset','Byrja umaftur']}[ph];
   return '<div class="psl psl-'+(PST[d.th]?d.th:'jol')+'" style="--pb:'+T.bg+';--pa:'+T.a+'"><div class="psl-deco" aria-hidden="true">'+T.deco()+'</div>'
     +'<div class="psl-h"><b>'+T.ti+'</b><span>'+lab+'</span></div>'
-    +'<div class="psl-d"><div class="psl-dice" title="Ringla">'+dice+'</div><div class="psl-msg" aria-live="polite"></div><button type="button" class="psl-kast">Ringla</button></div>'
+    +'<div class="psl-d"><div class="psl-dice" title="Ringla">'+dice+'</div><div class="psl-msg" aria-live="polite">Trýst á Ringla – ella á terningarnar.</div><button type="button" class="psl-kast">Ringla</button></div>'
     +'<div class="psl-r"><div class="psl-t'+(ph==='end'?' done':'')+'">'+(ph==='end'?T.ic():pslFmt(sec))+'</div><div class="psl-rule">'+rule+'</div></div>'
-    +'<div class="psl-f"><button type="button" data-psa="'+act[0]+'">'+act[1]+'</button>'+(ph!=='klar'&&ph!=='end'?'<button type="button" class="sec" data-psa="reset">Byrja av nýggjum</button>':'')+'</div></div>';},
+    +'<div class="psl-f"><button type="button" data-psa="'+act[0]+'">'+act[1]+'</button>'+(ph!=='klar'&&ph!=='end'?'<button type="button" class="sec" data-psa="reset">Byrja umaftur</button>':'')+'</div></div>';},
   after:function(id,b){var d=S.stk[id];try{Object.defineProperty(d,'__id',{value:id,enumerable:false,configurable:true});}catch(e){}
     var R=PSR[d.rule]||PSR.seks1,dv=PSDV[id]||[6,6];$$('.psl-die',b).forEach(function(x,i){pips(x,dv[i]||6);});
     b.querySelector('.psl-kast').addEventListener('click',function(){pslRoll(id);});
@@ -3258,12 +3260,12 @@ function pslRoll(id){var d=S.stk[id],w=$('#w-'+id);if(!d||!w)return;var R=PSR[d.
       hit=d.rule==='eins'?eins:d.rule==='bada'?(seks||eins):seks,m=$('#w-'+id+' .psl-msg');if(!m)return;
     if(hit){m.className='psl-msg hit';m.innerHTML='<span class="psl-ic">'+T.ic()+'</span>'+(seks&&d.rule!=='eins'?'Seks!':'Báðir eins!')+' Tak '+T.it;
       if(typeof tone==='function'){try{[784,1047].forEach(function(f,i){tone(f,i*.12,.25,.08);});}catch(e){}}}
-    else m.textContent=R[0]>1?'Gev terningarnar víðari':'Gev terningin víðari';},1100);}
+    else{var k=PSMISS[id]||0;m.textContent=PSMT[k===0?0:1+(k-1)%(PSMT.length-1)];PSMISS[id]=k+1;}},1100);}
 STK.pakka.settings=function(id,d,sec){
   sec.innerHTML='<div class="set-row"><h4>Útsjónd</h4><div class="seg tx-seg" id="pslTh">'+Object.keys(PST).map(function(k){return '<button type="button" data-v="'+k+'" aria-pressed="'+((d.th||'jol')===k?'true':'false')+'">'+PST[k].n+'</button>'}).join('')+'</div></div>'
    +'<div class="set-row"><h4>Hvat skal til?</h4><div class="ad-ps">'+Object.keys(PSR).map(function(k){return '<button type="button" class="btn sm" data-psr="'+k+'" aria-pressed="'+((d.rule||'seks1')===k?'true':'false')+'">'+PSR[k][1]+'</button>'}).join('')+'</div></div>'
-   +'<div class="set-row"><h4>Umfar 1</h4><div class="seg tx-seg" id="pslM1">'+[5,10,15,20].map(function(n){return '<button type="button" data-v="'+n+'" aria-pressed="'+((d.m1||10)===n?'true':'false')+'">'+n+' min.</button>'}).join('')+'</div></div>'
-   +'<div class="set-row"><h4>Umfar 2: tit taka frá hvørjum øðrum</h4><div class="seg tx-seg" id="pslM2">'+[0,3,5,10].map(function(n){return '<button type="button" data-v="'+n+'" aria-pressed="'+(((d.m2==null?5:d.m2))===n?'true':'false')+'">'+(n?n+' min.':'Einki umfar 2')+'</button>'}).join('')+'</div></div>';
+   +'<div class="set-row"><h4>Fyrsta umfar</h4><div class="seg tx-seg" id="pslM1">'+[5,10,15,20].map(function(n){return '<button type="button" data-v="'+n+'" aria-pressed="'+((d.m1||10)===n?'true':'false')+'">'+n+' min.</button>'}).join('')+'</div></div>'
+   +'<div class="set-row"><h4>Næsta umfar: tit taka frá hvørjum øðrum</h4><div class="seg tx-seg" id="pslM2">'+[0,3,5,10].map(function(n){return '<button type="button" data-v="'+n+'" aria-pressed="'+(((d.m2==null?5:d.m2))===n?'true':'false')+'">'+(n?n+' min.':'Einki næsta umfar')+'</button>'}).join('')+'</div></div>';
   function set(k,v){d[k]=v;pslStop(id);save();drawStk(id);openStkSet(id);}
   $$('#pslTh button',sec).forEach(function(b){b.addEventListener('click',function(){set('th',b.dataset.v);});});
   $$('[data-psr]',sec).forEach(function(b){b.addEventListener('click',function(){delete PSDV[id];set('rule',b.dataset.psr);});});
@@ -3352,13 +3354,13 @@ STK.stiga={n:'Stigatalva',sz:[640,340],set:1,lib:false,tool:1,r:function(d){var 
 STK.stiga.settings=function(id,d,sec){var T=sgTeams(d);
   var h='<div class="set-row"><h4>Liðini</h4><div class="sg-set">'+T.map(function(t,i){return '<div class="sg-row"><button type="button" class="sg-col" data-i="'+i+'" title="Skift lit" style="background:'+TEAMC[t.c%TEAMC.length]+'"></button><input class="set-in" data-i="'+i+'" maxlength="20" value="'+esc(t.n||'')+'" aria-label="Navnið á liði '+(i+1)+'"></div>'}).join('')+'</div></div>'
    +'<div class="set-row"><h4>Tal av liðum</h4><div class="row"><button class="btn sm" type="button" data-sgn="-1" '+(T.length<=2?'disabled':'')+'>−</button><span class="note" style="min-width:4.5em;text-align:center">'+T.length+' lið</span><button class="btn sm" type="button" data-sgn="1" '+(T.length>=6?'disabled':'')+'>+</button></div></div>'
-   +'<div class="set-row"><h4>Stigini</h4><div class="row"><button class="btn sm" type="button" data-sg0>Byrja av nýggjum</button></div></div>';
+   +'<div class="set-row"><h4>Stigini</h4><div class="row"><button class="btn sm" type="button" data-sg0>Byrja umaftur</button></div></div>';
   sec.innerHTML=h;
   $$('.sg-row input',sec).forEach(function(x){x.addEventListener('input',function(){T[+x.dataset.i].n=x.value;save();drawStk(id);});});
   $$('.sg-col',sec).forEach(function(x){x.addEventListener('click',function(){var t=T[+x.dataset.i];t.c=(t.c+1)%TEAMC.length;x.style.background=TEAMC[t.c];save();drawStk(id);});});
   $$('[data-sgn]',sec).forEach(function(x){x.addEventListener('click',function(){var v=+x.dataset.sgn;if(v>0&&T.length<6){var used=T.map(function(t){return t.c}),c=0;while(used.indexOf(c)>=0&&c<TEAMC.length-1)c++;T.push({n:'Lið '+(T.length+1),c:c,p:0});}
     else if(v<0&&T.length>2)T.pop();save();drawStk(id);openStkSet(id);});});
-  $('[data-sg0]',sec).addEventListener('click',function(){ask('Set øll stigini aftur til 0?','Byrja av nýggjum',function(){T.forEach(function(t){t.p=0});save();drawStk(id);});});};
+  $('[data-sg0]',sec).addEventListener('click',function(){ask('Set øll stigini aftur til 0?','Byrja umaftur',function(){T.forEach(function(t){t.p=0});save();drawStk(id);});});};
 
 /* ---------- Arbeiðsmerki: hvussu vit arbeiða nú ---------- */
 var AMERKI=[
