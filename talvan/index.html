@@ -928,12 +928,12 @@ body.locked .pk-q button{display:none}
 .km-b button[data-km=live]{background:#fff;color:#1f2937}
 body.locked .km-b{display:none}
 /* Tallinja */
-.tl{width:100%;height:100%;display:flex;flex-direction:column;padding:10px 14px;border-radius:18px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4)}
-.tl-wrap{flex:1;min-height:0;display:grid;place-items:center}.tl-svg{width:100%;height:100%;font-family:Inter,Arial,sans-serif;overflow:visible}
-.tl-t{cursor:pointer}.tl-t:hover line{stroke:#ef2418}
-.tl-b{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:#64748b;font-weight:600}
-.tl-b button{border:0;border-radius:999px;padding:.4em 1em;background:#f1f5f9;font:700 .85rem inherit;cursor:pointer}
-body.locked .tl-b button{visibility:hidden}
+.nl{width:100%;height:100%;display:flex;flex-direction:column;padding:10px 14px;border-radius:18px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4)}
+.nl-wrap{flex:1;min-height:0;display:grid;place-items:center}.nl-svg{width:100%;height:100%;font-family:Inter,Arial,sans-serif;overflow:visible}
+.nl-t{cursor:pointer}.nl-t:hover line{stroke:#ef2418}
+.nl-b{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:#64748b;font-weight:600}
+.nl-b button{border:0;border-radius:999px;padding:.4em 1em;background:#f1f5f9;font:700 .85rem inherit;cursor:pointer}
+body.locked .nl-b button{visibility:hidden}
 /* Hundraðstalva */
 .ht{width:100%;height:100%;padding:min(2cqi,2cqh);border-radius:18px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);display:grid;place-items:center}
 .ht-g{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;width:min(100%,calc(100cqh - 4cqh));aspect-ratio:1}
@@ -3057,15 +3057,15 @@ setInterval(function(){Object.keys(KAM).forEach(function(id){var w=$('#w-'+id);i
 /* ---------- Tallinja ---------- */
 function tlNum(v){var r=Math.round(v*1000)/1000;return String(r).replace('.',',').replace('-','−');}
 STK.tallinja={n:'Tallinja',sz:[1100,280],set:1,lib:false,tool:1,r:function(d){var a=d.a!=null?d.a:0,b=d.b!=null?d.b:20,st=d.s||1,n=Math.round((b-a)/st);if(n<1)n=1;if(n>100)n=100;
-  var W=1000,P=40,H=170,y=110,sx=(W-2*P)/n,h='<svg viewBox="0 0 '+W+' '+H+'" class="tl-svg">';
+  var W=1000,P=40,H=170,y=110,sx=(W-2*P)/n,h='<svg viewBox="0 0 '+W+' '+H+'" class="nl-svg">';
   h+='<line x1="'+(P-25)+'" y1="'+y+'" x2="'+(W-P+25)+'" y2="'+y+'" stroke="#1f2937" stroke-width="3"/><path d="M'+(W-P+30)+' '+y+'l-12-7v14z" fill="#1f2937"/>';
-  var lab=d.lab||1;for(var i=0;i<=n;i++){var x=P+i*sx,v=a+i*st,big=i%lab===0||i===n;h+='<g class="tl-t" data-v="'+v+'"><rect x="'+(x-sx/2)+'" y="'+(y-40)+'" width="'+sx+'" height="80" fill="transparent"/><line x1="'+x+'" y1="'+(y-(big?14:8))+'" x2="'+x+'" y2="'+(y+(big?14:8))+'" stroke="#1f2937" stroke-width="'+(big?2.5:1.5)+'"/>'
+  var lab=d.lab||1;for(var i=0;i<=n;i++){var x=P+i*sx,v=a+i*st,big=i%lab===0||i===n;h+='<g class="nl-t" data-v="'+v+'"><rect x="'+(x-sx/2)+'" y="'+(y-40)+'" width="'+sx+'" height="80" fill="transparent"/><line x1="'+x+'" y1="'+(y-(big?14:8))+'" x2="'+x+'" y2="'+(y+(big?14:8))+'" stroke="#1f2937" stroke-width="'+(big?2.5:1.5)+'"/>'
     +(big&&!d.hide?'<text x="'+x+'" y="'+(y+40)+'" text-anchor="middle" font-size="'+Math.min(26,Math.max(12,sx*.7))+'" font-weight="700" fill="#1f2937">'+tlNum(v)+'</text>':'')+'</g>';}
   var M=d.m||[];M.forEach(function(v,i){var x=P+(v-a)/st*sx;if(i>0){var x0=P+(M[i-1]-a)/st*sx,mid=(x+x0)/2,hh=Math.min(54,Math.abs(x-x0)*.35+16),df=v-M[i-1];
       h+='<path d="M'+x0+' '+(y-6)+' Q'+mid+' '+(y-6-hh*1.6)+' '+x+' '+(y-6)+'" fill="none" stroke="#ef2418" stroke-width="3"/><text x="'+mid+'" y="'+(y-12-hh*.8)+'" text-anchor="middle" font-size="20" font-weight="800" fill="#ef2418">'+(df>=0?'+':'−')+tlNum(Math.abs(df))+'</text>';}
     h+='<circle cx="'+x+'" cy="'+y+'" r="9" fill="'+(i?'#ef2418':'#2563eb')+'" stroke="#fff" stroke-width="3"/>';});
-  return '<div class="tl"><div class="tl-wrap">'+h+'</svg></div><div class="tl-b"><span>Trýst á tølini fyri at hoppa</span><button type="button" data-tl="clr">Strika hoppini</button></div></div>';},
-  after:function(id,b){$$('.tl-t',b).forEach(function(g){g.addEventListener('click',function(){var d=S.stk[id];d.m=d.m||[];d.m.push(+g.dataset.v);save();drawStk(id);});});
+  return '<div class="nl"><div class="nl-wrap">'+h+'</svg></div><div class="nl-b"><span>Trýst á tølini fyri at hoppa</span><button type="button" data-tl="clr">Strika hoppini</button></div></div>';},
+  after:function(id,b){$$('.nl-t',b).forEach(function(g){g.addEventListener('click',function(){var d=S.stk[id];d.m=d.m||[];d.m.push(+g.dataset.v);save();drawStk(id);});});
     b.querySelector('[data-tl]').addEventListener('click',function(){delete S.stk[id].m;save();drawStk(id);});}};
 STK.tallinja.settings=function(id,d,sec){var Pz=[['0–10',0,10,1,1],['0–20',0,20,1,1],['0–100',0,100,5,2],['0–1000',0,1000,50,2],['−10–10',-10,10,1,1],['0–1 (tíggjundapartar)',0,1,.1,1]];
   sec.innerHTML='<div class="set-row"><h4>Skjót val</h4><div class="row" style="flex-wrap:wrap;gap:6px">'+Pz.map(function(p,i){return '<button type="button" class="btn sm" data-tlp="'+i+'">'+p[0]+'</button>'}).join('')+'</div></div>'
