@@ -1189,11 +1189,12 @@ var BG=[['strik','Strikumynd','#fff url("data:image/svg+xml,'+encodeURIComponent
   ['kvold','Kvøld','linear-gradient(180deg,#1d2440,#3b3f6b 50%,#c9707a)'],
   ['mynd','Tín egna mynd','']];
 /* ---------- PDF-amboðið (PDF.js, fílan goymd í IndexedDB í kaganum) ---------- */
-var PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+/* PDF.js 3.11.174 liggur við síðuna av Talvuni (pdfjs/), avritað úr cdnjs 15.11.2026 og kannað við SRI-hashinum hjá cdnjs */
+var PDFJS='pdfjs/';
 var pdfDoc=null,pdfTasks=[],pdfBusy=false,pdfGen=0;
 if(S.bg==='pdf'){S.bg='strik';S.vis.pdf=1;S.pdfBack=1;}
 if(!S.pdfTwo)S.pdfTwo=1;if(!S.pdfZoom)S.pdfZoom=1;
-function pdfLib(){return new Promise(function(res,rej){if(window.pdfjsLib)return res(window.pdfjsLib);var sc=document.createElement('script');sc.src=PDFJS+'pdf.min.js';
+function pdfLib(){return new Promise(function(res,rej){if(window.pdfjsLib)return res(window.pdfjsLib);var sc=document.createElement('script');sc.src=PDFJS+'pdf.min.js';sc.integrity='sha512-q+4liFwdPC/bNdhUpZx6aXDx/h77yEQtn4I1slHydcbZK34nLaR3cAeYSJshoxIOq3mjEf7xJE8YWIUHMn+oCQ==';
   sc.onload=function(){window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+'pdf.worker.min.js';res(window.pdfjsLib);};sc.onerror=rej;document.head.appendChild(sc);});}
 function idb(mode,fn){return new Promise(function(res){try{var rq=indexedDB.open('snar-flokskiggi',1);rq.onupgradeneeded=function(){rq.result.createObjectStore('f');};
   rq.onsuccess=function(){try{var tx=rq.result.transaction('f',mode),st=tx.objectStore('f'),r=fn(st);tx.oncomplete=function(){res(r&&r.result);};tx.onerror=function(){res(null);};}catch(e){res(null);}};rq.onerror=function(){res(null);};}catch(e){res(null);}});}
@@ -1204,7 +1205,7 @@ function pdfUI(){var has=!!pdfDoc;$('#pdfEmpty').hidden=has;$('#pdfWrap').hidden
   $('#pdfFit').textContent=Math.round(S.pdfZoom*100)+' %';$('#pdfOut').disabled=S.pdfZoom<=.41;$('#pdfIn').disabled=S.pdfZoom>=4.9;}
 function openPdf(buf,keep){$('#pdfEmpty').hidden=true;
   return pdfLib().then(function(lib){return lib.getDocument({data:new Uint8Array(buf)}).promise;}).then(function(doc){pdfDoc=doc;
-    if(!keep){S.pdfPage=1;S.pdfZoom=1;}S.pdfPage=Math.max(1,Math.min(S.pdfPage||1,doc.numPages));save();pdfUI();requestAnimationFrame(renderPdf);})
+    if(!keep){S.pdfPage=1;S.pdfZoom=1;}S.pdfPage=Math.max(1,Math.min(S.pdfPage||1,doc.numPages));save();pdfUI();setTimeout(renderPdf,0);})
   .catch(function(){pdfDoc=null;pdfUI();alert('Tað bar ikki til at lesa PDF-fíluna.');});}
 function renderPdf(){if(!pdfDoc||!S.vis.pdf||$('#w-pdf').hidden)return;
   var N=pdfDoc.numPages,n=S.pdfPage,list=[n];if(S.pdfTwo===2&&n+1<=N)list.push(n+1);
@@ -1227,7 +1228,7 @@ $('#pdfIn').addEventListener('click',function(){pdfZoom(S.pdfZoom*1.25)});
 $('#pdfOut').addEventListener('click',function(){pdfZoom(S.pdfZoom/1.25)});
 $('#pdfFit').addEventListener('click',function(){pdfZoom(1)});
 $$('[data-pp]').forEach(function(b){b.addEventListener('click',function(){S.pdfTwo=+b.dataset.pp;save();pdfUI();renderPdf();})});
-$('#pdfBack').addEventListener('click',function(){S.pdfBack=S.pdfBack?0:1;if(S.pdfBack&&document.body.classList.contains('focus'))unfocus();save();pdfUI();requestAnimationFrame(renderPdf);});
+$('#pdfBack').addEventListener('click',function(){S.pdfBack=S.pdfBack?0:1;if(S.pdfBack&&document.body.classList.contains('focus'))unfocus();save();pdfUI();setTimeout(renderPdf,0);});
 $('#pdfPick').addEventListener('click',function(){$('#pdfFile').click()});
 $('#pdfNew').addEventListener('click',function(){$('#pdfFile').click()});
 $('#pdfFile').addEventListener('change',function(e){var f=e.target.files[0];e.target.value='';if(!f)return;
