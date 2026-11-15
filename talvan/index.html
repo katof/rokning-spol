@@ -2403,7 +2403,7 @@ pdfMigrate().then(pdfLibDraw);
 var LAYOUTS=[
  {n:'Tóm talva',d:'Einki á talvuni. Tú velur sjálv ella sjálvur amboðini.',bg:'strik',w:{}},
  {n:'Spøl',d:'Tríggjar funkur frá Snar at spæla á talvuni.',bg:'spol',w:{snar:[24,90,505,660],snar2:[547,90,505,660],snar3:[1070,90,505,660]},f:{snar:'Heingja mann',snar2:'Hoppandi tøl',snar3:'Fiskarnir kava'}},
- {n:'Byrjan á degnum',d:'Klokkan, ætlanin fyri dagin og ein spurnarkanning um, hvussu tey hava tað.',bg:'summar',w:{skra:[40,100,540,660],klokka:[620,100,520,250],poll:[620,380,520,380],ljos:[1180,100,380,300]},sm:'tid'},
+ {n:'Byrjan á degnum',d:'Klokkan, ætlanin fyri dagin og ein spurnarkanning um, hvussu tey hava tað.',bg:'summar',w:{skra:[40,100,540,660],klokka:[620,100,520,250],poll:[620,380,520,380],ljos:[1180,100,380,300]},sm:'tid',pq:'Hvussu hevur tú tað?'},
  {n:'Arbeiðsfriður',d:'Stoppur, ferðsluljós og ljóðmátari, meðan flokkurin arbeiðir.',bg:'fjord',w:{tid:[60,110,600,430],ljos:[700,110,420,320],larm:[700,460,420,280],skra:[1160,110,400,620]},sm:'frii'},
  {n:'Bólkaarbeiði',d:'Ger bólkar, set tíðina og savna smileykúlur saman.',bg:'talva',w:{tid:[568,90,480,400],glas:[1072,90,504,400],tern:[568,510,1008,250]},stk:[['tilv',[24,90,520,670],{ti:'Bólkar',mode:'bolkar',gn:3,th:'hvitt',items:'@flokkur'}]]},
  {n:'Til lukku',d:'Stjørna við navninum á føðingardagsbarninum og sangurin „Til lukku til lukku“ frá Barnasangbók Føroya.',bg:'lukku',w:{yt:[960,380,600,360]},yt:{yt:{id:'cRPUkTEJDxg',s:0}},stk:[['star',[110,150,560,560]],['lukku',[700,120,620,200]]]},
@@ -2415,6 +2415,7 @@ function applyLayout(L){unfocus();Object.keys(S.stk).forEach(function(id){var w=
   if(L.f)Object.keys(L.f).forEach(function(k){var hit=null;FUNKUR.forEach(function(g){g[1].forEach(function(f){if(f[0]===L.f[k])hit=f;});});
     if(hit){S[k]={u:hit[2],t:hit[0],p:'https://snar.fo'+hit[1]};if(SW[k])SW[k].show();}});
   if(L.sm){S.skra.m=L.sm;if(SKSYNC)SKSYNC();}
+  if(L.pq){S.poll.q=L.pq;S.poll.t='s';S.poll.v=[];if(typeof drawPoll==='function')drawPoll();}
   (L.stk||[]).forEach(function(x){var ex=x[2];if(ex&&ex.items==='@flokkur'){ex=JSON.parse(JSON.stringify(ex));ex.items=(S.lists[0]||{}).items||'';}var id=addStk(x[0],x[1],true,ex);S.z[id]=++zTop;});
   if(L.yt)Object.keys(L.yt).forEach(function(k){S.ytOf[k]=L.yt[k];drawYt(k);});
   if(L.tsec)setT(L.tsec);
