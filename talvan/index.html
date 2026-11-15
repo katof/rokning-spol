@@ -49,6 +49,7 @@ body.dark .top-title span{color:rgba(255,255,255,.7)}
 .lock-btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid #77787b;background:#fff;font-weight:700;font-size:.92rem;color:var(--ink)}
 .lock-btn:hover{background:var(--soft)}
 .lock-btn svg{width:18px;height:18px;flex:none}
+.lock-btn.pop-x{width:40px;padding:0;justify-content:center;border-radius:50%;font:400 1.5rem/1 Arial,sans-serif}
 .lock-btn[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
 /* Læst: einki kann broytast, men amboðini kunnu framvegis nýtast */
 body.locked .w-head .ic:not(.big-btn),body.locked #namesBox,body.locked .jar-goal,body.locked #planAdd,body.locked .edit-note,body.locked .tabs button[data-tab=bolkar]{display:none}
@@ -383,6 +384,8 @@ body.focus .bk-grid{max-height:none}
   <div style="flex:1"></div>
   <button class="lock-btn" type="button" id="penBtn" aria-pressed="false" title="Skriva og tekna á skíggjan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/></svg><span>Pennur</span></button>
   <button class="lock-btn" type="button" id="lockBtn" aria-pressed="false"></button>
+  <button class="lock-btn" type="button" id="popFull" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Fullur skíggi</span></button>
+  <button class="lock-btn pop-x" type="button" id="popClose" hidden aria-label="Lat Talvuna aftur" title="Lat aftur">×</button>
 </header>
 
 <main class="board" id="board">
@@ -766,7 +769,13 @@ $$('.dk[data-t]').forEach(function(b){b.addEventListener('click',function(){
 
 function focus(w){unfocus(true);w.classList.add('big');document.body.classList.add('focus');var b=w.querySelector('.big-btn');b.innerHTML=I.back;b.title='Vís øll amboðini';requestAnimationFrame(layoutJar);}
 function unfocus(keep){$$('.w.big').forEach(function(x){x.classList.remove('big');var b=x.querySelector('.big-btn');b.innerHTML=I.fill;b.title='Fyll skíggjan'});if(!keep){document.body.classList.remove('focus');requestAnimationFrame(layoutJar);}}
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('#bgPanel').hidden||!$('#infoPanel').hidden)closePanels();else if(document.body.classList.contains('focus'))unfocus();}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('#bgPanel').hidden||!$('#infoPanel').hidden)closePanels();else if(document.body.classList.contains('focus'))unfocus();else if(POPUP&&!document.fullscreenElement)popClose();}});
+/* Opnað sum popup á snar.fo/funkur (?popup=1): egin knøttur til fullan skíggja og at lata aftur */
+var POPUP=/[?&]popup=1/.test(location.search)&&window.parent!==window;
+function popClose(){if(document.fullscreenElement)document.exitFullscreen().catch(function(){});try{window.parent.postMessage({snar:'talvan-close'},'*');}catch(e){}}
+if(POPUP){var pf=$('#popFull'),pc=$('#popClose');pc.hidden=false;pc.addEventListener('click',popClose);
+  if(document.fullscreenEnabled){pf.hidden=false;pf.addEventListener('click',function(){if(document.fullscreenElement)document.exitFullscreen().catch(function(){});else document.documentElement.requestFullscreen().catch(function(){});});
+    document.addEventListener('fullscreenchange',function(){pf.querySelector('span').textContent=document.fullscreenElement?'Lat fulla skíggjan aftur':'Fullur skíggi';});}}
 
 /* ---------- Klokkan ---------- */
 var DAG=['sunnudagur','mánadagur','týsdagur','mikudagur','hósdagur','fríggjadagur','leygardagur'];
