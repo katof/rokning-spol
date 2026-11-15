@@ -8,8 +8,9 @@
      ?dl=g|m|h  (Byrjanarstig, Miðstig, Hástig)
      &n=1–200   (arkið; annars arkið til skúladagin í dag – talt frá 1. august, uttan leygardagar og sunnudagar)
      &d=ÁÁÁÁ-M-D (ein annar dagur)   &k=slag (bert til roynd)   &print=1 (prentar beinanvegin)   &v=5 (fimm ørk í senn)
+     &slag=rokning|sudoku|labyrint|tabell|prikkar|ordaleiting|klokkan|ord (øll 25 ørkini av slagnum; knøtturin er á snar.fo/um-talvuna)
      Arkini verða gjørd við kotu: arkið nr. n er altíð tað sama, so lærarin kann prenta frammanundan.
-     Á skíggja (iPad) eru svarteigar og ein tekniflati; á pappíri eru linjur og kassar. -->
+     Á skíggja (iPad) eru svarteigar og ein blýantur yvir alt arkið; á pappíri eru linjur og kassar. -->
 <style>
 :root{--ink:#1f2937;--muted:#64748b;--red:#ef2418;--line:#cbd5e1;--soft:#f1f5f9}
 *{box-sizing:border-box}
@@ -77,7 +78,7 @@ body.pen .penc{pointer-events:auto;touch-action:none;cursor:crosshair}
 .penbar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .penbar #penOn[aria-pressed=true]{background:#1d4ed8;color:#fff}
 body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
-@media (max-width:760px){.penbar{left:8px;right:8px;justify-content:center}.penbar button{padding:10px 12px}.sheet{margin-bottom:84px}}
+@media screen and (max-width:760px){.penbar{left:8px;right:8px;justify-content:center}.penbar button{padding:10px 12px}.sheet{margin-bottom:84px}}
 /* Liðugt, yvirlit og prógv */
 .done{display:flex;justify-content:center;margin:2mm 0 4mm}
 .done button{border:0;border-radius:999px;padding:12px 22px;font:800 1.05rem inherit;cursor:pointer;background:#16a34a;color:#fff;box-shadow:0 8px 20px -10px rgba(22,163,74,.8)}
@@ -106,19 +107,25 @@ body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
 .cert .kl{font-size:11pt;color:#475569;max-width:150mm;margin:0 auto;line-height:1.6}
 .cert .sig{display:flex;justify-content:space-between;gap:20mm;width:150mm;margin:22mm auto 0;font-size:10.5pt;color:#475569}
 .cert .sig span{flex:1;border-top:1.5px solid var(--ink);padding-top:2mm}
-@media (max-width:760px){.grid200{grid-template-columns:repeat(10,1fr)}.kinds{grid-template-columns:repeat(2,1fr)}.cert{min-height:150vw;padding:14vw 8vw}.cert:before{inset:4vw}.cert h1{font-size:13vw}.cert .st{font-size:9vw}.cert .nmc{min-width:0;width:100%;font-size:8vw}.cert .why{font-size:5vw}.cert .sig{width:100%;gap:8vw;margin-top:10vw}}
+@media screen and (max-width:760px){.grid200{grid-template-columns:repeat(10,1fr)}.kinds{grid-template-columns:repeat(2,1fr)}.cert{min-height:150vw;padding:14vw 8vw}.cert:before{inset:4vw}.cert h1{font-size:13vw}.cert .st{font-size:9vw}.cert .nmc{min-width:0;width:100%;font-size:8vw}.cert .why{font-size:5vw}.cert .sig{width:100%;gap:8vw;margin-top:10vw}}
 @media print{
-  @page{size:A4;margin:0}
+  /* Kagarnir (serliga Safari á iPad) leggja ofta egnar breddar afturat. Tí er arkið ikki ein fastur 210×297 mm
+     kassi, men fyllir bert tað, sum er eftir innan fyri breddarnar, so einki fer yvir á eina nýggja síðu. */
+  @page{size:A4;margin:12mm}
   html,body{background:#fff}
   .bar,.screen-only{display:none!important}
-  .sheet{margin:0;box-shadow:none;width:210mm;height:297mm;break-after:page;overflow:hidden}
+  .sheet{margin:0 auto;box-shadow:none;width:auto;max-width:178mm;min-height:0;height:auto;padding:0;break-after:page;break-inside:avoid}
+  .sheet.cert{height:255mm}
   .sheet:last-child{break-after:auto}
   body.blank input.a,body.blank input.ans{color:transparent}
   .penbar,.done{display:none!important}
   .ws span.on{background:none}
 }
-/* Telefon og iPad á langs: alt innan fyri arkið */
-@media (max-width:760px){
+/* Til at máta, hvussu høgt arkið verður á pappíri (sí fitPrint) */
+.pfit .sheet{margin:0 auto;width:178mm;max-width:none;min-height:0;height:auto;padding:0}
+.pfit .done,.pfit .screen-only{display:none!important}
+/* Telefon og iPad á langs: alt innan fyri arkið (bert á skíggja, ikki tá ið prentað verður) */
+@media screen and (max-width:760px){
   .bar{gap:6px;padding:8px}.bar button{padding:6px 10px;font-size:.8rem}.bar .sep{display:none}.bar .nr{min-width:0}
   .sheet{width:auto;min-height:0;margin:8px;padding:16px 14px 12px}
   .hd{flex-direction:column;align-items:flex-start;gap:4px}.hd .dt{text-align:left;font-size:10.5pt}.hd h1{font-size:22pt}
@@ -149,7 +156,6 @@ body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
   <button type="button" id="mittBtn">Prenta mítt ark</button>
   <span class="sep"></span>
   <button type="button" class="pr" id="prentBtn" title="Tómt ark til at prenta">Prenta tómt ark</button>
-  <button type="button" id="prent5">Prenta 5 ørk</button>
 </div>
 <div id="sheets"></div>
 <div class="penbar screen-only" role="toolbar" aria-label="Blýantur">
@@ -330,8 +336,11 @@ function certificate(m){var kc={};Object.keys(DONE).forEach(function(n){var k=ki
   return '<main class="sheet cert"><div class="st">★ ★ ★</div><h1>Prógv</h1><div class="who">Hetta prógvið fær</div><div class="nmc">'+(esc(NAME)||'&nbsp;')+'</div>'
     +'<div class="why">fyri at hava gjørt '+m+' morgunørk</div><div class="kl">'+KIND.filter(function(k){return kc[k]}).map(function(k){return KN[k]+': '+kc[k]}).join(' · ')+'</div>'
     +'<div class="sig"><span>'+fmtD(new Date())+'</span><span>Lærari</span></div></main>';}
+/* slag=sudoku o.s.fr. (frá síðuni um Talvuna): øll ørkini av hesum slagi á hesum stiginum, t.d. til at prenta */
+var SLAG=KIND.indexOf(Q.get('slag'))>=0?Q.get('slag'):'';
 var V=Math.min(10,Math.max(1,+Q.get('v')||1)),out='',MODE=Q.get('yvirlit')?'yv':Q.get('progv')?'pg':'ark';
-if(MODE==='yv')out=overview();else if(MODE==='pg')out=certificate(+Q.get('progv')||10);else for(var k=0;k<V&&N+k<=MAX;k++)out+=sheet(N+k);
+if(MODE==='yv')out=overview();else if(MODE==='pg')out=certificate(+Q.get('progv')||10);else if(SLAG)for(var k=1;k<=MAX;k++){if(KIND[(k-1)%KIND.length]===SLAG)out+=sheet(k);}
+else for(var k=0;k<V&&N+k<=MAX;k++)out+=sheet(N+k);
 document.getElementById('sheets').innerHTML=out;if(!SCREEN)document.body.classList.add('blank');
 /* Navn og svar verða goymd, so arkið kann prentast ella gerast lidnað seinni */
 if(SCREEN&&MODE==='ark')Array.prototype.forEach.call(document.querySelectorAll('.sheet'),function(sh){
@@ -355,11 +364,16 @@ document.getElementById('next').addEventListener('click',function(){go({n:N+1});
 document.getElementById('today').addEventListener('click',function(){go({n:null,d:null,yvirlit:null,progv:null,print:null,v:null});});
 document.getElementById('yvBtn').addEventListener('click',function(){go({yvirlit:1,n:null,progv:null,print:null,v:null});});
 document.getElementById('mittBtn').addEventListener('click',function(){window.print();});
-if(MODE!=='ark'){['mittBtn','prent5'].concat(MODE==='yv'?['prentBtn']:[]).forEach(function(id){document.getElementById(id).style.display='none';});}
+if(MODE!=='ark'){['mittBtn'].concat(MODE==='yv'?['prentBtn']:[]).forEach(function(id){document.getElementById(id).style.display='none';});}
 if(MODE==='pg'){var pbn=document.getElementById('prentBtn');pbn.textContent='Prenta prógv';pbn.onclick=function(e){e.stopImmediatePropagation();window.print();};}
 document.getElementById('prentBtn').addEventListener('click',function(){if(SCREEN)go({print:1,n:N,v:null});else window.print();});
-document.getElementById('prent5').addEventListener('click',function(){go({print:1,n:N,v:5});});
-if(!SCREEN)setTimeout(function(){window.print();},500);
+/* Hvørt ark skal vera á einari síðu: er arkið hægri enn 255 mm á pappíri, verður tað gjørt eitt sindur minni */
+function fitPrint(){var L=255*96/25.4;document.body.classList.add('pfit');
+  Array.prototype.forEach.call(document.querySelectorAll('.sheet:not(.cert)'),function(s){s.style.zoom='';var h=s.offsetHeight;if(h>L)s.style.zoom=(L/h).toFixed(3);});
+  document.body.classList.remove('pfit');}
+window.addEventListener('beforeprint',fitPrint);
+if(SCREEN)window.addEventListener('afterprint',function(){Array.prototype.forEach.call(document.querySelectorAll('.sheet'),function(s){s.style.zoom='';});});
+if(!SCREEN)setTimeout(function(){fitPrint();window.print();},500);
 
 /* ---------- Blýanturin yvir allt arkið (navn, uppgávur og tekningar) ---------- */
 if(MODE!=='ark'){document.querySelector('.penbar').style.display='none';['prev','next'].forEach(function(id){document.getElementById(id).style.display='none';});}
