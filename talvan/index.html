@@ -1356,6 +1356,12 @@ function setupW(w){
   var bg=el('button','ic big-btn',I.fill);bg.type='button';bg.title='Fyll skíggjan';
   var cl=el('button','ic close-btn',I.trash);cl.type='button';cl.title='Tak burtur av talvuni';
   [st,bg,cl].forEach(function(b){h.appendChild(b)});
+  /* Funkur: ＋ letur eina funku afturat upp við síðuna av (í mesta lagi tríggjar) */
+  if(/^snar\d?$/.test(k)){var ad=el('button','ic add-btn','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>');ad.type='button';ad.title='Ein funka afturat';h.insertBefore(ad,st);
+    ad.addEventListener('click',function(){var n=['snar','snar2','snar3'].filter(function(x){return !S.vis[x]})[0];if(!n)return;
+      var p=S.pos[k]||[100,100,600,420],q=(S.pos[n]||p).slice();q[2]=p[2];q[3]=p[3];
+      q[0]=p[0]+p[2]+24+q[2]<=BW?p[0]+p[2]+24:p[0]-q[2]-24>=0?p[0]-q[2]-24:Math.min(BW-q[2],p[0]+60);q[1]=p[0]+p[2]+24+q[2]<=BW||p[0]-q[2]-24>=0?p[1]:Math.min(BH-q[3],p[1]+60);
+      S.pos[n]=q;var nw=$('#w-'+n);if(nw)place(nw);S.vis[n]=1;front(n);select(n);applyVis();save();});}
   st.addEventListener('click',function(){if($('#setPanel').hidden||SETK!==k)openSet(k);else closePanels();});
   bg.addEventListener('click',function(){if(w.classList.contains('big'))unfocus();else focus(w);});
   cl.addEventListener('click',function(){if(w.dataset.stk){removeStk(k);return;}S.vis[k]=0;if(SETK===k)closePanels();select(null);applyVis();save();});
@@ -1426,6 +1432,7 @@ function applyVis(){
   syncMedia();
   $$('.dk[data-t]').forEach(function(b){b.setAttribute('aria-pressed',S.vis[b.dataset.t]?'true':'false')});
   $$('.dk[data-m]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m.split(',').some(function(k){return S.vis[k]})?'true':'false')});
+  var allF=['snar','snar2','snar3'].every(function(x){return S.vis[x]});$$('.add-btn').forEach(function(b){b.hidden=allF;});
   var fb=$('.dk[data-files]');if(fb)fb.setAttribute('aria-pressed',['mynd','mynd2','mynd3','pdf'].some(function(k){return S.vis[k]})?'true':'false');
   $('#moreBtn').classList.toggle('on',$$('#morePop .dk').some(function(b){return b.getAttribute('aria-pressed')==='true'}));
   showEmpty(!any);
