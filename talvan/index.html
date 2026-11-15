@@ -2279,6 +2279,8 @@ drawSkra();
 
 /* ---------- Dokkin: Funkur og Mynd kunnu vera upp til trý í senn ---------- */
 $$('.dk[data-m]').forEach(function(b){b.addEventListener('click',function(){var ks=b.dataset.m.split(','),free=ks.filter(function(k){return !S.vis[k]});
+  /* Funkur: trýstir tú aftur, tá ið ein funka er opin, verður hon latin aftur */
+  if(ks[0]==='snar'&&free.length<ks.length){ks.forEach(function(k){if(S.vis[k]){S.vis[k]=0;if(SETK===k)closePanels();if(SEL===k)select(null);}});if(document.body.classList.contains('focus')&&typeof unfocus==='function')unfocus();closeMore();applyVis();save();return;}
   var k=free.length?free[0]:ks[0];S.vis[k]=1;front(k);select(k);closeMore();applyVis();save();
   if(k.indexOf('mynd')===0&&!(S.myndOf||{})[k])openLib(k);});});
 
@@ -2440,7 +2442,7 @@ var STK={
 /* Gomul „Soleiðis spælir tú“-klistrimerki verða til tekstkassar */
 Object.keys(S.stk).forEach(function(id){var d=S.stk[id];if(d.t==='hjalp'){d.t='tekst';d.h='Soleiðis spælir tú';d.b='Finn so nógv orð, sum tú kanst, í talvuni.\n\nBókstavirnir í orðinum skulu liggja saman í talvuni, og hvør bókstavur kann bert brúkast eina ferð í hvørjum orði.';}});
 ['spurn','lukku','lesa','vael','gott','stedg','lurta','bolk','glas','finnt'].forEach(function(k){if(STK[k]){STK[k].set=1;STK[k].pal=1;}});
-function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d&&b&&STK[d.t]){CURPAL=d.pal||null;CURST=d.ol||null;b.innerHTML=STK[d.t].r(d);CURPAL=null;CURST=null;b.style.setProperty('--srot',(d.rot||0)+'deg');b.dataset.fx=d.fx||'';if(STK[d.t].after)STK[d.t].after(id,b);}}
+function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d&&b&&STK[d.t]){CURPAL=d.pal||null;CURST=d.ol||null;b.innerHTML=STK[d.t].r(d);CURPAL=null;CURST=null;b.style.setProperty('--srot',(d.t==='tilv'?0:(d.tilt||0))+'deg');b.dataset.fx=d.fx||'';if(STK[d.t].after)STK[d.t].after(id,b);}}
 function mkStk(id){var d=S.stk[id];if(!d||!STK[d.t])return null;var w=el('section','w stk');w.id='w-'+id;w.dataset.w=id;w.dataset.stk=d.t;w.setAttribute('aria-labelledby','h-'+id);
   w.innerHTML='<div class="w-head"><h2 id="h-'+id+'"></h2></div><div class="w-body stk-b"></div>';w.querySelector('h2').textContent=STK[d.t].n;
   $('#grid').appendChild(w);SETS[id]='stk';setupW(w);drawStk(id);return w;}
@@ -2455,7 +2457,7 @@ function stkFxRows(id,d,sec){
    +'<div class="set-row"><h4>Rørsla</h4><div class="seg tx-seg" id="stkFx">'+[['','Eingin'],['vagga','Vagga'],['hoppa','Hoppa'],['bulta','Bulta']].map(function(x){return '<button type="button" data-v="'+x[0]+'" aria-pressed="'+((d.fx||'')===x[0]?'true':'false')+'">'+x[1]+'</button>'}).join('')+'</div></div>'
    +(STK[d.t].pal?'<div class="set-row"><h4>Kantur</h4><div class="seg tx-seg" id="stkOl">'+[['','Hvítur'],['d','Myrkur'],['n','Eingin']].map(function(x){return '<button type="button" data-v="'+x[0]+'" aria-pressed="'+((d.ol||'')===x[0]?'true':'false')+'">'+x[1]+'</button>'}).join('')+'</div></div>':'');
   sec.insertAdjacentHTML('beforeend',h);
-  $$('[data-rot]',sec).forEach(function(b){b.addEventListener('click',function(){var v=+b.dataset.rot;d.rot=v?Math.max(-45,Math.min(45,(d.rot||0)+v)):0;if(!d.rot)delete d.rot;drawStk(id);save();})});
+  $$('[data-rot]',sec).forEach(function(b){b.addEventListener('click',function(){var v=+b.dataset.rot;d.tilt=v?Math.max(-45,Math.min(45,(d.tilt||0)+v)):0;if(!d.tilt)delete d.tilt;drawStk(id);save();})});
   [['#stkFx','fx'],['#stkOl','ol']].forEach(function(p){var g=$(p[0],sec);if(!g)return;$$('button',g).forEach(function(b){b.addEventListener('click',function(){var v=b.dataset.v;if(v)d[p[1]]=v;else delete d[p[1]];
     $$('button',g).forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});drawStk(id);save();})})});}
 function openStkSet(id){var d=S.stk[id];if(!d||S.lock)return;closeMore();['bgPanel','infoPanel','libPanel','layPanel'].forEach(function(x){$('#'+x).hidden=true});
