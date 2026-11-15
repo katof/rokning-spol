@@ -59,7 +59,7 @@ body.locked .w-head .ic:not(.big-btn),body.locked .w-rs,body.locked #namesBox,bo
 body.locked .tl-txt input,body.locked .plan input{pointer-events:none;border-bottom-color:transparent}
 body.locked .plan .dot{pointer-events:none}
 body.locked .plan li:has(input:placeholder-shown){display:none}
-body.locked .cfg,body.locked .w .note,body.locked .dk[data-t],body.locked #bgBtn,body.locked #infoBtn,body.locked .dk-sep{display:none!important}
+body.locked .lk,body.locked .cfg,body.locked .w .note,body.locked #moreBtn .x,body.locked .dk[data-t],body.locked #bgBtn,body.locked #infoBtn,body.locked .dk-sep{display:none!important}
 
 /* ---------- Borðið ---------- */
 /* Talvan er ein føst flata (1600 × 900), sum verður skalerað til skíggjan sum ein heild – sum ein krittalva.
@@ -357,6 +357,139 @@ body.pen.erase #ink{cursor:cell}
   .w-head{padding-left:16px}
   .w .sz-btn{display:none}
 }
+
+/* ================= v9 (15.11.2026): sum Classroomscreen =================
+   Bakgrundin fyllir allan skíggjan, smáir knøttar í hornunum, rundaðir kassar uttan høvd, eitt valt amboð fær
+   ein bjálka omanfyri og prikkar í hornunum, stillingarnar eru í feltinum høgrumegin, og dokkin hevur Meira. */
+#bg{position:fixed;inset:0;z-index:0}
+#bg svg{max-height:46vh}
+body{background:#26282c}
+.grid{background:transparent;box-shadow:none;overflow:visible;--isc:1}
+
+/* Hornini */
+.top{position:fixed;inset:0 0 auto 0;height:auto;padding:14px;background:none;border:0;backdrop-filter:none;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none;z-index:20}
+.top>*{pointer-events:auto}
+.cbs{display:flex;gap:10px}
+.cb{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:52px;height:52px;padding:0 14px;border:0;border-radius:14px;background:#fff;color:var(--ink);box-shadow:0 6px 20px -8px rgba(0,0,0,.45);font-weight:700;font-size:.9rem}
+.cb:hover{background:#f3f3f1}
+.cb svg{width:22px;height:22px;flex:none}
+.cb span{display:none}
+.cb[aria-pressed=true]{background:var(--ink);color:#fff}
+.cb[aria-pressed=true] span{display:inline}
+.cb.pop-x{font:400 1.7rem/1 Arial,sans-serif;border-radius:50%;padding:0;width:52px}
+.top-logo{padding:0 14px;line-height:0}
+.top-logo img{height:24px;width:auto}
+body.dark .top-logo{background:#fff;padding:0 14px}
+
+/* Kassarnir */
+.w{border:0;border-radius:18px;box-shadow:0 12px 34px -14px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.04)}
+.w-body{border-radius:inherit;padding:18px 20px}
+.w.sel{box-shadow:0 0 0 calc(3px * var(--isc)) var(--blue),0 18px 40px -16px rgba(0,0,0,.5)}
+.w.moving{cursor:grabbing}
+.w-ttl{font-weight:800;font-size:1.05rem;letter-spacing:-.01em;text-align:center;flex:none}
+/* Bjálkin omanfyri: stillingar, fyll skíggjan, tak burtur */
+.w-head{position:absolute;left:50%;bottom:100%;margin-bottom:calc(12px * var(--isc));top:auto;transform:translateX(-50%) scale(var(--isc));transform-origin:50% 100%;
+  display:none;align-items:center;gap:2px;padding:5px;background:#fff;border-radius:14px;box-shadow:0 8px 26px -8px rgba(0,0,0,.4),0 0 0 1px rgba(0,0,0,.05);cursor:default;z-index:8;white-space:nowrap}
+.w.sel .w-head{display:flex}
+.w-head .ic{width:42px;height:42px;border-radius:10px;color:var(--ink)}
+.w-head .ic svg{width:21px;height:21px}
+.w-head h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
+.w.tbin .w-head,.w.big .w-head,body.pdfback #w-pdf .w-head{bottom:auto;top:calc(12px * var(--isc));margin:0;transform-origin:50% 0}
+/* Prikkar í hornunum */
+.w .w-rs{position:absolute;display:none;width:calc(20px * var(--isc));height:calc(20px * var(--isc));border-radius:50%;background:#fff;border:calc(3px * var(--isc)) solid var(--blue);box-sizing:border-box;z-index:9;touch-action:none}
+.w.sel .w-rs{display:block}
+.w-rs.nw{left:calc(-10px * var(--isc));top:calc(-10px * var(--isc));cursor:nwse-resize}
+.w-rs.ne{right:calc(-10px * var(--isc));top:calc(-10px * var(--isc));cursor:nesw-resize}
+.w-rs.sw{left:calc(-10px * var(--isc));bottom:calc(-10px * var(--isc));cursor:nesw-resize}
+.w-rs.se{right:calc(-10px * var(--isc));bottom:calc(-10px * var(--isc));cursor:nwse-resize}
+body.focus .w.big .w-rs,body.pdfback #w-pdf .w-rs,body.locked .w-rs{display:none!important}
+body.focus .w.big{border-radius:0}
+.w .edit-note,.w .note#pickLeft:empty{display:none}
+
+/* Feltið høgrumegin */
+.panel{top:0;right:0;bottom:0;width:min(460px,100vw);max-height:none;border:0;border-radius:0;box-shadow:-24px 0 60px -24px rgba(0,0,0,.45);padding:22px 26px 30px;z-index:50}
+.panel h3{font-size:1.6rem;gap:12px;padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.panel h3::before{display:none}
+.panel h3 .ic{width:46px;height:46px;border-radius:50%;border:1px solid var(--line)}
+.set-ic svg{width:40px;height:40px;stroke:var(--ink);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;display:block}
+.set-row{margin:0 0 24px}
+.set-row h4{margin:0 0 10px;font-size:1.1rem;font-weight:700;letter-spacing:-.01em}
+.set-row .row{gap:10px}
+.set-row textarea{width:100%;min-height:110px;resize:vertical;border:1px solid var(--field);border-radius:10px;padding:12px 14px;font-size:1rem;line-height:1.5}
+.set-row textarea:focus,.popt input:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.set-row .note{font-size:.88rem}
+.set-row:has(>.row):not(:has(>.row>:not([hidden]))){display:none}
+.set-row .seg{border-radius:10px;overflow:hidden}
+.set-row .btn{border-radius:10px}
+.set-row .btn.danger{border:2px solid var(--red);color:var(--red);border-radius:999px;padding:0 22px;min-height:46px;font-size:1rem}
+.set-row .btn.danger:hover{background:#fdecea}
+.set-row #names{min-height:240px}
+.set-row .slider{display:flex;align-items:center;gap:10px;width:100%}
+.set-row .slider input{flex:1}
+.set-cnt{margin:6px 0 0;text-align:right;font-size:.85rem;color:var(--muted)}
+.set-tabs{display:flex;border-bottom:1px solid var(--line);margin:-4px 0 22px}
+.set-tabs button{flex:1;border:0;background:none;padding:12px 8px;font-weight:600;font-size:1rem;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.set-tabs button[aria-selected=true]{color:var(--blue);border-color:var(--blue)}
+.ptype{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;width:100%;text-align:left;padding:14px 16px;margin-bottom:10px;border:2px solid var(--line);border-radius:14px;background:#fff}
+.ptype:hover{border-color:#b9b8b3}
+.ptype[aria-pressed=true]{border-color:var(--blue);background:#f2f6fe}
+.ptype-ic{grid-row:span 2;display:flex;gap:2px}
+.ptype-ic svg{width:26px;height:26px}
+.ptype-ic i{font-style:normal;font-weight:800;font-size:.75rem;background:var(--ink);color:#fff;border-radius:6px;padding:4px 6px}
+.ptype b{font-size:1rem}
+.ptype small{color:var(--muted);font-size:.85rem}
+.pradio{display:flex;align-items:center;gap:10px;padding:6px 0;font-weight:600;cursor:pointer}
+.pradio input{width:20px;height:20px;accent-color:var(--blue);margin:0}
+.pradio svg{width:24px;height:24px}
+.pfaces{display:flex;gap:4px}
+.pfaces svg{width:32px;height:32px}
+.popt{display:flex;gap:6px;margin-bottom:8px}
+.popt input{flex:1;height:44px;border:1px solid var(--field);border-radius:10px;padding:0 12px;font-size:1rem}
+.pths{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.pth{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px;border:2px solid var(--line);border-radius:12px;background:#fff;aspect-ratio:1}
+.pth i{border-radius:4px}
+.pth[aria-pressed=true]{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,89,232,.18)}
+
+/* Spurnarkanning */
+.poll{align-items:stretch;gap:10px;padding:20px 22px}
+.poll-q{margin:0;font-weight:700;font-size:clamp(1rem,5.4cqi,2.6rem);line-height:1.25;letter-spacing:-.01em;flex:none;word-break:break-word}
+.poll-chart{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.poll-pie{height:100%;max-height:100%;max-width:100%;aspect-ratio:1}
+.poll-pie circle{transition:stroke-dasharray .4s,stroke-dashoffset .4s}
+.poll-bars{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:4%;width:100%;height:100%;align-items:end;padding:0 2%}
+.pb{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.pb i{display:block;width:62%;border-radius:8px 8px 0 0;transition:height .4s;min-height:0}
+.pb-n{font-weight:800;font-size:clamp(.9rem,4cqi,1.8rem)}
+.poll-ans{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:4%;padding:0 2%;flex:none}
+.pa{border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:700}
+.pa b{font-size:clamp(.8rem,3.4cqi,1.5rem);color:var(--muted)}
+.faces .pa svg{width:min(100%,16cqi,13cqh);height:auto;transition:transform .15s;filter:drop-shadow(0 4px 6px rgba(0,0,0,.15))}
+.faces .pa:hover svg{transform:scale(1.08)}
+.words .pa span{display:flex;align-items:center;justify-content:center;width:100%;min-height:min(14cqh,64px);padding:6px 8px;border-radius:12px;background:var(--c);color:#fff;font-size:clamp(.85rem,4cqi,1.6rem);line-height:1.15;word-break:break-word;transition:transform .15s}
+.words .pa:hover span{transform:translateY(-2px)}
+.pa.pop svg,.pa.pop span{animation:pop .35s ease}
+@keyframes pop{40%{transform:scale(1.25)}}
+.poll-n{margin:0;text-align:center;font-size:.85rem;color:var(--muted);font-weight:600;flex:none}
+
+/* Dokkin og Meira */
+.dock{border-radius:20px;padding:6px 12px;gap:4px}
+.dk{color:var(--ink);font-weight:500;font-size:.8rem;gap:6px;padding:10px 6px 7px;min-width:78px}
+.dk svg{width:38px;height:38px;stroke-width:1.4}
+.dk span{max-width:84px;overflow:hidden;text-overflow:ellipsis}
+.dk[aria-pressed=true]::after,#moreBtn.on::after{content:"";position:absolute;left:50%;top:2px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ink)}
+#penBtn[aria-pressed=true],#moreBtn[aria-expanded=true],#bgBtn[aria-expanded=true]{background:#eef2ff}
+#penBtn[aria-pressed=true]::after{display:none}
+.more-pop{position:fixed;z-index:46;bottom:calc(var(--dock-h) + 26px);width:min(440px,calc(100vw - 20px));background:#fff;border-radius:20px;box-shadow:0 20px 50px -12px rgba(0,0,0,.45);padding:6px 14px 16px}
+.more-h{margin:0 -14px 10px;padding:12px;text-align:center;font-weight:700;color:var(--blue);border-bottom:1px solid var(--line)}
+.more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.more-grid .dk{min-width:0;width:100%}
+#ink{top:0;height:100%}
+.penbar{top:14px}
+@media (max-width:1240px){.dock .dk{min-width:60px;font-size:.7rem;padding:8px 2px 6px}.dock .dk svg{width:32px;height:32px}}
+.more-grid .dk{font-size:.8rem}.more-grid .dk svg{width:40px;height:40px}
+.set-row .seg button{padding:10px 16px;font-size:.95rem}
+.set-row #tmrSound{width:48px;height:48px;border:1px solid var(--field);border-radius:10px}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -383,15 +516,13 @@ body.pen.erase #ink{cursor:cell}
 </div>
 
 <header class="top">
-  <a class="top-logo" href="https://snar.fo" target="_top" title="Til Snar"><img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Logo_Snar/SnarLogoRed.png" alt="Snar" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'Snar'}))"></a>
-  <h1 class="top-title">Talvan<span>til stóra skíggjan í flokkinum</span></h1>
-  <div style="flex:1"></div>
-  <button class="lock-btn" type="button" id="bgBtn" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg><span>Bakgrund</span></button>
-  <button class="lock-btn" type="button" id="infoBtn" aria-expanded="false" aria-label="Um Talvuna" title="Um Talvuna"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>Um</span></button>
-  <button class="lock-btn" type="button" id="penBtn" aria-pressed="false" title="Skriva og tekna á skíggjan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/></svg><span>Pennur</span></button>
-  <button class="lock-btn" type="button" id="lockBtn" aria-pressed="false"></button>
-  <button class="lock-btn" type="button" id="popFull" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Fullur skíggi</span></button>
-  <button class="lock-btn pop-x" type="button" id="popClose" hidden aria-label="Lat Talvuna aftur" title="Lat aftur">×</button>
+  <a class="cb top-logo" href="https://snar.fo" target="_top" title="Til Snar"><img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Logo_Snar/SnarLogoRed.png" alt="Snar" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'Snar'}))"></a>
+  <div class="cbs">
+    <button class="cb" type="button" id="lockBtn" aria-pressed="false"></button>
+    <button class="cb" type="button" id="fullBtn" hidden title="Fullur skíggi" aria-label="Fullur skíggi"></button>
+    <button class="cb" type="button" id="infoBtn" aria-expanded="false" aria-label="Um Talvuna" title="Um Talvuna"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+    <button class="cb pop-x" type="button" id="popClose" hidden aria-label="Lat Talvuna aftur" title="Lat aftur">×</button>
+  </div>
 </header>
 
 <main class="board" id="board">
@@ -414,7 +545,7 @@ body.pen.erase #ink{cursor:cell}
           <div class="clock-d" id="clockD"></div>
         </div>
         <div class="row center cfg">
-          <div class="seg" role="group" aria-label="Slag av klokku">
+          <div class="seg" role="group" aria-label="Slag av klokku" id="cmSeg">
             <button type="button" data-cm="t" aria-pressed="true">Talklokka</button>
             <button type="button" data-cm="v" aria-pressed="false">Vísaraklokka</button>
           </div>
@@ -434,8 +565,8 @@ body.pen.erase #ink{cursor:cell}
           <div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="44"/><circle class="fg" id="ringFg" cx="50" cy="50" r="44"/></svg>
             <div class="ring-t" id="tmrT" aria-live="off">05:00</div></div>
           <p class="tmr-msg" id="tmrMsg" aria-live="polite"></p>
-          <div class="row presets cfg" id="presets"></div>
-          <div class="row presets cfg">
+          <div class="row presets lk" id="presets"></div>
+          <div class="row presets lk">
             <button class="btn sm" type="button" data-add="-60">−1 min.</button>
             <button class="btn sm" type="button" data-add="60">+1 min.</button>
           </div>
@@ -453,15 +584,15 @@ body.pen.erase #ink{cursor:cell}
       <div class="w-head"><h2 id="h-navn">Nøvn</h2></div>
       <div class="w-body">
         <div class="pick">
-          <div class="tabs cfg" role="tablist">
+          <div class="tabs lk" role="tablist">
             <button role="tab" type="button" aria-selected="true" data-tab="eitt">Vel eitt navn</button>
             <button role="tab" type="button" aria-selected="false" data-tab="bolkar">Ger bólkar</button>
           </div>
           <div data-pane="eitt">
-            <div class="pick-out" id="pickOut" aria-live="polite"><span class="hint">Skriva nøvnini niðanfyri og trýst á „Vel“.</span></div>
+            <div class="pick-out" id="pickOut" aria-live="polite"><span class="hint">Eingi nøvn enn.<br><button class="btn sm" type="button" data-open-set="navn">Skriva nøvnini</button></span></div>
             <div class="row" style="margin-top:12px">
               <button class="btn red" type="button" id="pickGo">Vel</button>
-              <label class="chk cfg"><input type="checkbox" id="pickOnce" checked> Sama navn kemur ikki aftur</label>
+              <label class="chk cfg" id="pickOnceL"><input type="checkbox" id="pickOnce" checked> Sama navn kemur ikki aftur</label>
             </div>
             <p class="note" id="pickLeft" style="margin-top:8px"></p>
           </div>
@@ -476,7 +607,7 @@ body.pen.erase #ink{cursor:cell}
           <details id="namesBox">
             <summary>Nøvnini (<span id="nameCount">0</span>)</summary>
             <textarea id="names" placeholder="Skriva eitt navn á hvørja linju" spellcheck="false" aria-label="Nøvnini, eitt á hvørja linju"></textarea>
-            <p class="note">Nøvnini verða bert goymd í hesum kaganum á hesi teldu.</p>
+            <p class="note" id="namesNote">Eitt navn á hvørja linju. Nøvnini verða bert goymd í hesum kaganum á hesi teldu.</p>
           </details>
         </div>
       </div>
@@ -498,7 +629,7 @@ body.pen.erase #ink{cursor:cell}
             <input data-c="n" aria-label="Tekstur til grønt ljós">
           </div>
         </div>
-        <p class="note edit-note">Trýst á eitt ljós. Tú kanst sjálv ella sjálvur broyta tekstin við síðuna av.</p>
+        <p class="note edit-note" id="ljosNote">Trýst á eitt ljós. Tú kanst sjálv ella sjálvur broyta tekstin við síðuna av.</p>
       </div>
     </section>
 
@@ -513,12 +644,12 @@ body.pen.erase #ink{cursor:cell}
         </div>
         <div class="row center">
           <button class="btn red" type="button" id="jarAdd">Legg eina kúlu í</button>
-          <button class="btn sm cfg" type="button" id="jarSub">Tak eina burtur</button>
-          <button class="btn sm cfg" type="button" id="jarEmpty">Tøm glasið</button>
+          <button class="btn sm lk" type="button" id="jarSub">Tak eina burtur</button>
+          <button class="btn sm lk" type="button" id="jarEmpty">Tøm glasið</button>
         </div>
         <details class="jar-goal">
           <summary>Hvussu nógvar kúlur skulu í glasið?</summary>
-          <div class="row" style="margin-top:8px">
+          <div class="row" id="jarGoalRow">
             <label class="chk" for="jarGoal">Kúlur í fullum glasi</label>
             <input class="num" type="number" id="jarGoal" min="5" max="60" value="20">
           </div>
@@ -559,7 +690,7 @@ body.pen.erase #ink{cursor:cell}
         <div class="sn-frame" id="snView" hidden>
           <p class="sn-load" id="snLoad">Síðan verður heintað frá Snar …</p>
           <iframe id="snFrame" title="Funka frá Snar" allow="fullscreen; autoplay" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-          <div class="sn-src cfg"><span id="snTitle"></span> · <a id="snLink" href="#" target="_blank" rel="noopener">Lat upp á Snar</a></div>
+          <div class="sn-src lk"><span id="snTitle"></span> · <a id="snLink" href="#" target="_blank" rel="noopener">Lat upp á Snar</a></div>
         </div>
       </div>
     </section>
@@ -582,7 +713,7 @@ body.pen.erase #ink{cursor:cell}
         <div class="sn-frame" id="tmView" hidden>
           <p class="sn-load" id="tmLoad">Síðan verður heintað frá Snar …</p>
           <iframe id="tmFrame" title="Temasíða frá Snar" allow="fullscreen; autoplay" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-          <div class="sn-src cfg"><span id="tmTitle"></span> · <a id="tmLink" href="#" target="_blank" rel="noopener">Lat upp á Snar</a></div>
+          <div class="sn-src lk"><span id="tmTitle"></span> · <a id="tmLink" href="#" target="_blank" rel="noopener">Lat upp á Snar</a></div>
         </div>
       </div>
     </section>
@@ -599,7 +730,7 @@ body.pen.erase #ink{cursor:cell}
             </div>
             <button class="sn-go" type="submit">Leita</button>
           </form>
-          <p class="bk-count cfg" id="bkCount"></p>
+          <p class="bk-count lk" id="bkCount"></p>
           <p class="sn-msg" id="bkMsg" hidden></p>
           <div class="bk-grid" id="bkGrid"></div>
           <button class="btn sm bk-more" type="button" id="bkMore" hidden>Vís fleiri bøkur</button>
@@ -607,7 +738,7 @@ body.pen.erase #ink{cursor:cell}
         <div class="sn-frame" id="bkView" hidden>
           <p class="sn-load">Bókin verður heintað …</p>
           <iframe id="bkFrame" title="Bók á Google Books" allow="fullscreen"></iframe>
-          <div class="sn-src cfg"><a id="bkLink" href="#" target="_blank" rel="noopener">Lat upp á Google Books</a></div>
+          <div class="sn-src lk"><a id="bkLink" href="#" target="_blank" rel="noopener">Lat upp á Google Books</a></div>
         </div>
       </div>
     </section>
@@ -629,8 +760,7 @@ body.pen.erase #ink{cursor:cell}
             <button class="pt-b" type="button" id="pdfOut" title="Minni" aria-label="Minni">−</button>
             <button class="pt-b pt-txt" type="button" id="pdfFit" title="Passa til skíggjan">100 %</button>
             <button class="pt-b" type="button" id="pdfIn" title="Størri" aria-label="Størri">+</button>
-            <span class="pt-sep cfg"></span>
-            <div class="seg cfg" role="group" aria-label="Síður í senn">
+                        <div class="seg cfg" role="group" aria-label="Síður í senn" id="ppSeg">
               <button type="button" data-pp="1" aria-pressed="true">Ein síða</button>
               <button type="button" data-pp="2" aria-pressed="false">Tvær síður</button>
             </div>
@@ -650,10 +780,21 @@ body.pen.erase #ink{cursor:cell}
         <div class="noise" id="noise">
           <p class="noise-st msg" id="noiseSt">Mikrofonin er sløkt</p>
           <div class="meter"><div class="meter-f" id="meterF"></div><div class="meter-m" id="meterM"></div></div>
-          <label class="slider cfg">Stilt <input type="range" id="noiseLim" min="10" max="95" value="60" aria-label="Hvussu hart má vera"> Hart</label>
+          <label class="slider cfg" id="noiseLimL">Stilt <input type="range" id="noiseLim" min="10" max="95" value="60" aria-label="Hvussu hart má vera"> Hart</label>
           <div class="row"><button class="btn red" type="button" id="noiseGo">Tendra mikrofonina</button></div>
-          <p class="note">Ljóðið verður bert mátað í kaganum, meðan síðan er opin. Einki verður tikið upp, goymt ella sent.</p>
+          <p class="note" id="noiseNote">Ljóðið verður bert mátað í kaganum, meðan síðan er opin. Einki verður tikið upp, goymt ella sent.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- Spurnarkanning -->
+    <section class="w" id="w-poll" data-w="poll" aria-labelledby="h-poll">
+      <div class="w-head"><h2 id="h-poll">Spurnarkanning</h2></div>
+      <div class="w-body poll">
+        <p class="poll-q" id="pollQ"></p>
+        <div class="poll-chart" id="pollChart"></div>
+        <div class="poll-ans" id="pollAns"></div>
+        <p class="poll-n" id="pollN"></p>
       </div>
     </section>
 
@@ -663,11 +804,12 @@ body.pen.erase #ink{cursor:cell}
         <button class="ic" type="button" id="fsDown" title="Minni skrift">A−</button>
         <button class="ic" type="button" id="fsUp" title="Størri skrift">A+</button></div>
       <div class="w-body">
+        <div class="w-ttl">Dagsins ætlan</div>
         <div class="plan" id="plan">
           <ul id="planList"></ul>
           <button class="add" type="button" id="planAdd">+ Legg eitt punkt afturat</button>
         </div>
-        <p class="note edit-note">Trýst á Enter fyri at fáa eitt nýtt punkt. Trýst á prikkin, tá ið punktið er gjørt. Ætlanin verður goymd í hesum kaganum.</p>
+        <p class="note edit-note" id="planNote">Trýst á Enter fyri at fáa eitt nýtt punkt. Trýst á prikkin, tá ið punktið er gjørt. Ætlanin verður goymd í hesum kaganum.</p>
       </div>
     </section>
 
@@ -694,22 +836,37 @@ body.pen.erase #ink{cursor:cell}
 </div>
 
 <nav class="dock" id="dock" aria-label="Amboð">
-  <button class="dk" type="button" data-t="klokka"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12"/><path d="M16 9v7l5 3"/></svg>Klokkan</button>
-  <button class="dk" type="button" data-t="tid"><svg viewBox="0 0 32 32"><path d="M10 4h12M16 4v4"/><circle cx="16" cy="18" r="10"/><path d="M16 18l4-4"/></svg>Stoppur</button>
-  <button class="dk" type="button" data-t="navn"><svg viewBox="0 0 32 32"><circle cx="11" cy="11" r="4"/><path d="M4 25c0-4 3-7 7-7s7 3 7 7"/><circle cx="23" cy="9" r="3"/><path d="M20 17c1-1 2-1 3-1 3 0 5 2 5 6"/></svg>Nøvn</button>
-  <button class="dk" type="button" data-t="ljos"><svg viewBox="0 0 32 32"><rect x="10" y="3" width="12" height="26" rx="3"/><circle cx="16" cy="9" r="2.5"/><circle cx="16" cy="16" r="2.5"/><circle cx="16" cy="23" r="2.5"/></svg>Ferðsluljós</button>
-  <button class="dk" type="button" data-t="glas"><svg viewBox="0 0 32 32"><path d="M8 6v19a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V6M6 6h20"/><circle cx="13" cy="23" r="2.5"/><circle cx="19" cy="23" r="2.5"/><circle cx="16" cy="18" r="2.5"/></svg>Smileyglas</button>
-  <button class="dk" type="button" data-t="tern"><svg viewBox="0 0 32 32"><rect x="5" y="5" width="22" height="22" rx="4"/><circle cx="11" cy="11" r="1.4"/><circle cx="16" cy="16" r="1.4"/><circle cx="21" cy="21" r="1.4"/></svg>Terningar</button>
-  <button class="dk" type="button" data-t="snar"><svg viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="18"/><path d="M4 11h24M12 28h8M16 24v4"/><circle cx="8" cy="8.5" r=".6"/><circle cx="11" cy="8.5" r=".6"/></svg>Funkur</button>
-  <button class="dk" type="button" data-t="tema"><svg viewBox="0 0 32 32"><rect x="4" y="5" width="10" height="10"/><rect x="18" y="5" width="10" height="10"/><rect x="4" y="19" width="10" height="8"/><rect x="18" y="19" width="10" height="8"/></svg>Tema</button>
-  <button class="dk" type="button" data-t="bok"><svg viewBox="0 0 32 32"><path d="M5 5v22M11 5v22M5 5h6M5 27h6M16 7l5 20M16 7l5-1 5 20-5 1"/><path d="M3 27h26"/></svg>Bókahill</button>
-  <button class="dk" type="button" data-t="pdf"><svg viewBox="0 0 32 32"><path d="M8 3h11l6 6v20H8z"/><path d="M19 3v6h6"/><path d="M12 17h9M12 21h9M12 25h5"/></svg>PDF</button>
-  <button class="dk" type="button" data-t="larm"><svg viewBox="0 0 32 32"><rect x="12" y="4" width="8" height="14" rx="4"/><path d="M8 15a8 8 0 0 0 16 0M16 23v5M11 28h10"/></svg>Ljóðmátari</button>
-  <button class="dk" type="button" data-t="aetlan"><svg viewBox="0 0 32 32"><rect x="6" y="4" width="20" height="24"/><path d="M14 11h8M14 16h8M14 21h5"/><circle cx="10.5" cy="11" r=".8"/><circle cx="10.5" cy="16" r=".8"/><circle cx="10.5" cy="21" r=".8"/></svg>Dagsins ætlan</button>
+  <button class="dk" type="button" id="penBtn" aria-pressed="false" title="Skriva og tekna á skíggjan"><svg viewBox="0 0 32 32"><path d="M6 25c2-6 4-13 6.5-13 3 0-1 10 2 10 2.2 0 3.8-8 6-8 2.8 0 .5 6 3.5 6"/></svg><span>Pennur</span></button>
   <span class="dk-sep"></span>
-  <button class="dk" type="button" data-f="linjal"><svg viewBox="0 0 32 32"><rect x="3" y="11" width="26" height="10"/><path d="M7 11v4M11 11v3M15 11v4M19 11v3M23 11v4"/></svg>Linjal</button>
-  <button class="dk" type="button" data-f="vinkul"><svg viewBox="0 0 32 32"><path d="M3 24a13 13 0 0 1 26 0zM16 24l8-9"/><path d="M8 24a8 8 0 0 1 16 0"/></svg>Vinkulmátari</button>
+  <button class="dk" type="button" id="bgBtn" aria-expanded="false"><svg viewBox="0 0 32 32"><rect x="4" y="5" width="21" height="17" rx="3"/><path d="M4 18l5-5 4 4 3-3 5 5"/><circle cx="19" cy="10" r="1.6"/><path style="fill:#7dd3fc" d="M18 28l8-8 3 3-8 8h-3z"/></svg><span>Bakgrund</span></button>
+  <button class="dk" type="button" data-t="poll"><svg viewBox="0 0 32 32"><circle cx="8" cy="8" r="3"/><path d="M3 16c0-3 2-5 5-5s5 2 5 5"/><circle cx="8" cy="21" r="3"/><path d="M3 29c0-3 2-5 5-5s5 2 5 5"/><rect style="fill:#86efac" x="16" y="5" width="12" height="7" rx="2"/><rect x="16" y="18" width="12" height="7" rx="2"/></svg><span>Spurnarkanning</span></button>
+  <button class="dk" type="button" data-t="navn"><svg viewBox="0 0 32 32"><rect x="4" y="9" width="13" height="18" rx="2"/><rect style="fill:#7dd3fc" x="14" y="5" width="14" height="18" rx="2"/><circle cx="21" cy="11.5" r="2.5"/><path d="M17.5 19.5c.6-2 2-3 3.5-3s2.9 1 3.5 3"/></svg><span>Nøvn</span></button>
+  <button class="dk" type="button" data-t="larm"><svg viewBox="0 0 32 32"><path d="M3 17h3l2-6 3 13 3-18 3 16 3-9 2 4h7"/><circle style="fill:#ef2418" cx="27" cy="9" r="2.4"/></svg><span>Ljóðmátari</span></button>
+  <button class="dk" type="button" data-t="ljos"><svg viewBox="0 0 32 32"><rect x="10" y="3" width="12" height="26" rx="5"/><circle style="fill:#ef2418" cx="16" cy="9" r="2.6"/><circle style="fill:#f5b301" cx="16" cy="16" r="2.6"/><circle style="fill:#1f9d55" cx="16" cy="23" r="2.6"/></svg><span>Ferðsluljós</span></button>
+  <button class="dk" type="button" data-t="aetlan"><svg viewBox="0 0 32 32"><rect x="5" y="4" width="22" height="25" rx="3"/><path d="M14 11h9M14 17h9M14 23h6"/><rect style="fill:#ffd23f" x="8" y="9" width="3" height="3"/><rect style="fill:#ffd23f" x="8" y="15" width="3" height="3"/><rect x="8" y="21" width="3" height="3"/></svg><span>Dagsins ætlan</span></button>
+  <button class="dk" type="button" data-t="tid"><svg viewBox="0 0 32 32"><path d="M8 3h16M8 29h16M10 3c0 7 6 9 6 13s-6 6-6 13M22 3c0 7-6 9-6 13s6 6 6 13"/><path style="fill:#ffd23f" d="M11.5 27c1-3 3.5-5 4.5-5s3.5 2 4.5 5z"/></svg><span>Stoppur</span></button>
+  <button class="dk" type="button" data-t="klokka"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12.5"/><path d="M16 5.5v2M16 24.5v2M5.5 16h2M24.5 16h2"/><path d="M16 10v6l4.5 3"/><circle style="fill:#ef2418" cx="16" cy="16" r="1.8"/></svg><span>Klokkan</span></button>
+  <button class="dk" type="button" data-t="snar"><svg viewBox="0 0 32 32"><rect x="3" y="5" width="26" height="18" rx="3"/><path d="M11 28h10M16 23v5"/><path style="fill:#ef2418" d="M13 10l7 4-7 4z"/></svg><span>Funkur</span></button>
+  <button class="dk" type="button" data-t="tema"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="10" height="10" rx="2"/><rect style="fill:#7dd3fc" x="18" y="4" width="10" height="10" rx="2"/><rect x="4" y="18" width="10" height="10" rx="2"/><rect style="fill:#ffd23f" x="18" y="18" width="10" height="10" rx="2"/></svg><span>Tema</span></button>
+  <button class="dk" type="button" id="moreBtn" aria-expanded="false" aria-controls="morePop"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="13" y="4" width="6" height="6" rx="1.5"/><rect x="22" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="13" width="6" height="6" rx="1.5"/><rect x="13" y="13" width="6" height="6" rx="1.5"/><rect x="22" y="13" width="6" height="6" rx="1.5"/><rect x="4" y="22" width="6" height="6" rx="1.5"/><rect x="13" y="22" width="6" height="6" rx="1.5"/><rect x="22" y="22" width="6" height="6" rx="1.5"/></svg><span>Meira</span></button>
 </nav>
+
+<div class="more-pop" id="morePop" hidden role="dialog" aria-labelledby="moreH">
+  <p class="more-h" id="moreH">Fleiri amboð</p>
+  <div class="more-grid">
+    <button class="dk" type="button" data-t="tern"><svg viewBox="0 0 32 32"><rect x="3" y="11" width="15" height="15" rx="3"/><rect style="fill:#ef2418" x="14" y="5" width="15" height="15" rx="3"/><circle cx="7.5" cy="15.5" r="1.3"/><circle cx="13" cy="21.5" r="1.3"/><circle style="fill:#fff;stroke:none" cx="18.5" cy="9.5" r="1.4"/><circle style="fill:#fff;stroke:none" cx="24.5" cy="15.5" r="1.4"/></svg><span>Terningar</span></button>
+    <button class="dk" type="button" data-t="glas"><svg viewBox="0 0 32 32"><path d="M7 7v18a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4V7M5 7h22"/><circle style="fill:#ffd23f" cx="12.5" cy="23.5" r="3"/><circle style="fill:#ffd23f" cx="19.5" cy="23.5" r="3"/><circle style="fill:#ffd23f" cx="16" cy="17.5" r="3"/></svg><span>Smileyglas</span></button>
+    <button class="dk" type="button" data-t="bok"><svg viewBox="0 0 32 32"><path d="M4 5h5v22H4zM10 5h5v22h-5z"/><path style="fill:#7dd3fc" d="M17 7l5-1.3 5.5 20.5-5 1.3z"/><path d="M2 27h28"/></svg><span>Bókahill</span></button>
+    <button class="dk" type="button" data-t="pdf"><svg viewBox="0 0 32 32"><path d="M8 3h11l6 6v20H8z"/><path d="M19 3v6h6"/><rect style="fill:#ef2418" x="5" y="15" width="17" height="7" rx="1.5"/></svg><span>PDF</span></button>
+    <button class="dk" type="button" data-f="linjal"><svg viewBox="0 0 32 32"><rect style="fill:#ffd23f" x="3" y="11" width="26" height="10" rx="1.5"/><path d="M7 11v4M11 11v3M15 11v4M19 11v3M23 11v4"/></svg><span>Linjal</span></button>
+    <button class="dk" type="button" data-f="vinkul"><svg viewBox="0 0 32 32"><path style="fill:#bfdbfe" d="M3 24a13 13 0 0 1 26 0z"/><path d="M16 24l8-9M3 24h26"/></svg><span>Vinkulmátari</span></button>
+  </div>
+</div>
+
+<div class="panel" id="setPanel" hidden role="dialog" aria-labelledby="setH">
+  <h3><span class="set-ic" id="setIc"></span><span id="setH">Stillingar</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
+  <div id="setBody"></div>
+</div>
 
 <div class="panel" id="bgPanel" hidden role="dialog" aria-labelledby="bgH">
   <h3 id="bgH">Vel bakgrund<button class="ic close-p" type="button" title="Lat aftur"></button></h3>
@@ -720,8 +877,8 @@ body.pen.erase #ink{cursor:cell}
 
 <div class="panel" id="infoPanel" hidden role="dialog" aria-labelledby="infoH">
   <h3 id="infoH">Um Talvuna<button class="ic close-p" type="button" title="Lat aftur"></button></h3>
-  <p>Talvan er gjørd til stóra skíggjan í flokkinum. Hon hevur altíð somu stødd sum ein krittalva, so amboðini liggja á sama stað, hóast skíggin er stórur ella lítil.</p>
-  <p>Vel amboðini niðri á skíggjanum. Tað, tú letur upp ella trýstir á, kemur fremst. Drag í høvdinum á einum amboði fyri at flyta tað, og drag í horninum niðri til høgru fyri at gera tað størri ella minni. <strong>Fyll skíggjan</strong> letur eitt amboð fylla alla talvuna.</p>
+  <p>Talvan er gjørd til stóra skíggjan í flokkinum. Hon hevur altíð somu stødd sum ein krittalva, so amboðini liggja á sama stað, hóast skíggin er stórur ella lítil. Knøtturin í erva til høgru ger, at talvan fyllir allan skíggjan.</p>
+  <p>Vel amboðini niðri á skíggjanum. Fleiri amboð eru undir <strong>Meira</strong>. Trýst á eitt amboð fyri at velja tað: tá kemur tað fremst, og ein lítil bjálki kemur omanfyri. Drag amboðið, hagar tú vilt, og drag í prikkunum í hornunum fyri at gera tað størri ella minni. Við <strong>tannhjólinum</strong> broytir tú stillingarnar í feltinum høgrumegin, og <strong>Fyll skíggjan</strong> letur eitt amboð fylla alla talvuna.</p>
   <p><button class="btn sm" type="button" id="resetPos">Legg amboðini uppá pláss aftur</button></p>
   <p>Linjalurin og vinkulmátarin kunnu flytast og snarast. Teir vísa ikki veruligar sentimetrar, tí tað veldst um skíggjan.</p>
   <p><strong>Einki verður sent nakran stað.</strong> Tú skalt ikki rita inn. Nøvnini, dagsins ætlan og tað, tú velur, verða bert goymd í hesum kaganum á hesi teldu. Ljóðmátarin hoyrir bert, meðan síðan er opin, og tekur einki upp.</p>
@@ -735,8 +892,8 @@ body.pen.erase #ink{cursor:cell}
 var KEY='snar-flokskiggi-v1';
 /* Føst talva: 1600 × 900. Har amboðini liggja, tá ið tey verða latin upp fyrstu ferð (x, y, breidd, hædd) */
 var BW=1600,BH=900,SC=1;
-var DEF_POS={klokka:[24,24,370,300],navn:[24,344,370,532],tid:[418,24,370,460],tern:[418,504,370,372],ljos:[812,24,370,410],glas:[812,448,370,438],
-  larm:[418,504,370,372],aetlan:[1206,24,370,852],snar:[260,50,1080,800],tema:[300,70,1080,800],bok:[320,60,1000,790],pdf:[280,40,1040,820]};
+var DEF_POS={klokka:[24,84,370,230],navn:[24,334,370,436],tid:[418,84,370,410],tern:[418,514,370,256],ljos:[812,84,370,300],glas:[812,404,370,366],
+  larm:[418,514,370,256],aetlan:[1206,84,370,686],poll:[420,130,640,540],snar:[260,80,1080,690],tema:[300,96,1080,674],bok:[320,90,1000,680],pdf:[280,80,1040,690]};
 var DEF_SZ={klokka:2,tid:2,navn:2,ljos:2,glas:2,tern:2,larm:2,aetlan:2,snar:3,tema:3,bok:3,pdf:3};
 var S={vis:{klokka:1,tid:1,navn:1,ljos:1,glas:1,tern:1,larm:0,aetlan:1},sz:{},bg:'strik',names:'',plan:null,planItems:null,once:true,fs:1.5,tl:'',
   tlTxt:{r:'Friður',g:'Tosið spakuliga',n:'Tosið saman'},secs:300,sound:true,lim:60,mynd:'',cm:'t',jar:0,goal:20,dice:2,fl:{}};
@@ -763,55 +920,102 @@ var I={
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5v14"/></svg>',
   rot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg>',
   snd:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 7V4h4v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>',
+  full:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+  unfull:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
   mute:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9zM17 10l4 4M21 10l-4 4"/></svg>'
 };
 $$('.close-p').forEach(function(b){b.innerHTML=I.x});
 
-/* Knøttar í høvdinum á hvørjum amboði: fyll skíggjan, fjal – og eitt horn at broyta stødd */
+/* Amboðini liggja frítt á talvuni. Trýst á eitt amboð fyri at velja tað: tá kemur tað fremst, ein lítil bjálki kemur
+   omanfyri (stillingar, fyll skíggjan, tak burtur), og prikkar í hornunum broyta støddina. Drag amboðið hvar sum helst. */
 var zTop=0;for(var zk in S.z)zTop=Math.max(zTop,S.z[zk]||0);
+var SEL=null,SETK=null;
+/* Hvat verður flutt út í feltið høgrumegin: [yvirskrift, [elementir]] */
+var SETS={
+  klokka:[['Slag av klokku',['#cmSeg']],['Vísaraklokkan vísir',['#cfSeg']]],
+  tid:[['Ljóð, tá ið tíðin er úti',['#tmrSound']]],
+  navn:[['Nøvnini',['#names','#namesNote']],['Tá ið tú velur',['#pickOnceL']]],
+  ljos:[['Tekstirnir',['#ljosNote']]],
+  glas:[['Kúlur í fullum glasi',['#jarGoalRow']]],
+  tern:[['Tal av terningum',['#diceMinus','#diceN','#dicePlus']]],
+  larm:[['Hvussu hart má vera?',['#noiseLimL']],['',['#noiseNote']]],
+  aetlan:[['Skriftstødd',['#fsDown','#fsUp']],['',['#planNote']]],
+  pdf:[['Síður í senn',['#ppSeg']],['Pláss á talvuni',['#pdfBack']],['Fílan',['#pdfNew']]],
+  poll:'egin'};
+/* Har kann ein ikki byrja at flyta amboðið, tí har verður arbeitt */
+var NODRAG='button,input,textarea,select,a,label,summary,details,iframe,canvas,[contenteditable],.ball,.pile,.jar,.dice,.pdf-view,.sn-list,.bk-grid,.plan,.groups,.tl-txt,.poll-ans,.w-rs,.w-head';
 $$('.w').forEach(function(w){
   var h=w.querySelector('.w-head'),k=w.dataset.w;
+  var st=el('button','ic set-btn',I.gear);st.type='button';st.title='Stillingar';st.hidden=!SETS[k];
   var bg=el('button','ic big-btn',I.fill);bg.type='button';bg.title='Fyll skíggjan';
-  var cl=el('button','ic close-btn',I.x);cl.type='button';cl.title='Fjal';
-  [bg,cl].forEach(function(b){h.appendChild(b)});
+  var cl=el('button','ic close-btn',I.trash);cl.type='button';cl.title='Tak burtur av talvuni';
+  [st,bg,cl].forEach(function(b){h.appendChild(b)});
+  st.addEventListener('click',function(){if($('#setPanel').hidden||SETK!==k)openSet(k);else closePanels();});
   bg.addEventListener('click',function(){if(w.classList.contains('big'))unfocus();else focus(w);});
-  cl.addEventListener('click',function(){S.vis[k]=0;applyVis();save();});
-  var rs=el('span','w-rs');rs.title='Drag fyri at broyta støddina';w.appendChild(rs);
-  /* Tað, tú nertir við, kemur fremst */
-  w.addEventListener('pointerdown',function(){front(k);},true);
-  /* Flyt: drag í høvdinum */
-  h.addEventListener('pointerdown',function(e){
-    if(e.button!==0||S.lock||w.classList.contains('big')||(k==='pdf'&&S.pdfBack)||e.target.closest('button,input,a,select,textarea'))return;
-    e.preventDefault();var p=pos(k),sx=e.clientX,sy=e.clientY,ox=p[0],oy=p[1];w.classList.add('moving');h.setPointerCapture(e.pointerId);
-    function mv(ev){p[0]=Math.round(Math.max(80-p[2],Math.min(BW-80,ox+(ev.clientX-sx)/SC)));p[1]=Math.round(Math.max(0,Math.min(BH-60,oy+(ev.clientY-sy)/SC)));place(w);}
-    function up(){h.removeEventListener('pointermove',mv);h.removeEventListener('pointerup',up);h.removeEventListener('pointercancel',up);w.classList.remove('moving');save();}
-    h.addEventListener('pointermove',mv);h.addEventListener('pointerup',up);h.addEventListener('pointercancel',up);});
-  /* Broyt stødd: drag í horninum niðri til høgru */
-  rs.addEventListener('pointerdown',function(e){if(e.button!==0||S.lock)return;e.preventDefault();e.stopPropagation();
-    var p=pos(k),sx=e.clientX,sy=e.clientY,ow=p[2],oh=p[3];w.classList.add('sizing');rs.setPointerCapture(e.pointerId);
-    function mv(ev){p[2]=Math.round(Math.max(240,Math.min(BW-p[0],ow+(ev.clientX-sx)/SC)));p[3]=Math.round(Math.max(180,Math.min(BH-p[1],oh+(ev.clientY-sy)/SC)));place(w);}
-    function up(){rs.removeEventListener('pointermove',mv);rs.removeEventListener('pointerup',up);rs.removeEventListener('pointercancel',up);w.classList.remove('sizing');save();requestAnimationFrame(layoutJar);}
-    rs.addEventListener('pointermove',mv);rs.addEventListener('pointerup',up);rs.addEventListener('pointercancel',up);});
+  cl.addEventListener('click',function(){S.vis[k]=0;if(SETK===k)closePanels();select(null);applyVis();save();});
+  /* Tað, tú nertir við, verður valt og kemur fremst */
+  w.addEventListener('pointerdown',function(){if(!$('#bgPanel').hidden||!$('#infoPanel').hidden)closePanels();front(k);select(k);},true);
+  /* Flyt: drag hvar sum helst á amboðinum, har einki annað hendir */
+  w.addEventListener('pointerdown',function(e){
+    if(e.button!==0||S.lock||w.classList.contains('big')||(k==='pdf'&&S.pdfBack)||e.target.closest(NODRAG))return;
+    e.preventDefault();var p=pos(k),sx=e.clientX,sy=e.clientY,ox=p[0],oy=p[1],on=false;
+    function mv(ev){var dx=(ev.clientX-sx)/SC,dy=(ev.clientY-sy)/SC;if(!on&&Math.abs(dx)+Math.abs(dy)<4)return;
+      if(!on){on=true;w.classList.add('moving');}
+      p[0]=Math.round(Math.max(80-p[2],Math.min(BW-80,ox+dx)));p[1]=Math.round(Math.max(0,Math.min(BH-60,oy+dy)));place(w);}
+    function up(){window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);w.classList.remove('moving');if(on)save();}
+    window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);});
+  /* Broyt stødd: prikkarnir í hornunum */
+  ['nw','ne','sw','se'].forEach(function(c){var rs=el('span','w-rs '+c);rs.title='Drag fyri at broyta støddina';w.appendChild(rs);
+    rs.addEventListener('pointerdown',function(e){if(e.button!==0||S.lock)return;e.preventDefault();e.stopPropagation();front(k);select(k);
+      var p=pos(k),sx=e.clientX,sy=e.clientY,o=p.slice();w.classList.add('sizing');rs.setPointerCapture(e.pointerId);
+      function mv(ev){var dx=(ev.clientX-sx)/SC,dy=(ev.clientY-sy)/SC;
+        if(c[1]==='e')p[2]=Math.max(220,Math.min(BW-o[0],o[2]+dx));
+        else{var nx=Math.max(0,Math.min(o[0]+o[2]-220,o[0]+dx));p[2]=o[2]+o[0]-nx;p[0]=nx;}
+        if(c[0]==='s')p[3]=Math.max(160,Math.min(BH-o[1],o[3]+dy));
+        else{var ny=Math.max(0,Math.min(o[1]+o[3]-160,o[1]+dy));p[3]=o[3]+o[1]-ny;p[1]=ny;}
+        p[0]=Math.round(p[0]);p[1]=Math.round(p[1]);p[2]=Math.round(p[2]);p[3]=Math.round(p[3]);place(w);}
+      function up(){rs.removeEventListener('pointermove',mv);rs.removeEventListener('pointerup',up);rs.removeEventListener('pointercancel',up);w.classList.remove('sizing');save();requestAnimationFrame(layoutJar);}
+      rs.addEventListener('pointermove',mv);rs.addEventListener('pointerup',up);rs.addEventListener('pointercancel',up);});});
 });
+/* Trýst á sjálva talvuna: einki amboð er valt longur */
+$('#board').addEventListener('pointerdown',function(e){if(!e.target.closest('.w'))select(null);});
+/* Ein funka ella temasíða í einari iframe fær ikki trýstini – men vit síggja, at hon fær fokus */
+window.addEventListener('blur',function(){setTimeout(function(){var a=document.activeElement;if(a&&a.tagName==='IFRAME'){var w=a.closest('.w');if(w){front(w.dataset.w);select(w.dataset.w);}}},0);});
 function pos(k){if(!S.pos[k])S.pos[k]=(DEF_POS[k]||[300,100,600,500]).slice();return S.pos[k];}
-function place(w){var p=pos(w.dataset.w);w.style.left=p[0]+'px';w.style.top=p[1]+'px';w.style.width=p[2]+'px';w.style.height=p[3]+'px';w.style.zIndex=10+(S.z[w.dataset.w]||0);}
+function place(w){var p=pos(w.dataset.w);w.style.left=p[0]+'px';w.style.top=p[1]+'px';w.style.width=p[2]+'px';w.style.height=p[3]+'px';w.style.zIndex=10+(S.z[w.dataset.w]||0);
+  w.classList.toggle('tbin',p[1]<110);}
 function front(k){if(S.z[k]&&S.z[k]===zTop)return;S.z[k]=++zTop;
   /* Halt tølini smá */
   if(zTop>500){var ks=Object.keys(S.z).sort(function(a,b){return S.z[a]-S.z[b]});ks.forEach(function(x,i){S.z[x]=i+1});zTop=ks.length;}
-  $$('.w').forEach(function(w){place(w);w.classList.toggle('front',w.dataset.w===k);});save();}
+  $$('.w').forEach(place);save();}
+function select(k){SEL=k;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===k);});
+  if(!$('#setPanel').hidden&&SETK!==k){if(k&&SETS[k]&&!S.lock)openSet(k);else closePanels();}}
+function openSet(k){if(S.lock||!SETS[k])return;closeMore();['bgPanel','infoPanel'].forEach(function(id){$('#'+id).hidden=true});
+  SETK=k;var b=$('.dk[data-t="'+k+'"]');$('#setH').textContent=b?b.textContent.trim():'Stillingar';$('#setIc').innerHTML=b?b.querySelector('svg').outerHTML:'';
+  $$('#setBody .set').forEach(function(x){x.hidden=x.dataset.for!==k;});$('#setPanel').hidden=false;
+  if(SEL!==k){front(k);SEL=k;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===k);});}}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-open-set]');if(b)openSet(b.dataset.openSet);});
 function applySz(){$$('.w').forEach(place);requestAnimationFrame(layoutJar);}
-/* Skalera talvuna, so hon fyllir tað, sum er millum toppin og dokkina */
-function fit(){var g=$('#grid'),tp=$('.top').offsetHeight,dk=$('#dock').offsetHeight+20,pad=12,
-  aw=window.innerWidth-pad*2,ah=window.innerHeight-tp-dk-pad*2;SC=Math.max(.2,Math.min(aw/BW,ah/BH));
-  var x=Math.round((window.innerWidth-BW*SC)/2),y=Math.round(tp+pad+(ah-BH*SC)/2);
-  g.style.transform='translate('+x+'px,'+y+'px) scale('+SC+')';}
+/* Skalera talvuna, so hon fyllir allan skíggjan (bakgrundin fyllir altíð alt) */
+function fit(){var g=$('#grid'),aw=window.innerWidth,ah=window.innerHeight;SC=Math.max(.2,Math.min(aw/BW,ah/BH));
+  var x=Math.round((aw-BW*SC)/2),y=Math.round((ah-BH*SC)/2);
+  g.style.transform='translate('+x+'px,'+y+'px) scale('+SC+')';g.style.setProperty('--isc',(1/SC).toFixed(4));}
 window.addEventListener('resize',fit);
+/* Meira: fleiri amboð í einum gitteri omanfyri dokkina */
+function closeMore(){var m=$('#morePop');if(m)m.hidden=true;var b=$('#moreBtn');if(b)b.setAttribute('aria-expanded','false');}
+$('#moreBtn').addEventListener('click',function(){var m=$('#morePop'),open=m.hidden;closePanels();if(!open)return;
+  m.hidden=false;this.setAttribute('aria-expanded','true');var r=this.getBoundingClientRect(),mw=m.offsetWidth;
+  m.style.left=Math.max(10,Math.min(window.innerWidth-mw-10,r.left+r.width/2-mw/2))+'px';});
+$$('#morePop .dk').forEach(function(b){b.addEventListener('click',function(){setTimeout(closeMore,0);});});
 
 /* ---------- Sjónligt / fjalt ---------- */
 function applyVis(){
   var any=false;
   $$('.w').forEach(function(w){var on=!!S.vis[w.dataset.w];w.hidden=!on;if(on)any=true;});
   $$('.dk[data-t]').forEach(function(b){b.setAttribute('aria-pressed',S.vis[b.dataset.t]?'true':'false')});
+  $('#moreBtn').classList.toggle('on',$$('#morePop .dk').some(function(b){return b.getAttribute('aria-pressed')==='true'}));
   $('#empty').hidden=any;
   if(document.body.classList.contains('focus')){var big=$('.w.big');if(!big||big.hidden)unfocus();}
   if(!S.vis.larm)stopNoise();
@@ -819,20 +1023,23 @@ function applyVis(){
 }
 $$('.dk[data-t]').forEach(function(b){b.addEventListener('click',function(){
   var t=b.dataset.t;S.vis[t]=S.vis[t]?0:1;
-  if(S.vis[t])front(t);
+  if(S.vis[t]){front(t);select(t);}else if(SEL===t)select(null);
   if(document.body.classList.contains('focus')&&S.vis[t])focus($('#w-'+t));
-  applyVis();save();
+  closeMore();applyVis();save();
 })});
 
 function focus(w){unfocus(true);w.classList.add('big');document.body.classList.add('focus');var b=w.querySelector('.big-btn');b.innerHTML=I.back;b.title='Vís øll amboðini';requestAnimationFrame(layoutJar);}
 function unfocus(keep){$$('.w.big').forEach(function(x){x.classList.remove('big');var b=x.querySelector('.big-btn');b.innerHTML=I.fill;b.title='Fyll skíggjan'});if(!keep){document.body.classList.remove('focus');requestAnimationFrame(layoutJar);}}
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('#bgPanel').hidden||!$('#infoPanel').hidden)closePanels();else if(document.body.classList.contains('focus'))unfocus();else if(POPUP&&!document.fullscreenElement)popClose();}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if($$('.panel').some(function(p){return !p.hidden})||!$('#morePop').hidden)closePanels();else if(document.body.classList.contains('focus'))unfocus();else if(POPUP&&!document.fullscreenElement)popClose();}});
 /* Opnað sum popup á snar.fo/funkur (?popup=1): egin knøttur til fullan skíggja og at lata aftur */
 var POPUP=/[?&]popup=1/.test(location.search)&&window.parent!==window;
 function popClose(){if(document.fullscreenElement)document.exitFullscreen().catch(function(){});try{window.parent.postMessage({snar:'talvan-close'},'*');}catch(e){}}
-if(POPUP){var pf=$('#popFull'),pc=$('#popClose');pc.hidden=false;pc.addEventListener('click',popClose);
-  if(document.fullscreenEnabled){pf.hidden=false;pf.addEventListener('click',function(){if(document.fullscreenElement)document.exitFullscreen().catch(function(){});else document.documentElement.requestFullscreen().catch(function(){});});
-    document.addEventListener('fullscreenchange',function(){pf.querySelector('span').textContent=document.fullscreenElement?'Lat fulla skíggjan aftur':'Fullur skíggi';});}}
+if(POPUP){var pc=$('#popClose');pc.hidden=false;pc.addEventListener('click',popClose);}
+/* Fullur skíggi: talvan og bakgrundin fylla allan skíggjan */
+(function(){var fb=$('#fullBtn');if(!document.fullscreenEnabled)return;fb.hidden=false;
+  function upd(){var on=!!document.fullscreenElement;fb.innerHTML=on?I.unfull:I.full;fb.title=on?'Lat fulla skíggjan aftur':'Fullur skíggi';fb.setAttribute('aria-label',fb.title);}
+  fb.addEventListener('click',function(){if(document.fullscreenElement)document.exitFullscreen().catch(function(){});else document.documentElement.requestFullscreen().catch(function(){});});
+  document.addEventListener('fullscreenchange',upd);upd();})();
 
 /* ---------- Klokkan ---------- */
 var DAG=['sunnudagur','mánadagur','týsdagur','mikudagur','hósdagur','fríggjadagur','leygardagur'];
@@ -892,14 +1099,13 @@ function list(){return ta.value.split(/\r?\n/).map(function(s){return s.trim()})
 function upd(){var l=list();$('#nameCount').textContent=l.length;used=used.filter(function(n){return l.indexOf(n)>=0});
   var leftN=l.length-used.length;$('#pickLeft').textContent=l.length&&S.once?(leftN?(leftN===1?'1 navn eftir':leftN+' nøvn eftir'):'Øll nøvnini eru vald. Trýst á „Vel“ fyri at byrja umaftur.'):'';}
 ta.addEventListener('input',function(){S.names=ta.value;save();upd();});
-if(!list().length)$('#namesBox').open=true;
 $('#pickOnce').checked=S.once!==false;
 $('#pickOnce').addEventListener('change',function(e){S.once=e.target.checked;used=[];save();upd();});
 function rnd(n){if(window.crypto&&crypto.getRandomValues){var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n;}return Math.floor(Math.random()*n);}
 var spinning=false;
 $('#pickGo').addEventListener('click',function(){
   var l=list(),out=$('#pickOut');if(spinning)return;
-  if(!l.length){out.innerHTML='<span class="hint">Skriva fyrst nøvnini, eitt á hvørja linju.</span>';$('#namesBox').open=true;ta.focus();return;}
+  if(!l.length){out.innerHTML='<span class="hint">Skriva fyrst nøvnini, eitt á hvørja linju.</span>';openSet('navn');ta.focus();return;}
   var pool=S.once?l.filter(function(n){return used.indexOf(n)<0}):l;
   if(!pool.length){used=[];pool=l;}
   var pick=pool[rnd(pool.length)];spinning=true;out.classList.remove('hit');out.classList.add('spin');
@@ -910,7 +1116,7 @@ $$('.tabs button').forEach(function(b){b.addEventListener('click',function(){$$(
   $$('[data-pane]').forEach(function(p){p.hidden=p.dataset.pane!==b.dataset.tab});})});
 $('#grpGo').addEventListener('click',function(){
   var l=list().slice(),n=Math.max(2,Math.min(15,+$('#grpN').value||3)),box=$('#groups');box.innerHTML='';
-  if(l.length<2){box.innerHTML='<p class="note">Skriva fyrst nøvnini, eitt á hvørja linju.</p>';$('#namesBox').open=true;return;}
+  if(l.length<2){box.innerHTML='<p class="note">Skriva fyrst nøvnini, eitt á hvørja linju.</p>';openSet('navn');return;}
   for(var i=l.length-1;i>0;i--){var j=rnd(i+1),t=l[i];l[i]=l[j];l[j]=t;}
   var g=Math.max(1,Math.round(l.length/n)),gs=[];for(var k=0;k<g;k++)gs.push([]);
   l.forEach(function(nm,ix){gs[ix%g].push(nm)});
@@ -1337,12 +1543,12 @@ $('#bgFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f
 applyBg();
 
 /* Spjøld */
-function closePanels(){['bgPanel','infoPanel'].forEach(function(id){$('#'+id).hidden=true});$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
+function closePanels(){closeMore();['bgPanel','infoPanel','setPanel'].forEach(function(id){$('#'+id).hidden=true});$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
 function tog(btn,id){var p=$('#'+id),open=p.hidden;closePanels();p.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');}
 $('#bgBtn').addEventListener('click',function(){tog(this,'bgPanel')});
 $('#infoBtn').addEventListener('click',function(){tog(this,'infoPanel')});
 $$('.close-p').forEach(function(b){b.addEventListener('click',closePanels)});
-document.addEventListener('pointerdown',function(e){if(!e.target.closest('.panel,#bgBtn,#infoBtn'))closePanels();});
+document.addEventListener('pointerdown',function(e){if(!e.target.closest('.panel,#bgBtn,#infoBtn,#moreBtn,.more-pop,.w'))closePanels();});
 $('#resetPos').addEventListener('click',function(){S.pos={};S.z={};zTop=0;unfocus();applySz();save();closePanels();});
 $('#wipe').addEventListener('click',function(){if(!confirm('Strika nøvnini, dagsins ætlan, smileyglasið og tað, tú hevur valt?'))return;try{localStorage.removeItem(KEY);}catch(e){}idb('readwrite',function(st){return st.delete('pdf');}).then(function(){location.reload();});});
 window.addEventListener('resize',function(){Object.keys(FL).forEach(placeFl);});
@@ -1357,7 +1563,91 @@ function applyLock(){var L=!!S.lock;document.body.classList.toggle('locked',L);v
     var tb=$('.tabs button[data-tab=eitt]');if(tb)tb.click();}}
 $('#lockBtn').addEventListener('click',function(){S.lock=S.lock?0:1;applyLock();save();});
 
-$('#grid').insertBefore($('#bg'),$('#grid').firstChild);
+/* ---------- Spurnarkanning ---------- */
+var FACE={g:['#22c55e','M12.5 23c2.5 4.5 12.5 4.5 15 0'],lg:['#84cc16','M13.5 24c2.5 2.5 10.5 2.5 13 0'],y:['#facc15','M14 25.5h12'],
+  o:['#fb923c','M14 27c2.5-2.5 9.5-2.5 12 0'],r:['#ef4444','M12.5 28.5c2.5-4.5 12.5-4.5 15 0']};
+var FSET={2:['g','r'],3:['g','y','r'],4:['g','lg','o','r'],5:['g','lg','y','o','r']};
+var PTHEME=[['Snar',['#ef2418','#1559e8','#202124','#f5b301','#1f9d55','#8b5cf6']],['Blátt',['#1559e8','#60a5fa','#1e3a8a','#93c5fd','#2563eb','#0ea5e9']],
+  ['Grønt',['#15803d','#4ade80','#166534','#86efac','#22c55e','#14532d']],['Litríkt',['#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444']],
+  ['Grátt',['#202124','#8d8a84','#505359','#b9b8b3','#3d3f44','#6b6e74']]];
+if(!S.poll)S.poll={q:'Hvussu dámdi tær tíman í dag?',t:'s',n:4,o:['Svar 1','Svar 2','Svar 3'],c:'kaka',th:0,v:[]};
+function faceSvg(f){var d=FACE[f];return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5" fill="'+d[0]+'"/><circle cx="14.5" cy="16" r="2.3" fill="#2b2100"/><circle cx="25.5" cy="16" r="2.3" fill="#2b2100"/><path d="'+d[1]+'" fill="none" stroke="#2b2100" stroke-width="2.5" stroke-linecap="round"/></svg>';}
+var FACE_NAME={g:'Sera gott',lg:'Gott',y:'Hvørki gott ella ringt',o:'Ikki so gott',r:'Ringt'};
+function pollItems(){var P=S.poll;if(P.t==='s')return FSET[P.n].map(function(f){return {f:f,c:FACE[f][0],t:FACE_NAME[f]}});
+  var th=(PTHEME[P.th]||PTHEME[0])[1],L=P.t==='j'?['Ja','Nei']:P.o;return L.map(function(t,i){return {t:t,c:th[i%th.length]}});}
+function pollFix(){var n=pollItems().length,v=S.poll.v||[];if(v.length!==n){v=[];for(var i=0;i<n;i++)v.push(0);S.poll.v=v;}}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+function drawPoll(bump){pollFix();var P=S.poll,it=pollItems(),v=P.v,T=v.reduce(function(a,b){return a+b},0),mx=Math.max.apply(null,v.concat([1]));
+  $('#pollQ').textContent=P.q||'';var ch=$('#pollChart'),h='';
+  if(P.c==='sulur'){h='<div class="poll-bars" style="--n:'+it.length+'">'+it.map(function(x,i){return '<div class="pb"><span class="pb-n">'+(v[i]||'')+'</span><i style="height:'+(v[i]?Math.max(3,v[i]/mx*100):0)+'%;background:'+x.c+'"></i></div>';}).join('')+'</div>';}
+  else{var ring=P.c==='hringur',r=ring?37:25,sw=ring?22:50,C=2*Math.PI*r,off=0;
+    h='<svg class="poll-pie" viewBox="0 0 100 100" role="img" aria-label="Úrslitini"><circle cx="50" cy="50" r="'+r+'" fill="none" stroke="#e8e8e6" stroke-width="'+sw+'"/>';
+    if(T)it.forEach(function(x,i){if(!v[i])return;var len=v[i]/T*C;h+='<circle cx="50" cy="50" r="'+r+'" fill="none" stroke="'+x.c+'" stroke-width="'+sw+'" stroke-dasharray="'+len.toFixed(3)+' '+(C-len+.01).toFixed(3)+'" stroke-dashoffset="'+(-off).toFixed(3)+'" transform="rotate(-90 50 50)"/>';off+=len;});
+    if(ring&&T)h+='<text x="50" y="55" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="900" font-size="15" fill="#202124">'+T+'</text>';
+    h+='</svg>';}
+  ch.innerHTML=h;
+  var ans=$('#pollAns');ans.className='poll-ans '+(P.t==='s'?'faces':'words');ans.style.setProperty('--n',it.length);
+  ans.innerHTML=it.map(function(x,i){return '<button type="button" class="pa" data-i="'+i+'" title="'+esc(x.t)+'" aria-label="'+esc(x.t)+'"'+(P.t==='s'?'':' style="--c:'+x.c+'"')+'>'+(P.t==='s'?faceSvg(x.f):'<span>'+esc(x.t)+'</span>')+(P.c!=='sulur'?'<b>'+v[i]+'</b>':'')+'</button>';}).join('');
+  if(bump!=null){var nb=ans.querySelector('[data-i="'+bump+'"]');if(nb)nb.classList.add('pop');}
+  $('#pollN').textContent=T===1?'1 svar':T+' svar';}
+$('#pollAns').addEventListener('click',function(e){var b=e.target.closest('.pa');if(!b)return;pollFix();S.poll.v[+b.dataset.i]++;save();drawPoll(+b.dataset.i);});
+function pollReset(){S.poll.v=[];pollFix();save();drawPoll();}
+
+/* ---------- Feltið høgrumegin: stillingarnar hjá hvørjum amboði ---------- */
+(function(){var body=$('#setBody');
+  Object.keys(SETS).forEach(function(k){var sec=el('div','set');sec.dataset.for=k;sec.hidden=true;body.appendChild(sec);
+    if(SETS[k]==='egin')return;
+    SETS[k].forEach(function(r){var row=el('div','set-row');if(r[0])row.appendChild(el('h4',null,r[0]));var box=el('div','row');row.appendChild(box);
+      r[1].forEach(function(q){var x=$(q);if(!x)return;x.classList.remove('cfg');if(x.classList.contains('pt-b'))x.className='btn sm';box.appendChild(x);});
+      sec.appendChild(row);});});
+  /* Spurnarkanningin: tvey teigar sum á Classroomscreen */
+  var ps=$('#setBody .set[data-for=poll]'),T=PTHEME.map(function(t,i){return '<button type="button" class="pth" data-th="'+i+'" title="'+t[0]+'">'+t[1].slice(0,4).map(function(c){return '<i style="background:'+c+'"></i>'}).join('')+'</button>'}).join('');
+  ps.innerHTML='<div class="set-tabs" role="tablist"><button type="button" role="tab" data-ptab="slag">Slag av spurningi</button><button type="button" role="tab" data-ptab="still">Stillingar</button></div>'
+   +'<div data-ppane="slag">'
+   +'<button type="button" class="ptype" data-pt="s"><span class="ptype-ic">'+faceSvg('g')+faceSvg('y')+faceSvg('r')+'</span><b>Smiley-svar</b><small>Næmingarnir trýsta á eitt andlit.</small></button>'
+   +'<button type="button" class="ptype" data-pt="j"><span class="ptype-ic"><i>Ja</i><i>Nei</i></span><b>Ja ella nei</b><small>Tvey svar: Ja og Nei.</small></button>'
+   +'<button type="button" class="ptype" data-pt="v"><span class="ptype-ic"><i>A</i><i>B</i><i>C</i></span><b>Fleiri svarmøguleikar</b><small>Tú skrivar sjálv ella sjálvur svarini.</small></button></div>'
+   +'<div data-ppane="still">'
+   +'<div class="set-row"><h4>Spurningurin</h4><textarea id="pollQIn" maxlength="160" rows="3"></textarea><p class="set-cnt" id="pollQCnt"></p></div>'
+   +'<div class="set-row" id="pollNRow"><h4>Svarmøguleikar</h4>'+[2,3,4,5].map(function(n){return '<label class="pradio"><input type="radio" name="pollN" value="'+n+'"><span class="pfaces">'+FSET[n].map(faceSvg).join('')+'</span></label>'}).join('')+'</div>'
+   +'<div class="set-row" id="pollJRow"><h4>Svarmøguleikar</h4><p class="note">Svarini eru Ja og Nei.</p></div>'
+   +'<div class="set-row" id="pollORow"><h4>Svarmøguleikar</h4><div id="pollOpts"></div><button type="button" class="btn sm" id="pollAdd">+ Legg ein møguleika afturat</button></div>'
+   +'<div class="set-row"><h4>Vís úrslitini sum</h4>'
+   +'<label class="pradio"><input type="radio" name="pollC" value="sulur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Súlur</label>'
+   +'<label class="pradio"><input type="radio" name="pollC" value="kaka"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l7 5"/></svg>Kaka</label>'
+   +'<label class="pradio"><input type="radio" name="pollC" value="hringur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5"/></svg>Hringur</label></div>'
+   +'<div class="set-row"><h4>Úrslitini</h4><button type="button" class="btn sm danger" id="pollReset">Strika úrslitini</button></div>'
+   +'<div class="set-row" id="pollThRow"><h4>Litir</h4><div class="pths">'+T+'</div></div></div>';
+  var tab='still';
+  function sync(){var P=S.poll;
+    $$('[data-ptab]',ps).forEach(function(b){b.setAttribute('aria-selected',b.dataset.ptab===tab?'true':'false')});
+    $$('[data-ppane]',ps).forEach(function(p){p.hidden=p.dataset.ppane!==tab});
+    $$('.ptype',ps).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.pt===P.t?'true':'false')});
+    var qi=$('#pollQIn');if(document.activeElement!==qi)qi.value=P.q||'';$('#pollQCnt').textContent=(P.q||'').length+' / 160';
+    $('#pollNRow').hidden=P.t!=='s';$('#pollJRow').hidden=P.t!=='j';$('#pollORow').hidden=P.t!=='v';$('#pollThRow').hidden=P.t==='s';
+    $$('[name=pollN]',ps).forEach(function(r){r.checked=+r.value===P.n});$$('[name=pollC]',ps).forEach(function(r){r.checked=r.value===P.c});
+    $$('.pth',ps).forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.th===P.th?'true':'false')});
+    var box=$('#pollOpts');if(!box.contains(document.activeElement)){box.innerHTML='';
+      P.o.forEach(function(t,i){var r=el('div','popt');var inp=el('input');inp.value=t;inp.maxLength=40;inp.placeholder='Svar '+(i+1);inp.setAttribute('aria-label','Svar '+(i+1));
+        inp.addEventListener('input',function(){P.o[i]=inp.value;save();drawPoll();});
+        var x=el('button','ic',I.x);x.type='button';x.title='Tak møguleikan burtur';x.disabled=P.o.length<=2;
+        x.addEventListener('click',function(){P.o.splice(i,1);P.v=[];save();sync();drawPoll();});r.appendChild(inp);r.appendChild(x);box.appendChild(r);});}
+    $('#pollAdd').disabled=P.o.length>=6;}
+  $$('[data-ptab]',ps).forEach(function(b){b.addEventListener('click',function(){tab=b.dataset.ptab;sync();})});
+  $$('.ptype',ps).forEach(function(b){b.addEventListener('click',function(){if(S.poll.t!==b.dataset.pt){S.poll.t=b.dataset.pt;S.poll.v=[];save();drawPoll();}tab='still';sync();})});
+  $('#pollQIn').addEventListener('input',function(){S.poll.q=this.value;save();drawPoll();$('#pollQCnt').textContent=this.value.length+' / 160';});
+  $$('[name=pollN]',ps).forEach(function(r){r.addEventListener('change',function(){S.poll.n=+r.value;S.poll.v=[];save();drawPoll();})});
+  $$('[name=pollC]',ps).forEach(function(r){r.addEventListener('change',function(){S.poll.c=r.value;save();drawPoll();})});
+  $$('.pth',ps).forEach(function(b){b.addEventListener('click',function(){S.poll.th=+b.dataset.th;save();sync();drawPoll();})});
+  $('#pollAdd').addEventListener('click',function(){if(S.poll.o.length>=6)return;S.poll.o.push('');S.poll.v=[];save();sync();drawPoll();var l=$$('#pollOpts input');if(l.length)l[l.length-1].focus();});
+  $('#pollReset').addEventListener('click',pollReset);
+  $('[data-t=poll]').addEventListener('click',sync);
+  $('.set-btn',$('#w-poll'))&&$('#w-poll .set-btn').addEventListener('click',sync);
+  sync();})();
+drawPoll();
+/* Nøvnini eru nú í feltinum høgrumegin */
+$('#namesBox').hidden=true;$('.jar-goal').hidden=true;
+
 applySz();fit();applyVis();applyFl();applyLock();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layoutJar);
 })();
