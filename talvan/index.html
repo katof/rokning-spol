@@ -1560,12 +1560,13 @@ var DEF_POS={klokka:[24,84,370,230],navn:[24,334,370,436],tid:[418,84,370,410],t
   larm:[418,514,370,256],aetlan:[1206,84,370,686],poll:[420,130,640,540],snar:[260,80,1080,690],tema:[300,96,1080,674],pdf:[280,80,1040,690],
   skra:[1206,84,370,686],mynd:[300,110,620,460],mynd2:[340,140,620,460],mynd3:[380,170,620,460],snar2:[300,100,1080,690],snar3:[340,120,1080,690],yt:[380,140,840,520],yt2:[420,170,840,520]};
 var DEF_SZ={klokka:2,tid:2,navn:2,ljos:2,glas:2,tern:2,larm:2,aetlan:2,snar:3,tema:3,pdf:3};
-var S={vis:{klokka:1,tid:1,navn:1,ljos:1,glas:1,tern:1,larm:0,skra:1},sz:{},bg:'strik',names:'',plan:null,planItems:null,once:true,fs:1.5,tl:'',
+/* Nýggjar talvur byrja róliga: bert klokkan. Hini amboðini eru í bjálkanum niðri. */
+var S={vis:{klokka:1},sz:{},bg:'strik',names:'',plan:null,planItems:null,once:true,fs:1.5,tl:'',
   tlTxt:{r:'Friður',g:'Tosið spakuliga',n:'Tosið saman'},secs:300,sound:true,lim:60,mynd:'',cm:'t',jar:0,goal:20,dice:2,fl:{}};
 try{var o=JSON.parse(localStorage.getItem(KEY)||'null');if(o)for(var k in o)S[k]=o[k];}catch(e){}
 /* Flyt eldri goymslu yvir */
 /* bert gamlar goymslur uttan dias: nýggj dias hava ikki hesi lyklarnar, og tey skulu vera tóm */
-if(!S.pages)['glas','tern'].forEach(function(k){if(S.vis[k]===undefined)S.vis[k]=1;});
+if(!S.pages&&typeof o!=='undefined'&&o)['glas','tern'].forEach(function(k){if(S.vis[k]===undefined)S.vis[k]=1;});
 if(S.tlTxt){if(S.tlTxt.r==='Arbeiðið kvirt')S.tlTxt.r='Friður';if(S.tlTxt.g==='Hvískrið')S.tlTxt.g='Tosið spakuliga';}
 if(!S.planItems){S.planItems=(S.plan||'').split(/\r?\n/).map(function(t){return t.replace(/^\s*(\d+[.)]|[-•*])\s*/,'').trim()}).filter(Boolean).map(function(t){return {t:t,d:0}});delete S.plan;}
 if(!S.sz)S.sz={};for(var kk in DEF_SZ)if(!S.sz[kk])S.sz[kk]=DEF_SZ[kk];
@@ -3052,7 +3053,7 @@ STK.kamera={n:'Myndatól',sz:[680,520],set:1,lib:false,tool:1,r:function(d){
       var v=$('#w-'+id+' video');if(!v||!v.videoWidth)return;var c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;var g=c.getContext('2d');
       if(d.mir){g.translate(c.width,0);g.scale(-1,1);}g.drawImage(v,0,0);c.toBlob(function(bl){var k='k'+Date.now().toString(36);idb('readwrite',function(st){return st.put(bl,'cam:'+k);}).then(function(){KAMURL[k]=URL.createObjectURL(bl);d.snap=k;save();drawStk(id);});},'image/jpeg',.88);});});}};
 STK.kamera.settings=function(id,d,sec){sec.innerHTML='<div class="set-row"><h4>Hvørt myndatól?</h4><div class="row" id="kmDevs" style="flex-wrap:wrap;gap:6px"><span class="note">Leiti …</span></div></div>'
-  +'<div class="set-row"><label class="chk"><input type="checkbox" id="kmMir"> Spegla myndina</label></div><p class="note">Myndin verður bert víst á hesi telduni og verður ikki send á netið. Tá ið tú hevur tikið eina mynd, kanst tú tekna á henni við pennanum.</p>';
+  +'<div class="set-row"><label class="chk"><input type="checkbox" id="kmMir"> Spegla myndina</label></div><p class="note">Myndin verður bert víst á hesi telduni og verður ikki send á netið. Tá ið tú hevur tikið eina mynd, kanst tú tekna á henni við penninum.</p>';
   var mi=$('#kmMir',sec);mi.checked=!!d.mir;mi.addEventListener('change',function(){if(mi.checked)d.mir=1;else delete d.mir;save();drawStk(id);});
   if(navigator.mediaDevices&&navigator.mediaDevices.enumerateDevices)navigator.mediaDevices.enumerateDevices().then(function(L){L=L.filter(function(x){return x.kind==='videoinput';});var box=$('#kmDevs',sec);if(!box)return;
     box.innerHTML=L.length?L.map(function(x,i){return '<button type="button" class="btn sm" data-dev="'+x.deviceId+'" aria-pressed="'+((d.dev||'')===x.deviceId?'true':'false')+'">'+esc(x.label||('Myndatól '+(i+1)))+'</button>'}).join(''):'<span class="note">Einki myndatól funnið.</span>';
