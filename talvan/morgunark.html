@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Morgunark – Snar</title>
 <!-- Morgunark til Talvuna: 200 ørk til hvønn floksbólk, eitt til hvønn skúladag.
-     ?dl=g|m|h  (1.–3., 4.–6., 7.–9. flokkur)
+     ?dl=g|m|h  (Byrjanarstig, Miðstig, Hástig)
      &n=1–200   (arkið; annars arkið til skúladagin í dag – talt frá 1. august, uttan leygardagar og sunnudagar)
      &d=ÁÁÁÁ-M-D (ein annar dagur)   &k=slag (bert til roynd)   &print=1 (prentar beinanvegin)   &v=5 (fimm ørk í senn)
      Arkini verða gjørd við kotu: arkið nr. n er altíð tað sama, so lærarin kann prenta frammanundan.
@@ -42,9 +42,7 @@ input.a,input.ans,textarea.ans{border:0;border-bottom:1.5px solid var(--ink);fon
 .lines{display:grid;gap:9mm;margin-top:2mm}
 .lines span{border-bottom:1px solid #94a3b8;height:1px}
 textarea.ans{width:100%;min-height:42mm;border:1px solid var(--line);border-radius:8px;font-size:13pt;line-height:1.6;resize:vertical}
-.box{border:1.5px solid var(--ink);border-radius:10px;height:62mm;position:relative;overflow:hidden;touch-action:none;background:#fff}
-.box canvas,.draw canvas{position:absolute;inset:0;width:100%;height:100%}
-.clr{position:absolute;right:6px;top:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font:600 .8rem inherit;z-index:2}
+.box{border:1.5px solid var(--ink);border-radius:10px;height:62mm;position:relative;overflow:hidden;background:#fff}
 .stars{display:flex;flex-wrap:wrap;gap:6px;max-width:150mm;margin-bottom:3mm;color:#f59e0b;font-size:20pt;line-height:1}
 .words{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14pt;font-weight:700;margin-bottom:3mm}
 .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:4mm 10mm;font-size:14pt;font-weight:700}
@@ -55,7 +53,7 @@ textarea.ans{width:100%;min-height:42mm;border:1px solid var(--line);border-radi
 .sc.br{border-right:2.5px solid var(--ink)}.sc.bb{border-bottom:2.5px solid var(--ink)}
 .sc.giv{background:#f1f5f9}
 .sc input{width:100%;height:100%;border:0;text-align:center;font:700 18pt inherit;color:#1d4ed8;background:transparent;padding:0}
-.draw{position:relative;width:100%;margin:0 auto;touch-action:none}
+.draw{position:relative;width:100%;margin:0 auto}
 .draw svg{display:block;width:100%;height:auto;font-family:Inter,Arial,sans-serif}
 .ws{display:grid;grid-template-columns:repeat(var(--n),1fr);width:min(100%,calc(var(--n) * 12mm));margin:0 auto 5mm;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
 .ws span{aspect-ratio:1;display:grid;place-items:center;font-size:15pt;font-weight:800;border:.5px solid #e2e8f0;user-select:none;cursor:pointer}
@@ -110,7 +108,7 @@ body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
 @media print{
   @page{size:A4;margin:0}
   html,body{background:#fff}
-  .bar,.screen-only,.clr{display:none!important}
+  .bar,.screen-only{display:none!important}
   .sheet{margin:0;box-shadow:none;width:210mm;height:297mm;break-after:page;overflow:hidden}
   .sheet:last-child{break-after:auto}
   body.blank input.a,body.blank input.ans{color:transparent}
@@ -136,9 +134,9 @@ body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
 </head>
 <body>
 <div class="bar screen-only" role="toolbar" aria-label="Morgunark">
-  <button type="button" data-dl="g">1.–3. flokkur</button>
-  <button type="button" data-dl="m">4.–6. flokkur</button>
-  <button type="button" data-dl="h">7.–9. flokkur</button>
+  <button type="button" data-dl="g">Byrjanarstig</button>
+  <button type="button" data-dl="m">Miðstig</button>
+  <button type="button" data-dl="h">Hástig</button>
   <span class="sep"></span>
   <button type="button" id="prev" aria-label="Undanfarna ark">‹</button>
   <span class="nr" id="nr"></span>
@@ -162,7 +160,7 @@ body:not(.pen) #penUndo,body:not(.pen) #penClear{display:none}
 var Q=new URLSearchParams(location.search),DL=/^[gmh]$/.test(Q.get('dl')||'')?Q.get('dl'):'m',SCREEN=!Q.get('print'),MAX=200;
 var DGD=['sunnudagur','mánadagur','týsdagur','mikudagur','hósdagur','fríggjadagur','leygardagur'],
   DGM=['januar','februar','mars','apríl','mai','juni','juli','august','september','oktober','november','desember'],
-  DLN={g:'1.–3. flokkur',m:'4.–6. flokkur',h:'7.–9. flokkur'};
+  DLN={g:'Byrjanarstig',m:'Miðstig',h:'Hástig'};
 function dayOf(){var p=(Q.get('d')||'').split('-').map(Number);if(p.length===3&&p[0]>2000)return new Date(p[0],p[1]-1,p[2]);var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate());}
 /* Skúladagur nr.: mánadagar–fríggjadagar frá 1. august (Talvan roknar tað sama) */
 function schoolDay(t){var y=t.getMonth()>=7?t.getFullYear():t.getFullYear()-1,d=new Date(y,7,1),n=0;while(d<=t){var w=d.getDay();if(w>0&&w<6)n++;d.setDate(d.getDate()+1);}return Math.max(1,((n-1)%MAX)+1);}
@@ -181,8 +179,9 @@ function ans(w){return SCREEN?'<input class="ans" inputmode="numeric" aria-label
 function sums(L){return '<div class="sums">'+L.map(function(x){return '<div>'+x+' = '+(SCREEN?'<input class="a" inputmode="numeric" aria-label="Svar">':'<span class="a"></span>')+'</div>'}).join('')+'</div>';}
 function fill(L){return '<div class="sums">'+L.map(function(x){return '<div>'+x.replace('__',ans('18mm'))+'</div>'}).join('')+'</div>';}
 function lines(n){return SCREEN?'<textarea class="ans" aria-label="Skriva her"></textarea>':'<div class="lines">'+new Array(n+1).join('<span></span>')+'</div>';}
-function box(){return '<div class="box"><canvas></canvas><button type="button" class="clr screen-only">Strika</button></div>';}
-function draw(svg){return '<div class="draw">'+svg+(SCREEN?'<canvas></canvas><button type="button" class="clr">Strika</button>':'')+'</div>';}
+/* Kassar og tekningar hava ikki egnan blýant longur: Blýanturin niðri til høgru tekur alt arkið (og verður goymdur). */
+function box(){return '<div class="box"></div>';}
+function draw(svg){return '<div class="draw">'+svg+'</div>';}
 var tn=0;function task(title,body){tn++;return '<section class="t"><h2><b>'+tn+'</b>'+title+'</h2>'+body+'</section>';}
 
 /* ---------- Sudoku ---------- */
@@ -342,14 +341,6 @@ if(SCREEN&&MODE==='ark')Array.prototype.forEach.call(document.querySelectorAll('
 function dgIso(){var t=new Date();return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();}
 Array.prototype.forEach.call(document.querySelectorAll('[data-progv]'),function(b){b.addEventListener('click',function(){var u=new URLSearchParams();u.set('dl',DL);u.set('progv',b.dataset.progv);u.set('print','1');location.search=u.toString();});});
 
-/* Tekna við fingrinum á iPad */
-Array.prototype.forEach.call(document.querySelectorAll('.box,.draw'),function(bx){var c=bx.querySelector('canvas');if(!c)return;var g=c.getContext('2d'),dr=false;
-  function fit(){var r=bx.getBoundingClientRect(),k=window.devicePixelRatio||1;c.width=r.width*k;c.height=r.height*k;g.setTransform(k,0,0,k,0,0);g.lineWidth=3;g.lineCap='round';g.lineJoin='round';g.strokeStyle='#1d4ed8';}
-  fit();function pt(e){var r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
-  c.addEventListener('pointerdown',function(e){dr=true;var p=pt(e);g.beginPath();g.moveTo(p[0],p[1]);c.setPointerCapture(e.pointerId);});
-  c.addEventListener('pointermove',function(e){if(!dr)return;var p=pt(e);g.lineTo(p[0],p[1]);g.stroke();});
-  ['pointerup','pointercancel'].forEach(function(t){c.addEventListener(t,function(){dr=false;});});
-  var cl=bx.querySelector('.clr');if(cl)cl.addEventListener('click',function(){g.clearRect(0,0,c.width,c.height);});});
 /* Orðaleiting á skíggja: trýst á bókstavirnar */
 if(SCREEN)Array.prototype.forEach.call(document.querySelectorAll('.ws span'),function(s){s.addEventListener('click',function(){s.classList.toggle('on');});});
 /* Knøttar ovast */
