@@ -484,6 +484,12 @@ body.focus .w.big{border-radius:0}
 .more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .more-grid .dk{min-width:0;width:100%}
 #ink{top:0;height:100%}
+.w,.w-body{touch-action:none}
+.sn-list,.bk-grid,.pdf-view,.panel,.more-pop{touch-action:pan-x pan-y}
+.pdf-fail{margin:auto;padding:20px;max-width:360px;text-align:center;color:var(--muted);font-weight:600}
+@media (pointer:coarse){.w .w-rs{width:calc(34px * var(--isc));height:calc(34px * var(--isc));border-width:calc(4px * var(--isc))}
+  .w-rs.nw,.w-rs.sw{left:calc(-17px * var(--isc))}.w-rs.ne,.w-rs.se{right:calc(-17px * var(--isc))}.w-rs.nw,.w-rs.ne{top:calc(-17px * var(--isc))}.w-rs.sw,.w-rs.se{bottom:calc(-17px * var(--isc))}
+  .w-head .ic{width:52px;height:52px}}
 .penbar{top:14px}
 @media (max-width:1240px){.dock .dk{min-width:60px;font-size:.7rem;padding:8px 2px 6px}.dock .dk svg{width:32px;height:32px}}
 .more-grid .dk{font-size:.8rem}.more-grid .dk svg{width:40px;height:40px}
@@ -942,7 +948,7 @@ var SETS={
   tern:[['Tal av terningum',['#diceMinus','#diceN','#dicePlus']]],
   larm:[['Hvussu hart má vera?',['#noiseLimL']],['',['#noiseNote']]],
   aetlan:[['Skriftstødd',['#fsDown','#fsUp']],['',['#planNote']]],
-  pdf:[['Síður í senn',['#ppSeg']],['Pláss á talvuni',['#pdfBack']],['Fílan',['#pdfNew']]],
+  pdf:[['Síður í senn',['#ppSeg']],['Pláss á talvuni',['#pdfBack']]],
   poll:'egin'};
 /* Har kann ein ikki byrja at flyta amboðið, tí har verður arbeitt */
 var NODRAG='button,input,textarea,select,a,label,summary,details,iframe,canvas,[contenteditable],.ball,.pile,.jar,.dice,.pdf-view,.sn-list,.bk-grid,.plan,.groups,.tl-txt,.poll-ans,.w-rs,.w-head';
@@ -1471,6 +1477,8 @@ var BG=[['strik','Strikumynd','#fff url("data:image/svg+xml,'+encodeURIComponent
 /* ---------- PDF-amboðið (PDF.js, fílan goymd í IndexedDB í kaganum) ---------- */
 /* PDF.js 3.11.174 liggur við síðuna av Talvuni (pdfjs/), avritað úr cdnjs 15.11.2026 og kannað við SRI-hashinum hjá cdnjs */
 var PDFJS='pdfjs/';
+/* Ein síða verður í mesta lagi 8 milliónir pixlar og 4096 pixlar á breidd/hædd – annars verður hon blonk á mongum touch-skermum */
+var PDF_MAXPX=8e6,PDF_MAXDIM=4096;
 var pdfDoc=null,pdfTasks=[],pdfBusy=false,pdfGen=0;
 if(S.bg==='pdf'){S.bg='strik';S.vis.pdf=1;S.pdfBack=1;}
 if(!S.pdfTwo)S.pdfTwo=1;if(!S.pdfZoom)S.pdfZoom=1;
@@ -1496,10 +1504,12 @@ function renderPdf(){if(!pdfDoc||!S.vis.pdf||$('#w-pdf').hidden)return;
     var v1=pgs.map(function(pg){return pg.getViewport({scale:1});}),sw=v1.reduce(function(a,v){return a+v.width},0),mh=Math.max.apply(null,v1.map(function(v){return v.height}));
     var fit=Math.min((W-12*(pgs.length-1))/sw,H/mh),sc=fit*S.pdfZoom,dp=(window.devicePixelRatio||1)*Math.max(1,SC);
     pdfTasks.forEach(function(t){try{t.cancel()}catch(e){}});pdfTasks=[];
-    var cs=pgs.map(function(pg){var vp=pg.getViewport({scale:sc*dp}),c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);
-      c.style.width=(vp.width/dp)+'px';c.style.height=(vp.height/dp)+'px';var t=pg.render({canvasContext:c.getContext('2d'),viewport:vp});pdfTasks.push(t);return t.promise.then(function(){return c;});});
+    var cs=pgs.map(function(pg){var v0=pg.getViewport({scale:sc}),mx=Math.min(dp,Math.sqrt(PDF_MAXPX/(v0.width*v0.height)),PDF_MAXDIM/Math.max(v0.width,v0.height));var d=Math.max(.5,mx);
+      var vp=pg.getViewport({scale:sc*d}),c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);
+      c.style.width=(vp.width/d)+'px';c.style.height=(vp.height/d)+'px';var t=pg.render({canvasContext:c.getContext('2d'),viewport:vp});pdfTasks.push(t);return t.promise.then(function(){return c;});});
     Promise.all(cs).then(function(cv){if(gen!==pdfGen)return;var box=$('#pdfPages');box.innerHTML='';cv.forEach(function(c){box.appendChild(c)});
-      view.scrollLeft=cx*view.scrollWidth-view.clientWidth/2;view.scrollTop=cy*view.scrollHeight-view.clientHeight/2;}).catch(function(){});});}
+      view.scrollLeft=cx*view.scrollWidth-view.clientWidth/2;view.scrollTop=cy*view.scrollHeight-view.clientHeight/2;}).catch(function(e){if(e&&e.name==='RenderingCancelledException')return;console.warn('PDF',e);pdfFail();});}).catch(function(e){console.warn('PDF',e);pdfFail();});}
+function pdfFail(){var box=$('#pdfPages');box.innerHTML='<p class="pdf-fail">Tað bar ikki til at vísa hesa síðuna. Royn at gera PDF-ið minni við −.</p>';}
 function pdfGo(d){if(!pdfDoc)return;var N=pdfDoc.numPages,n=Math.max(1,Math.min(N,S.pdfPage+d*S.pdfTwo));if(n!==S.pdfPage){S.pdfPage=n;save();$('#pdfView').scrollTop=0;renderPdf();}}
 function pdfZoom(z){S.pdfZoom=Math.max(.4,Math.min(5,z));save();pdfUI();renderPdf();}
 $('#pdfPrev').addEventListener('click',function(){pdfGo(-1)});
@@ -1615,7 +1625,7 @@ function pollReset(){S.poll.v=[];pollFix();save();drawPoll();}
    +'<div class="set-row"><h4>Vís úrslitini sum</h4>'
    +'<label class="pradio"><input type="radio" name="pollC" value="sulur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Súlur</label>'
    +'<label class="pradio"><input type="radio" name="pollC" value="kaka"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l7 5"/></svg>Kaka</label>'
-   +'<label class="pradio"><input type="radio" name="pollC" value="hringur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5"/></svg>Hringur</label></div>'
+   +'<label class="pradio"><input type="radio" name="pollC" value="hringur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5"/></svg>Kransur</label></div>'
    +'<div class="set-row"><h4>Úrslitini</h4><button type="button" class="btn sm danger" id="pollReset">Strika úrslitini</button></div>'
    +'<div class="set-row" id="pollThRow"><h4>Litir</h4><div class="pths">'+T+'</div></div></div>';
   var tab='still';
