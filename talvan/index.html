@@ -863,7 +863,10 @@ body.focus .w.big{top:calc(80px * var(--isc))!important;height:calc(100% - 80px 
 .psl .psl-die{width:calc(var(--u)*16);border-width:calc(var(--u)*.5);box-shadow:0 10px 20px -12px rgba(0,0,0,.5)}
 .psl-msg{min-height:calc(var(--u)*7);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*1.6);font-weight:900;font-size:calc(var(--u)*4.4);text-align:center;color:var(--pa);line-height:1.15}
 .psl-msg:not(.hit){color:#475569;font-weight:700;font-size:calc(var(--u)*3.4)}
-.psl-msg.hit{white-space:nowrap;font-size:calc(var(--u)*3.9);animation:pslPop .55s cubic-bezier(.3,1.6,.5,1)}
+.psl-mt{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0}
+.psl-mt b{font-size:1.15em}.psl-mt span{font-size:.85em}
+.psl-msg{max-width:100%}
+.psl-msg.hit{font-size:calc(var(--u)*3.9);animation:pslPop .55s cubic-bezier(.3,1.6,.5,1)}
 .psl-ic svg{display:block;width:calc(var(--u)*7);height:auto}
 @keyframes pslPop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
 .psl-kast{border:0;border-radius:999px;padding:.55em 1.6em;background:var(--pa);color:#fff;font:900 max(.9rem,calc(var(--u)*4)) Inter,Arial,sans-serif;cursor:pointer;box-shadow:0 8px 16px -10px rgba(0,0,0,.6)}
@@ -3258,7 +3261,7 @@ function pslRoll(id){var d=S.stk[id],w=$('#w-'+id);if(!d||!w)return;var R=PSR[d.
   if(S.sound){ensureAudio();if(actx)[0,.12,.26,.42].forEach(function(dl,k){tone(180+rnd(140),dl,.08,.07+.02*(3-k))});}
   setTimeout(function(){delete w.dataset.rolling;var seks=v.indexOf(6)>=0,eins=v.length>1&&v[0]===v[1],
       hit=d.rule==='eins'?eins:d.rule==='bada'?(seks||eins):seks,m=$('#w-'+id+' .psl-msg');if(!m)return;
-    if(hit){m.className='psl-msg hit';m.innerHTML='<span class="psl-ic">'+T.ic()+'</span>'+(seks&&d.rule!=='eins'?'Seks!':'Báðir eins!')+' Tak '+T.it;
+    if(hit){m.className='psl-msg hit';m.innerHTML='<span class="psl-ic">'+T.ic()+'</span><span class="psl-mt"><b>'+(seks&&d.rule!=='eins'?'Seks!':'Báðir eins!')+'</b><span>Tak '+T.it+'</span></span>';
       if(typeof tone==='function'){try{[784,1047].forEach(function(f,i){tone(f,i*.12,.25,.08);});}catch(e){}}}
     else{var k=PSMISS[id]||0;m.textContent=PSMT[k===0?0:1+(k-1)%(PSMT.length-1)];PSMISS[id]=k+1;}},1100);}
 STK.pakka.settings=function(id,d,sec){
