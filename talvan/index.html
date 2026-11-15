@@ -2610,20 +2610,21 @@ var STKPAL={litrikt:['Litríkt',null],pastell:['Pastell',['#f472b6','#f59e0b','#
   heyst:['Heyst',['#ea580c','#d97706','#b91c1c','#a16207','#c2410c']],jol:['Jól',['#dc2626','#16a34a','#dc2626','#16a34a','#ca8a04']],
   reytt:['Reytt',['#ef2418']],blatt:['Blátt',['#1559e8']],gront:['Grønt',['#15803d']],lilla:['Lilla',['#7c3aed']],svart:['Svart',['#1f2937']],hvitt:['Hvítt',['#ffffff']]};
 var CURPAL=null,CURST=null;
-function bub(lines,o){o=o||{};var pad=30,y=pad,W=0,rows=[],PP=CURPAL&&STKPAL[CURPAL]&&STKPAL[CURPAL][1],one=PP&&PP.length===1;
+var SVGN;
+function bub(lines,o){var U=(SVGN=(SVGN||0)+1);o=o||{};var pad=30,y=pad,W=0,rows=[],PP=CURPAL&&STKPAL[CURPAL]&&STKPAL[CURPAL][1],one=PP&&PP.length===1;
   lines.forEach(function(L){var w=L.t.length*L.s*(L.w||.6);W=Math.max(W,w);y+=L.s*.92;rows.push({L:L,y:y});y+=L.s*.18;});
   var VW=W+pad*2,VH=y+pad*.6,ci=o.c0||0;
-  var s='<svg viewBox="0 0 '+VW.toFixed(0)+' '+VH.toFixed(0)+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="ds" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".22"/></filter></defs>';
-  if(o.bubble)s+='<path d="M14 10h'+(VW-28)+'a14 14 0 0 1 14 14v'+(VH-62)+'a14 14 0 0 1-14 14H'+(VW*.72)+'l22 30-46-30H24a14 14 0 0 1-14-14V24a14 14 0 0 1 14-14z" fill="#f8fafc" filter="url(#ds)"/>';
-  rows.forEach(function(r){var L=r.L;s+='<text x="'+(VW/2).toFixed(0)+'" y="'+r.y.toFixed(0)+'" text-anchor="middle" font-family="Fredoka,Inter,Arial,sans-serif" font-weight="'+(L.fw||700)+'" font-size="'+L.s+'" paint-order="stroke" stroke="'+(L.st||(CURST==='d'?'#1f2937':CURST==='n'?'none':(CURPAL==='hvitt'?'rgba(0,0,0,.45)':'#fff')))+'" stroke-width="'+(L.sw!=null?L.sw:L.s*.2).toFixed(0)+'" stroke-linejoin="round"'+(o.bubble?'':' filter="url(#ds)"')+'>';
+  var s='<svg viewBox="0 0 '+VW.toFixed(0)+' '+VH.toFixed(0)+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="ds'+U+'" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".22"/></filter></defs>';
+  if(o.bubble)s+='<path d="M14 10h'+(VW-28)+'a14 14 0 0 1 14 14v'+(VH-62)+'a14 14 0 0 1-14 14H'+(VW*.72)+'l22 30-46-30H24a14 14 0 0 1-14-14V24a14 14 0 0 1 14-14z" fill="#f8fafc" filter="url(#ds'+U+')"/>';
+  rows.forEach(function(r){var L=r.L;s+='<text x="'+(VW/2).toFixed(0)+'" y="'+r.y.toFixed(0)+'" text-anchor="middle" font-family="Fredoka,Inter,Arial,sans-serif" font-weight="'+(L.fw||700)+'" font-size="'+L.s+'" paint-order="stroke" stroke="'+(L.st||(CURST==='d'?'#1f2937':CURST==='n'?'none':(CURPAL==='hvitt'?'rgba(0,0,0,.45)':'#fff')))+'" stroke-width="'+(L.sw!=null?L.sw:L.s*.2).toFixed(0)+'" stroke-linejoin="round"'+(o.bubble?'':' filter="url(#ds'+U+')"')+'>';
     var PAL=PP||STKC;if(L.m)L.t.split('').forEach(function(ch){if(ch===' '){s+=' ';return;}s+='<tspan fill="'+PAL[ci++%PAL.length]+'">'+esc(ch)+'</tspan>';});
     else s+='<tspan fill="'+(one?PP[0]:(L.c||'#1f2937'))+'">'+esc(L.t)+'</tspan>';
     s+='</text>';});
   return s+'</svg>';}
-function starSvg(d){var pts=[],cx=250,cy=262,R=232,r=118;for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,q=i%2?r:R;pts.push((cx+q*Math.cos(a)).toFixed(1)+','+(cy+q*Math.sin(a)).toFixed(1));}
+function starSvg(d){var U=(SVGN=(SVGN||0)+1);var pts=[],cx=250,cy=262,R=232,r=118;for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,q=i%2?r:R;pts.push((cx+q*Math.cos(a)).toFixed(1)+','+(cy+q*Math.sin(a)).toFixed(1));}
   var nm=d.name||'Navnið her',ns=Math.min(44,Math.max(22,470/Math.max(8,nm.length)));
-  return '<svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="sd"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity=".25"/></filter></defs>'
-   +'<polygon points="'+pts.join(' ')+'" fill="#fffaec" stroke="#f6b81a" stroke-width="26" stroke-linejoin="round" filter="url(#sd)"/>'
+  return '<svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="sd'+U+'"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity=".25"/></filter></defs>'
+   +'<polygon points="'+pts.join(' ')+'" fill="#fffaec" stroke="#f6b81a" stroke-width="26" stroke-linejoin="round" filter="url(#sd'+U+')"/>'
    +'<g><path d="M92 290q-6 30 8 52" fill="none" stroke="#2f4858" stroke-width="2"/><ellipse cx="92" cy="262" rx="24" ry="29" fill="#5cc8d4"/><ellipse cx="84" cy="251" rx="6" ry="8" fill="#fff" opacity=".6"/>'
    +'<path d="M408 290q8 30-6 52" fill="none" stroke="#2f4858" stroke-width="2"/><ellipse cx="408" cy="262" rx="24" ry="29" fill="#f26b6b"/><ellipse cx="400" cy="251" rx="6" ry="8" fill="#fff" opacity=".6"/></g>'
    +'<g font-family="Fredoka,Inter,Arial,sans-serif" font-weight="700" text-anchor="middle">'
@@ -2635,10 +2636,10 @@ function starSvg(d){var pts=[],cx=250,cy=262,R=232,r=118;for(var i=0;i<10;i++){v
 var FV='AAAAEEEEIIIIUUUOOAÁÍÓÚYØÆ',FC='RRRRNNNNSSSSTTTTLLLLKKKGGGMMMDDDFFVVHHBBPJÐ';
 function newLetters(n){var a=[],v=0;for(var i=0;i<n*n;i++){var isV=Math.random()<.42;if(isV)v++;var p=isV?FV:FC;a.push(p[Math.floor(Math.random()*p.length)]);}
   if(v<Math.round(n*n*.3))return newLetters(n);return a;}
-function finnSvg(d){var n=d.n||4,L=d.l&&d.l.length===n*n?d.l:(d.l=newLetters(n)),c=110,o=34,W=n*c+o*2;
-  var s='<svg viewBox="0 0 '+W+' '+W+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="fd"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity=".2"/></filter></defs>'
+function finnSvg(d){var U=(SVGN=(SVGN||0)+1);var n=d.n||4,L=d.l&&d.l.length===n*n?d.l:(d.l=newLetters(n)),c=110,o=34,W=n*c+o*2;
+  var s='<svg viewBox="0 0 '+W+' '+W+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="fd'+U+'"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity=".2"/></filter></defs>'
    +'<rect x="0" y="0" width="'+W+'" height="'+W+'" rx="40" fill="#a8dde3"/><rect x="'+(o-8)+'" y="'+(o-8)+'" width="'+(n*c+16)+'" height="'+(n*c+16)+'" fill="#0e9a9a"/>';
-  for(var i=0;i<n*n;i++){var x=o+(i%n)*c,y=o+Math.floor(i/n)*c;s+='<rect x="'+(x+4)+'" y="'+(y+4)+'" width="'+(c-8)+'" height="'+(c-8)+'" fill="#a8dde3"/><rect x="'+(x+12)+'" y="'+(y+12)+'" width="'+(c-24)+'" height="'+(c-24)+'" rx="16" fill="#fbfbfb" filter="url(#fd)"/>'
+  for(var i=0;i<n*n;i++){var x=o+(i%n)*c,y=o+Math.floor(i/n)*c;s+='<rect x="'+(x+4)+'" y="'+(y+4)+'" width="'+(c-8)+'" height="'+(c-8)+'" fill="#a8dde3"/><rect x="'+(x+12)+'" y="'+(y+12)+'" width="'+(c-24)+'" height="'+(c-24)+'" rx="16" fill="#fbfbfb" filter="url(#fd'+U+')"/>'
     +'<text x="'+(x+c/2)+'" y="'+(y+c/2+27)+'" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="600" font-size="76" fill="#111">'+L[i]+'</text>';}
   return s+'</svg>';}
 var STK={
