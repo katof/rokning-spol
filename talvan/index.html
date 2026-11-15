@@ -2963,7 +2963,7 @@ STK.dagur.settings=function(id,d,sec){var L=dgLog(d),t=new Date(),o=[['noS','Ví
   var cnt={},tot=0;Object.keys(L).forEach(function(k){var p=k.split('-');if(+p[0]===t.getFullYear()&&+p[1]===t.getMonth()+1){cnt[L[k]]=(cnt[L[k]]||0)+1;tot++;}});
   var mx=Math.max.apply(null,[1].concat(Object.keys(cnt).map(function(k){return cnt[k]})));
   var h='<div class="set-row"><h4>Litur</h4><div class="stkpals dday-ths">'+Object.keys(DDTH).map(function(k){var c=DDTH[k][1];return '<button type="button" class="stkpal" data-ddth="'+k+'" aria-pressed="'+((d.th||'')===k?'true':'false')+'"><span class="sp-dots">'+(c?'<i style="width:26px;height:18px;border-radius:6px;background:linear-gradient(160deg,'+c[0]+','+c[1]+')"></i>':'<i style="background:#bfdbfe"></i><i style="background:#bbf7d0"></i><i style="background:#fde68a"></i><i style="background:#fed7aa"></i>')+'</span><small>'+DDTH[k][0]+'</small></button>'}).join('')+'</div></div>';
-  h+='<div class="set-row"><h4>Veðrið í '+DGM[t.getMonth()]+'</h4>'+(tot?'<div class="dday-bars">'+DGW.map(function(x){var n=cnt[x[0]]||0;return '<div class="dday-bar"><svg viewBox="0 0 48 48" style="--wc:'+x[2]+'" aria-hidden="true">'+x[3]+'</svg><span>'+x[1]+'</span><i style="width:'+(n/mx*100)+'%;background:'+x[2]+'"></i><b>'+n+'</b></div>'}).join('')+'</div><p class="note">'+tot+(tot===1?' dagur':' dagar')+' skrivaðir upp hendan mánaðin.</p>':'<p class="note">Enn einki veður skrivað upp hendan mánaðin. Trýst á eitt veður á kortinum.</p>')+'</div>';
+  h+='<div class="set-row"><h4>Veðrið í '+DGM[t.getMonth()]+'</h4>'+(tot?'<div class="dday-bars">'+DGW.map(function(x){var n=cnt[x[0]]||0;return '<div class="dday-bar"><svg viewBox="0 0 48 48" style="--wc:'+x[2]+'" aria-hidden="true">'+x[3]+'</svg><span>'+x[1]+'</span><i style="width:'+(n/mx*100)+'%;background:'+x[2]+'"></i><b>'+n+'</b></div>'}).join('')+'</div><p class="note">'+tot+(tot===1?' dagur':' dagar')+' skrivaðir upp hendan mánaðin.</p>':'<p class="note">Einki veður er enn skrivað upp hendan mánaðin. Trýst á eitt veður á kortinum.</p>')+'</div>';
   h+='<div class="set-row"><h4>Hvat skal standa?</h4><div class="dday-opts">'+o.map(function(x){return '<label class="chk"><input type="checkbox" data-o="'+x[0]+'"'+(d[x[0]]?'':' checked')+'> '+x[1]+'</label>'}).join('')+'</div></div>';
   h+='<div class="set-row"><div class="row"><button class="btn sm" type="button" data-ddclr>Strika veðurdagbókina</button></div></div>';
   sec.innerHTML=h;
@@ -2987,7 +2987,7 @@ function rkIdx(d,t){return Math.round((rkMon(t)-rkStart(d))/6048e5)+(d.off||0);}
 function rkFor(d,t){var L=rkNames(d),p=rkPer(d),w=rkIdx(d,t),out=[];if(!L.length)return out;for(var j=0;j<Math.min(p,L.length);j++)out.push(L[(((w*p+j)%L.length)+L.length)%L.length]);return out;}
 function rkJoin(L){return L.length<2?(L[0]||''):L.slice(0,-1).join(', ')+' og '+L[L.length-1];}
 STK.rokil={n:'Røklaskipan',sz:[560,380],set:1,lib:false,tool:1,r:function(d){var t=new Date(),now=rkFor(d,t),nx=rkFor(d,new Date(t.getTime()+6048e5)),J=rkJobs(d);
-  if(!now.length)return '<div class="rk"><div class="rk-h"><b>Røklar</b><span>Vika '+rkWeek(t)+'</span></div><button type="button" class="rk-empty" data-rk-set>Skriva nøvnini í flokkinum</button></div>';
+  if(!now.length)return '<div class="rk"><div class="rk-h"><b>Røklar</b><span>Vika '+rkWeek(t)+'</span></div><button type="button" class="rk-empty" data-rk-set>Skriva nøvnini á næmingunum í flokkinum</button></div>';
   return '<div class="rk"><div class="rk-h"><b>'+(now.length>1?'Røklar':'Røkil')+' hesa vikuna</b><span>Vika '+rkWeek(t)+'</span></div>'
     +'<div class="rk-n">'+now.map(function(n,i){return '<div class="rk-p">'+(J[i]?'<small>'+esc(J[i])+'</small>':'')+'<b>'+esc(n)+'</b></div>'}).join('')+'</div>'
     +'<div class="rk-nx">Næstu viku: '+esc(rkJoin(nx))+'</div></div>';},
@@ -2999,7 +2999,7 @@ STK.rokil.settings=function(id,d,sec){var L=rkNames(d),J=rkJobs(d),st=rkStart(d)
     +((S.lists||[]).length?'<div class="row" style="flex-wrap:wrap;gap:6px;margin-top:6px">'+S.lists.map(function(l,i){return '<button type="button" class="btn sm" data-rkl="'+i+'">'+esc(l.n)+'</button>'}).join('')+'</div>':'')+'</div>'
     +'<div class="set-row"><h4>Hvussu nógvir røklar í senn?</h4><div class="row">'+(J.length?'<span class="note">'+J.length+' – ein til hvørja uppgávu</span>':'<button class="btn sm" type="button" data-rkp="-1">−</button><span class="note" style="min-width:4em;text-align:center">'+rkPer(d)+'</span><button class="btn sm" type="button" data-rkp="1">+</button>')+'</div></div>'
     +'<div class="set-row"><h4>Uppgávur (ikki neyðugt)</h4><textarea class="set-in" id="rkJobs" rows="3" placeholder="T.d. Talvan&#10;Blómurnar&#10;Ruddingur"></textarea></div>'
-    +'<div class="set-row"><h4>Røðin byrjar vikuna við</h4><input class="set-in" type="date" id="rkStart"><div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-rko="-1">‹ Ein viku aftur</button><button class="btn sm" type="button" data-rko="1">Ein viku fram ›</button></div><p class="note">Er ein frívika, ella skal røðin skiftast, flytur tú hana eina viku fram ella aftur.</p></div>'
+    +'<div class="set-row"><h4>Røðin byrjar vikuna við</h4><input class="set-in" type="date" id="rkStart"><div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-rko="-1">‹ Eina viku aftur</button><button class="btn sm" type="button" data-rko="1">Eina viku fram ›</button></div><p class="note">Er ein frívika, ella skal røðin broytast, kanst tú flyta hana eina viku fram ella aftur.</p></div>'
     +'<div class="set-row"><h4>Yvirlit yvir árið</h4><div class="rk-yr">'+(L.length?rkYear(d).map(function(r){return '<div'+(r[3]?' class="now"':'')+'><b>Vika '+r[0]+'</b><span>'+r[1]+'</span><em>'+esc(rkJoin(r[2]))+'</em></div>'}).join(''):'<p class="note">Skriva nøvnini fyrst.</p>')+'</div>'
     +(L.length?'<div class="row" style="margin-top:8px"><button class="btn sm" type="button" data-rkprint>Prenta yvirlitið</button></div>':'')+'</div>';
   sec.innerHTML=h;var it=$('#rkItems',sec),jb=$('#rkJobs',sec),sd=$('#rkStart',sec),tm;it.value=d.items||'';jb.value=d.jobs||'';sd.value=iso;
@@ -3018,8 +3018,8 @@ STK.rokil.settings=function(id,d,sec){var L=rkNames(d),J=rkJobs(d),st=rkStart(d)
 var PKC=['#fef08a','#fbcfe8','#bfdbfe','#bbf7d0','#fed7aa'];
 STK.parker={n:'Spurningar til seinni',sz:[560,480],set:1,lib:false,tool:1,r:function(d){var L=d.q||[];
   return '<div class="pk"><div class="pk-h"><b>Spurningar til seinni</b><span>'+(L.length?L.length:'')+'</span></div><div class="pk-l">'
-    +(L.length?L.map(function(q,i){return '<div class="pk-q" style="--pc:'+PKC[(q.c||i)%PKC.length]+'"><p>'+esc(q.t)+'</p><button type="button" data-pkd="'+i+'" title="Svarað – tak burtur" aria-label="Svarað – tak burtur">✓</button></div>'}).join(''):'<p class="pk-0">Her kunnu spurningar standa, sum tit taka upp seinni.</p>')
-    +'</div><form class="pk-f"><input maxlength="140" placeholder="Skriva ein spurning …" aria-label="Nýggjur spurningur"><button type="submit">Legg upp</button></form></div>';},
+    +(L.length?L.map(function(q,i){return '<div class="pk-q" style="--pc:'+PKC[(q.c||i)%PKC.length]+'"><p>'+esc(q.t)+'</p><button type="button" data-pkd="'+i+'" title="Svarað – tak burtur" aria-label="Svarað – tak burtur">✓</button></div>'}).join(''):'<p class="pk-0">Her kunnu tit skriva spurningar, sum tit vilja taka upp seinni.</p>')
+    +'</div><form class="pk-f"><input maxlength="140" placeholder="Skriva ein spurning …" aria-label="Nýggjur spurningur"><button type="submit">Legg afturat</button></form></div>';},
   after:function(id,b){var f=b.querySelector('.pk-f'),i=f.querySelector('input');
     f.addEventListener('submit',function(e){e.preventDefault();var v=i.value.trim();if(!v)return;var d=S.stk[id];d.q=d.q||[];d.q.push({t:v,c:Math.floor(Math.random()*PKC.length)});save();drawStk(id);var n=$('#w-'+id+' .pk-f input');if(n)n.focus();});
     $$('[data-pkd]',b).forEach(function(x){x.addEventListener('click',function(){var d=S.stk[id];d.q.splice(+x.dataset.pkd,1);save();drawStk(id);});});}};
@@ -3035,7 +3035,7 @@ function kamStart(id,b){var d=S.stk[id],v=b.querySelector('video'),msg=b.querySe
   kamStop(id);msg.textContent='Bíða eftir myndatólinum …';
   navigator.mediaDevices.getUserMedia({video:d.dev?{deviceId:{exact:d.dev},width:{ideal:1920}}:{facingMode:'environment',width:{ideal:1920}},audio:false}).then(function(st){
     KAM[id]={st:st,dev:d.dev||''};var vv=$('#w-'+id+' video');if(vv){vv.srcObject=st;vv.play().catch(function(){});}var m=$('#w-'+id+' .km-msg');if(m)m.textContent='';})
-  .catch(function(){var m=$('#w-'+id+' .km-msg');if(m)m.textContent='Myndatólið kom ikki í gongd. Loyv kaganum at brúka myndatólið, og royn aftur.';});}
+  .catch(function(){var m=$('#w-'+id+' .km-msg');if(m)m.textContent='Myndatólið kom ikki í gongd. Gev kaganum loyvi at brúka myndatólið og royn aftur.';});}
 var KAMURL={};
 STK.kamera={n:'Myndatól',sz:[680,520],set:1,lib:false,tool:1,r:function(d){
   return '<div class="km'+(d.mir?' mir':'')+'">'+(d.snap?'<img class="km-img" alt="Mynd frá myndatólinum">':'<video playsinline muted></video><p class="km-msg"></p>')
@@ -3047,8 +3047,8 @@ STK.kamera={n:'Myndatól',sz:[680,520],set:1,lib:false,tool:1,r:function(d){
       if(x.dataset.km==='live'){if(d.snap){var old=d.snap;idb('readwrite',function(st){return st.delete('cam:'+old);});delete d.snap;}save();drawStk(id);return;}
       var v=$('#w-'+id+' video');if(!v||!v.videoWidth)return;var c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;var g=c.getContext('2d');
       if(d.mir){g.translate(c.width,0);g.scale(-1,1);}g.drawImage(v,0,0);c.toBlob(function(bl){var k='k'+Date.now().toString(36);idb('readwrite',function(st){return st.put(bl,'cam:'+k);}).then(function(){KAMURL[k]=URL.createObjectURL(bl);d.snap=k;save();drawStk(id);});},'image/jpeg',.88);});});}};
-STK.kamera.settings=function(id,d,sec){sec.innerHTML='<div class="set-row"><h4>Hvat myndatól?</h4><div class="row" id="kmDevs" style="flex-wrap:wrap;gap:6px"><span class="note">Leiti …</span></div></div>'
-  +'<div class="set-row"><label class="chk"><input type="checkbox" id="kmMir"> Spegla myndina</label></div><p class="note">Myndin verður bert víst á hesi telduni og fer ikki á netið. Tá ið tú tekur eina mynd, kanst tú tekna á henni við pennanum.</p>';
+STK.kamera.settings=function(id,d,sec){sec.innerHTML='<div class="set-row"><h4>Hvørt myndatól?</h4><div class="row" id="kmDevs" style="flex-wrap:wrap;gap:6px"><span class="note">Leiti …</span></div></div>'
+  +'<div class="set-row"><label class="chk"><input type="checkbox" id="kmMir"> Spegla myndina</label></div><p class="note">Myndin verður bert víst á hesi telduni og verður ikki send á netið. Tá ið tú hevur tikið eina mynd, kanst tú tekna á henni við pennanum.</p>';
   var mi=$('#kmMir',sec);mi.checked=!!d.mir;mi.addEventListener('change',function(){if(mi.checked)d.mir=1;else delete d.mir;save();drawStk(id);});
   if(navigator.mediaDevices&&navigator.mediaDevices.enumerateDevices)navigator.mediaDevices.enumerateDevices().then(function(L){L=L.filter(function(x){return x.kind==='videoinput';});var box=$('#kmDevs',sec);if(!box)return;
     box.innerHTML=L.length?L.map(function(x,i){return '<button type="button" class="btn sm" data-dev="'+x.deviceId+'" aria-pressed="'+((d.dev||'')===x.deviceId?'true':'false')+'">'+esc(x.label||('Myndatól '+(i+1)))+'</button>'}).join(''):'<span class="note">Einki myndatól funnið.</span>';
@@ -3072,7 +3072,7 @@ STK.tallinja={n:'Tallinja',sz:[1100,280],set:1,lib:false,tool:1,r:function(d){va
 STK.tallinja.settings=function(id,d,sec){var Pz=[['0–10',0,10,1,1],['0–20',0,20,1,1],['0–100',0,100,5,2],['0–1000',0,1000,50,2],['−10–10',-10,10,1,1],['0–1 (tíggjundapartar)',0,1,.1,1]];
   sec.innerHTML='<div class="set-row"><h4>Skjót val</h4><div class="row" style="flex-wrap:wrap;gap:6px">'+Pz.map(function(p,i){return '<button type="button" class="btn sm" data-tlp="'+i+'">'+p[0]+'</button>'}).join('')+'</div></div>'
    +'<div class="set-row"><h4>Frá, til og stig</h4><div class="row" style="gap:6px"><input class="set-in" type="number" id="tlA" step="any" style="width:5em"><input class="set-in" type="number" id="tlB" step="any" style="width:5em"><input class="set-in" type="number" id="tlS" step="any" min="0.01" style="width:5em"></div></div>'
-   +'<div class="set-row"><h4>Tal á hvørjum strikinum</h4><div class="seg tx-seg" id="tlL">'+[1,2,5,10].map(function(x){return '<button type="button" data-v="'+x+'" aria-pressed="'+((d.lab||1)===x?'true':'false')+'">'+(x===1?'Øllum':'Hvørjum '+x+'.')+'</button>'}).join('')+'</div></div>'
+   +'<div class="set-row"><h4>Tal á hvørjum striki</h4><div class="seg tx-seg" id="tlL">'+[1,2,5,10].map(function(x){return '<button type="button" data-v="'+x+'" aria-pressed="'+((d.lab||1)===x?'true':'false')+'">'+(x===1?'Øllum':'Hvørjum '+x+'.')+'</button>'}).join('')+'</div></div>'
    +'<div class="set-row"><label class="chk"><input type="checkbox" id="tlH"> Fjal tølini (næmingarnir gita)</label></div>';
   var A=$('#tlA',sec),Bb=$('#tlB',sec),St=$('#tlS',sec);A.value=d.a!=null?d.a:0;Bb.value=d.b!=null?d.b:20;St.value=d.s||1;
   function upd(){var a=parseFloat(A.value),b=parseFloat(Bb.value),st=parseFloat(St.value);if(isNaN(a)||isNaN(b)||!(st>0)||b<=a)return;d.a=a;d.b=b;d.s=st;delete d.m;save();drawStk(id);}
@@ -3090,7 +3090,7 @@ STK.hundrad={n:'Hundraðstalva',sz:[600,620],set:1,lib:false,tool:1,r:function(d
     if(k==null)d.c[n]=d.pen||0;else if(k===(d.pen||0))delete d.c[n];else d.c[n]=d.pen||0;save();drawStk(id);});});}};
 STK.hundrad.settings=function(id,d,sec){
   sec.innerHTML='<div class="set-row"><h4>Litur</h4><div class="row" style="gap:8px">'+HTC.map(function(c,i){return '<button type="button" class="sg-col" data-hc="'+i+'" style="background:'+c+';'+((d.pen||0)===i?'box-shadow:0 0 0 3px #1559e8':'')+'" aria-label="Litur '+(i+1)+'"></button>'}).join('')+'</div></div>'
-   +'<div class="set-row"><h4>Lita ein tabell</h4><div class="row" style="flex-wrap:wrap;gap:6px">'+[2,3,4,5,6,7,8,9,10].map(function(t){return '<button type="button" class="btn sm" data-ht="'+t+'">'+t+'</button>'}).join('')+'</div></div>'
+   +'<div class="set-row"><h4>Lita ein teig</h4><div class="row" style="flex-wrap:wrap;gap:6px">'+[2,3,4,5,6,7,8,9,10].map(function(t){return '<button type="button" class="btn sm" data-ht="'+t+'">'+t+'</button>'}).join('')+'</div></div>'
    +'<div class="set-row"><h4>Tølini</h4><div class="seg tx-seg" id="htZ"><button type="button" data-v="" aria-pressed="'+(!d.z)+'">1–100</button><button type="button" data-v="1" aria-pressed="'+(!!d.z)+'">0–99</button></div>'
    +'<label class="chk" style="margin-top:8px"><input type="checkbox" id="htH"> Fjal tølini, sum ikki eru litað</label></div>'
    +'<div class="set-row"><div class="row"><button class="btn sm" type="button" data-ht0>Strika allar litir</button></div></div>';
@@ -3113,7 +3113,7 @@ STK.tidl={n:'Tíðarlinja',sz:[1200,420],set:1,lib:false,tool:1,r:function(d){va
   after:function(id,b){var e=b.querySelector('[data-td-set]');if(e)e.addEventListener('click',function(){openStkSet(id);});}};
 STK.tidl.settings=function(id,d,sec){sec.innerHTML='<div class="set-row"><h4>Yvirskrift</h4><input class="set-in" id="tdTi" maxlength="60" placeholder="Tíðarlinja"></div>'
   +'<div class="set-row"><h4>Hendingarnar</h4><textarea class="set-in" id="tdIt" rows="8" placeholder="Tíð | Hending&#10;1. september | Skúlin byrjar&#10;Oktober | Heystfrí&#10;Desember | Jólaframsýning"></textarea>'
-  +'<p class="note">Ein hending á hvørji linju: fyrst tíðin, so | og so hendingin. Eru øll tíðirnar ártøl, verða tær settar rætt eftir árunum á linjuni. Annars standa tær við javnari frástøðu í tí røð, tær eru skrivaðar.</p></div>';
+  +'<p class="note">Skriva eina hending á hvørja linju: fyrst tíðina, síðan | og at enda hendingina. Eru allar tíðirnar ártøl, verða hendingarnar settar á rætt pláss eftir ártølunum. Annars verða tær settar við javnari frástøðu í somu røð, sum tær eru skrivaðar.</p></div>';
   var ti=$('#tdTi',sec),it=$('#tdIt',sec);ti.value=d.ti||'';it.value=d.items||'';
   ti.addEventListener('input',function(){if(ti.value)d.ti=ti.value;else delete d.ti;save();drawStk(id);});
   it.addEventListener('input',function(){d.items=it.value;save();drawStk(id);});
@@ -3121,7 +3121,7 @@ STK.tidl.settings=function(id,d,sec){sec.innerHTML='<div class="set-row"><h4>Yvi
 
 /* ---------- Andingarvenjing: ringurin veksur, tá ið tú andar inn, og minkar, tá ið tú andar út ---------- */
 /* Slag: [navn, [[fasa, sekund], …]]. Fasar: i = anda inn, h = halt andanum, u = anda út */
-var ADP={roligt:['Rólig anding (4 inn, 6 út)',[['i',4],['u',6]]],kassi:['Kassaanding (4 – 4 – 4 – 4)',[['i',4],['h',4],['u',4],['h',4]]],stutt:['Stutt anding (3 inn, 3 út)',[['i',3],['u',3]]],djupt:['Djúp anding (4 inn, halt 2, 6 út)',[['i',4],['h',2],['u',6]]]};
+var ADP={roligt:['Rólig anding (4 inn, 6 út)',[['i',4],['u',6]]],kassi:['Kassaanding (4 – 4 – 4 – 4)',[['i',4],['h',4],['u',4],['h',4]]],stutt:['Stutt anding (3 inn, 3 út)',[['i',3],['u',3]]],djupt:['Djúp anding (4 inn, halt í 2, 6 út)',[['i',4],['h',2],['u',6]]]};
 var ADT={i:'Anda inn',h:'Halt andanum',u:'Anda út'},ADC={bla:['Blátt','#0ea5e9','#e0f2fe'],gron:['Grønt','#16a34a','#dcfce7'],lilla:['Lilla','#8b5cf6','#ede9fe'],reyd:['Ljósreytt','#ec4899','#fce7f3']};
 var ADRUN={};
 function adStop(id){var r=ADRUN[id];if(r){clearTimeout(r.t);clearInterval(r.iv);}delete ADRUN[id];}
@@ -3181,7 +3181,7 @@ STK.morgun.settings=function(id,d,sec){
 /* ---------- Morgunark: næmingarnir arbeiða sjálvi fyrsta korterið (pappír ella iPad) ---------- */
 var MKD={g:'1.–3. flokkur',m:'4.–6. flokkur',h:'7.–9. flokkur'};
 /* Sama teljing sum í morgunark.html: skúladagur nr. frá 1. august (mánadagar–fríggjadagar), 200 ørk og átta sløg */
-var MKK=['Rokning','Sudoku','Labyrint','Tabellvenjing','Tekna eftir prikkum','Orðaleiting','Klokkan','Lesa og skriva'];
+var MKK=['Rokning','Sudoku','Villiniborg','Tabellvenjing','Tekna eftir prikkum','Orðaleiting','Klokkan','Lesa og skriva'];
 function mkNum(){var t=new Date();t=new Date(t.getFullYear(),t.getMonth(),t.getDate());var y=t.getMonth()>=7?t.getFullYear():t.getFullYear()-1,d=new Date(y,7,1),n=0;while(d<=t){var w=d.getDay();if(w>0&&w<6)n++;d.setDate(d.getDate()+1);}return Math.max(1,((n-1)%200)+1);}
 /* Á netinum leiða QR-kotan og knøttarnir til snar.fo/talvan/morgunark (ikki til GitHub); lokalt til fíluna við síðuna av */
 function mkUrl(d,pr,v){var q='dl='+(d.dl||'m')+(pr?'&print=1':'')+(v?'&v='+v:'');if(/github\.io$|snar\.fo$/.test(location.hostname))return 'https://snar.fo/talvan/morgunark#'+q;return location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/,'')+'morgunark.html?'+q;}
@@ -3195,7 +3195,7 @@ STK.mark={n:'Morgunark',sz:[520,440],set:1,lib:false,tool:1,r:function(d){var u=
 STK.mark.settings=function(id,d,sec){
   sec.innerHTML='<div class="set-row"><h4>Hvør flokkur?</h4><div class="seg tx-seg" id="mkDl">'+Object.keys(MKD).map(function(k){return '<button type="button" data-v="'+k+'" aria-pressed="'+((d.dl||'m')===k?'true':'false')+'">'+MKD[k]+'</button>'}).join('')+'</div></div>'
    +'<div class="set-row"><label class="chk"><input type="checkbox" id="mkQr"> Vís QR-kotu til iPad</label></div>'
-   +'<p class="note">Tað eru 200 ørk, eitt til hvønn skúladag (talt frá 1. august). Átta sløg skifta: rokning, sudoku, labyrint, tabellvenjing, tekna eftir prikkum, orðaleiting, klokkan og lesa og skriva. Á pappíri eru linjur og kassar, á iPadinum skriva og tekna næmingarnir á skíggjanum.</p>';
+   +'<p class="note">Tað eru 200 ørk, eitt til hvønn skúladag (talt frá 1. august). Átta sløg av uppgávum skiftast: rokning, sudoku, villiniborg, tabellvenjing, tekna eftir prikkum, orðaleiting, klokkan og lesa og skriva. Á pappírinum eru linjur og kassar, og á iPadinum kunnu næmingarnir skriva og tekna á skíggjanum.</p>';
   $$('#mkDl button',sec).forEach(function(b){b.addEventListener('click',function(){d.dl=b.dataset.v;$$('#mkDl button',sec).forEach(function(z){z.setAttribute('aria-pressed',z===b?'true':'false')});save();drawStk(id);});});
   var q=$('#mkQr',sec);q.checked=!d.noQr;q.addEventListener('change',function(){if(q.checked)delete d.noQr;else d.noQr=1;save();drawStk(id);});};
 /* ---------- QR-kota: næmingarnir skanna eitt leinki ---------- */
@@ -3213,7 +3213,7 @@ STK.qr={n:'QR-kota',sz:[400,480],set:1,lib:false,tool:1,r:function(d){var u=(d.u
 STK.qr.settings=function(id,d,sec){
   var open=['snar','snar2','snar3','tema'].filter(function(k){return S.vis[k]&&S[k]&&S[k].p;});
   sec.innerHTML='<div class="set-row"><h4>Leinkið</h4><input class="set-in" id="qrU" placeholder="https://snar.fo/…" inputmode="url"></div>'
-    +(open.length?'<div class="set-row"><h4>Ella brúka eitt, sum er opið á talvuni</h4><div class="qr-open">'+open.map(function(k){return '<button type="button" class="btn sm" data-qrk="'+k+'">'+esc(S[k].t||'Funka')+'</button>'}).join('')+'</div></div>':'')
+    +(open.length?'<div class="set-row"><h4>Ella brúka eitt leinki, sum er opið á talvuni</h4><div class="qr-open">'+open.map(function(k){return '<button type="button" class="btn sm" data-qrk="'+k+'">'+esc(S[k].t||'Funka')+'</button>'}).join('')+'</div></div>':'')
     +'<div class="set-row"><h4>Yvirskrift</h4><input class="set-in" id="qrT" maxlength="40" placeholder="Skanna meg"></div>'
     +'<p class="note">Næmingarnir skanna kotuna við myndatólinum á iPadinum ella telefonini.</p>';
   var ui=$('#qrU',sec),ti=$('#qrT',sec),tm;ui.value=d.u||'';ti.value=d.ti||'';
@@ -3247,7 +3247,7 @@ var AMERKI=[
   ['par','Arbeiðið í pørum','#16a34a','<circle cx="22" cy="22" r="8"/><circle cx="42" cy="22" r="8"/><path d="M8 54c0-9 6-16 14-16s14 7 14 16M28 54c0-9 6-16 14-16s14 7 14 16"/>'],
   ['bolkur','Arbeiðið í bólkum','#9333ea','<circle cx="32" cy="16" r="7"/><circle cx="16" cy="28" r="7"/><circle cx="48" cy="28" r="7"/><path d="M20 50c0-7 5-12 12-12s12 5 12 12M4 58c0-7 5-12 12-12M60 58c0-7-5-12-12-12"/>'],
   ['spakuliga','Tosið spakuliga','#d97706','<path d="M12 14h40a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H30l-12 10V44h-6a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z"/><path d="M20 29h4M30 29h3M39 29h2" stroke-width="4"/>'],
-  ['kvirt','Kvirt','#dc2626','<path d="M12 14h40a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H30l-12 10V44h-6a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z"/><path d="M10 54L54 8"/>'],
+  ['kvirt','Verið kvirr','#dc2626','<path d="M12 14h40a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H30l-12 10V44h-6a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z"/><path d="M10 54L54 8"/>'],
   ['hond','Rættið hondina upp','#0284c7','<g transform="translate(2 2) scale(2.5)" style="stroke-width:1.4"><path d="M18 11V6a2 2 0 0 0-4 0"/><path d="M14 10V4a2 2 0 0 0-4 0v2"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g>'],
   ['lurta','Lurtið væl eftir','#db2777','<path d="M22 26a12 12 0 1 1 24 0c0 8-8 10-8 18a8 8 0 0 1-14 4"/><path d="M30 26a4 4 0 1 1 8 0c0 3-4 4-4 8"/><path d="M50 18c3 3 4 6 4 10M54 12c5 5 7 10 7 16" stroke-width="3"/>'],
   ['rydda','Vit rudda','#0d9488','<path d="M40 6L28 34"/><path d="M16 36h22l4 20H12z"/><path d="M20 44v8M27 44v8M34 44v8"/>'],
