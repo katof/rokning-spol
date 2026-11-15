@@ -2716,7 +2716,9 @@ function addStk(t,p,silent,x){var id='k'+Date.now().toString(36)+Math.random().t
   S.pos[id]=p?p.slice():[Math.round((BW-sz[0])/2+Math.random()*80-40),Math.round((BH-sz[1])/2-40+Math.random()*60),sz[0],sz[1]];S.vis[id]=1;
   mkStk(id);if(!silent){front(id);select(id);applySz();applyVis();save();}return id;}
 function removeStk(id){var w=$('#w-'+id);if(w)w.remove();delete S.stk[id];delete S.vis[id];delete S.pos[id];delete S.z[id];delete SETS[id];if(SETK===id)closePanels();if(SEL===id)SEL=null;applyVis();save();}
-Object.keys(S.stk).forEach(mkStk);
+/* Klistrimerki og amboð verða sett á talvuna aftur. Tey seinni amboðini (Dagurin í dag, Morgunark …) verða skilgreind longur niðri, so mkAllStk verður kallað aftur, tá ið alt er klárt. */
+function mkAllStk(){Object.keys(S.stk).forEach(function(id){if(!$('#w-'+id))mkStk(id);});}
+mkAllStk();
 /* Stillingar til stjørnuna og Finn orð-talvuna */
 function stkFxRows(id,d,sec){
   var h='<div class="set-row"><h4>Hall</h4><div class="row"><button class="btn sm" type="button" data-rot="-5" title="Halla til vinstru">↺</button><button class="btn sm" type="button" data-rot="0">Beint</button><button class="btn sm" type="button" data-rot="5" title="Halla til høgru">↻</button></div></div>'
@@ -3177,6 +3179,7 @@ document.addEventListener('keydown',function(e){if(e.key!=='PageDown'&&e.key!=='
   if(S.bg==='dias')return;e.preventDefault();pgGo(S.pg+(e.key==='PageDown'?1:-1));});
 pgUI();
 
+mkAllStk();
 applySz();fit();applyVis();applyFl();applyLock();
 document.documentElement.classList.add('ready');
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layoutJar);
