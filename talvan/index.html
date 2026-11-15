@@ -555,7 +555,12 @@ body.focus .ring{width:min(40cqi,70cqh)}
 @media (pointer:coarse){.lib-x{opacity:1}}
 #libPanel .note{margin-top:16px}
 /* PDF-savn */
-#pdfLibBox{display:flex;flex-direction:column;gap:8px;width:100%}
+.pdf-it{aspect-ratio:auto!important;display:flex;flex-direction:column;gap:6px;padding:10px!important;background:#f3f4f6}
+.pdf-th{display:block;width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 2px 8px -3px rgba(0,0,0,.3)}
+.pdf-th img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.pdf-th.none{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none' stroke='%23ef2418' stroke-width='1.5'%3E%3Cpath d='M8 3h11l6 6v20H8z'/%3E%3C/svg%3E") center/40% no-repeat}
+.pdf-it small{font-size:.82rem;font-weight:600;color:var(--ink);text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pdf-grid .lib-add{aspect-ratio:3/4.4}
 .lib-row{display:flex;align-items:center;gap:6px}
 .lib-name{flex:1;text-align:left;min-height:46px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:600;word-break:break-word}
 .lib-name:hover{border-color:#b9b8b3}
@@ -960,6 +965,7 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
         <div class="pdf-empty" id="pdfEmpty">
           <button class="btn red" type="button" id="pdfPick">Vel eina PDF-fílu</button>
           <button class="btn" type="button" id="pdfLibOpen" data-open-set="pdf" hidden>Opna PDF-savnið</button>
+          <p class="note">Fílan verður goymd í PDF-savninum í kagaranum á hesi teldu.</p>
           <p class="note">Fílan verður bert goymd í hesum kaganum á hesi teldu.</p>
         </div>
         <div class="pdf-wrap" id="pdfWrap" hidden>
@@ -981,7 +987,6 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
           <div class="pdf-view" id="pdfView"><div class="pdf-pages" id="pdfPages"></div></div>
         </div>
         <input type="file" id="pdfFile" accept="application/pdf,.pdf" hidden>
-        <div id="pdfLibBox" class="cfg"><div id="pdfLibList"></div><button class="btn sm" type="button" id="pdfLibAdd">+ Legg eina PDF afturat</button><p class="note">PDF-fílurnar verða bert goymdar í kagaranum á hesi teldu.</p></div>
       </div>
     </section>
 
@@ -1102,9 +1107,10 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
 
 <div class="panel" id="libPanel" hidden role="dialog" aria-labelledby="libH">
   <h3><span class="set-ic"><svg viewBox="0 0 32 32"><rect x="3" y="6" width="26" height="20" rx="3"/><circle style="fill:#ffd23f" cx="11" cy="12" r="2.5"/><path style="fill:#86efac" d="M3.5 23l7.5-7 6 5 4-3 7.5 5.5V23a3 3 0 0 1-3 3H6.5a3 3 0 0 1-3-3z"/></svg></span><span id="libH">Savn</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
-  <div class="set-tabs" role="tablist"><button type="button" role="tab" data-libt="img" aria-selected="true">Myndir</button><button type="button" role="tab" data-libt="stk" aria-selected="false">Klistrimerki</button></div>
+  <div class="set-tabs" role="tablist"><button type="button" role="tab" data-libt="img" aria-selected="true">Myndir</button><button type="button" role="tab" data-libt="stk" aria-selected="false">Klistrimerki</button><button type="button" role="tab" data-libt="pdf" aria-selected="false">PDF</button></div>
   <div class="lib-grid" id="libGrid"></div>
   <div class="stk-grid" id="stkGrid" hidden></div>
+  <div class="lib-grid pdf-grid" id="pdfGrid" hidden></div>
   <input type="file" id="libFile" accept="image/*" multiple hidden>
   <p class="note" id="libNote">Trýst á eina mynd fyri at seta hana á talvuna. Myndirnar verða bert goymdar í kagaranum á hesi teldu.</p>
 </div>
@@ -1134,6 +1140,12 @@ body.dark #w-glas .jar-count{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
   <p>Tú skalt ikki rita inn fyri at brúka talvuna, og ongar upplýsingar verða sendar víðari.</p>
   <p>Nøvn, dagsins ætlan og tínar stillingar verða bert goymd í kagaranum á telduni, sum tú brúkar.</p>
   <p>Ljóðmátarin brúkar bert mikrofonina, meðan síðan er opin. Einki ljóð verður tikið upp ella goymt.</p>
+  <h4>Til læraran: flyt talvuna</h4>
+  <p>Tak talvuna niður sum eina fílu, so kanst tú goyma hana ella flyta hana til eina aðra teldu. Fílan hevur amboðini, plásini, stillingarnar, nøvnini, ætlanirnar og bakgrundina. Myndir og PDF-ir koma eisini við, um tú vilt.</p>
+  <label class="chk" style="margin:0 0 10px;display:flex;gap:8px;align-items:center"><input type="checkbox" id="expFiles" checked> Tak myndir og PDF-ir við</label>
+  <div class="row"><button class="btn sm" type="button" id="expBtn">Tak niður</button><button class="btn sm" type="button" id="impBtn">Legg upp</button></div>
+  <input type="file" id="impFile" accept=".json,application/json" hidden>
+  <p class="note" id="expMsg" style="margin-top:8px"></p>
   <h4>Strika goymdar upplýsingar</h4>
   <p>Vilt tú strika allar upplýsingar og stillingar, sum eru goymdar í kagaranum?</p>
   <button class="btn sm" type="button" id="wipe">Strika alt goymt</button>
@@ -1203,7 +1215,7 @@ var SETS={
   glas:[['Kúlur í fullum glasi',['#jarGoalRow']],['Glasið',['#jarSub','#jarEmpty']]],
   tern:[['Tal av terningum',['#diceMinus','#diceN','#dicePlus']]],
   larm:[['Hvussu hart má vera?',['#noiseLimL']],['',['#noiseNote']]],
-  pdf:[['PDF-savn',['#pdfLibBox']],['Síður í senn',['#ppSeg']]],
+  pdf:'pdflib',
   poll:'egin',skra:'egin',mynd:'lib',mynd2:'lib',mynd3:'lib'};
 /* Har kann ein ikki byrja at flyta amboðið, tí har verður arbeitt */
 var NODRAG='button,input,textarea,select,a,label,summary,details,iframe,canvas,[contenteditable],.ball,.pile,.jar,.dice,.pdf-view,.sn-list,.bk-grid,.plan,.groups,.tl-txt,.poll-ans,.w-rs,.w-head';
@@ -1254,7 +1266,7 @@ function front(k){if(S.z[k]&&S.z[k]===zTop)return;S.z[k]=++zTop;
   $$('.w').forEach(place);save();}
 function select(k){SEL=k;if(k&&MP[k]&&!$('#libPanel').hidden){LIBK=k;drawLib();}$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===k);});
   if(!$('#setPanel').hidden&&SETK!==k){if(k&&SETS[k]&&!S.lock)openSet(k);else closePanels();}}
-function openSet(k){if(S.lock||!SETS[k])return;if(SETS[k]==='lib'){openLib(k);return;}if(SETS[k]==='stk'){openStkSet(k);return;}closeMore();['bgPanel','infoPanel'].forEach(function(id){$('#'+id).hidden=true});
+function openSet(k){if(S.lock||!SETS[k])return;if(SETS[k]==='lib'){openLib(k);return;}if(SETS[k]==='stk'){openStkSet(k);return;}if(SETS[k]==='pdflib'){openLib(null);libTab('pdf');return;}closeMore();['bgPanel','infoPanel'].forEach(function(id){$('#'+id).hidden=true});
   SETK=k;var b=$('.dk[data-t="'+k+'"]')||$$('.dk[data-m]').filter(function(x){return x.dataset.m.split(',').indexOf(k)>=0})[0];$('#setH').textContent=b?b.textContent.trim():'Stillingar';$('#setIc').innerHTML=b?b.querySelector('svg').outerHTML:'';
   $$('#setBody .set').forEach(function(x){x.hidden=x.dataset.for!==k;});$('#setPanel').hidden=false;
   if(SEL!==k){front(k);SEL=k;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===k);});}}
@@ -1872,6 +1884,33 @@ $('#infoBtn').addEventListener('click',function(){tog(this,'infoPanel')});
 $$('.close-p').forEach(function(b){b.addEventListener('click',closePanels)});
 document.addEventListener('pointerdown',function(e){if(!e.target.closest('.panel,#bgBtn,#infoBtn,#moreBtn,#layBtn,.more-pop,.w'))closePanels();});
 $('#resetPos').addEventListener('click',function(){S.pos={};S.z={};zTop=0;unfocus();applySz();save();closePanels();});
+/* Tak niður / Legg upp: alt í kaganum í eini JSON-fílu */
+function ab64(buf){var b=new Uint8Array(buf),s='',n=0x8000;for(var i=0;i<b.length;i+=n)s+=String.fromCharCode.apply(null,b.subarray(i,i+n));return btoa(s);}
+function b64ab(t){var s=atob(t),b=new Uint8Array(s.length);for(var i=0;i<s.length;i++)b[i]=s.charCodeAt(i);return b.buffer;}
+function idbAll(){return new Promise(function(res){try{var rq=indexedDB.open('snar-flokskiggi',1);rq.onupgradeneeded=function(){rq.result.createObjectStore('f');};
+  rq.onsuccess=function(){var out=[];try{var c=rq.result.transaction('f','readonly').objectStore('f').openCursor();c.onsuccess=function(){var cur=c.result;if(cur){out.push([cur.key,cur.value]);cur.continue();}else res(out);};c.onerror=function(){res(out);};}catch(e){res(out);}};rq.onerror=function(){res([]);};}catch(e){res([]);}});}
+$('#expBtn').addEventListener('click',function(){var withF=$('#expFiles').checked,msg=$('#expMsg');msg.textContent='Talvan verður gjørd klár …';
+  try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+  (withF?idbAll():Promise.resolve([])).then(function(rows){return Promise.all(rows.map(function(r){var v=r[1];
+      if(v instanceof ArrayBuffer)return {k:r[0],t:'ab',d:ab64(v)};
+      if(v instanceof Blob)return v.arrayBuffer().then(function(b){return {k:r[0],t:'blob',m:v.type,d:ab64(b)};});
+      return {k:r[0],t:'v',d:v};}));})
+  .then(function(files){var data={app:'snar-talvan',v:1,dato:new Date().toISOString(),S:S,files:files};
+    var bl=new Blob([JSON.stringify(data)],{type:'application/json'}),u=URL.createObjectURL(bl),a=document.createElement('a');
+    var d=new Date();a.href=u;a.download='talvan-'+d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);
+    msg.textContent='Fílan „'+a.download+'“ er tikin niður ('+(bl.size>1e6?(bl.size/1e6).toFixed(1).replace('.',',')+' MB':Math.max(1,Math.round(bl.size/1e3))+' KB')+').';})
+  .catch(function(){msg.textContent='Tað bar ikki til at taka talvuna niður.';});});
+$('#impBtn').addEventListener('click',function(){$('#impFile').click();});
+$('#impFile').addEventListener('change',function(e){var f=e.target.files[0];e.target.value='';if(!f)return;var msg=$('#expMsg');
+  f.text().then(function(t){var d=JSON.parse(t);if(!d||d.app!=='snar-talvan'||!d.S)throw new Error('format');
+    if(!confirm('Leggja talvuna úr „'+f.name+'“ upp? Tað, sum er goymt í hesum kaganum nú, verður skift út.'))return;msg.textContent='Talvan verður løgd upp …';
+    var files=d.files||[];return new Promise(function(res){var rq=indexedDB.open('snar-flokskiggi',1);rq.onupgradeneeded=function(){rq.result.createObjectStore('f');};
+      rq.onsuccess=function(){var tx=rq.result.transaction('f','readwrite'),st=tx.objectStore('f');
+        if(files.length||!$('#expFiles'))st.clear();
+        files.forEach(function(x){var v=x.t==='ab'?b64ab(x.d):x.t==='blob'?new Blob([b64ab(x.d)],{type:x.m||''}):x.d;st.put(v,x.k);});
+        tx.oncomplete=function(){res();};tx.onerror=function(){res();};};rq.onerror=function(){res();};})
+    .then(function(){try{localStorage.setItem(KEY,JSON.stringify(d.S));}catch(err){alert('Talvan er ov stór at goyma í kaganum.');return;}location.reload();});})
+  .catch(function(){msg.textContent='Hendan fílan er ikki ein talva, sum er tikin niður úr Talvuni.';});});
 $('#wipe').addEventListener('click',function(){if(!confirm('Strika nøvnini, dagsins ætlan, smileyglasið og tað, tú hevur valt?'))return;try{localStorage.removeItem(KEY);}catch(e){}idb('readwrite',function(st){return st.clear();}).then(function(){location.reload();});});
 window.addEventListener('resize',function(){Object.keys(FL).forEach(placeFl);});
 
@@ -2086,19 +2125,31 @@ function pdfMigrate(){if(S.pdfs)return Promise.resolve();S.pdfs=[];
     return idb('readwrite',function(st){st.put(buf,'pdf:'+id);return st.delete('pdf');}).then(function(){save();});});}
 function addPdf(f){return f.arrayBuffer().then(function(buf){var id='p'+Date.now().toString(36),copy=buf.slice(0);
   return pdfMigrate().then(function(){return idb('readwrite',function(st){return st.put(copy,'pdf:'+id);});}).then(function(){
-    S.pdfs.unshift({id:id,n:f.name.replace(/\.pdf$/i,'')||'PDF'});S.pdfCur=id;S.pdfPage=1;save();pdfDoc=null;pdfLibDraw();return openPdf(buf);});});}
+    S.pdfs.unshift({id:id,n:f.name.replace(/\.pdf$/i,'')||'PDF'});S.pdfCur=id;S.pdfPage=1;S.vis.pdf=1;applyVis();front('pdf');save();pdfDoc=null;pdfLibDraw();return openPdf(buf);});});}
 function pdfOpenId(id){S.pdfCur=id;S.pdfPage=1;S.pdfZoom=1;save();pdfDoc=null;pdfLibDraw();
   idb('readonly',function(st){return st.get('pdf:'+id);}).then(function(buf){if(buf)openPdf(buf,true);else pdfUI();});}
-function pdfDel(it){if(!confirm('Strika „'+it.n+'“ úr PDF-savninum?'))return;idb('readwrite',function(st){return st.delete('pdf:'+it.id);});
+function pdfDel(it){if(!confirm('Strika „'+it.n+'“ úr PDF-savninum?'))return;idb('readwrite',function(st){st.delete('pth:'+it.id);return st.delete('pdf:'+it.id);});delete PTH[it.id];
   S.pdfs=S.pdfs.filter(function(x){return x.id!==it.id});if(S.pdfCur===it.id){pdfDoc=null;S.pdfCur=S.pdfs.length?S.pdfs[0].id:null;$('#pdfPages').innerHTML='';
     if(S.pdfCur)pdfOpenId(S.pdfCur);else{save();pdfUI();}}else save();pdfLibDraw();}
-function pdfLibDraw(){var box=$('#pdfLibList');if(!box)return;box.innerHTML='';var L=S.pdfs||[];
-  if(!L.length)box.appendChild(el('p','note','Savnið er tómt enn.'));
-  L.forEach(function(it){var r=el('div','lib-row');var b=el('button','lib-name');b.type='button';b.textContent=it.n;b.setAttribute('aria-pressed',it.id===S.pdfCur?'true':'false');
-    b.addEventListener('click',function(){pdfOpenId(it.id);});var x=el('button','ic',I.trash);x.type='button';x.title='Strika úr savninum';x.addEventListener('click',function(){pdfDel(it);});
-    r.appendChild(b);r.appendChild(x);box.appendChild(r);});
-  var lo=$('#pdfLibOpen');if(lo)lo.hidden=!L.length;}
-$('#pdfLibAdd').addEventListener('click',function(){$('#pdfFile').click();});
+/* PDF-savnið: smámyndir av fyrstu síðuni, sum í myndasavninum */
+var PTH={},pthQ=Promise.resolve();
+function pdfThumb(id){if(PTH[id])return Promise.resolve(PTH[id]);
+  return idb('readonly',function(st){return st.get('pth:'+id);}).then(function(t){if(t){PTH[id]=t;return t;}
+    return idb('readonly',function(st){return st.get('pdf:'+id);}).then(function(buf){if(!buf)return null;
+      return pdfLib().then(function(lib){return lib.getDocument({data:new Uint8Array(buf.slice(0))}).promise;}).then(function(doc){return doc.getPage(1).then(function(pg){
+        var v=pg.getViewport({scale:1}),vp=pg.getViewport({scale:300/v.width}),c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);
+        var cx=c.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,c.width,c.height);
+        return pg.render({canvasContext:cx,viewport:vp,intent:'print'}).promise.then(function(){var u=c.toDataURL('image/jpeg',.8);try{doc.destroy();}catch(e){}PTH[id]=u;idb('readwrite',function(st){return st.put(u,'pth:'+id);});return u;});});});});}).catch(function(){return null;});}
+function pdfLibDraw(){var lo=$('#pdfLibOpen'),L=S.pdfs||[];if(lo)lo.hidden=!L.length;var g=$('#pdfGrid');if(!g||g.hidden)return;g.innerHTML='';
+  var add=el('button','lib-add','<span>+</span>');add.type='button';add.title='Legg PDF-fílur afturat';add.addEventListener('click',function(){$('#pdfFile').click();});g.appendChild(add);
+  L.forEach(function(it){var b=el('button','lib-it pdf-it');b.type='button';b.title=it.n;b.setAttribute('aria-pressed',it.id===S.pdfCur&&S.vis.pdf?'true':'false');
+    var th=el('span','pdf-th'),im=el('img');im.alt='';im.draggable=false;th.appendChild(im);b.appendChild(th);var nm=el('small');nm.textContent=it.n;b.appendChild(nm);
+    var x=el('span','lib-x',I.x);x.title='Strika úr savninum';x.setAttribute('role','button');b.appendChild(x);
+    pthQ=pthQ.then(function(){return pdfThumb(it.id).then(function(u){if(u)im.src=u;else th.classList.add('none');});});
+    b.addEventListener('click',function(e){if(e.target.closest('.lib-x')){pdfDel(it);return;}
+      S.vis.pdf=1;front('pdf');SEL='pdf';$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w==='pdf');});applyVis();
+      if(S.pdfCur!==it.id||!pdfDoc)pdfOpenId(it.id);else{pdfUI();renderPdf();}save();pdfLibDraw();});
+    g.appendChild(b);});}
 pdfMigrate().then(pdfLibDraw);
 
 /* ---------- Uppsetingar: ferðaklárar talvur við hóskandi bakgrund ---------- */
@@ -2199,7 +2250,8 @@ function openStkSet(id){var d=S.stk[id];if(!d||S.lock)return;closeMore();['bgPan
 /* Savnið: teigar til myndir og klistrimerki */
 var LIBTAB='img';
 function libTab(t){LIBTAB=t;$$('[data-libt]').forEach(function(b){b.setAttribute('aria-selected',b.dataset.libt===t?'true':'false')});
-  $('#libGrid').hidden=t!=='img';$('#stkGrid').hidden=t!=='stk';$('#libNote').textContent=t==='img'?'Trýst á eina mynd fyri at seta hana á talvuna. Myndirnar verða bert goymdar í kagaranum á hesi teldu.':'Trýst á eitt klistrimerki fyri at seta tað á talvuna. Tú kanst flyta tað og gera tað størri ella minni.';}
+  $('#libGrid').hidden=t!=='img';$('#stkGrid').hidden=t!=='stk';$('#pdfGrid').hidden=t!=='pdf';if(t==='pdf')pdfLibDraw();
+  $('#libNote').textContent=t==='img'?'Trýst á eina mynd fyri at seta hana á talvuna. Myndirnar verða bert goymdar í kagaranum á hesi teldu.':t==='pdf'?'Trýst á eina PDF-fílu fyri at lata hana upp á talvuni. PDF-fílurnar verða bert goymdar í kagaranum á hesi teldu.':'Trýst á eitt klistrimerki fyri at seta tað á talvuna. Tú kanst flyta tað og gera tað størri ella minni.';}
 $$('[data-libt]').forEach(function(b){b.addEventListener('click',function(){libTab(b.dataset.libt);})});
 (function(){var g=$('#stkGrid');Object.keys(STK).forEach(function(t){var b=el('button','stk-it');b.type='button';b.title=STK[t].n;b.innerHTML='<span class="stk-pv">'+STK[t].r({name:'Navn',n:4,l:'FINNORÐSPÆLIÐABA'.split('')})+'</span><small>'+esc(STK[t].n)+'</small>';
   b.addEventListener('click',function(){addStk(t);});g.appendChild(b);});})();
