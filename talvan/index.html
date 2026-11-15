@@ -1893,11 +1893,13 @@ var NEWBG={};Object.keys(SVGBG).forEach(function(k){NEWBG[k]='#222 url("data:ima
 var SNARIMG='https://snar.fo/fileadmin/';
 function svgTile(w,h,body,bg){return (bg||'#fff')+' url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'"><g fill="none" stroke="#a5b4fc" stroke-width="1.3">'+body+'</g></svg>')+'") 0 0/'+w+'px '+h+'px';}
 var MOREBG={
-  bergseydur:['Seyður á bergi',SNARIMG+'user_upload/Sey%C3%B0ur_1.JPG','Myndir frá Snar'],
+  bergseydur:['Seyður í fjøllinum',SNARIMG+'user_upload/Sey%C3%B0ur_1.JPG','Myndir frá Snar'],
   lundi:['Lundi í Mykinesi',SNARIMG+'00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/heimsmal/myndir/15_lundar_i_mykinesi1.JPG','Myndir frá Snar'],
-  fjoran:['Fjøran',SNARIMG+'_processed_/1/6/csm_14_livid_i_havinum1_074ed7ec52.jpg','Myndir frá Snar'],
-  seydir:['Seyðaflokkur',SNARIMG+'user_upload/Sey%C3%B0ur_2.JPG','Myndir frá Snar'],
-  vordur:['Vørður',SNARIMG+'_processed_/4/f/csm_P1270847d_6a76af4d0a.jpg','Myndir frá Snar']};
+  fjoran:['Sandurin',SNARIMG+'_processed_/1/6/csm_14_livid_i_havinum1_074ed7ec52.jpg','Myndir frá Snar'],
+  seydir:['Seyðafylgi',SNARIMG+'user_upload/Sey%C3%B0ur_2.JPG','Myndir frá Snar'],
+  steinar:['Málaðir steinar',SNARIMG+'user_upload/TEMA_-_KT/Paskir/steinar.jpg','Myndir frá Snar'],
+  vindmyllur:['Vindmyllur í kavanum',SNARIMG+'00_filagoymsla/01_filar/04_Tema_og_tvoergreinalig_evni/heimsmal/myndir/07_burdardygg_orka5.JPG','Myndir frá Snar']};
+if(S.bg==='vordur')S.bg='bergseydur';
 Object.keys(MOREBG).forEach(function(k){NEWBG[k]='#cfd8dc url("'+MOREBG[k][1]+'") center/cover no-repeat';});
 var COLBG={grattlj:['Ljósagrátt','#e5e7eb'],myrkt:['Myrkt','#374151'],blattlj:['Ljósablátt','#bfdbfe'],gront2:['Grønt','#86cfac'],
   mjukt:['Mjúkt','linear-gradient(180deg,#b9fbf6,#fbe1ea)'],solsetur:['Sólsetur','linear-gradient(35deg,#fcd34d,#fb7185 60%,#f472b6)'],
@@ -1913,7 +1915,7 @@ var LINBG={
   notur:['Nótulinjur',svgTile(40,150,'<path d="M0 30.5H40M0 42.5H40M0 54.5H40M0 66.5H40M0 78.5H40"/>')]};
 Object.keys(LINBG).forEach(function(k){NEWBG[k]=LINBG[k][1];});
 var BG=[['strik','Strikumynd','#fff url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 100"><path d="M0 80 C30 70 40 45 70 40 C95 36 110 60 160 50" fill="none" stroke="#8f918e" stroke-width="2"/><circle cx="70" cy="30" r="4" fill="#ef2418"/><circle cx="120" cy="40" r="3" fill="#1559e8"/></svg>')+'") center/cover','Teknaðar'],
-  ['fjord','Fjørður',NEWBG.fjord,'Teknaðar'],['summar','Summar',NEWBG.summar,'Teknaðar'],['nordlys','Norðlýsi',NEWBG.nordlys,'Teknaðar'],
+  ['fjord','Landslag',NEWBG.fjord,'Teknaðar'],['summar','Summar',NEWBG.summar,'Teknaðar'],['nordlys','Norðlýsi',NEWBG.nordlys,'Teknaðar'],
   ['spol','Spøl',NEWBG.spol,'Teknaðar'],['lukku','Til lukku',NEWBG.lukku,'Teknaðar'],['sand','Sandur',NEWBG.sand,'Teknaðar'],['dyr','Føroysk dýr',NEWBG.dyr,'Teknaðar'],['mariu','Maríuhønur',NEWBG.mariu,'Teknaðar'],
   ['talva','Krittalva','radial-gradient(ellipse at 30% 20%,#3d5a4c,#223629)','Teknaðar'],['hav','Havið','linear-gradient(180deg,#eaf2fb,#a9c6e6)','Teknaðar'],
   ['kvold','Kvøld','linear-gradient(180deg,#1d2440,#3b3f6b 50%,#c9707a)','Teknaðar'],
@@ -2011,7 +2013,7 @@ $('[data-t=pdf]').addEventListener('click',function(){setTimeout(pdfShow,0)});
 $('#w-pdf .w-head').addEventListener('click',function(e){if(e.target.closest('.close-btn'))setTimeout(pdfUI,0);});
 pdfUI();pdfShow();
 
-var DARK={talva:1,kvold:1,mynd:1,spol:1,nordlys:1,lukku:1,myrkt:1,havblatt:1,vordur:1,dias:1};
+var DARK={talva:1,kvold:1,mynd:1,spol:1,nordlys:1,lukku:1,myrkt:1,havblatt:1,dias:1};
 function applyBg(){document.body.dataset.bg=S.bg;$('#bg').style.background=NEWBG[S.bg]||'';document.body.classList.toggle('dark',!!DARK[S.bg]);diasApply();
   document.body.style.setProperty('--mynd',S.mynd?'url("'+S.mynd+'")':'none');
   $$('#bgs button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.bg===S.bg?'true':'false')});
