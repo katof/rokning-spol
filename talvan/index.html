@@ -1709,7 +1709,14 @@ if(!S.fl)S.fl={};
 if(S.vis&&S.vis.bok!==undefined){delete S.vis.bok;delete S.bok;}
 if(!S.pos)S.pos={};if(!S.z)S.z={};
 
-var saveT;function save(){clearTimeout(saveT);if(mtLeaving)return;saveT=setTimeout(function(){if(mtLeaving)return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}mtChanged();},250);}
+var saveT;function save(){clearTimeout(saveT);if(mtLeaving)return;undoSched();saveT=setTimeout(function(){if(mtLeaving)return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}mtChanged();},250);}
+/* Ctrl+Z: angrisøga fyri diasið. Ein røð av broytingum stutt eftir hvørja aðra (t.d. at draga eitt amboð) verður eitt stig */
+var UNDO=[],undoLast=null,undoBusy=false,undoT=null;
+function undoSched(){clearTimeout(undoT);undoT=setTimeout(undoTrack,500);}
+function undoTrack(){if(undoBusy||typeof pgSnap!=='function'||!S.pages)return;var c=JSON.stringify(pgSnap());if(undoLast===null){undoLast=c;return;}
+  if(c!==undoLast){UNDO.push(undoLast);if(UNDO.length>60)UNDO.shift();undoLast=c;}}
+function boardUndo(){if(S.lock||!UNDO.length)return false;clearTimeout(undoT);var keep=UNDO.slice(0,-1),p=JSON.parse(UNDO[UNDO.length-1]);undoBusy=true;
+  pgLoad(p);S.pages[S.pg]=pgSnap();UNDO=keep;undoLast=JSON.stringify(pgSnap());save();setTimeout(function(){undoBusy=false;},700);return true;}
 function $(s,r){return (r||document).querySelector(s)}
 function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
 function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
@@ -2276,7 +2283,13 @@ function inkSnap(){inkHist.push(strokes.slice());if(inkHist.length>80)inkHist.sh
 function inkUndo(){if(!inkHist.length)return false;strokes=inkHist.pop();redrawInk();return true;}
 function inkClearAll(){if(!strokes.length)return;inkSnap();strokes=[];redrawInk();}
 document.addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey)||e.shiftKey||e.altKey||(e.key!=='z'&&e.key!=='Z'))return;
-  if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;if(inkUndo())e.preventDefault();});
+  if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;
+  if(document.body.classList.contains('pen')){if(inkUndo())e.preventDefault();return;}
+  if(boardUndo()||inkUndo())e.preventDefault();});
+/* Delete (ella Backspace): tak valda amboðið burtur av talvuni */
+document.addEventListener('keydown',function(e){if(e.key!=='Delete'&&e.key!=='Backspace')return;if(e.ctrlKey||e.metaKey||e.altKey||S.lock||!SEL)return;
+  if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;
+  var w=$('#w-'+SEL),b=w&&w.querySelector('.close-btn');if(!b)return;e.preventDefault();b.click();});
 function inkPt(e){var r=ink.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
 function eraseAt(pt){var n=strokes.length;strokes=strokes.filter(function(st){var lim=st.w*(st.hl?3:1)/2+14;return !st.p.some(function(q){return Math.abs(q[0]-pt[0])<lim&&Math.abs(q[1]-pt[1])<lim;});});if(strokes.length!==n)redrawInk();}
 ink.addEventListener('pointerdown',function(e){if(!document.body.classList.contains('pen'))return;e.preventDefault();ink.setPointerCapture(e.pointerId);
@@ -2576,7 +2589,7 @@ function tog(btn,id){var p=$('#'+id),open=p.hidden;closePanels();p.hidden=!open;
 $('#bgBtn').addEventListener('click',function(){tog(this,'bgPanel')});
 $('#infoBtn').addEventListener('click',function(){tog(this,'infoPanel')});
 $$('.close-p').forEach(function(b){b.addEventListener('click',closePanels)});
-document.addEventListener('pointerdown',function(e){if(!e.target.closest('.panel,#bgBtn,#infoBtn,#ambBtn,#layBtn,#mtBtn,.more-pop,.w,.mt-start'))closeMore();});
+document.addEventListener('pointerdown',function(e){if(!e.target.closest('.panel,#bgBtn,#infoBtn,#ambBtn,#layBtn,#mtBtn,.more-pop,.w,.mt-start'))closePanels(true);});
 $('#resetPos').addEventListener('click',function(){S.pos={};S.z={};zTop=0;unfocus();applySz();save();closePanels();});
 /* Tak niður / Legg upp: alt í kaganum í eini JSON-fílu */
 function ab64(buf){var b=new Uint8Array(buf),s='',n=0x8000;for(var i=0;i<b.length;i+=n)s+=String.fromCharCode.apply(null,b.subarray(i,i+n));return btoa(s);}
@@ -3650,7 +3663,7 @@ function pgLoad(p){var oldPdf=S.pdfCur;PGK.forEach(function(k){S[k]=p[k]!==undef
   zTop=0;for(var k in S.z)zTop=Math.max(zTop,S.z[k]||0);
   unfocus();closeMore();$('#setPanel').hidden=true;SETK=null;select(null);applyBg();applySz();applyVis();applyFl();
   Object.keys(MP).forEach(drawMynd);Object.keys(YP).forEach(drawYt);['snar','snar2','snar3','tema'].forEach(function(k){if(SW[k])SW[k].show();});
-  pdfShow();pgDrawD();}
+  pdfShow();pgDrawD();if(!undoBusy){UNDO=[];undoLast=null;}}
 /* Tekna spurnarkanningina, ætlanina og stopprið hjá diasinum av nýggjum */
 function pgDrawD(){drawPoll();if(PSYNC)PSYNC();drawSkra();if(SKSYNC)SKSYNC();
   var pl=$('#planList');pl.innerHTML='';(S.planItems&&S.planItems.length?S.planItems:[{t:'',d:0}]).forEach(function(it){mkItem(it);});
