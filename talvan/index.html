@@ -3735,21 +3735,32 @@ function mtPushAll(){if(!MT.u)return Promise.resolve();if(mtBusy){mtAgain=true;r
 function mtPush(e){if(!MT.u)return Promise.resolve();
   return (e.id===MT.cur?Promise.resolve(S):mtGet(e.id)).then(function(s){if(!s){e.dirty=0;mtSave();return;}
     var j=JSON.stringify(mtSrv(s)),h=mtHash(j);
+    /* Goym hvat vit sendu: kemur goymingin fram, men ikki svarið (t.d. tí síðan varð latin upp av nýggjum), kenna vit hana aftur seinni */
+    e.sentH=h;mtSave();
     return mtApi('goym',{id:e.id,heiti:e.heiti,ver:e.ver||0,data:j}).then(function(r){if(!MT.u)throw new Error('ut');
       if(r.ok){e.ver=r.ver;e.srv=1;if(r.broytt)e.broytt=r.broytt;if(e.id!==MT.cur||e.h===h||!e.h){e.dirty=0;e.h=h;}mtSave();mtUI();return;}
       if(r.villa==='konflikt')return mtConflict(e);
       if(r.villa==='stor'){mtBig[e.id]=1;note('„'+e.heiti+'“ er ov stór at goyma hjá Snar og verður bert goymd á hesi teldu.');return;}
       if(r.villa==='ovmangar'){mtBig[e.id]=1;note('Tú hevur 100 talvur hjá Snar, og fleiri kunnu ikki goymast. Strika nakrar, sum tú ikki nýtir longur.');return;}
       throw new Error(r.villa||'villa');});});}
-/* Talvan er broytt á eini aðrari teldu: okkara útgáva verður goymd sum avrit, og tann nýggjasta verður heintað */
-function mtConflict(e){var isCur=e.id===MT.cur,c=null;
-  return (isCur?Promise.resolve(JSON.parse(JSON.stringify(S))):mtGet(e.id)).then(function(mine){
-    if(mine){c={id:mtId(),heiti:mtName(e.heiti+' (avrit)'),ver:0,srv:0,dirty:1,broytt:Date.now()};MT.list.splice(MT.list.indexOf(e)+1,0,c);mtSave();}
-    return (mine?mtPut(c.id,mine):Promise.resolve()).then(function(){return mtApi('heinta',{id:e.id});}).then(function(r){
-      if(!r.ok){if(r.villa==='burtur'){e.srv=0;e.ver=0;e.dirty=1;mtSave();return;}throw new Error(r.villa);}
-      var s=JSON.parse(r.data);if(mine&&mine.mynd&&!s.mynd)s.mynd=mine.mynd;
+/* Snar hevur eina aðra útgávu enn vit. Fyrst verður kannað, um tað er okkara egna (ein goyming, sum kom fram, men svarið ikki)
+   ella júst tað sama, sum vit hava – tá verður einki avrit gjørt. Bert um onkur annar veruliga hevur broytt talvuna, verður okkara
+   útgáva goymd sum avrit, og tann nýggjasta verður latin upp. Ein kanning í senn fyri hvørja talvu. */
+var mtConfBusy={};
+function mtConflict(e){if(mtConfBusy[e.id])return mtConfBusy[e.id];var isCur=e.id===MT.cur;
+  var p=mtApi('heinta',{id:e.id}).then(function(r){
+    if(!r.ok){if(r.villa==='burtur'){e.srv=0;e.ver=0;e.dirty=1;mtSave();return;}throw new Error(r.villa);}
+    var sh=mtHash(r.data);
+    return (isCur?Promise.resolve(JSON.parse(JSON.stringify(S))):mtGet(e.id)).then(function(mine){
+      var myH=mine?mtHash(JSON.stringify(mtSrv(mine))):'';
+      if(!mine||sh===myH||sh===e.sentH){e.ver=r.ver;e.srv=1;e.broytt=r.broytt;e.stale=0;e.remote=0;
+        e.dirty=mine&&sh!==myH?1:0;e.h=mine?myH:sh;mtSave();mtUI();if(e.dirty)mtSchedule(500);return;}
+      var c={id:mtId(),heiti:mtName(e.heiti+' (avrit)'),ver:0,srv:0,dirty:1,broytt:Date.now()};MT.list.splice(MT.list.indexOf(e)+1,0,c);mtSave();
+      var s=JSON.parse(r.data);if(mine.mynd&&!s.mynd)s.mynd=mine.mynd;
       e.ver=r.ver;e.heiti=r.heiti;e.broytt=r.broytt;e.dirty=0;e.srv=1;e.stale=0;e.remote=0;e.h=mtSrvH(s);mtSave();
-      return mtPut(e.id,s).then(function(){mtUI();if(isCur)mtReload(s,'Henda talvan var broytt á eini aðrari teldu. Tú sært nú ta nýggjastu útgávuna. Tað, sum tú broytti her, er goymt sum „'+c.heiti+'“ í Mínum talvum.');});});});}
+      return mtPut(c.id,mine).then(function(){return mtPut(e.id,s);}).then(function(){mtUI();
+        if(isCur)mtReload(s,'Henda talvan var broytt á eini aðrari teldu. Tú sært nú ta nýggjastu útgávuna. Tað, sum tú broytti her, er goymt sum „'+c.heiti+'“ í Mínum talvum.');});});});
+  mtConfBusy[e.id]=p;p.then(function(){delete mtConfBusy[e.id];},function(){delete mtConfBusy[e.id];});return p;}
 /* Skriva eina talvu inn sum ta, ið er á skíggjanum, og les síðuna inn av nýggjum */
 var mtLeaving=false;
 function mtReload(s,msg){mtLeaving=true;clearTimeout(saveT);clearTimeout(mtLocT);clearTimeout(mtPushT);
