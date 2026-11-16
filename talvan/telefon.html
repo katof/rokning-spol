@@ -82,7 +82,7 @@ dialog .row{justify-content:flex-end}
   <!-- Ikki innritað -->
   <section id="vIn" hidden>
     <h1>Talvan á telefonini</h1>
-    <p class="lead">Talvan sjálv riggar bara við teldu, og best á stórum skíggja. Men ritar tú inn, kanst tú rætta tínar talvur her: tekstir, ætlanir, listar, spurnarkanningar og stoppur.</p>
+    <p class="lead">Sjálv Talvan riggar bara á teldu og best á stórum skíggja. Men ritar tú inn, kanst tú rætta tínar talvur her: tekstir, ætlanir, listar, spurnarkanningar og stoppur.</p>
     <div class="card">
       <form id="login" novalidate>
         <label class="f">Navn<input class="in" name="n" autocomplete="username" maxlength="40" spellcheck="false" placeholder="til dømis Anna Hoyvík"></label>
@@ -92,7 +92,7 @@ dialog .row{justify-content:flex-end}
         <div class="row"><button class="btn red" type="submit" id="lgo">Rita inn</button><button class="btn sm" type="button" id="lback" hidden>Aftur</button></div>
       </form>
     </div>
-    <p class="note">Hevur tú gloymt tølini, skriva til Snar á <a href="mailto:snar@snar.fo">snar@snar.fo</a>.</p>
+    <p class="note">Hevur tú gloymt tølini, skalt tú skriva til Snar á <a href="mailto:snar@snar.fo">snar@snar.fo</a>.</p>
     <div class="foot"><a class="lnk" href="hundur.html">Spæl við Snar-hundin</a></div>
   </section>
 
@@ -155,10 +155,10 @@ function show(v){['in','list','board'].forEach(function(x){$('#v'+x.charAt(0).to
     if(step===2&&p2i.value!==pv){msg.textContent='Tølini eru ikki tey somu. Royn aftur.';p2i.value='';p2i.focus();return;}
     go.disabled=true;msg.textContent='Bíða eina løtu …';
     api(step===2?'stovna':'inn',{navn:nv,pin:pv}).then(function(r){go.disabled=false;
-      if(r.ok){msg.textContent='';p.value='';mode(1);U={navn:r.navn,tok:r.tok};saveU();drawList(r.talvur||[]);if(r.nyttpin)tell('Tú hevur nú nýggj tøl: tey, sum tú júst skrivaði. Minst til tey.');return;}
+      if(r.ok){msg.textContent='';p.value='';mode(1);U={navn:r.navn,tok:r.tok};saveU();drawList(r.talvur||[]);if(r.nyttpin)tell('Tú hevur nú fingið nýggj tøl – tey, sum tú júst skrivaði. Minst til tey.');return;}
       var v=r.villa;
       if(v==='ukent'){mode(2);msg.textContent='Vit kenna ikki navnið „'+nv+'“. Er tað fyrsta ferð, tú ritar inn, skalt tú skriva tey fýra tølini aftur. Hevur tú skrivað navnið skeivt, trýst á Aftur.';p2i.focus();return;}
-      if(v==='skeivt'){p.value='';p.focus();msg.textContent='Navnið og tølini passa ikki saman. Tú hevur '+r.eftir+(r.eftir===1?' roynd':' royndir')+' eftir. Er hetta ikki títt navn, so vel eitt annað, til dømis við skúlanum aftaná.';return;}
+      if(v==='skeivt'){p.value='';p.focus();msg.textContent='Navnið og tølini samsvara ikki. Tú hevur '+r.eftir+(r.eftir===1?' roynd':' royndir')+' eftir. Er hetta ikki títt navn, so vel eitt annað, til dømis við skúlanavninum afturat.';return;}
       if(v==='stongt'){msg.textContent='Ov nógvar skeivar royndir. Royn aftur um '+r.min+(r.min===1?' minutt.':' minuttir.');return;}
       if(v==='tikid'){mode(1);msg.textContent='Hetta navnið er júst tikið. Vel eitt annað navn.';n.focus();return;}
       msg.textContent='Tað bar ikki til at rita inn. Royn aftur um eina løtu.';},
@@ -215,7 +215,7 @@ function drawBoard(){var s=cur.s,B=$('#bBody');B.innerHTML='';
   /* Flokslistar */
   var h2=document.createElement('h2');h2.textContent='Flokslistar';B.appendChild(h2);B.appendChild(cardLists(s));
   var n=document.createElement('p');n.className='note';n.style.marginTop='18px';
-  n.textContent='Her kanst tú rætta tekstir, ætlanir, listar, spurnarkanningar og stoppur. Amboðini sjálv, plásið og støddina broytir tú á telduni.';B.appendChild(n);}
+  n.textContent='Her kanst tú rætta tekstir, ætlanir, listar, spurnarkanningar og stoppur. Sjálv amboðini, staðsetingina og støddina broytir tú á telduni.';B.appendChild(n);}
 
 function cardTekst(s,pi,id,d){var c=card('Tekstur');
   c.appendChild(field('Yvirskrift',d.h,120,function(v){stkSet(s,pi,id,function(x){x.h=v;});}));
@@ -223,7 +223,7 @@ function cardTekst(s,pi,id,d){var c=card('Tekstur');
 function cardStar(s,pi,id,d){var c=card('Stjørna við navni');c.appendChild(field('Navn',d.name,40,function(v){stkSet(s,pi,id,function(x){x.name=v;});}));return c;}
 function cardTilv(s,pi,id,d){var c=card('Tilvild',d.ti||'');
   c.appendChild(field('Heiti',d.ti,60,function(v){stkSet(s,pi,id,function(x){x.ti=v;});}));
-  c.appendChild(field('Listin (eitt á hvørji linju)',d.items,6000,function(v){stkSet(s,pi,id,function(x){x.items=v;x.used=[];x.cur=null;x.grp=null;});},true));return c;}
+  c.appendChild(field('Listin (eitt á hvørjari linju)',d.items,6000,function(v){stkSet(s,pi,id,function(x){x.items=v;x.used=[];x.cur=null;x.grp=null;});},true));return c;}
 function cardParker(s,pi,id,d){var c=card('Spurningar til seinni'),box=document.createElement('div');box.className='items';c.appendChild(box);
   function draw(){box.innerHTML='';(d.q||[]).forEach(function(q,i){var r=document.createElement('div');r.className='row';var t=document.createElement('span');t.style.flex='1';t.textContent=q.t;
       var x=document.createElement('button');x.type='button';x.className='x';x.textContent='×';x.setAttribute('aria-label','Tak burtur');
@@ -237,7 +237,7 @@ function cardParker(s,pi,id,d){var c=card('Spurningar til seinni'),box=document.
 function cardSkra(s){var k=s.skra,c=card('Ætlan',k.t||'');
   c.appendChild(field('Heiti',k.t,60,function(v){k.t=v;}));
   if(k.m==='frii'){var lines=(s.planItems||[]).map(function(x){return x.t}).join('\n');
-    c.appendChild(field('Punktini (eitt á hvørji linju)',lines,4000,function(v){var old=s.planItems||[];s.planItems=v.split('\n').map(function(t){t=t.trim();var o=old.filter(function(x){return x.t===t})[0];return {t:t,d:o?o.d:0};}).filter(function(x){return x.t;});},true));return c;}
+    c.appendChild(field('Punktini (eitt á hvørjari linju)',lines,4000,function(v){var old=s.planItems||[];s.planItems=v.split('\n').map(function(t){t=t.trim();var o=old.filter(function(x){return x.t===t})[0];return {t:t,d:o?o.d:0};}).filter(function(x){return x.t;});},true));return c;}
   if(k.m==='tid'){var w=document.createElement('label');w.className='f';w.textContent='Byrjar kl.';var t=document.createElement('input');t.type='time';t.className='in';t.style.maxWidth='160px';t.value=k.st||'08:10';
     t.addEventListener('input',function(){k.st=t.value;setDirty(true);});w.appendChild(t);c.appendChild(w);}
   var lab=document.createElement('p');lab.className='f';lab.style.margin='0 0 6px';lab.textContent=k.m==='tid'?'Virksemi og minuttir':'Virksemi';c.appendChild(lab);
@@ -275,7 +275,7 @@ function cardTid(s){var c=card('Stoppur'),sec=s.secs||300,r=document.createEleme
 function cardLists(s){var c=document.createElement('div');s.lists=s.lists||[];
   function draw(){c.innerHTML='';s.lists.forEach(function(L,i){var k=card(L.n||'Listi');
       k.appendChild(field('Heiti',L.n,40,function(v){L.n=v;}));
-      k.appendChild(field('Nøvnini (eitt á hvørji linju)',L.items,6000,function(v){L.items=v;},true));
+      k.appendChild(field('Nøvnini (eitt á hvørjari linju)',L.items,6000,function(v){L.items=v;},true));
       var x=document.createElement('button');x.type='button';x.className='lnk';x.textContent='Strika listan';
       x.addEventListener('click',function(){ask('Strika listan „'+(L.n||'Listi')+'“?','Strika').then(function(y){if(!y)return;s.lists.splice(i,1);setDirty(true);draw();});});k.appendChild(x);c.appendChild(k);});
     var a=document.createElement('button');a.type='button';a.className='btn sm';a.textContent='+ Nýggjur listi';
@@ -290,7 +290,7 @@ $('#bSave').addEventListener('click',function(){if(!cur||!dirty)return;var b=$('
   api('goym',{id:cur.id,heiti:heiti,ver:cur.ver,data:JSON.stringify(cur.s)}).then(function(r){
     if(r.ok){cur.ver=r.ver;cur.heiti=heiti;setDirty(false);$('#bst').textContent='Goymt. Talvan á telduni dagførir seg innan eina løtu.';return;}
     if(r.villa==='konflikt'){b.disabled=false;$('#bst').textContent='Ikki goymt.';
-      ask('Henda talvan er júst broytt á eini aðrari teldu. Heinta ta nýggjastu útgávuna og ger tínar broytingar aftur.','Heinta','only').then(function(){openBoard(cur.id);});return;}
+      ask('Henda talvan er júst broytt á aðrari teldu. Heinta ta nýggjastu útgávuna og ger tínar broytingar aftur.','Heinta','only').then(function(){openBoard(cur.id);});return;}
     b.disabled=false;$('#bst').textContent='Tað bar ikki til at goyma. Royn aftur.';},
   function(){b.disabled=false;$('#bst').textContent='Einki samband við Snar. Royn aftur, tá ið telefonin hevur samband.';});});
 
