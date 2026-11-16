@@ -1075,6 +1075,8 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
 .ask-row{display:flex;justify-content:flex-end;gap:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 /* Mínar talvur og innritan */
+.mt-toast{position:fixed;z-index:58;top:14px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:10px 10px 10px 18px;box-shadow:0 14px 40px -14px rgba(0,0,0,.5);font-weight:600;max-width:calc(100vw - 24px)}
+.mt-toast .btn{border-radius:10px;white-space:nowrap}
 #mtBtn{position:relative}
 #mtBtn.in{background:#eef2ff;color:#3730a3}
 .mt-dot{position:absolute;right:6px;top:6px;width:11px;height:11px;border-radius:50%;border:2px solid #fff;display:none}
@@ -3719,7 +3721,15 @@ function mtMerge(L){var ids={},conf=[],re=null;mtLastList=Date.now();
   mtSave();mtUI();
   conf.reduce(function(p,e){return p.then(function(){return mtConflict(e);});},Promise.resolve()).then(function(){
     if(re&&!mtLeaving)return mtApi('heinta',{id:re.id}).then(function(r){if(!r.ok||mtLeaving)return;var s=JSON.parse(r.data);if(S.mynd&&!s.mynd)s.mynd=S.mynd;
-      re.ver=r.ver;re.heiti=r.heiti;re.broytt=r.broytt;re.stale=0;re.dirty=0;re.h=mtSrvH(s);mtPut(re.id,s).then(function(){mtReload(s);});});}).catch(function(){});}
+      function go(){re.ver=r.ver;re.heiti=r.heiti;re.broytt=r.broytt;re.stale=0;re.dirty=0;re.h=mtSrvH(s);mtPut(re.id,s).then(function(){mtReload(s);});}
+      /* Gongur stopprið, ella er nakað teknað, verður talvan ikki skift út beinanvegin: lærarin velur sjálvur */
+      if(running||!$('#inkClear').hidden)mtToast(go);else go();});}).catch(function(){});}
+/* Broytingar frá telefonini: talvan kannar, meðan hon er í brúki (í mesta lagi 45 minuttir eftir seinasta trýst) */
+var mtLastAct=Date.now();['pointerdown','keydown'].forEach(function(t){document.addEventListener(t,function(){mtLastAct=Date.now();},true);});
+setInterval(function(){if(MT.u&&MT.cur&&!mtLeaving&&!mtBusy&&document.visibilityState==='visible'&&Date.now()-mtLastAct<45*60000)mtSync();},90000);
+function mtToast(go){var t=$('#mtToast');if(!t){t=el('div','mt-toast');t.id='mtToast';t.setAttribute('role','status');
+    t.innerHTML='<span>Talvan er broytt á telefonini ella á eini aðrari teldu.</span><button class="btn red sm" type="button">Dagfør nú</button><button class="ic" type="button" aria-label="Seinni" title="Seinni">'+I.x+'</button>';document.body.appendChild(t);}
+  var b=t.querySelectorAll('button');b[0].onclick=function(){t.hidden=true;go();};b[1].onclick=function(){t.hidden=true;};t.hidden=false;}
 function mtSync(){if(!MT.u)return;mtApi('listi').then(function(r){if(r.ok){mtMerge(r.talvur||[]);mtPushAll();}else mtStatus('off');},function(){mtStatus('off');});}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&MT.u&&Date.now()-mtLastList>5*60000)mtSync();});
 function mtSignOut(){askP('Rita út? Talvurnar verða tiknar av hesi teldu. Tær eru goymdar hjá Snar, so tú fært tær aftur, tá ið tú ritar inn.','Rita út').then(function(y){if(!y)return;

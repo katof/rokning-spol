@@ -5,168 +5,299 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Talvan – Snar</title>
 <!-- Telefonir fáa hesa síðuna í staðin fyri Talvuna (index.html sendir tær higar), tí Talvan er ov tung og ov stór til eina telefon.
-     Hundurin og spælið eru tikin úr Spøl til Rokning 1a og 1b á snar.fo/rokning. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+     Her kann lærarin rita inn og rætta tekstir, ætlanir, listar, spurnarkanningar og stoppur í talvunum, sum eru goymdar hjá Snar.
+     Amboðini verða ikki flutt ella gjørd størri her – tað verður gjørt á telduni. Snar-hundurin er fluttur til hundur.html. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<script>/* Bert til royndir á egnu teldu: ?mock=1 nýtir eina lokala útgávu av skriptinum hjá Snar */
+if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&/[?&]mock=1/.test(location.search))document.write('<script src="test/mt-mock.js"><\/script>');</script>
 <style>
-html, body { height: 100%; margin: 0; }
-body { background: #f7f7f7; font-family: Inter, Arial, Helvetica, sans-serif; }
-.phone {
-    display: grid; align-content: center; justify-items: center; gap: 18px; min-height: 100%; box-sizing: border-box;
-    padding-block: 24px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-    text-align: center;
-  }
-.phone p { margin: 0; max-width: 30ch; font-size: clamp(17px, 4.6vw, 22px); line-height: 1.4; font-weight: 700; color: #3a3a3a; text-wrap: balance; }
-.phone svg { width: 100%; max-width: 640px; height: auto; display: block; touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: pointer; }
-.phone .px { font-family: "Press Start 2P", ui-monospace, monospace; }
-.phone .hint { font-size: clamp(11px, 3vw, 13px); color: #757575; font-family: "Press Start 2P", ui-monospace, monospace; line-height: 1.6; }
-document.querySelector(".phone").addEventListener("pointerdown", jump);
-  addEventListener("keydown", ev => { if (ev.code === "Space" || ev.code === "ArrowUp") jump(ev); }
+:root{--red:#ef2418;--red-d:#c81d12;--ink:#202124;--muted:#5f6368;--line:#dadce0;--bg:#f4f5f7;--card:#fff;--blue:#1559e8;--field:#9aa0a6}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,Arial,Helvetica,sans-serif;font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px max(14px,env(safe-area-inset-right)) 10px max(14px,env(safe-area-inset-left));background:#fff;border-bottom:1px solid var(--line)}
+.top img{height:26px;display:block}
+.top .tt{font-weight:800;font-size:1.05rem}
+.top .sp{flex:1}
+.top .who{font-size:.85rem;color:var(--muted);text-align:right;line-height:1.25;max-width:45vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wrap{max-width:640px;margin:0 auto;padding:16px max(14px,env(safe-area-inset-right)) 120px max(14px,env(safe-area-inset-left))}
+h1{font-size:1.45rem;line-height:1.25;margin:6px 0 8px}
+h2{font-size:1.05rem;margin:26px 0 10px;color:var(--muted);text-transform:none;letter-spacing:0}
+p{margin:0 0 12px}
+.lead{color:#3c4043}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card h3{margin:0 0 10px;font-size:1.02rem;display:flex;align-items:center;gap:8px}
+.card h3 small{font-weight:500;color:var(--muted);font-size:.82rem}
+.f{display:grid;gap:6px;font-weight:600;font-size:.92rem;margin:0 0 12px}
+.f:last-child{margin-bottom:0}
+.in{width:100%;min-height:48px;border:1px solid var(--field);border-radius:12px;padding:10px 12px;font-size:1rem;background:#fff;font-weight:400}
+textarea.in{min-height:110px;resize:vertical;line-height:1.4}
+.in:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.pin{letter-spacing:.4em;font-size:1.25rem;max-width:180px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border:1px solid #77787b;border-radius:12px;background:#fff;font-weight:700}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn.red:disabled{background:#f3a59f;border-color:#f3a59f}
+.btn.sm{min-height:40px;padding:0 12px;font-size:.92rem;font-weight:600}
+.btn.wide{width:100%}
+.lnk{background:none;border:0;padding:6px 0;color:var(--blue);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.msg{color:#9a3412;font-size:.92rem;margin:0 0 12px}
+.msg:empty{display:none}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.it{width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;gap:2px}
+.it b{font-size:1.05rem}
+.it small{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0}
+.chip{font-size:.82rem;padding:4px 10px;border-radius:999px;background:#eef0f3;color:#3c4043}
+.row{display:flex;gap:8px;align-items:center}
+.row .in{flex:1}
+.mini{width:84px;flex:none!important;text-align:center}
+.x{flex:none;width:44px;height:44px;border:0;border-radius:10px;background:#f1f3f4;font-size:1.3rem;line-height:1}
+.items{display:grid;gap:8px;margin:0 0 10px}
+.note{font-size:.85rem;color:var(--muted)}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:#fff;border-top:1px solid var(--line);padding:10px max(14px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.bar .in2{max-width:640px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .st{flex:1;font-size:.88rem;color:var(--muted);line-height:1.3}
+.back{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:6px 0;font-weight:700;color:var(--blue)}
+.dias{display:inline-block;font-size:.78rem;font-weight:700;background:#fff1f0;color:var(--red-d);border-radius:999px;padding:2px 10px;margin-left:4px}
+.empty{color:var(--muted);text-align:center;padding:20px 0}
+.foot{margin-top:28px;text-align:center}
+dialog{border:0;border-radius:18px;padding:22px;max-width:min(420px,90vw);box-shadow:0 24px 60px -20px rgba(0,0,0,.45)}
+dialog::backdrop{background:rgba(20,22,25,.4)}
+dialog p{font-weight:500;margin:0 0 18px}
+dialog .row{justify-content:flex-end}
 </style>
 </head>
 <body>
-<section class="phone" aria-label="Talvan riggar bara við teldu">
-  <p>Talvan riggar bara við teldu – og best á stórskíggja, men tú kanst spæla við Snar.</p>
-  <svg id="run" viewBox="0 0 600 200" shape-rendering="crispEdges" role="img" aria-label="Snar hoppar. Trýst fyri at hoppa.">
-    <rect width="600" height="200" fill="#f7f7f7"/>
-    <g id="clouds" fill="#dcdcdc"></g>
-    <text id="score" class="px" x="588" y="26" text-anchor="end" font-size="14" fill="#535353">00000</text>
-    <text id="best" class="px" x="470" y="26" text-anchor="end" font-size="14" fill="#a0a0a0"></text>
-    <g id="ground"></g>
-    <g id="obstacles"></g>
-    <g id="dog">
-      <g fill="#535353">
-        <path id="back-legs" d="M28 46h8v6h-8zm-4 4h12v4H24z"/>
-        <path id="front-legs" d="M54 46h8v6h-8zm0 4h12v4H54z"/>
-        <path id="tail" d="M24 34h8v10h-8zm-6-2h6v6h-6zm-4-4h6v6h-6z"/>
-        <path d="M30 32h32v18H30zm-4 4h8v10h-8zm12-6h22v6H38zm22-4h10v24H60z"/>
-        <path d="M66 18h12v4H66zm-4 4h20v20H62zm16 8h12v12H78zm10 0h4v6h-4z"/>
-        <path d="M60 20h6v18h-6zm-2 4h4v10h-4z"/>
-      </g>
-      <path id="eye-open" d="M73 25h4v4h-4z" fill="#1a5ce6"/>
-      <path id="eye-shut" d="M72 28h6v2h-6z" fill="#1a5ce6" visibility="hidden"/>
-      <path d="M62 38h10v4H62z" fill="#ef2418"/>
-      <text id="woof" class="px" x="96" y="14" font-size="10" fill="#ef2418" visibility="hidden">VOFF!</text>
-    </g>
-    <text id="msg" class="px" x="300" y="92" text-anchor="middle" font-size="13" fill="#535353">Trýst fyri at byrja</text>
-  </svg>
-  <div class="hint">Trýst á skermin fyri at hoppa</div>
-</section>
+<header class="top">
+  <a href="https://snar.fo" target="_top" aria-label="Til Snar"><img src="https://snar.fo/fileadmin/user_upload/TEMA_-_KT/Logo_Snar/SnarLogoRed.png" alt="Snar" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'Snar'}))"></a>
+  <span class="tt">Talvan</span><span class="sp"></span>
+  <span class="who" id="who"></span>
+</header>
+
+<main class="wrap">
+  <!-- Ikki innritað -->
+  <section id="vIn" hidden>
+    <h1>Talvan á telefonini</h1>
+    <p class="lead">Talvan sjálv riggar bara við teldu, og best á stórum skíggja. Men ritar tú inn, kanst tú rætta tínar talvur her: tekstir, ætlanir, listar, spurnarkanningar og stoppur.</p>
+    <div class="card">
+      <form id="login" novalidate>
+        <label class="f">Navn<input class="in" name="n" autocomplete="username" maxlength="40" spellcheck="false" placeholder="til dømis Anna Hoyvík"></label>
+        <label class="f">Fýra tøl<input class="in pin" name="p" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="• • • •"></label>
+        <label class="f" id="p2w" hidden>Skriva tey fýra tølini aftur<input class="in pin" name="p2" type="password" inputmode="numeric" autocomplete="new-password" maxlength="4" placeholder="• • • •"></label>
+        <p class="msg" id="lmsg" role="status"></p>
+        <div class="row"><button class="btn red" type="submit" id="lgo">Rita inn</button><button class="btn sm" type="button" id="lback" hidden>Aftur</button></div>
+      </form>
+    </div>
+    <p class="note">Hevur tú gloymt tølini, skriva til Snar á <a href="mailto:snar@snar.fo">snar@snar.fo</a>.</p>
+    <div class="foot"><a class="lnk" href="hundur.html">Spæl við Snar-hundin</a></div>
+  </section>
+
+  <!-- Mínar talvur -->
+  <section id="vList" hidden>
+    <h1>Mínar talvur</h1>
+    <p class="lead">Vel talvuna, sum tú vilt rætta. Broytingarnar koma á talvuna á telduni, tá ið tú hevur goymt.</p>
+    <ul class="list" id="boards"></ul>
+    <p class="empty" id="noBoards" hidden>Tú hevur ongar talvur enn. Ger eina á telduni, so kemur hon her.</p>
+    <div class="foot"><button class="lnk" type="button" id="out">Rita út</button></div>
+  </section>
+
+  <!-- Ein talva -->
+  <section id="vBoard" hidden>
+    <button class="back" type="button" id="toList">‹ Mínar talvur</button>
+    <label class="f" style="margin-top:8px">Navnið á talvuni<input class="in" id="bName" maxlength="60"></label>
+    <div id="bBody"></div>
+  </section>
+</main>
+
+<div class="bar" id="bar" hidden><div class="in2"><span class="st" id="bst">Eingar broytingar.</span><button class="btn red" type="button" id="bSave" disabled>Goym</button></div></div>
+
+<dialog id="dlg"><p id="dlgT"></p><div class="row"><button class="btn sm" type="button" id="dlgNo">Lat vera</button><button class="btn red" type="button" id="dlgOk">Í lagi</button></div></dialog>
 
 <script>
-// Snar hoppar: spælið, sum telefonir fáa í staðin fyri Talvuna.
-(() => {
+(function(){
+'use strict';
+var API='https://script.google.com/macros/s/AKfycbzCXg4lWitSjUbpf8rYoEWBbdE3VRoJURthXZYP_OZlpE5U33ovlfk8Iw-L_hLilsB8eA/exec';
+var UKEY='snar-talvan-telefon';
+var U=null;try{U=JSON.parse(localStorage.getItem(UKEY)||'null');}catch(e){}
+var cur=null;   // {id,heiti,ver,s}
+var dirty=false;
+function $(s,r){return (r||document).querySelector(s)}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function p2(n){return (n<10?'0':'')+n}
+function saveU(){try{if(U)localStorage.setItem(UKEY,JSON.stringify(U));else localStorage.removeItem(UKEY);}catch(e){}}
+function api(act,b){b=b||{};b.act=act;if(U&&act!=='inn'&&act!=='stovna')b.tok=U.tok;
+  var p=window.MT_MOCK?new Promise(function(res,rej){setTimeout(function(){try{res(JSON.parse(JSON.stringify(window.MT_MOCK(JSON.parse(JSON.stringify(b))))));}catch(e){rej(e);}},150);})
+    :fetch(API,{method:'POST',body:JSON.stringify(b)}).then(function(r){return r.json();});
+  return p.then(function(r){if(r&&r.villa==='tok'&&U){U=null;saveU();show('in');tell('Innritanin er ikki galdandi longur. Rita inn aftur.');}return r||{ok:false};});}
+function ask(msg,ok,only){return new Promise(function(res){var d=$('#dlg');$('#dlgT').textContent=msg;$('#dlgOk').textContent=ok||'Í lagi';$('#dlgNo').hidden=!!only;
+  function done(v){$('#dlgOk').onclick=$('#dlgNo').onclick=null;d.oncancel=null;if(d.open)d.close();res(v);}
+  $('#dlgOk').onclick=function(){done(true)};$('#dlgNo').onclick=function(){done(false)};d.oncancel=function(e){e.preventDefault();done(false)};d.showModal();});}
+function tell(msg){return ask(msg,'Í lagi',true);}
+function when(t){if(!t)return '';var d=new Date(t),n=new Date(),y=new Date(n.getFullYear(),n.getMonth(),n.getDate()-1),kl='kl. '+d.getHours()+'.'+p2(d.getMinutes());
+  if(d.toDateString()===n.toDateString())return 'Broytt í dag '+kl;if(d.toDateString()===y.toDateString())return 'Broytt í gjár '+kl;return 'Broytt '+d.getDate()+'.'+(d.getMonth()+1)+'. '+kl;}
 
-  const NS = "http://www.w3.org/2000/svg";
-  const $ = id => document.getElementById(id);
-  const dog = $("dog"), obstaclesG = $("obstacles"), cloudsG = $("clouds"), scoreEl = $("score"), bestEl = $("best"), msg = $("msg");
-  const GROUND = 170, DOG_X = 30, GRAVITY = .0026, JUMP = .74, S = 1.3;  // S: Snar and the obstacles are drawn 1.3× size
+function show(v){['in','list','board'].forEach(function(x){$('#v'+x.charAt(0).toUpperCase()+x.slice(1)).hidden=x!==v;});$('#bar').hidden=v!=='board';
+  $('#who').textContent=U?U.navn:'';window.scrollTo(0,0);}
 
-  function el(tag, attrs, parent) {
-    const n = document.createElementNS(NS, tag);
-    for (const k in attrs) n.setAttribute(k, attrs[k]);
-    if (parent) parent.appendChild(n);
-    return n;
-  }
+/* ---------- Innritan ---------- */
+(function(){var f=$('#login'),n=f.elements.n,p=f.elements.p,p2i=f.elements.p2,msg=$('#lmsg'),go=$('#lgo'),back=$('#lback'),step=1;
+  $$('.pin',f).forEach(function(i){i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').slice(0,4);});});
+  function mode(s){step=s;$('#p2w').hidden=s!==2;back.hidden=s!==2;n.readOnly=s===2;go.textContent=s===2?'Stovna innritan':'Rita inn';if(s===1)p2i.value='';}
+  back.addEventListener('click',function(){mode(1);msg.textContent='';p.focus();});
+  f.addEventListener('submit',function(ev){ev.preventDefault();var nv=n.value.replace(/\s+/g,' ').trim(),pv=p.value;
+    if(nv.length<2){msg.textContent='Skriva navnið hjá tær.';n.focus();return;}
+    if(!/^\d{4}$/.test(pv)){msg.textContent='Skriva fýra tøl.';p.focus();return;}
+    if(step===2&&p2i.value!==pv){msg.textContent='Tølini eru ikki tey somu. Royn aftur.';p2i.value='';p2i.focus();return;}
+    go.disabled=true;msg.textContent='Bíða eina løtu …';
+    api(step===2?'stovna':'inn',{navn:nv,pin:pv}).then(function(r){go.disabled=false;
+      if(r.ok){msg.textContent='';p.value='';mode(1);U={navn:r.navn,tok:r.tok};saveU();drawList(r.talvur||[]);if(r.nyttpin)tell('Tú hevur nú nýggj tøl: tey, sum tú júst skrivaði. Minst til tey.');return;}
+      var v=r.villa;
+      if(v==='ukent'){mode(2);msg.textContent='Vit kenna ikki navnið „'+nv+'“. Er tað fyrsta ferð, tú ritar inn, skalt tú skriva tey fýra tølini aftur. Hevur tú skrivað navnið skeivt, trýst á Aftur.';p2i.focus();return;}
+      if(v==='skeivt'){p.value='';p.focus();msg.textContent='Navnið og tølini passa ikki saman. Tú hevur '+r.eftir+(r.eftir===1?' roynd':' royndir')+' eftir. Er hetta ikki títt navn, so vel eitt annað, til dømis við skúlanum aftaná.';return;}
+      if(v==='stongt'){msg.textContent='Ov nógvar skeivar royndir. Royn aftur um '+r.min+(r.min===1?' minutt.':' minuttir.');return;}
+      if(v==='tikid'){mode(1);msg.textContent='Hetta navnið er júst tikið. Vel eitt annað navn.';n.focus();return;}
+      msg.textContent='Tað bar ikki til at rita inn. Royn aftur um eina løtu.';},
+    function(){go.disabled=false;msg.textContent='Tað bar ikki til at fáa samband við Snar. Kanna, um telefonin hevur samband við netið, og royn aftur.';});});})();
 
-  // Ground line with pebbles; the pebble strip is two screens wide so it can scroll forever.
-  const groundG = $("ground");
-  el("rect", { x: 0, y: GROUND, width: 600, height: 2, fill: "#535353" }, groundG);
-  const pebbles = el("g", { fill: "#a3a3a3" }, groundG);
-  for (let x = 0; x < 1200; x += 37) el("rect", { x: x % 600 + (x >= 600 ? 600 : 0), y: GROUND + 6 + (x % 3) * 5, width: x % 5 + 2, height: 2 }, pebbles);
+$('#out').addEventListener('click',function(){ask('Rita út á hesi telefon? Talvurnar verða verandi hjá Snar.','Rita út').then(function(y){if(!y)return;api('ut').catch(function(){});U=null;saveU();show('in');});});
 
-  const clouds = [[80, 50], [330, 34], [520, 62]].map(([x, y]) => {
-    const g = el("g", {}, cloudsG);
-    el("path", { d: "M8 0h20v4h6v4h6v8H0V8h4V4h4z" }, g);
-    return { g, x, y };
-  });
+/* ---------- Mínar talvur ---------- */
+function loadList(){$('#boards').innerHTML='<li class="empty">Heinti talvurnar …</li>';$('#noBoards').hidden=true;show('list');
+  api('listi').then(function(r){if(r.ok)drawList(r.talvur||[]);},function(){$('#boards').innerHTML='<li class="empty">Tað bar ikki til at heinta talvurnar. Kanna sambandið og royn aftur.</li>';});}
+function drawList(L){show('list');var ul=$('#boards');ul.innerHTML='';L.sort(function(a,b){return (b.broytt||0)-(a.broytt||0)});$('#noBoards').hidden=L.length>0;
+  L.forEach(function(t){var li=document.createElement('li'),b=document.createElement('button');b.type='button';b.className='it';b.innerHTML='<b>'+esc(t.heiti)+'</b><small>'+esc(when(t.broytt))+'</small>';
+    b.addEventListener('click',function(){openBoard(t.id);});li.appendChild(b);ul.appendChild(li);});}
+function openBoard(id){$('#bBody').innerHTML='<p class="empty">Heinti talvuna …</p>';show('board');$('#bName').value='';
+  api('heinta',{id:id}).then(function(r){if(!r.ok){tell('Tað bar ikki til at heinta talvuna.');loadList();return;}
+    cur={id:r.id,heiti:r.heiti,ver:r.ver,s:JSON.parse(r.data)};setDirty(false);$('#bName').value=r.heiti;drawBoard();},
+  function(){tell('Tað bar ikki til at fáa samband við Snar.');loadList();});}
+$('#toList').addEventListener('click',function(){(dirty?ask('Tú hevur broytingar, sum ikki eru goymdar. Vilt tú fara aftur kortini?','Far aftur'):Promise.resolve(true)).then(function(y){if(y){cur=null;setDirty(false);loadList();}});});
+$('#bName').addEventListener('input',function(){if(cur){cur.heiti=this.value;setDirty(true);}});
+window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue='';}});
 
-  // Obstacles, drawn in pixels: a red hydrant, a stone and two stones.
-  const TYPES = [
-    { w: 18, h: 30, draw: g => el("path", { d: "M5 0h8v4H5zM3 4h12v22H3zM0 12h18v4H0zM1 26h16v4H1z", fill: "#d43a2f" }, g) },
-    { w: 20, h: 14, draw: g => el("path", { d: "M4 0h12v4H4zM0 4h20v10H0z", fill: "#8a8a8a" }, g) },
-    { w: 34, h: 18, draw: g => el("path", { d: "M4 4h10v4H4zM0 8h18v10H0zM20 0h10v4H20zM18 4h16v14H18z", fill: "#8a8a8a" }, g) },
-  ];
+/* ---------- Ein talva ---------- */
+var WN={klokka:'Klokkan',tid:'Stoppur',skra:'Ætlan',ljos:'Ferðsluljós',poll:'Spurnarkanning',larm:'Ljóðmátari',glas:'Smileyglas',tern:'Terningar',pdf:'PDF',
+  mynd:'Mynd',mynd2:'Mynd',mynd3:'Mynd',snar:'Funka',snar2:'Funka',snar3:'Funka',tema:'Tema',yt:'YouTube',yt2:'YouTube',navn:'Nøvn',aetlan:'Dagsins ætlan'};
+var SN={spurn:'Dagsins spurningur',lukku:'Til lukku!',lesa:'Vit lesa',vael:'Flott!',gott:'Gott!',stedg:'Steðgur',lurta:'Lurtið væl eftir',bolk:'Bólkaarbeiði',glas:'Smileyglasið',
+  finnt:'Finn orð',star:'Stjørna við navni',finn:'Finn orð-talva',tekst:'Tekstur',gbtdog:'Snar-hundurin',dagur:'Dagurin í dag',rokil:'Røklaskipan',parker:'Spurningar til seinni',
+  kamera:'Myndatól',tallinja:'Tallinja',hundrad:'Hundraðstalva',tidl:'Tíðarlinja',anding:'Andingarvenjing',pakka:'Pakkaspæl',morgun:'Felags uppgáva',mark:'Morgunark',qr:'QR-kota',
+  stiga:'Stigatalva',amerki:'Arbeiðsmerki',tilv:'Tilvild'};
+function pages(s){var n=(s.pages&&s.pages.length)||1,out=[];for(var i=0;i<n;i++)out.push(i===(s.pg||0)?s:s.pages[i]);return out;}
+function visAny(s,k){return pages(s).some(function(p){return p.vis&&p.vis[k];});}
+/* Tað aktiva diasið liggur bæði í s og sum gamalt avrit í s.pages[s.pg]: broyt bæði */
+function stkSet(s,pi,id,fn){var P=pages(s)[pi];if(P.stk&&P.stk[id])fn(P.stk[id]);if(pi===(s.pg||0)&&s.pages&&s.pages[pi]&&s.pages[pi].stk&&s.pages[pi].stk[id]&&s.pages[pi].stk[id]!==P.stk[id])fn(s.pages[pi].stk[id]);}
+function setDirty(v){dirty=v;$('#bSave').disabled=!v;$('#bst').textContent=v?'Tú hevur broytingar, sum ikki eru goymdar.':'Eingar broytingar.';}
+function field(lbl,val,ml,onIn,area){var w=document.createElement('label');w.className='f';w.textContent=lbl;var i=document.createElement(area?'textarea':'input');i.className='in';i.value=val||'';if(ml)i.maxLength=ml;
+  i.addEventListener('input',function(){onIn(i.value);setDirty(true);});w.appendChild(i);return w;}
+function card(title,sub){var c=document.createElement('div');c.className='card';c.innerHTML='<h3>'+esc(title)+(sub?' <small>'+esc(sub)+'</small>':'')+'</h3>';return c;}
 
-  let state = "ready", y = 0, vy = 0, dist = 0, speed = 0, last = 0, legT = 0, obstacles = [], gap = 0, best = 0;
-  try { best = +localStorage.getItem("talvan/snar-best") || 0; } catch (e) {}
-  const pad = n => String(Math.floor(n)).padStart(5, "0");
-  bestEl.textContent = best ? `HI ${pad(best)}` : "";
+function drawBoard(){var s=cur.s,B=$('#bBody');B.innerHTML='';var any=false;
+  /* Fyri alla talvuna */
+  var g=document.createElement('div');
+  if(visAny(s,'skra')&&s.skra){g.appendChild(cardSkra(s));any=true;}
+  if(visAny(s,'poll')&&s.poll){g.appendChild(cardPoll(s));any=true;}
+  if(visAny(s,'tid')){g.appendChild(cardTid(s));any=true;}
+  if(g.children.length){var h=document.createElement('h2');h.textContent='Fyri alla talvuna';B.appendChild(h);B.appendChild(g);}
+  /* Hvørt dias */
+  var P=pages(s);
+  P.forEach(function(pg,pi){var h=document.createElement('h2');h.innerHTML=P.length>1?'Dias '+(pi+1)+(pi===(s.pg||0)?' <span class="dias">á skíggjanum</span>':''):'Á talvuni';B.appendChild(h);
+    var cnt=0,other=[];
+    Object.keys(pg.stk||{}).forEach(function(id){if(!pg.vis||!pg.vis[id])return;var d=pg.stk[id],c=null;
+      if(d.t==='tekst')c=cardTekst(s,pi,id,d);else if(d.t==='tilv')c=cardTilv(s,pi,id,d);else if(d.t==='parker')c=cardParker(s,pi,id,d);else if(d.t==='star')c=cardStar(s,pi,id,d);
+      if(c){B.appendChild(c);cnt++;}else other.push(SN[d.t]||'Glansmynd');});
+    Object.keys(pg.vis||{}).forEach(function(k){if(pg.vis[k]&&WN[k]&&!(pg.stk&&pg.stk[k]))other.push(WN[k]);});
+    if(cnt)any=true;
+    var o=document.createElement('p');o.className='note';
+    if(other.length){o.innerHTML=(cnt?'Eisini á diasinum: ':'Á diasinum: ')+'<span class="chips">'+other.filter(function(x,i,a){return a.indexOf(x)===i}).map(function(x){return '<span class="chip">'+esc(x)+'</span>'}).join('')+'</span>';B.appendChild(o);}
+    else if(!cnt){o.textContent='Einki á hesum diasinum.';B.appendChild(o);}});
+  /* Flokslistar */
+  var h2=document.createElement('h2');h2.textContent='Flokslistar';B.appendChild(h2);B.appendChild(cardLists(s));
+  var n=document.createElement('p');n.className='note';n.style.marginTop='18px';
+  n.textContent='Her kanst tú rætta tekstir, ætlanir, listar, spurnarkanningar og stoppur. Amboðini sjálv, plásið og støddina broytir tú á telduni.';B.appendChild(n);}
 
-  function show(id, on) { $(id).setAttribute("visibility", on ? "visible" : "hidden"); }
+function cardTekst(s,pi,id,d){var c=card('Tekstur');
+  c.appendChild(field('Yvirskrift',d.h,120,function(v){stkSet(s,pi,id,function(x){x.h=v;});}));
+  c.appendChild(field('Tekstur',d.b,4000,function(v){stkSet(s,pi,id,function(x){x.b=v;});},true));return c;}
+function cardStar(s,pi,id,d){var c=card('Stjørna við navni');c.appendChild(field('Navn',d.name,40,function(v){stkSet(s,pi,id,function(x){x.name=v;});}));return c;}
+function cardTilv(s,pi,id,d){var c=card('Tilvild',d.ti||'');
+  c.appendChild(field('Heiti',d.ti,60,function(v){stkSet(s,pi,id,function(x){x.ti=v;});}));
+  c.appendChild(field('Listin (eitt á hvørji linju)',d.items,6000,function(v){stkSet(s,pi,id,function(x){x.items=v;x.used=[];x.cur=null;x.grp=null;});},true));return c;}
+function cardParker(s,pi,id,d){var c=card('Spurningar til seinni'),box=document.createElement('div');box.className='items';c.appendChild(box);
+  function draw(){box.innerHTML='';(d.q||[]).forEach(function(q,i){var r=document.createElement('div');r.className='row';var t=document.createElement('span');t.style.flex='1';t.textContent=q.t;
+      var x=document.createElement('button');x.type='button';x.className='x';x.textContent='×';x.setAttribute('aria-label','Tak burtur');
+      x.addEventListener('click',function(){stkSet(s,pi,id,function(o){o.q=(o.q||[]).filter(function(_,j){return j!==i;});});setDirty(true);draw();});r.appendChild(t);r.appendChild(x);box.appendChild(r);});
+    if(!(d.q||[]).length){var e=document.createElement('p');e.className='note';e.textContent='Eingir spurningar enn.';box.appendChild(e);}}
+  draw();var r=document.createElement('div');r.className='row';var i=document.createElement('input');i.className='in';i.maxLength=200;i.placeholder='Nýggjur spurningur';
+  var a=document.createElement('button');a.type='button';a.className='btn sm';a.textContent='Legg afturat';
+  function add(){var v=i.value.trim();if(!v)return;stkSet(s,pi,id,function(o){o.q=o.q||[];o.q.push({t:v,c:Math.floor(Math.random()*6)});});i.value='';setDirty(true);draw();}
+  a.addEventListener('click',add);i.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();add();}});r.appendChild(i);r.appendChild(a);c.appendChild(r);return c;}
 
-  function drawDog() {
-    dog.setAttribute("transform", `translate(${DOG_X} ${GROUND - 54 * S - y}) scale(${S})`);
-    const step = y === 0 && state === "run" ? Math.floor(legT / 90) % 2 : -1;
-    $("back-legs").setAttribute("transform", step === 0 ? "translate(0 -2)" : "");
-    $("front-legs").setAttribute("transform", step === 1 ? "translate(0 -2)" : "");
-    $("tail").setAttribute("transform", state === "run" && Math.floor(legT / 150) % 2 ? "translate(0 -2)" : "");
-  }
+function cardSkra(s){var k=s.skra,c=card('Ætlan',k.t||'');
+  c.appendChild(field('Heiti',k.t,60,function(v){k.t=v;}));
+  if(k.m==='frii'){var lines=(s.planItems||[]).map(function(x){return x.t}).join('\n');
+    c.appendChild(field('Punktini (eitt á hvørji linju)',lines,4000,function(v){var old=s.planItems||[];s.planItems=v.split('\n').map(function(t){t=t.trim();var o=old.filter(function(x){return x.t===t})[0];return {t:t,d:o?o.d:0};}).filter(function(x){return x.t;});},true));return c;}
+  if(k.m==='tid'){var w=document.createElement('label');w.className='f';w.textContent='Byrjar kl.';var t=document.createElement('input');t.type='time';t.className='in';t.style.maxWidth='160px';t.value=k.st||'08:10';
+    t.addEventListener('input',function(){k.st=t.value;setDirty(true);});w.appendChild(t);c.appendChild(w);}
+  var lab=document.createElement('p');lab.className='f';lab.style.margin='0 0 6px';lab.textContent=k.m==='tid'?'Virksemi og minuttir':'Virksemi';c.appendChild(lab);
+  var box=document.createElement('div');box.className='items';c.appendChild(box);
+  function draw(){box.innerHTML='';(k.it||[]).forEach(function(it,i){var r=document.createElement('div');r.className='row';
+      var n=document.createElement('input');n.className='in';n.value=it.n||'';n.maxLength=60;n.setAttribute('aria-label','Virksemi');n.addEventListener('input',function(){it.n=n.value;setDirty(true);});r.appendChild(n);
+      if(k.m==='tid'){var m=document.createElement('input');m.className='in mini';m.type='number';m.inputMode='numeric';m.min=5;m.max=240;m.step=5;m.value=it.d||45;m.setAttribute('aria-label','Minuttir');
+        m.addEventListener('input',function(){it.d=Math.max(1,Math.min(600,+m.value||0));setDirty(true);});r.appendChild(m);}
+      var x=document.createElement('button');x.type='button';x.className='x';x.textContent='×';x.setAttribute('aria-label','Tak burtur');x.addEventListener('click',function(){k.it.splice(i,1);setDirty(true);draw();});r.appendChild(x);box.appendChild(r);});}
+  draw();var a=document.createElement('button');a.type='button';a.className='btn sm';a.textContent='+ Legg virksemi afturat';
+  a.addEventListener('click',function(){k.it=k.it||[];k.it.push({ic:'📌',n:'',d:30,k:0});setDirty(true);draw();var L=$$('input:not(.mini)',box);if(L.length)L[L.length-1].focus();});c.appendChild(a);return c;}
 
-  function start() {
-    obstacles.forEach(o => o.g.remove());
-    obstacles = []; y = vy = dist = legT = 0; gap = 300;
-    state = "run";
-    msg.setAttribute("visibility", "hidden");
-    show("eye-open", true); show("eye-shut", false);
-    show("woof", true); setTimeout(() => state === "run" && show("woof", false), 700);
-    last = performance.now();
-    requestAnimationFrame(loop);
-  }
+function cardPoll(s){var p=s.poll,c=card('Spurnarkanning'),oldQ=p.q;
+  c.appendChild(field('Spurningurin',p.q,160,function(v){p.q=v;if(v!==oldQ)p.v=[];}));
+  if(p.t==='v'){var lab=document.createElement('p');lab.className='f';lab.style.margin='0 0 6px';lab.textContent='Svarmøguleikar';c.appendChild(lab);
+    var box=document.createElement('div');box.className='items';c.appendChild(box);
+    function draw(){box.innerHTML='';(p.o||[]).forEach(function(o,i){var r=document.createElement('div');r.className='row';var n=document.createElement('input');n.className='in';n.value=o;n.maxLength=60;
+        n.addEventListener('input',function(){p.o[i]=n.value;setDirty(true);});r.appendChild(n);
+        if(p.o.length>2){var x=document.createElement('button');x.type='button';x.className='x';x.textContent='×';x.setAttribute('aria-label','Tak burtur');x.addEventListener('click',function(){p.o.splice(i,1);p.v=[];setDirty(true);draw();});r.appendChild(x);}
+        box.appendChild(r);});
+      a.hidden=(p.o||[]).length>=6;}
+    var a=document.createElement('button');a.type='button';a.className='btn sm';a.textContent='+ Legg svarmøguleika afturat';
+    a.addEventListener('click',function(){p.o=p.o||[];p.o.push('');p.v=[];setDirty(true);draw();});draw();c.appendChild(a);}
+  var n=document.createElement('p');n.className='note';n.style.margin='10px 0 0';n.textContent='Broytir tú spurningin, verða úrslitini strikað.';c.appendChild(n);return c;}
 
-  function over() {
-    state = "over";
-    show("eye-open", false); show("eye-shut", true); show("woof", true);
-    msg.textContent = "Aj! Trýst fyri at royna aftur";
-    msg.setAttribute("visibility", "visible");
-    const score = dist / 12;
-    if (score > best) {
-      best = Math.floor(score);
-      bestEl.textContent = `HI ${pad(best)}`;
-      try { localStorage.setItem("talvan/snar-best", best); } catch (e) {}
-    }
-    drawDog();
-  }
+function cardTid(s){var c=card('Stoppur'),sec=s.secs||300,r=document.createElement('div');r.className='row';r.style.flexWrap='wrap';
+  var m=document.createElement('input'),x=document.createElement('input');[m,x].forEach(function(i){i.className='in mini';i.type='number';i.inputMode='numeric';i.min=0;});
+  m.max=99;x.max=59;m.value=Math.floor(sec/60);x.value=sec%60;m.setAttribute('aria-label','Minuttir');x.setAttribute('aria-label','Sekund');
+  function upd(){s.secs=Math.max(1,Math.min(5999,(+m.value||0)*60+Math.min(59,+x.value||0)));setDirty(true);}
+  m.addEventListener('input',upd);x.addEventListener('input',upd);
+  var lm=document.createElement('span');lm.textContent='min.';var ls=document.createElement('span');ls.textContent='sek.';
+  r.appendChild(m);r.appendChild(lm);r.appendChild(x);r.appendChild(ls);c.appendChild(r);
+  var n=document.createElement('p');n.className='note';n.style.margin='10px 0 0';n.textContent='Stopprið byrjar við hesi tíðini, tá ið talvan verður latin upp.';c.appendChild(n);return c;}
 
-  function loop(t) {
-    if (state !== "run") return;
-    const dt = Math.min(40, t - last);
-    last = t;
-    speed = Math.min(.75, .33 + dist * .000012);
-    dist += speed * dt;
-    legT += dt;
-    // jump arc
-    if (y > 0 || vy > 0) { vy -= GRAVITY * dt; y = Math.max(0, y + vy * dt); if (y === 0) vy = 0; }
-    // obstacles roll in from the right, further apart as the game speeds up
-    obstacles.forEach(o => { o.x -= speed * dt; o.g.setAttribute("transform", `translate(${o.x.toFixed(1)} ${GROUND - o.t.h * S}) scale(${S})`); });
-    while (obstacles.length && obstacles[0].x < -60) obstacles.shift().g.remove();
-    const lastX = obstacles.length ? obstacles[obstacles.length - 1].x : -Infinity;
-    if (600 - lastX > gap) {
-      const t2 = TYPES[Math.floor(Math.random() * TYPES.length)];
-      const g = el("g", {}, obstaclesG);
-      t2.draw(g);
-      obstacles.push({ g, t: t2, x: 610 });
-      gap = 240 + Math.random() * 260 + speed * 260;
-    }
-    pebbles.setAttribute("transform", `translate(${-(dist % 600).toFixed(1)} 0)`);
-    clouds.forEach(c => { c.x -= speed * .15 * dt; if (c.x < -50) c.x = 620; c.g.setAttribute("transform", `translate(${c.x.toFixed(1)} ${c.y})`); });
-    scoreEl.textContent = pad(dist / 12);
-    drawDog();
-    // the dog's body is roughly x 26–90 and 36 tall in its own drawing
-    const dx0 = DOG_X + 30 * S, dx1 = DOG_X + 88 * S, dTop = GROUND - y - 34 * S, dBottom = GROUND - y - 2;
-    if (obstacles.some(o => o.x + 3 < dx1 && o.x + o.t.w * S - 3 > dx0 && GROUND - o.t.h * S + 3 < dBottom && dTop < GROUND)) { over(); return; }
-    requestAnimationFrame(loop);
-  }
+function cardLists(s){var c=document.createElement('div');s.lists=s.lists||[];
+  function draw(){c.innerHTML='';s.lists.forEach(function(L,i){var k=card(L.n||'Listi');
+      k.appendChild(field('Heiti',L.n,40,function(v){L.n=v;}));
+      k.appendChild(field('Nøvnini (eitt á hvørji linju)',L.items,6000,function(v){L.items=v;},true));
+      var x=document.createElement('button');x.type='button';x.className='lnk';x.textContent='Strika listan';
+      x.addEventListener('click',function(){ask('Strika listan „'+(L.n||'Listi')+'“?','Strika').then(function(y){if(!y)return;s.lists.splice(i,1);setDirty(true);draw();});});k.appendChild(x);c.appendChild(k);});
+    var a=document.createElement('button');a.type='button';a.className='btn sm';a.textContent='+ Nýggjur listi';
+    a.addEventListener('click',function(){s.lists.push({n:'Nýggjur listi',items:''});setDirty(true);draw();});c.appendChild(a);
+    var n=document.createElement('p');n.className='note';n.style.marginTop='10px';n.textContent='Listarnir verða nýttir í Tilvild og Røklaskipan á talvuni.';c.appendChild(n);}
+  draw();return c;}
 
-  function jump(ev) {
-    ev?.preventDefault?.();
-    if (state !== "run") { start(); return; }
-    if (y === 0) vy = JUMP;
-  }
+/* ---------- Goym ---------- */
+$('#bSave').addEventListener('click',function(){if(!cur||!dirty)return;var b=$('#bSave');b.disabled=true;$('#bst').textContent='Goymir …';
+  var heiti=($('#bName').value||'').replace(/\s+/g,' ').trim()||cur.heiti||'Talva';
+  api('goym',{id:cur.id,heiti:heiti,ver:cur.ver,data:JSON.stringify(cur.s)}).then(function(r){
+    if(r.ok){cur.ver=r.ver;cur.heiti=heiti;setDirty(false);$('#bst').textContent='Goymt. Talvan á telduni dagførir seg innan eina løtu.';return;}
+    if(r.villa==='konflikt'){b.disabled=false;$('#bst').textContent='Ikki goymt.';
+      ask('Henda talvan er júst broytt á eini aðrari teldu. Heinta ta nýggjastu útgávuna og ger tínar broytingar aftur.','Heinta','only').then(function(){openBoard(cur.id);});return;}
+    b.disabled=false;$('#bst').textContent='Tað bar ikki til at goyma. Royn aftur.';},
+  function(){b.disabled=false;$('#bst').textContent='Einki samband við Snar. Royn aftur, tá ið telefonin hevur samband.';});});
 
-  document.querySelector(".phone").addEventListener("pointerdown", jump);
-  addEventListener("keydown", ev => { if (ev.code === "Space" || ev.code === "ArrowUp") jump(ev); });
-  clouds.forEach(c => c.g.setAttribute("transform", `translate(${c.x} ${c.y})`));
-  drawDog();
+/* ---------- Byrjan ---------- */
+if(U)loadList();else show('in');
 })();
 </script>
 </body>
