@@ -1634,6 +1634,9 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
   <p>Vel amboðini niðast á skíggjanum. Fleiri amboð eru undir <strong>Amboð</strong>, og undir <strong>Uppsetingar</strong> ovast í vinstra horni finnur tú talvur, sum eru klárar at brúka.</p>
   <p>Trýst á eitt amboð fyri at velja tað. Tá kemur tað fremst, og ein lítil bjálki birtist oman fyri tað. Drag amboðið, hagar tú vilt hava tað, og drag í prikkarnar í hornunum fyri at gera tað størri ella minni. Við <strong>tannhjólinum</strong> kanst tú broyta stillingarnar í feltinum høgrumegin.</p>
   <p>Við <strong>‹ ›</strong> ovast í vinstra horni kanst tú blaða millum dias, og við <strong>+</strong> gert tú eitt nýtt dias. Hvørt dias er ein sjálvstøðug talva við sínum amboðum og sínari bakgrund. Tú kanst eisini blaða við einari framløgufjarstýring ella við tastunum PageUp og PageDown.</p>
+  <h4>Mínar talvur</h4>
+  <p>Við knappinum við persóninum ovast í høgra horni kanst tú rita inn við tínum navni og fýra tølum. Tá verða talvurnar goymdar hjá Snar, og tú fært tær á allar teldur. Undir Mínar talvur kanst tú geva talvunum nøvn, gera nýggjar og lata tær upp aftur seinni. PDF-ar og myndir verða verandi á telduni, har tú valdi tær.</p>
+  <p>Hevur tú gloymt tølini, skriva til Snar á <a href="mailto:snar@snar.fo">snar@snar.fo</a>. So kunnu vit lata teg velja nýggj tøl, og tú missir ikki talvurnar.</p>
   <p><button class="btn sm" type="button" id="resetPos">Legg amboðini uppá pláss aftur</button></p>
   <h4>Linjalur og vinkulmátari</h4>
   <p>Linjalin og vinkulmátaran kanst tú bæði flyta og snara eftir tørvi.</p>
@@ -1642,15 +1645,17 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
   <p>Tú skalt ikki rita inn fyri at brúka talvuna. Uttan innritan verða nøvn, dagsins ætlan og tínar stillingar bert goymd í kagaranum á telduni, sum tú brúkar.</p>
   <p>Ritar tú inn, verða talvurnar eisini goymdar hjá Snar, so tú fært tær á allar teldur. Tá verða navnið, sum tú ritar inn við, og talvurnar goymdar: amboðini, tekstirnir, listarnir og bakgrundin. PDF-ar og myndir verða ikki sendar.</p>
   <p>Ljóðmátarin brúkar bert mikrofonina, meðan síðan er opin. Einki ljóð verður tikið upp ella goymt.</p>
-  <h4>Til læraran: flyt talvuna</h4>
-  <p>Tak talvuna niður sum eina fílu, so kanst tú goyma hana ella flyta hana til eina aðra teldu. Fílan hevur amboðini, plásini, stillingarnar, nøvnini, ætlanirnar og bakgrundina. Myndir og PDF-ar koma eisini við, um tú vilt.</p>
+  <h4>Trygdarrit av talvuni</h4>
+  <p>Tú kanst eisini taka talvuna niður sum eina fílu og leggja hana upp aftur seinni, til dømis á eini teldu, har tú ikki vilt rita inn. Myndir og PDF-ar koma við, um tú vilt.</p>
   <label class="chk" style="margin:0 0 10px;display:flex;gap:8px;align-items:center"><input type="checkbox" id="expFiles" checked> Tak myndir og PDF-ar við</label>
   <div class="row"><button class="btn sm" type="button" id="expBtn">Tak niður</button><button class="btn sm" type="button" id="impBtn">Legg upp</button></div>
   <input type="file" id="impFile" accept=".json,application/json" hidden>
   <p class="note" id="expMsg" style="margin-top:8px"></p>
   <h4>Strika goymdar upplýsingar</h4>
-  <p>Vilt tú strika allar upplýsingar og stillingar, sum eru goymdar í kagaranum?</p>
+  <p>Vilt tú strika allar upplýsingar og stillingar, sum eru goymdar í kagaranum á hesi teldu? Talvur, sum eru goymdar hjá Snar, verða ikki strikaðar.</p>
   <button class="btn sm" type="button" id="wipe">Strika alt goymt</button>
+  <div id="mtDelAcct" hidden><p style="margin-top:16px">Vilt tú strika innritanina? Navnið og allar tínar talvur verða strikaðar hjá Snar. Tað kann ikki gerast aftur.</p>
+  <button class="btn sm" type="button" id="mtDelBtn">Strika innritanina</button></div>
 </div>
 
 <script>/* Bert til royndir á egnu teldu: ?mock=1 nýtir eina lokala útgávu av skriptinum hjá Snar */
@@ -3724,6 +3729,12 @@ function mtSignOut(){askP('Rita út? Talvurnar verða tiknar av hesi teldu. Tær
     return Promise.race([p,new Promise(function(r){setTimeout(r,4000)})]).then(function(){MT.list.forEach(function(e){mtDelLocal(e.id);});
       MT={u:null,cur:null,list:[],tab:''};mtLeaving=true;clearTimeout(saveT);mtSave();try{localStorage.removeItem(KEY);}catch(e){}setTimeout(function(){location.reload();},300);});});});}
 
+function mtDelAccount(){if(!MT.u)return;askP('Strika innritanina „'+MT.u.navn+'“? Navnið og allar tínar talvur verða strikaðar hjá Snar og á hesi teldu. Tað kann ikki gerast aftur.','Strika innritanina').then(function(y){if(!y)return;
+  mtApi('strikainn').then(function(r){if(!r.ok)throw new Error(r.villa);MT.list.forEach(function(e){mtDelLocal(e.id);});
+    MT={u:null,cur:null,list:[],tab:''};mtLeaving=true;clearTimeout(saveT);mtSave();try{localStorage.removeItem(KEY);}catch(e){}
+    try{sessionStorage.setItem('mt-note','Innritanin og allar tínar talvur eru strikaðar hjá Snar.');}catch(e){}setTimeout(function(){location.reload();},200);},
+  function(){note('Tað bar ikki til at strika innritanina. Kanna sambandið og royn aftur.');});});}
+$('#mtDelBtn').addEventListener('click',mtDelAccount);
 function mtLoginForm(box,after){
   box.innerHTML='<form class="mt-login" novalidate><label class="mt-f">Navn<input class="set-in" name="n" autocomplete="username" maxlength="40" spellcheck="false" placeholder="til dømis Anna Hoyvík"></label>'
    +'<label class="mt-f">Fýra tøl<input class="set-in mt-pin" name="p" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="• • • •"></label>'
@@ -3739,7 +3750,7 @@ function mtLoginForm(box,after){
     if(step===2&&p2.value!==pv){msg.textContent='Tølini eru ikki tey somu. Royn aftur.';p2.value='';p2.focus();return;}
     go.disabled=true;msg.textContent='Bíða eina løtu …';
     mtApi(step===2?'stovna':'inn',{navn:nv,pin:pv}).then(function(r){go.disabled=false;
-      if(r.ok){msg.textContent='';mtSignedIn(r);if(after)after(r);return;}
+      if(r.ok){msg.textContent='';mtSignedIn(r);if(after)after(r);if(r.nyttpin)note('Tú hevur nú nýggj tøl: tey, sum tú júst skrivaði. Minst til tey.');return;}
       var v=r.villa;
       if(v==='ukent'){mode(2);msg.textContent='Vit kenna ikki navnið „'+nv+'“. Er tað fyrsta ferð, tú ritar inn, skalt tú skriva tey fýra tølini aftur. Hevur tú skrivað navnið skeivt, trýst á Aftur.';p2.focus();return;}
       if(v==='skeivt'){p.value='';p.focus();msg.textContent='Navnið og tølini passa ikki saman. Tú hevur '+r.eftir+(r.eftir===1?' roynd':' royndir')+' eftir. Er hetta ikki títt navn, so vel eitt annað, til dømis við skúlanum aftaná.';return;}
@@ -3781,7 +3792,7 @@ function mtDraw(){var box=$('#layPaneMine');if(!box||box.hidden)return;var e=mtE
   $('#mtNewB').addEventListener('click',function(){mtNew(LAYOUTS[0]);});
   var cp=$('#mtCopyB');if(cp)cp.addEventListener('click',mtCopy);
   var n=mtRowList($('#mtList'),function(x){mtOpen(x.id);});$('#mtNone').hidden=n>0;}
-function mtUI(){var b=$('#mtBtn');if(b){var t=MT.u?'Mínar talvur · '+MT.u.navn:'Mínar talvur · Rita inn';b.title=t;b.setAttribute('aria-label',t);b.classList.toggle('in',!!MT.u);b.dataset.st=MT.u?(mtState||'ok'):'';}
+function mtUI(){var da=$('#mtDelAcct');if(da)da.hidden=!MT.u;var b=$('#mtBtn');if(b){var t=MT.u?'Mínar talvur · '+MT.u.navn:'Mínar talvur · Rita inn';b.title=t;b.setAttribute('aria-label',t);b.classList.toggle('in',!!MT.u);b.dataset.st=MT.u?(mtState||'ok'):'';}
   $('#layNote').textContent=mtMine()?'Tá ið tú velur eina uppseting, verður ein nýggj talva gjørd í Mínum talvum. Talvan, sum er á skíggjanum nú, verður verandi, sum hon er.'
     :'Tá ið tú velur eina uppseting, verða amboðini og bakgrundin skift út. Nøvn, ætlanir, myndir og PDF-fílur verða verandi.';
   var cn=$('#mtCurName');if(document.activeElement!==cn)mtDraw();if(!$('#mtStart').hidden)mtStartDraw();}
