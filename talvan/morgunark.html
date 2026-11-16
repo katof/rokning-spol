@@ -201,7 +201,7 @@ function sudoku(br,bc,keep){var N=br*bc,r,c;
   function count(B,lim){for(var r=0;r<N;r++)for(var c=0;c<N;c++)if(!B[r][c]){var n=0;for(var v=1;v<=N;v++)if(ok(B,r,c,v)){B[r][c]=v;n+=count(B,lim-n);B[r][c]=0;if(n>=lim)return n;}return n;}return 1;}
   var left=N*N;shuffle(Array.from({length:N*N},function(_,i){return i;})).forEach(function(k){if(left<=keep)return;var r=Math.floor(k/N),c=k%N,v=P[r][c];P[r][c]=0;if(count(P.map(function(x){return x.slice();}),2)!==1)P[r][c]=v;else left--;});
   var h='<div class="sdk" style="--n:'+N+'">';for(r=0;r<N;r++)for(c=0;c<N;c++){var v=P[r][c],cl=(c%bc===bc-1&&c<N-1?' br':'')+(r%br===br-1&&r<N-1?' bb':'');
-    h+='<div class="sc'+cl+(v?' giv':'')+'">'+(v?v:(SCREEN?'<input inputmode="numeric" maxlength="1" aria-label="Linja '+(r+1)+', rúta '+(c+1)+'">':''))+'</div>';}return h+'</div>';}
+    h+='<div class="sc'+cl+(v?' giv':'')+'">'+(v?v:(SCREEN?'<input inputmode="numeric" maxlength="1" aria-label="Linja '+(r+1)+', rútur '+(c+1)+'">':''))+'</div>';}return h+'</div>';}
 function sdkRule(n){return 'Tølini 1–'+n+' skulu standa eina ferð í hvørjari linju, bæði vatnrætt og loddrætt, og í hvørjum tjúkkum kassa.';}
 
 /* ---------- Labyrint ---------- */
@@ -326,7 +326,7 @@ function overview(){var done=Object.keys(DONE).map(Number).filter(function(n){re
   for(i=first;i<=Math.min(TODAYN,MAX);i++)if(!DONE[i])miss.push(i);
   done.forEach(function(n){var k=kindOf(n);kc[k]=(kc[k]||0)+1;});
   h+='<div class="hd"><div><h1>Mítt yvirlit</h1><div class="kd">Morgunark</div></div><div class="dt">'+DLN[DL]+(NAME?'<br>'+esc(NAME):'')+'</div></div><div class="yv">';
-  h+='<p class="big">Tú hevur gjørt <b>'+arkTal(done.length)+'</b>.</p><p class="sub">'+(miss.length?(miss.length===1?'1 ark manglar':miss.length+' ørk mangla')+' fram til í dag. Trýst á eina gráa rútu fyri at gera tað.':'Tú hevur gjørt øll ørkini fram til í dag. Flott!')+'</p>';
+  h+='<p class="big">Tú hevur gjørt <b>'+arkTal(done.length)+'</b>.</p><p class="sub">'+(miss.length?(miss.length===1&&miss[0]===TODAYN?'Tú hevur ikki gjørt uppgávuna í dag.':'Tú hevur ikki gjørt '+arkTal(miss.length)+' enn.')+' Trýst á ein gráan rút fyri at síggja uppgávuna.':'Tú hevur gjørt øll ørkini fram til í dag. Flott!')+'</p>';
   h+='<div class="grid200">';for(i=1;i<=MAX;i++){var cl=DONE[i]?'ok':i>TODAYN?'fut':i<first?'fut':'';h+='<a href="?dl='+DL+'&n='+i+'" class="'+cl+(i===TODAYN?' now':'')+'" title="Ark '+i+': '+KN[kindOf(i)]+(DONE[i]?' – gjørt':'')+'">'+i+'</a>';}h+='</div>';
   h+='<div class="legend"><span><i style="background:#16a34a"></i>Gjørt</span><span><i style="background:#e2e8f0"></i>Manglar</span><span><i style="background:#f8fafc;border:1px solid #e2e8f0"></i>Áðrenn tú byrjaði, ella um tú kemur seinni</span><span><i style="background:#fff;outline:2px solid #ef2418"></i>Í dag</span></div>';
   h+='<h2>Hvat hevur tú gjørt?</h2><div class="kinds">'+KIND.map(function(k){return '<div><b>'+(kc[k]||0)+'</b>'+KN[k]+'</div>'}).join('')+'</div>';
