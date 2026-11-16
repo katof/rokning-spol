@@ -174,7 +174,7 @@ function drawList(L){show('list');var ul=$('#boards');ul.innerHTML='';L.sort(fun
     b.addEventListener('click',function(){openBoard(t.id);});li.appendChild(b);ul.appendChild(li);});}
 function openBoard(id){$('#bBody').innerHTML='<p class="empty">Heinti talvuna …</p>';show('board');$('#bName').value='';
   api('heinta',{id:id}).then(function(r){if(!r.ok){tell('Tað bar ikki til at heinta talvuna.');loadList();return;}
-    cur={id:r.id,heiti:r.heiti,ver:r.ver,s:JSON.parse(r.data)};setDirty(false);$('#bName').value=r.heiti;drawBoard();},
+    cur={id:r.id,heiti:r.heiti,ver:r.ver,s:JSON.parse(r.data),base:JSON.parse(r.data)};setDirty(false);$('#bName').value=r.heiti;drawBoard();},
   function(){tell('Tað bar ikki til at fáa samband við Snar.');loadList();});}
 $('#toList').addEventListener('click',function(){(dirty?ask('Tú hevur broytingar, sum ikki eru goymdar. Vilt tú fara aftur kortini?','Far aftur'):Promise.resolve(true)).then(function(y){if(y){cur=null;setDirty(false);loadList();}});});
 $('#bName').addEventListener('input',function(){if(cur){cur.heiti=this.value;setDirty(true);}});
@@ -215,7 +215,8 @@ function drawBoard(){var s=cur.s,B=$('#bBody');B.innerHTML='';
   /* Flokslistar */
   var h2=document.createElement('h2');h2.textContent='Flokslistar';B.appendChild(h2);B.appendChild(cardLists(s));
   var n=document.createElement('p');n.className='note';n.style.marginTop='18px';
-  n.textContent='Her kanst tú rætta tekstir, ætlanir, listar, spurnarkanningar og stoppur. Sjálv amboðini, staðsetingina og støddina broytir tú á telduni.';B.appendChild(n);}
+  n.textContent='Her kanst tú rætta tekstir, ætlanir, listar, spurnarkanningar og stoppur. Sjálv amboðini, staðsetingina og støddina broytir tú á telduni.';B.appendChild(n);
+  var g=document.createElement('button');g.type='button';g.className='btn red wide';g.style.marginTop='14px';g.textContent='Goym';g.addEventListener('click',function(){$('#bSave').click();});B.appendChild(g);}
 
 function cardTekst(s,pi,id,d){var c=card('Tekstur');
   c.appendChild(field('Yvirskrift',d.h,120,function(v){stkSet(s,pi,id,function(x){x.h=v;});}));
@@ -284,15 +285,25 @@ function cardLists(s){var c=document.createElement('div');s.lists=s.lists||[];
   draw();return c;}
 
 /* ---------- Goym ---------- */
+/* Munurin millum talvuna, sum hon var heintað, og hana nú: ein listi av [leið, virði]. Listar (array) verða tiknir heilir */
+function isObj(x){return x&&typeof x==='object'&&!Array.isArray(x);}
+function diff(a,b,path,out){if(isObj(a)&&isObj(b)){var k={};Object.keys(a).concat(Object.keys(b)).forEach(function(x){k[x]=1;});
+    Object.keys(k).forEach(function(x){diff(a[x],b[x],path.concat(x),out);});return out;}
+  if(JSON.stringify(a)!==JSON.stringify(b))out.push([path,b===undefined?undefined:JSON.parse(JSON.stringify(b)),b===undefined]);return out;}
+function applyOps(t,ops){ops.forEach(function(o){var p=o[0],x=t;for(var i=0;i<p.length-1;i++){if(!isObj(x[p[i]])&&!Array.isArray(x[p[i]]))x[p[i]]={};x=x[p[i]];}
+  if(o[2])delete x[p[p.length-1]];else x[p[p.length-1]]=o[1];});return t;}
+function saveNow(heiti,tries){var b=$('#bSave');
+  return api('goym',{id:cur.id,heiti:heiti,ver:cur.ver,data:JSON.stringify(cur.s)}).then(function(r){
+    if(r.ok){cur.ver=r.ver;cur.heiti=heiti;cur.base=JSON.parse(JSON.stringify(cur.s));setDirty(false);$('#bst').textContent='Goymt. Talvan á telduni dagførir seg innan eina løtu.';return;}
+    /* Talvan er broytt á telduni, meðan tú rættaði her: heinta ta nýggjastu, legg tínar broytingar oman á og goym aftur */
+    if(r.villa==='konflikt'&&tries<3){var ops=diff(cur.base,cur.s,[],[]);
+      return api('heinta',{id:cur.id}).then(function(h){if(!h.ok)throw new Error(h.villa);
+        var fresh=JSON.parse(h.data);cur.base=JSON.parse(h.data);cur.s=applyOps(fresh,ops);cur.ver=h.ver;drawBoard();return saveNow(heiti,tries+1);});}
+    b.disabled=false;$('#bst').textContent='Tað bar ikki til at goyma. Royn aftur.';});}
 $('#bSave').addEventListener('click',function(){if(!cur||!dirty)return;var b=$('#bSave');b.disabled=true;$('#bst').textContent='Goymir …';
   var heiti=($('#bName').value||'').replace(/\s+/g,' ').trim()||cur.heiti||'Talva';
   var s0=cur.s,cp=s0.pages&&s0.pages[s0.pg||0];if(cp)['poll','skra','secs','planItems'].forEach(function(k){if(s0[k]!==undefined)cp[k]=JSON.parse(JSON.stringify(s0[k]));});
-  api('goym',{id:cur.id,heiti:heiti,ver:cur.ver,data:JSON.stringify(cur.s)}).then(function(r){
-    if(r.ok){cur.ver=r.ver;cur.heiti=heiti;setDirty(false);$('#bst').textContent='Goymt. Talvan á telduni dagførir seg innan eina løtu.';return;}
-    if(r.villa==='konflikt'){b.disabled=false;$('#bst').textContent='Ikki goymt.';
-      ask('Henda talvan er júst broytt á aðrari teldu. Heinta ta nýggjastu útgávuna og ger tínar broytingar aftur.','Heinta','only').then(function(){openBoard(cur.id);});return;}
-    b.disabled=false;$('#bst').textContent='Tað bar ikki til at goyma. Royn aftur.';},
-  function(){b.disabled=false;$('#bst').textContent='Einki samband við Snar. Royn aftur, tá ið telefonin hevur samband.';});});
+  saveNow(heiti,0).catch(function(){b.disabled=false;$('#bst').textContent='Einki samband við Snar. Royn aftur, tá ið telefonin hevur samband.';});});
 
 /* ---------- Byrjan ---------- */
 if(U)loadList();else show('in');
