@@ -1075,8 +1075,11 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
 .ask-row{display:flex;justify-content:flex-end;gap:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 /* Tímin er liðugur (skúlaklokka) */
-.kl-al{font-size:min(4cqi,3.4cqh);color:var(--muted);font-weight:600;margin-top:.3em}
+.kl-al{font-size:min(4cqi,3.4cqh);color:var(--muted);font-weight:600;margin-top:.3em;text-align:center;align-self:center;width:100%}
 .kl-al-set{display:grid;gap:10px}
+.kl-al-list{display:grid;gap:8px}
+.kl-al-it{display:grid;grid-template-columns:118px 1fr 38px;gap:6px;align-items:center}
+.kl-al-it .set-in{height:42px;padding:0 8px}
 .kl-ring{position:fixed;inset:0;z-index:57;display:grid;place-items:center;background:rgba(20,22,25,.45)}
 .kl-ring-c{background:#fff;border-radius:28px;padding:36px 48px 30px;text-align:center;box-shadow:0 30px 80px -20px rgba(0,0,0,.55);max-width:min(900px,90vw)}
 .kl-ring-i{font-size:clamp(48px,8vw,96px);line-height:1;animation:klShake .18s linear infinite alternate}
@@ -1205,9 +1208,8 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
         <div class="kl-al" id="klAlChip" hidden></div>
         <div class="cfg kl-al-set" id="klAlRow">
           <label class="tmr-w"><input type="checkbox" id="klAlOn"> Ring sum ein skúlaklokka</label>
-          <label class="set-lbl">Klokkan<input class="set-in" type="time" id="klAlT" value="10:15"></label>
-          <label class="set-lbl">Tekstur<input class="set-in" id="klAlTxt" maxlength="60" value="Tímin er liðugur"></label>
-          <button class="btn sm" type="button" id="klAlTest">Royn klokkuna</button>
+          <div class="kl-al-list" id="klAlList"></div>
+          <div class="row"><button class="btn sm" type="button" id="klAlAdd">+ Legg eina tíð afturat</button><button class="btn sm" type="button" id="klAlTest">Royn klokkuna</button></div>
           <p class="note">Tá ið klokkan er so nógv, ringir hon sum ein skúlaklokka, og teksturin sæst stórt á talvuni.</p>
         </div>
       </div>
@@ -1905,28 +1907,41 @@ $$('[data-cm]').forEach(function(b){b.addEventListener('click',function(){S.cm=b
 $$('[data-cf]').forEach(function(b){b.addEventListener('click',function(){S.cf=b.dataset.cf;applyCm();save();})});
 applyCm();tick();setInterval(tick,1000);
 /* ---------- Tímin er liðugur: skúlaklokka á ásettari tíð ---------- */
-if(!S.klAl)S.klAl={on:0,t:'10:15',txt:'Tímin er liðugur'};
-var klFired='';
+if(!S.klAl)S.klAl={on:0,list:[{t:'10:15',txt:'Tímin er liðugur'}]};
+if(!S.klAl.list){S.klAl.list=[{t:S.klAl.t||'10:15',txt:S.klAl.txt||'Tímin er liðugur'}];delete S.klAl.t;delete S.klAl.txt;}
+var klFired={};
 function klVis(){return (S.pages||[]).some(function(p,i){return i===S.pg?S.vis.klokka:p.vis&&p.vis.klokka;})||S.vis.klokka;}
-function klUI(){var a=S.klAl;$('#klAlOn').checked=!!a.on;$('#klAlT').value=a.t||'10:15';$('#klAlTxt').value=a.txt||'';
-  var c=$('#klAlChip');c.hidden=!a.on;c.textContent='🔔 '+(a.t||'').replace(':','.')+' · '+(a.txt||'Tímin er liðugur');}
-$('#klAlOn').addEventListener('change',function(){S.klAl.on=this.checked?1:0;if(this.checked)ensureAudio();klFired='';klUI();save();});
-$('#klAlT').addEventListener('change',function(){S.klAl.t=this.value||'10:15';klFired='';klUI();save();});
-$('#klAlTxt').addEventListener('input',function(){S.klAl.txt=this.value;klUI();save();});
-$('#klAlTest').addEventListener('click',function(){ensureAudio();klRing();});
+function klSorted(){return S.klAl.list.filter(function(x){return x.t}).slice().sort(function(a,b){return a.t<b.t?-1:a.t>b.t?1:0});}
+/* Kortið á klokkuni vísir næstu tíð í dag */
+function klChip(){var a=S.klAl,c=$('#klAlChip'),L=klSorted();if(!a.on||!L.length){c.hidden=true;return;}
+  var d=new Date(),hm=p2(d.getHours())+':'+p2(d.getMinutes()),nx=L.filter(function(x){return x.t>=hm})[0];
+  c.hidden=false;c.textContent=nx?'🔔 '+(L.length>1?'Næst ':'')+nx.t.replace(':','.')+' · '+(nx.txt||'Tímin er liðugur'):'🔔 Ikki meira í dag';}
+function klDraw(){var box=$('#klAlList');box.innerHTML='';
+  S.klAl.list.forEach(function(it,i){var r=el('div','kl-al-it');
+    r.innerHTML='<input class="set-in" type="time" aria-label="Klokkan"><input class="set-in" maxlength="60" aria-label="Tekstur" placeholder="Tímin er liðugur"><button class="ic" type="button" aria-label="Tak burtur" title="Tak burtur">'+I.x+'</button>';
+    var t=r.children[0],x=r.children[1],b=r.children[2];t.value=it.t||'';x.value=it.txt||'';
+    t.addEventListener('change',function(){it.t=t.value;klChip();save();});x.addEventListener('input',function(){it.txt=x.value;klChip();save();});
+    b.hidden=S.klAl.list.length<2;b.addEventListener('click',function(){S.klAl.list.splice(i,1);klDraw();klChip();save();});box.appendChild(r);});}
+function klUI(){$('#klAlOn').checked=!!S.klAl.on;klDraw();klChip();}
+$('#klAlOn').addEventListener('change',function(){S.klAl.on=this.checked?1:0;if(this.checked)ensureAudio();klChip();save();});
+$('#klAlAdd').addEventListener('click',function(){var L=klSorted(),last=L.length?L[L.length-1].t:'09:00',h=+last.slice(0,2),m=+last.slice(3);
+  var n=Math.min(23*60+59,h*60+m+45);S.klAl.list.push({t:p2(Math.floor(n/60))+':'+p2(n%60),txt:'Tímin er liðugur'});klDraw();klChip();save();
+  var ins=$$('#klAlList input[type=time]');if(ins.length)ins[ins.length-1].focus();});
+$('#klAlTest').addEventListener('click',function(){ensureAudio();var L=klSorted();klRing(L[0]||{t:'',txt:'Tímin er liðugur'});});
 document.addEventListener('pointerdown',function(){if(S.klAl&&S.klAl.on)ensureAudio();},true);
 /* Ein elektrisk skúlaklokka: hamarin slær skjótt á eina bjøllu (umleið 20 ferðir um sekundið) */
 function klBell(){if(S.mute)return;ensureAudio();if(!actx)return;var t0=actx.currentTime+.05,P=[[1040,.22],[2610,.08],[3900,.04]];
   [[0,2.6],[3.2,2.6]].forEach(function(seg){for(var x=seg[0];x<seg[0]+seg[1];x+=.048){P.forEach(function(p){var o=actx.createOscillator(),g=actx.createGain(),t=t0+x;
     o.type='sine';o.frequency.value=p[0]*(1+(Math.random()-.5)*.004);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(p[1]*.5,t+.004);g.gain.exponentialRampToValueAtTime(.001,t+.16);
     o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+.18);});}});}
-function klRing(){klBell();var o=$('#klRingDlg');if(!o){o=el('div','kl-ring');o.id='klRingDlg';o.setAttribute('role','alert');
+function klRing(it){klBell();var o=$('#klRingDlg');if(!o){o=el('div','kl-ring');o.id='klRingDlg';o.setAttribute('role','alert');
     o.innerHTML='<div class="kl-ring-c"><div class="kl-ring-i" aria-hidden="true">🔔</div><div class="kl-ring-t"></div><div class="kl-ring-k"></div><button class="btn red" type="button">Í lagi</button></div>';
     document.body.appendChild(o);o.querySelector('button').addEventListener('click',function(){o.hidden=true;});o.addEventListener('click',function(e){if(e.target===o)o.hidden=true;});}
-  o.querySelector('.kl-ring-t').textContent=S.klAl.txt||'Tímin er liðugur';o.querySelector('.kl-ring-k').textContent='kl. '+(S.klAl.t||'').replace(':','.');o.hidden=false;
+  o.querySelector('.kl-ring-t').textContent=it.txt||'Tímin er liðugur';o.querySelector('.kl-ring-k').textContent=it.t?'kl. '+it.t.replace(':','.'):'';o.hidden=false;
   clearTimeout(klRing.t);klRing.t=setTimeout(function(){o.hidden=true;},120000);}
-setInterval(function(){var a=S.klAl;if(!a||!a.on||!a.t)return;var d=new Date(),hm=p2(d.getHours())+':'+p2(d.getMinutes()),k=d.toDateString()+' '+a.t;
-  if(hm===a.t&&klFired!==k&&klVis()){klFired=k;klRing();}},1000);
+setInterval(function(){var a=S.klAl;if(!a||!a.on)return;var d=new Date(),hm=p2(d.getHours())+':'+p2(d.getMinutes());
+  if(d.getSeconds()===0)klChip();
+  a.list.forEach(function(it){var k=d.toDateString()+' '+it.t;if(it.t===hm&&!klFired[k]&&klVis()){klFired[k]=1;klRing(it);klChip();}});},1000);
 klUI();
 
 /* ---------- Stoppur (v12: ringur, stór tøl við + og −, spælknøttur; restin í stillingunum) ---------- */
