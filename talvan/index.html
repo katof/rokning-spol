@@ -3869,7 +3869,6 @@ function mtDraw(){var box=$('#layPaneMine');if(!box||$('#mtPanel').hidden)return
      :'<p>Talvan á skíggjanum er ikki goymd í Mínum talvum.</p><button class="btn red sm" type="button" id="mtSaveCur">Goym hana</button>')+'</div>';
   h+='<div class="row mt-row"><button class="btn sm" type="button" id="mtNewB">+ Nýggj talva</button>'+(e?'<button class="btn sm" type="button" id="mtCopyB">Avrita hesa talvuna</button>':'')+'</div>';
   h+='<h4>Mínar talvur</h4><ul class="mt-list" id="mtList" data-del="1"></ul><p class="note" id="mtNone" hidden>Tú hevur ongar talvur enn.</p>';
-  h+='<p class="note">PDF-ar og myndir verða verandi á telduni og fylgja ikki við. Letur tú eina talvu upp á eini aðrari teldu, kanst tú velja tær aftur har.</p>';
   box.innerHTML=h;
   var a=$('#mtAcct');
   if(MT.u){a.innerHTML='<p class="mt-who"><span class="mt-av">'+MTU+'</span><span><b>'+mtEsc(MT.u.navn)+'</b><small id="mtSt"></small></span></p><button class="btn sm" type="button" id="mtOut">Rita út</button>';
