@@ -470,7 +470,7 @@ body.focus .w.big{border-radius:0}
 .poll-ans{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:4%;padding:0 2%;flex:none}
 .pa{border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:700}
 .pa b{font-size:clamp(.8rem,3.4cqi,1.5rem);color:var(--muted)}
-.faces .pa svg{width:min(100%,16cqi,13cqh);height:auto;transition:transform .15s;filter:drop-shadow(0 4px 6px rgba(0,0,0,.15))}
+.faces .pa svg{width:min(100%,24cqi,21cqh);height:auto;transition:transform .15s;filter:drop-shadow(0 4px 6px rgba(0,0,0,.15))}
 .faces .pa:hover svg{transform:scale(1.08)}
 .words .pa span{display:flex;align-items:center;justify-content:center;width:100%;min-height:min(14cqh,64px);padding:6px 8px;border-radius:12px;background:var(--c);color:#fff;font-size:clamp(.85rem,4cqi,1.6rem);line-height:1.15;word-break:break-word;transition:transform .15s}
 .words .pa:hover span{transform:translateY(-2px)}
@@ -638,6 +638,14 @@ body.locked .dk[data-m],body.locked #layBtn{display:none!important}
 /* ================= v14 (15.11.2026): klistrimerki, YouTube, pennur sum í dokkini, lítil dokk, ný krukka ================= */
 /* Klistrimerki */
 .w.stk{background:transparent;box-shadow:none;border-radius:12px}
+/* Útsjónd (S.look) */
+.w[data-lbg="y"]{background:#fef9c3}.w[data-lbg="o"]{background:#ffedd5}.w[data-lbg="p"]{background:#fce7f3}.w[data-lbg="l"]{background:#ede9fe}.w[data-lbg="b"]{background:#dbeafe}
+.w[data-lbg="t"]{background:#ccfbf1}.w[data-lbg="g"]{background:#dcfce7}.w[data-lbg="k"]{background:#f1f5f9}.w[data-lbg="x"]{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.w.lk-sq,.w.lk-sq .w-body,.w.lk-sq .stk-b>*{border-radius:3px!important}
+.w.lk-nosh:not(.sel):not(.msel){box-shadow:0 0 0 1px rgba(0,0,0,.06)!important}.w.lk-nosh .stk-b>*{box-shadow:none!important}
+.lk-set{padding:0 0 10px}.lk-cols{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lk-c{width:38px;height:38px;border-radius:10px;border:2px solid #d1d5db;cursor:pointer}.lk-c[data-lbg="x"]{background-image:linear-gradient(45deg,#e5e7eb 25%,transparent 25%,transparent 75%,#e5e7eb 75%),linear-gradient(45deg,#e5e7eb 25%,#fff 25%,#fff 75%,#e5e7eb 75%)!important;background-size:12px 12px;background-position:0 0,6px 6px}
+.lk-c[aria-pressed=true]{outline:3px solid #1d4ed8;outline-offset:2px}.lk-row{margin-bottom:8px}
 .w.stk.sel{box-shadow:0 0 0 calc(3px * var(--isc)) var(--blue)}
 .stk-b{padding:0!important;overflow:visible!important;display:block}
 .stk-b>svg{width:100%;height:100%;display:block;overflow:visible}
@@ -1871,7 +1879,7 @@ $('#alX').addEventListener('click',function(){mselSet([]);});
 /* Ein funka ella temasíða í einari iframe fær ikki trýstini – men vit síggja, at hon fær fokus */
 window.addEventListener('blur',function(){setTimeout(function(){var a=document.activeElement;if(a&&a.tagName==='IFRAME'){var w=a.closest('.w');if(w){front(w.dataset.w);select(w.dataset.w);}}},0);});
 function pos(k){if(!S.pos[k])S.pos[k]=(DEF_POS[k]||[300,100,600,500]).slice();return S.pos[k];}
-function place(w){var p=pos(w.dataset.w);w.style.left=p[0]+'px';w.style.top=p[1]+'px';w.style.width=p[2]+'px';w.style.height=p[3]+'px';w.style.zIndex=10+(S.z[w.dataset.w]||0);
+function place(w){if(typeof lookApply==='function'&&S.look)lookApply(w);var p=pos(w.dataset.w);w.style.left=p[0]+'px';w.style.top=p[1]+'px';w.style.width=p[2]+'px';w.style.height=p[3]+'px';w.style.zIndex=10+(S.z[w.dataset.w]||0);
   w.classList.toggle('tbin',p[1]<110);}
 function front(k){if(S.z[k]&&S.z[k]===zTop)return;S.z[k]=++zTop;
   /* Halt tølini smá */
@@ -1882,7 +1890,7 @@ function select(k){SEL=k;if(k&&MP[k]&&!$('#libPanel').hidden){LIBK=k;drawLib();}
   if(!$('#setPanel').hidden&&SETK!==k&&k&&SETS[k]&&!S.lock)openSet(k);}
 function openSet(k){if(S.lock||!SETS[k])return;if(SETS[k]==='lib'){openLib(k);return;}if(SETS[k]==='stk'){openStkSet(k);return;}if(SETS[k]==='pdflib'){openLib(null);libTab('pdf');return;}closeMore();['bgPanel','infoPanel'].forEach(function(id){$('#'+id).hidden=true});
   SETK=k;var b=$('.dk[data-t="'+k+'"]')||$$('.dk[data-m]').filter(function(x){return x.dataset.m.split(',').indexOf(k)>=0})[0];$('#setH').textContent=b?b.textContent.trim():'Stillingar';$('#setIc').innerHTML=b?b.querySelector('svg').outerHTML:'';
-  $$('#setBody .set').forEach(function(x){x.hidden=x.dataset.for!==k;});$('#setPanel').hidden=false;
+  $$('#setBody .set').forEach(function(x){x.hidden=x.dataset.for!==k;});$('#setPanel').hidden=false;lookShow(k);
   if(SEL!==k){front(k);SEL=k;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===k);});}}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-open-set]');if(b)openSet(b.dataset.openSet);});
 function applySz(){$$('.w').forEach(place);requestAnimationFrame(layoutJar);}
@@ -2359,7 +2367,7 @@ var CPKEY='snar-talvan-klipp',CPFAM={snar:['snar','snar2','snar3'],mynd:['mynd',
 function cpFam(k){for(var f in CPFAM)if(CPFAM[f].indexOf(k)>=0)return f;return null;}
 function cpName(k){if(S.stk[k]&&STK[S.stk[k].t])return STK[S.stk[k].t].n;var b=$('[data-tool="'+(cpFam(k)||k)+'"] span');return b?b.textContent.trim():'Amboðið';}
 function cpTip(msg){var t=$('#cpTip');if(!t){t=el('div','cp-tip');t.id='cpTip';t.setAttribute('role','status');document.body.appendChild(t);}t.textContent=msg;t.hidden=false;clearTimeout(cpTip.t);cpTip.t=setTimeout(function(){t.hidden=true;},1600);}
-function cpOne(k){var o={k:k,pos:pos(k).slice()};
+function cpOne(k){var o={k:k,pos:pos(k).slice()};if(S.look&&S.look[k])o.look=JSON.parse(JSON.stringify(S.look[k]));
   if(S.stk[k]){o.stk=JSON.parse(JSON.stringify(S.stk[k]));return o;}
   var f=cpFam(k);if(f==='snar'&&S[k])o.snar=JSON.parse(JSON.stringify(S[k]));if(f==='mynd')o.mynd=S.myndOf[k];if(f==='yt'&&S.ytOf[k])o.yt=JSON.parse(JSON.stringify(S.ytOf[k]));
   if(k==='tema'&&S.tema)o.tema=JSON.parse(JSON.stringify(S.tema));
@@ -2373,14 +2381,14 @@ function cpPaste(){if(S.lock)return false;var L;try{L=JSON.parse(localStorage.ge
   L.forEach(function(o){var p=o.pos.slice(),k=o.k,same=S.vis[k]&&$('#w-'+k);
     /* Er tað upprunaliga á hesum diasinum, verður tað nýggja skeiklað eitt sindur */
     if(o.stk||same||cpFam(k)){p[0]=Math.min(BW-p[2],p[0]+40);p[1]=Math.min(BH-p[3],p[1]+40);}
-    if(o.stk){var x=JSON.parse(JSON.stringify(o.stk)),t=x.t;delete x.t;if(!STK[t])return;var id=addStk(t,p,true,x);S.z[id]=++zTop;made.push(id);return;}
+    if(o.stk){var x=JSON.parse(JSON.stringify(o.stk)),t=x.t;delete x.t;if(!STK[t])return;var id=addStk(t,p,true,x);S.z[id]=++zTop;if(o.look)S.look[id]=o.look;made.push(id);return;}
     var f=cpFam(k);
     if(f){var slot=CPFAM[f].filter(function(x){return !S.vis[x];})[0];if(!slot){skip.push(cpName(k));return;}
-      S.pos[slot]=p;S.vis[slot]=1;S.z[slot]=++zTop;
+      S.pos[slot]=p;S.vis[slot]=1;S.z[slot]=++zTop;if(o.look)S.look[slot]=o.look;
       if(f==='snar'&&o.snar){S[slot]=o.snar;}if(f==='mynd'&&o.mynd)S.myndOf[slot]=o.mynd;if(f==='yt'&&o.yt)S.ytOf[slot]=o.yt;
       made.push(slot);return;}
     if(same){skip.push(cpName(k));return;}
-    S.pos[k]=p;S.vis[k]=1;S.z[k]=++zTop;
+    S.pos[k]=p;S.vis[k]=1;S.z[k]=++zTop;if(o.look)S.look[k]=o.look;
     if(o.tema)S.tema=o.tema;if(o.poll)S.poll=o.poll;if(o.skra){S.skra=o.skra;S.planItems=o.plan||[];}if(o.secs)S.secs=o.secs;
     made.push(k);});
   if(made.length){applySz();applyVis();
@@ -2394,6 +2402,24 @@ document.addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey)||e.al
   if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;
   if(k==='c'){if(String(window.getSelection()||'').trim())return;if(cpCopy())e.preventDefault();}
   else if(cpPaste())e.preventDefault();});
+/* ---------- Útsjónd á amboðunum: bakgrundslitur, skuggi og horn – somu stillingar á øllum amboðum (S.look, hvørt dias sær) ---------- */
+if(!S.look)S.look={};
+var LKBG=[['','Hvítt','#ffffff'],['y','Gult','#fef9c3'],['o','Reyðgult','#ffedd5'],['p','Bleikt','#fce7f3'],['l','Lilla','#ede9fe'],['b','Blátt','#dbeafe'],['t','Turkis','#ccfbf1'],['g','Grønt','#dcfce7'],['k','Grátt','#f1f5f9'],['x','Gjøgnumskygt','rgba(255,255,255,.55)']];
+function lookOf(k){return (S.look||{})[k]||{};}
+function lookApply(w){var L=lookOf(w.dataset.w);if(L.bg)w.dataset.lbg=L.bg;else delete w.dataset.lbg;w.classList.toggle('lk-sq',L.rd==='s');w.classList.toggle('lk-nosh',L.sh===0);}
+function lookOk(k){if(S.stk[k]){var t=S.stk[k].t;return !!(STK[t]&&(STK[t].tool||t==='tekst'||t==='tilv'));}return Array.isArray(SETS[k])||k==='skra'||k==='poll';}
+var lkBox=el('div','lk-set');lkBox.id='lookSet';lkBox.hidden=true;$('#setPanel').appendChild(lkBox);
+function lookShow(k){if(!k||!lookOk(k)||S.lock){lkBox.hidden=true;return;}var L=lookOf(k);
+  lkBox.innerHTML='<div class="set-row"><h4>Útsjónd</h4><div class="lk-cols">'+LKBG.map(function(c){return '<button type="button" class="lk-c" data-lbg="'+c[0]+'" title="'+c[1]+'" aria-label="'+c[1]+'" aria-pressed="'+((L.bg||'')===c[0])+'" style="background:'+c[2]+'"></button>';}).join('')+'</div>'
+    +'<div class="row lk-row"><div class="seg"><button type="button" data-lrd="r" aria-pressed="'+(L.rd!=='s')+'">Avrundað horn</button><button type="button" data-lrd="s" aria-pressed="'+(L.rd==='s')+'">Bein horn</button></div></div>'
+    +'<div class="row lk-row"><div class="seg"><button type="button" data-lsh="1" aria-pressed="'+(L.sh!==0)+'">Við skugga</button><button type="button" data-lsh="0" aria-pressed="'+(L.sh===0)+'">Uttan skugga</button></div></div>'
+    +'<button type="button" class="btn sm" id="lkAll">Set somu útsjónd á øll amboðini á diasinum</button></div>';
+  function set(f){var o=S.look[k]||{};f(o);if(!o.bg)delete o.bg;if(o.rd!=='s')delete o.rd;if(o.sh!==0)delete o.sh;if(Object.keys(o).length)S.look[k]=o;else delete S.look[k];var w=$('#w-'+k);if(w)lookApply(w);save();lookShow(k);}
+  $$('[data-lbg]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.bg=b.dataset.lbg;});});});
+  $$('[data-lrd]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.rd=b.dataset.lrd;});});});
+  $$('[data-lsh]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.sh=+b.dataset.lsh;});});});
+  $('#lkAll',lkBox).addEventListener('click',function(){var src=JSON.stringify(S.look[k]||{});$$('.w').forEach(function(w){var x=w.dataset.w;if(!S.vis[x]||!lookOk(x))return;var o=JSON.parse(src);if(Object.keys(o).length)S.look[x]=o;else delete S.look[x];lookApply(w);});save();});
+  lkBox.hidden=false;}
 /* Pílarnir flyta valda amboðið (ella øll tey valdu): eitt lítið stig, við Shift eitt stórt stig */
 document.addEventListener('keydown',function(e){var D={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(!D||e.ctrlKey||e.metaKey||e.altKey||S.lock||S.bg==='dias')return;
   if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable],.pdf-view'))return;
@@ -3165,7 +3191,7 @@ function openStkSet(id){var d=S.stk[id];if(!d||S.lock)return;closeMore();['bgPan
     $$('#stkN button').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.n===(d.n||4)?'true':'false');b.addEventListener('click',function(){d.n=+b.dataset.n;d.l=newLetters(d.n);drawStk(id);save();$$('#stkN button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});});});}
   if(d.t!=='tekst'&&d.t!=='tilv'&&!STK[d.t].tool)stkFxRows(id,d,sec);
   if(STK[d.t].settings)STK[d.t].settings(id,d,sec);
-  $('#setPanel').hidden=false;if(SEL!==id){front(id);SEL=id;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===id);});}}
+  $('#setPanel').hidden=false;lookShow(id);if(SEL!==id){front(id);SEL=id;$$('.w').forEach(function(w){w.classList.toggle('sel',w.dataset.w===id);});}}
 (function(){var sec=el('div','set');sec.dataset.for='stk';sec.hidden=true;$('#setBody').appendChild(sec);})();
 
 /* Savnið: teigar til myndir og klistrimerki */
@@ -3809,7 +3835,7 @@ Object.keys(S.stk).forEach(function(id){if(S.stk[id].t==='tilv'&&!$('#w-'+id))mk
 
 
 /* ---------- Dias: fleiri talvur, hvør við sínum amboðum, plásum, klistrimerkjum og bakgrund ---------- */
-var PGK=['vis','pos','z','bg','stk','ytOf','myndOf','snar','snar2','snar3','tema','fl','pdfBack','pdfCur','pdfPage'];
+var PGK=['vis','pos','z','bg','stk','ytOf','myndOf','snar','snar2','snar3','tema','fl','pdfBack','pdfCur','pdfPage','look'];
 /* Spurnarkanning, stopptíð og ætlan hoyra hvørjum diasi til (frá 16.11.2026) */
 var PGD=['poll','skra','secs','planItems'];
 function pgDef(k){return k==='poll'?{q:'Hvussu dámdi tær tíman í dag?',t:'s',n:4,o:['Svar 1','Svar 2','Svar 3'],c:'kaka',th:0,v:[]}
@@ -3824,7 +3850,7 @@ if(!(S.pg>=0&&S.pg<S.pages.length))S.pg=0;
 S.pages.forEach(function(p,i){if(i!==S.pg)PGD.forEach(function(k){if(p[k]===undefined&&S[k]!==undefined)p[k]=JSON.parse(JSON.stringify(S[k]));});});
 function pgLoad(p){var oldPdf=S.pdfCur;PGK.forEach(function(k){S[k]=p[k]!==undefined?JSON.parse(JSON.stringify(p[k])):null;});
   PGD.forEach(function(k){S[k]=p[k]!==undefined?JSON.parse(JSON.stringify(p[k])):pgDef(k);});
-  ['vis','pos','z','stk','ytOf','myndOf','fl'].forEach(function(k){if(!S[k])S[k]={};});if(!S.bg)S.bg='strik';S.vis.navn=0;
+  ['vis','pos','z','stk','ytOf','myndOf','fl','look'].forEach(function(k){if(!S[k])S[k]={};});if(!S.bg)S.bg='strik';S.vis.navn=0;
   if(S.pdfCur!==oldPdf){pdfDoc=null;$('#pdfPages').innerHTML='';}
   $$('.w.stk').forEach(function(w){w.remove();});Object.keys(S.stk).forEach(mkStk);
   zTop=0;for(var k in S.z)zTop=Math.max(zTop,S.z[k]||0);
