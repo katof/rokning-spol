@@ -1815,6 +1815,10 @@ function setupW(w){
     rs.addEventListener('pointerdown',function(e){if(e.button!==0||S.lock)return;e.preventDefault();e.stopPropagation();front(k);select(k);
       var p=pos(k),sx=e.clientX,sy=e.clientY,o=p.slice();w.classList.add('sizing');rs.setPointerCapture(e.pointerId);
       function mv(ev){var dx=(ev.clientX-sx)/SC,dy=(ev.clientY-sy)/SC;
+        /* Shift: vaks ella minka líka nógv frá øllum síðum – miðjan og lutfallið verða verandi */
+        if(ev.shiftKey){var gx=(c[1]==='e'?dx:-dx)/o[2],gy=(c[0]==='s'?dy:-dy)/o[3],cx=o[0]+o[2]/2,cy=o[1]+o[3]/2,
+            f=1+(gx+gy),fmin=Math.max(220/o[2],160/o[3]),fmax=Math.min(2*cx/o[2],2*(BW-cx)/o[2],2*cy/o[3],2*(BH-cy)/o[3]);
+          f=Math.max(fmin,Math.min(Math.max(fmin,fmax),f));p[2]=Math.round(o[2]*f);p[3]=Math.round(o[3]*f);p[0]=Math.round(cx-p[2]/2);p[1]=Math.round(cy-p[3]/2);place(w);return;}
         if(c[1]==='e')p[2]=Math.max(220,Math.min(BW-o[0],o[2]+dx));
         else{var nx=Math.max(0,Math.min(o[0]+o[2]-220,o[0]+dx));p[2]=o[2]+o[0]-nx;p[0]=nx;}
         if(c[0]==='s')p[3]=Math.max(160,Math.min(BH-o[1],o[3]+dy));
