@@ -1007,14 +1007,20 @@ body.locked .nl-b button{visibility:hidden}
 .ad-ps{display:grid;gap:6px;width:100%}.ad-ps .btn{text-align:left}.ad-ps .btn[aria-pressed=true]{background:var(--ink);color:#fff}
 @media (prefers-reduced-motion:reduce){.ad-o{transition-duration:0s!important}}
 /* Røklaskipan */
-.rk{--u:min(1cqi,1.6cqh);width:100%;height:100%;display:flex;flex-direction:column;gap:calc(var(--u)*2.4);padding:calc(var(--u)*4);border-radius:20px;background:linear-gradient(160deg,#f0fdf4,#dcfce7);box-shadow:0 10px 30px -14px rgba(0,0,0,.4);color:#1f2937}
+.rk{--u:min(1cqi,1.6cqh);width:100%;height:100%;display:flex;flex-direction:column;gap:calc(var(--u)*2.4);padding:calc(var(--u)*4);border-radius:20px;background:var(--rk-bg,linear-gradient(160deg,#f0fdf4,#dcfce7));box-shadow:0 10px 30px -14px rgba(0,0,0,.4);color:#1f2937}
+.rk.rk-dark{color:#f8fafc}
+.rk.rk-list .rk-n{flex-direction:column;flex-wrap:nowrap;align-content:stretch;justify-content:center}
+.rk.rk-list .rk-p{flex-direction:row;align-items:baseline;justify-content:space-between;gap:calc(var(--u)*3)}
+.rk-ths{display:flex;flex-wrap:wrap;gap:8px}.rk-th{width:46px;height:46px;border-radius:12px;border:2px solid #d1d5db;font-weight:900;font-size:1rem;cursor:pointer}
+.rk-th[aria-pressed=true]{outline:3px solid #1d4ed8;outline-offset:2px}
+[data-rklay][aria-pressed=true]{background:#202124;color:#fff;border-color:#202124}
 .rk-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.rk-h b{font-weight:900;font-size:max(1rem,calc(var(--u)*5.6))}.rk-h span{font-weight:700;color:#166534;font-size:max(.7rem,calc(var(--u)*3.4))}
+.rk-h b{font-weight:900;font-size:max(1rem,calc(var(--u)*5.6))}.rk-h span{font-weight:700;color:var(--rk-sub,#166534);font-size:max(.7rem,calc(var(--u)*3.4))}
 .rk-n{flex:1;min-height:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:calc(var(--u)*2.4)}
-.rk-p{display:flex;flex-direction:column;align-items:center;padding:calc(var(--u)*2) calc(var(--u)*4);background:#fff;border-radius:16px;box-shadow:0 6px 16px -10px rgba(0,0,0,.4)}
-.rk-p b{font-weight:900;font-size:max(1rem,calc(var(--u)*8));color:#15803d;line-height:1.1}
-.rk-p small{font-weight:700;font-size:max(.65rem,calc(var(--u)*3));color:#64748b}
-.rk-nx{font-weight:600;color:#475569;font-size:max(.7rem,calc(var(--u)*3.4));text-align:center}
+.rk-p{display:flex;flex-direction:column;align-items:center;padding:calc(var(--u)*2) calc(var(--u)*4);background:var(--rk-card,#fff);border-radius:16px;box-shadow:0 6px 16px -10px rgba(0,0,0,.4)}
+.rk-p b{font-weight:900;font-size:max(1rem,calc(var(--u)*8*var(--rk-fs,1)));color:var(--rk-ac,#15803d);line-height:1.1}
+.rk-p small{font-weight:700;font-size:max(.65rem,calc(var(--u)*3*var(--rk-fs,1)));color:var(--rk-sub,#64748b)}
+.rk-nx{font-weight:600;color:var(--rk-sub,#475569);font-size:max(.7rem,calc(var(--u)*3.4));text-align:center}
 .rk-empty{margin:auto;border:2px dashed #86efac;border-radius:14px;background:#fff;padding:14px 18px;font-weight:700;color:#166534;cursor:pointer}
 .rk-yr{display:grid;gap:2px;max-height:260px;overflow:auto;width:100%;font-size:.82rem}
 .rk-yr div{display:grid;grid-template-columns:62px 112px 1fr;gap:6px;padding:4px 6px;border-radius:6px}
@@ -3215,23 +3221,49 @@ function rkPer(d){var J=rkJobs(d);return J.length||Math.max(1,Math.min(6,d.per||
 function rkIdx(d,t){return Math.round((rkMon(t)-rkStart(d))/6048e5)+(d.off||0);}
 function rkFor(d,t){var L=rkNames(d),p=rkPer(d),w=rkIdx(d,t),out=[];if(!L.length)return out;for(var j=0;j<Math.min(p,L.length);j++)out.push(L[(((w*p+j)%L.length)+L.length)%L.length]);return out;}
 function rkJoin(L){return L.length<2?(L[0]||''):L.slice(0,-1).join(', ')+' og '+L[L.length-1];}
+/* Útsjónd: litur (d.th), snið (d.lay: kort/listi), stødd á nøvnunum (d.fs), egin yvirskrift (d.ti) og hvat sæst (d.noH, d.noW, d.noNx) */
+var RKTH={gront:['Grønt','linear-gradient(160deg,#f0fdf4,#dcfce7)','#15803d','#166534','#fff'],blatt:['Blátt','linear-gradient(160deg,#eff6ff,#dbeafe)','#1d4ed8','#1e40af','#fff'],
+  gult:['Gult','linear-gradient(160deg,#fefce8,#fef08a)','#a16207','#854d0e','#fff'],lilla:['Lilla','linear-gradient(160deg,#faf5ff,#ede9fe)','#7c3aed','#6d28d9','#fff'],
+  reytt:['Reytt','linear-gradient(160deg,#fff1f2,#fecdd3)','#be123c','#9f1239','#fff'],hvitt:['Hvítt','#ffffff','#1f2937','#475569','#f1f5f9'],
+  myrkt:['Myrkt','linear-gradient(160deg,#1e293b,#0f172a)','#fde68a','#cbd5e1','#334155'],krit:['Krittalva','linear-gradient(160deg,#2f4f3a,#1f3a2a)','#fefce8','#d9f99d','rgba(255,255,255,.1)']};
+function rkStyle(d){var t=RKTH[d.th]||RKTH.gront;return ' style="--rk-bg:'+t[1]+';--rk-ac:'+t[2]+';--rk-sub:'+t[3]+';--rk-card:'+t[4]+';--rk-fs:'+(d.fs||1)+'"';}
 STK.rokil={n:'Røklaskipan',sz:[560,380],set:1,lib:false,tool:1,r:function(d){var t=new Date(),now=rkFor(d,t),nx=rkFor(d,new Date(t.getTime()+6048e5)),J=rkJobs(d);
-  if(!now.length)return '<div class="rk"><div class="rk-h"><b>Røklar</b><span>Vika '+rkWeek(t)+'</span></div><button type="button" class="rk-empty" data-rk-set>Skriva nøvnini á næmingunum í flokkinum</button></div>';
-  return '<div class="rk"><div class="rk-h"><b>'+(now.length>1?'Røklar':'Røkil')+' hesa vikuna</b><span>Vika '+rkWeek(t)+'</span></div>'
+  var cls='rk'+(d.lay==='listi'?' rk-list':'')+((d.th==='myrkt'||d.th==='krit')?' rk-dark':''),st=rkStyle(d);
+  var head=d.noH&&d.noW?'':'<div class="rk-h">'+(d.noH?'<b></b>':'<b>'+esc(d.ti||((now.length>1?'Røklar':'Røkil')+' hesa vikuna'))+'</b>')+(d.noW?'':'<span>Vika '+rkWeek(t)+'</span>')+'</div>';
+  if(!now.length)return '<div class="'+cls+'"'+st+'>'+head+'<button type="button" class="rk-empty" data-rk-set>Skriva nøvnini á næmingunum í flokkinum</button></div>';
+  return '<div class="'+cls+'"'+st+'>'+head
     +'<div class="rk-n">'+now.map(function(n,i){return '<div class="rk-p">'+(J[i]?'<small>'+esc(J[i])+'</small>':'')+'<b>'+esc(n)+'</b></div>'}).join('')+'</div>'
-    +'<div class="rk-nx">Næstu viku: '+esc(rkJoin(nx))+'</div></div>';},
+    +(d.noNx?'':'<div class="rk-nx">Næstu viku: '+esc(rkJoin(nx))+'</div>')+'</div>';},
   after:function(id,b){var e=b.querySelector('[data-rk-set]');if(e)e.addEventListener('click',function(){openStkSet(id);});}};
 function rkYear(d){var st=rkStart(d),rows=[],t;for(var i=0;i<46;i++){t=new Date(st.getFullYear(),st.getMonth(),st.getDate()+7*i);var f=new Date(t.getFullYear(),t.getMonth(),t.getDate()+4);
   rows.push([rkWeek(t),t.getDate()+'. '+DGM[t.getMonth()].slice(0,3)+'. – '+f.getDate()+'. '+DGM[f.getMonth()].slice(0,3)+'.',rkFor(d,t),rkMon(new Date()).getTime()===t.getTime()]);}return rows;}
+var RKTAB='rk';
 STK.rokil.settings=function(id,d,sec){var L=rkNames(d),J=rkJobs(d),st=rkStart(d),iso=st.getFullYear()+'-'+String(st.getMonth()+1).padStart(2,'0')+'-'+String(st.getDate()).padStart(2,'0');
-  var h='<div class="set-row"><h4>Nøvnini í flokkinum</h4><textarea class="set-in" id="rkItems" rows="6" placeholder="Eitt navn á hvørjari linju"></textarea>'
+  var h='<div class="set-tabs" role="tablist"><button type="button" role="tab" data-rkt="rk" aria-selected="'+(RKTAB==='rk')+'">Røklar</button><button type="button" role="tab" data-rkt="ut" aria-selected="'+(RKTAB==='ut')+'">Útsjónd</button></div>'
+    +'<div data-rkpane="ut"'+(RKTAB==='ut'?'':' hidden')+'>'
+    +'<div class="set-row"><h4>Yvirskrift</h4><input class="set-in" id="rkTi" maxlength="40" placeholder="'+(rkPer(d)>1?'Røklar':'Røkil')+' hesa vikuna"></div>'
+    +'<div class="set-row"><h4>Litur</h4><div class="rk-ths">'+Object.keys(RKTH).map(function(k){return '<button type="button" class="rk-th" data-rkth="'+k+'" aria-pressed="'+((d.th||'gront')===k)+'" title="'+RKTH[k][0]+'" style="background:'+RKTH[k][1]+';color:'+RKTH[k][2]+'">Aa</button>'}).join('')+'</div></div>'
+    +'<div class="set-row"><h4>Snið</h4><div class="row"><button class="btn sm" type="button" data-rklay="kort" aria-pressed="'+(d.lay!=='listi')+'">Kort</button><button class="btn sm" type="button" data-rklay="listi" aria-pressed="'+(d.lay==='listi')+'">Listi</button></div></div>'
+    +'<div class="set-row"><h4>Stødd á nøvnunum</h4><div class="row"><button class="btn sm" type="button" data-rkfs="-1">A−</button><span class="note" style="min-width:4em;text-align:center">'+Math.round((d.fs||1)*100)+' %</span><button class="btn sm" type="button" data-rkfs="1">A+</button></div></div>'
+    +'<div class="set-row"><h4>Hvat sæst</h4>'
+    +'<label class="tmr-w"><input type="checkbox" data-rkv="noH"'+(d.noH?'':' checked')+'> Yvirskriftin</label>'
+    +'<label class="tmr-w"><input type="checkbox" data-rkv="noW"'+(d.noW?'':' checked')+'> Vikunummarið</label>'
+    +'<label class="tmr-w"><input type="checkbox" data-rkv="noNx"'+(d.noNx?'':' checked')+'> Hvør er næstu viku</label></div></div>'
+    +'<div data-rkpane="rk"'+(RKTAB==='rk'?'':' hidden')+'>'
+    +'<div class="set-row"><h4>Nøvnini í flokkinum</h4><textarea class="set-in" id="rkItems" rows="6" placeholder="Eitt navn á hvørjari linju"></textarea>'
     +((S.lists||[]).length?'<div class="row" style="flex-wrap:wrap;gap:6px;margin-top:6px">'+S.lists.map(function(l,i){return '<button type="button" class="btn sm" data-rkl="'+i+'">'+esc(l.n)+'</button>'}).join('')+'</div>':'')+'</div>'
     +'<div class="set-row"><h4>Hvussu nógvir røklar í senn?</h4><div class="row">'+(J.length?'<span class="note">'+J.length+' – ein til hvørja uppgávu</span>':'<button class="btn sm" type="button" data-rkp="-1">−</button><span class="note" style="min-width:4em;text-align:center">'+rkPer(d)+'</span><button class="btn sm" type="button" data-rkp="1">+</button>')+'</div></div>'
     +'<div class="set-row"><h4>Uppgávur (ikki neyðugt)</h4><textarea class="set-in" id="rkJobs" rows="3" placeholder="T.d. Talvan&#10;Blómurnar&#10;Rudda"></textarea></div>'
     +'<div class="set-row"><h4>Røðin byrjar vikuna við</h4><input class="set-in" type="date" id="rkStart"><div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-rko="-1">‹ Eina viku aftur</button><button class="btn sm" type="button" data-rko="1">Eina viku fram ›</button></div><p class="note">Er ein frívika, ella skal røðin broytast, kanst tú flyta hana eina viku fram ella aftur.</p></div>'
     +'<div class="set-row"><h4>Yvirlit yvir árið</h4><div class="rk-yr">'+(L.length?rkYear(d).map(function(r){return '<div'+(r[3]?' class="now"':'')+'><b>Vika '+r[0]+'</b><span>'+r[1]+'</span><em>'+esc(rkJoin(r[2]))+'</em></div>'}).join(''):'<p class="note">Skriva nøvnini fyrst.</p>')+'</div>'
-    +(L.length?'<div class="row" style="margin-top:8px"><button class="btn sm" type="button" data-rkprint>Prenta yvirlitið</button></div>':'')+'</div>';
-  sec.innerHTML=h;var it=$('#rkItems',sec),jb=$('#rkJobs',sec),sd=$('#rkStart',sec),tm;it.value=d.items||'';jb.value=d.jobs||'';sd.value=iso;
+    +(L.length?'<div class="row" style="margin-top:8px"><button class="btn sm" type="button" data-rkprint>Prenta yvirlitið</button></div>':'')+'</div></div>';
+  sec.innerHTML=h;
+  $$('[data-rkt]',sec).forEach(function(b){b.addEventListener('click',function(){RKTAB=b.dataset.rkt;openStkSet(id);});});
+  var ti=$('#rkTi',sec);ti.value=d.ti||'';ti.addEventListener('input',function(){if(ti.value.trim())d.ti=ti.value;else delete d.ti;save();drawStk(id);});
+  $$('[data-rkth]',sec).forEach(function(b){b.addEventListener('click',function(){d.th=b.dataset.rkth;if(d.th==='gront')delete d.th;save();drawStk(id);openStkSet(id);});});
+  $$('[data-rklay]',sec).forEach(function(b){b.addEventListener('click',function(){if(b.dataset.rklay==='listi')d.lay='listi';else delete d.lay;save();drawStk(id);openStkSet(id);});});
+  $$('[data-rkfs]',sec).forEach(function(b){b.addEventListener('click',function(){var f=Math.round(((d.fs||1)+(+b.dataset.rkfs)*.1)*10)/10;f=Math.max(.6,Math.min(1.8,f));if(f===1)delete d.fs;else d.fs=f;save();drawStk(id);openStkSet(id);});});
+  $$('[data-rkv]',sec).forEach(function(c){c.addEventListener('change',function(){var k=c.dataset.rkv;if(c.checked)delete d[k];else d[k]=1;save();drawStk(id);});});var it=$('#rkItems',sec),jb=$('#rkJobs',sec),sd=$('#rkStart',sec),tm;it.value=d.items||'';jb.value=d.jobs||'';sd.value=iso;
   function later(){clearTimeout(tm);tm=setTimeout(function(){save();drawStk(id);openStkSet(id);var x=$('#setBody .set[data-for=stk] #rkItems');if(x){x.focus();x.setSelectionRange(x.value.length,x.value.length);}},900);}
   it.addEventListener('input',function(){d.items=it.value;save();drawStk(id);});it.addEventListener('change',function(){openStkSet(id);});
   jb.addEventListener('input',function(){if(jb.value.trim())d.jobs=jb.value;else delete d.jobs;save();drawStk(id);});jb.addEventListener('change',function(){openStkSet(id);});
