@@ -3828,7 +3828,7 @@ function mtPush(e){if(!MT.u)return Promise.resolve();
     /* Goym hvat vit sendu: kemur goymingin fram, men ikki svarið (t.d. tí síðan varð latin upp av nýggjum), kenna vit hana aftur seinni */
     e.sentH=h;mtSave();
     return mtApi('goym',{id:e.id,heiti:e.heiti,ver:e.ver||0,data:j}).then(function(r){if(!MT.u)throw new Error('ut');
-      if(r.ok){e.ver=r.ver;e.srv=1;if(r.broytt)e.broytt=r.broytt;if(e.id!==MT.cur||e.h===h||!e.h){e.dirty=0;e.h=h;}mtSave();mtUI();return;}
+      if(r.ok){e.ver=r.ver;e.srv=1;if(r.broytt)e.broytt=r.broytt;if(e.id!==MT.cur||e.h===h||!e.h){e.dirty=0;e.h=h;}mtSave();mtUI();return mtBaseSet(e.id,j);}
       if(r.villa==='konflikt')return mtConflict(e);
       if(r.villa==='stor'){mtBig[e.id]=1;note('„'+e.heiti+'“ er ov stór at goyma hjá Snar og verður bert goymd á hesi teldu.');return;}
       if(r.villa==='ovmangar'){mtBig[e.id]=1;note('Tú hevur 100 talvur hjá Snar, og fleiri kunnu ikki goymast. Strika nakrar, sum tú ikki nýtir longur.');return;}
@@ -3844,13 +3844,30 @@ function mtConflict(e){if(mtConfBusy[e.id])return mtConfBusy[e.id];var isCur=e.i
     return (isCur?Promise.resolve(JSON.parse(JSON.stringify(S))):mtGet(e.id)).then(function(mine){
       var myH=mine?mtHash(JSON.stringify(mtSrv(mine))):'';
       if(!mine||sh===myH||sh===e.sentH){e.ver=r.ver;e.srv=1;e.broytt=r.broytt;e.stale=0;e.remote=0;
-        e.dirty=mine&&sh!==myH?1:0;e.h=mine?myH:sh;mtSave();mtUI();if(e.dirty)mtSchedule(500);return;}
+        e.dirty=mine&&sh!==myH?1:0;e.h=mine?myH:sh;mtSave();mtUI();if(e.dirty)mtSchedule(500);return mtBaseSet(e.id,r.data);}
+      /* Onkur annar hevur broytt talvuna (t.d. á telefonini): okkara broytingar síðani seinastu goymingina verða lagdar oman á ta nýggjastu útgávuna */
+      return mtBaseGet(e.id).then(function(base){
+        if(base){var ops=mtDiff(JSON.parse(base),mtSrv(mine),[],[]),merged=mtApplyOps(JSON.parse(r.data),ops);if(mine.mynd)merged.mynd=mine.mynd;
+          e.ver=r.ver;e.broytt=r.broytt;e.srv=1;e.stale=0;e.remote=0;var mh=mtSrvH(merged);e.dirty=mh!==mtHash(r.data)?1:0;e.h=mh;mtSave();
+          return mtBaseSet(e.id,r.data).then(function(){return mtPut(e.id,merged);}).then(function(){mtUI();if(isCur)mtReload(merged);else if(e.dirty)mtSchedule(500);});}
+        return mtCopyConflict(e,mine,r,isCur);});});});
+  mtConfBusy[e.id]=p;p.then(function(){delete mtConfBusy[e.id];},function(){delete mtConfBusy[e.id];});return p;}
+/* Er eingin grundútgáva at samanbera við (eldri talva), verður okkara útgáva goymd sum avrit, sum áðrenn */
+function mtCopyConflict(e,mine,r,isCur){
       var c={id:mtId(),heiti:mtName(e.heiti+' (avrit)'),ver:0,srv:0,dirty:1,broytt:Date.now()};MT.list.splice(MT.list.indexOf(e)+1,0,c);mtSave();
       var s=JSON.parse(r.data);if(mine.mynd&&!s.mynd)s.mynd=mine.mynd;
       e.ver=r.ver;e.heiti=r.heiti;e.broytt=r.broytt;e.dirty=0;e.srv=1;e.stale=0;e.remote=0;e.h=mtSrvH(s);mtSave();
       return mtPut(c.id,mine).then(function(){return mtPut(e.id,s);}).then(function(){mtUI();
-        if(isCur)mtReload(s,'Henda talvan var broytt á aðrari teldu. Tú sært nú ta nýggjastu útgávuna. Tað, sum tú broytti her, er goymt sum „'+c.heiti+'“ undir Mínum talvum.');});});});
-  mtConfBusy[e.id]=p;p.then(function(){delete mtConfBusy[e.id];},function(){delete mtConfBusy[e.id];});return p;}
+        if(isCur)mtReload(s,'Henda talvan var broytt á aðrari teldu. Tú sært nú ta nýggjastu útgávuna. Tað, sum tú broytti her, er goymt sum „'+c.heiti+'“ undir Mínum talvum.');});}
+function mtBaseSet(id,d){return idb('readwrite',function(st){return st.put(d,'tbase:'+id);});}
+function mtBaseGet(id){return idb('readonly',function(st){return st.get('tbase:'+id);});}
+function mtIsObj(x){return x&&typeof x==='object'&&!Array.isArray(x);}
+/* Munurin millum tvær útgávur sum ein listi av [leið, virði, strikað]. Listar (array) verða tiknir heilir */
+function mtDiff(a,b,path,out){if(mtIsObj(a)&&mtIsObj(b)){var k={};Object.keys(a).concat(Object.keys(b)).forEach(function(x){k[x]=1;});
+    Object.keys(k).forEach(function(x){mtDiff(a[x],b[x],path.concat(x),out);});return out;}
+  if(JSON.stringify(a)!==JSON.stringify(b))out.push([path,b===undefined?undefined:JSON.parse(JSON.stringify(b)),b===undefined]);return out;}
+function mtApplyOps(t,ops){ops.forEach(function(o){var p=o[0],x=t;if(!p.length)return;for(var i=0;i<p.length-1;i++){if(!mtIsObj(x[p[i]])&&!Array.isArray(x[p[i]]))x[p[i]]={};x=x[p[i]];}
+  if(o[2])delete x[p[p.length-1]];else x[p[p.length-1]]=o[1];});return t;}
 /* Skriva eina talvu inn sum ta, ið er á skíggjanum, og les síðuna inn av nýggjum */
 var mtLeaving=false;
 function mtReload(s,msg){mtLeaving=true;clearTimeout(saveT);clearTimeout(mtLocT);clearTimeout(mtPushT);
@@ -3866,7 +3883,7 @@ function mtOpen(id,noKeep){if(id===MT.cur){closePanels();mtStartHide();return;}v
   (noKeep?Promise.resolve():mtKeepUnsaved().then(mtFlush)).then(function(){return mtGet(id);}).then(function(s){
     if(s&&!e.remote&&!e.stale)return s;if(!MT.u)return s;
     return mtApi('heinta',{id:id}).then(function(r){if(!r.ok)return s;var n=JSON.parse(r.data);if(s&&s.mynd&&!n.mynd)n.mynd=s.mynd;
-      e.ver=r.ver;e.heiti=r.heiti;e.broytt=r.broytt;e.remote=0;e.stale=0;e.dirty=0;e.h=mtSrvH(n);return n;},function(){return s;});})
+      e.ver=r.ver;e.heiti=r.heiti;e.broytt=r.broytt;e.remote=0;e.stale=0;e.dirty=0;e.h=mtSrvH(n);return mtBaseSet(id,r.data).then(function(){return n;});},function(){return s;});})
   .then(function(s){if(!s){note('Tað bar ikki til at heinta „'+e.heiti+'“. Kanna, um teldan hevur samband við netið, og royn aftur.');return;}
     s.lists=mtLists(s.lists,S.lists);MT.cur=id;mtReload(s);});}
 /* Nýggj talva út frá eini uppseting. Ein talva, sum júst er gjørd úr eini uppseting og ikki broytt, verður nýtt aftur. */
@@ -3905,7 +3922,7 @@ function mtMerge(L){var ids={},conf=[],re=null;mtLastList=Date.now();
   mtSave();mtUI();
   conf.reduce(function(p,e){return p.then(function(){return mtConflict(e);});},Promise.resolve()).then(function(){
     if(re&&!mtLeaving)return mtApi('heinta',{id:re.id}).then(function(r){if(!r.ok||mtLeaving)return;var s=JSON.parse(r.data);if(S.mynd&&!s.mynd)s.mynd=S.mynd;
-      function go(){re.ver=r.ver;re.heiti=r.heiti;re.broytt=r.broytt;re.stale=0;re.dirty=0;re.h=mtSrvH(s);mtPut(re.id,s).then(function(){mtReload(s);});}
+      function go(){re.ver=r.ver;re.heiti=r.heiti;re.broytt=r.broytt;re.stale=0;re.dirty=0;re.h=mtSrvH(s);mtBaseSet(re.id,r.data).then(function(){return mtPut(re.id,s);}).then(function(){mtReload(s);});}
       /* Gongur stopprið, ella er nakað teknað, verður talvan ikki skift út beinanvegin: lærarin velur sjálvur */
       if(running||!$('#inkClear').hidden)mtToast(go);else go();});}).catch(function(){});}
 /* Broytingar frá telefonini: talvan kannar, meðan hon er í brúki (í mesta lagi 45 minuttir eftir seinasta trýst) */
