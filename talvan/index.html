@@ -1184,8 +1184,8 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
         </div>
         <div class="row center cfg">
           <div class="seg" role="group" aria-label="Slag av klokku" id="cmSeg">
-            <button type="button" data-cm="t" aria-pressed="true">Talklokka</button>
-            <button type="button" data-cm="v" aria-pressed="false">Vísaraklokka</button>
+            <button type="button" data-cm="t" aria-pressed="true">Talgild klokka</button>
+            <button type="button" data-cm="v" aria-pressed="false">Klokka við vísarum</button>
           </div>
           <div class="seg" role="group" aria-label="Tøl ella pinnar" id="cfSeg">
             <button type="button" data-cf="tol" aria-pressed="true">Tøl</button>
@@ -1722,7 +1722,7 @@ var zTop=0;for(var zk in S.z)zTop=Math.max(zTop,S.z[zk]||0);
 var SEL=null,SETK=null;
 /* Hvat verður flutt út í feltið høgrumegin: [yvirskrift, [elementir]] */
 var SETS={
-  klokka:[['Slag av klokku',['#cmSeg']],['Vísaraklokkan vísir',['#cfSeg']]],
+  klokka:[['Slag av klokku',['#cmSeg']],['Klokkan við vísarum vísir',['#cfSeg']]],
   tid:[['Skjót val',['#presets']],['Byrjanartíð',['#tmrDefRow']],['Ávaring',['#tmrWarnRow']],['Litur',['#tmrThRow']],['Ljóð, tá ið tíðin er farin',['#tmrSound']]],
   navn:[['Hvat skal gerast?',['#navnTabs']],['Persónar í hvørjum bólki',['#grpN']],['Nøvnini',['#names','#namesNote']],['Tá ið tú velur',['#pickOnceL']]],
   ljos:[['Tekstirnir',['#ljosSet','#ljosNote']]],
