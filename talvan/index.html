@@ -3760,8 +3760,9 @@ function mtFlush(){clearTimeout(mtLocT);var p=MT.cur?mtPut(MT.cur,S):Promise.res
 function mtKeepUnsaved(){if(MT.cur||mtBlank(S))return Promise.resolve();
   return askP('Talvan á skíggjanum er ikki goymd í Mínum talvum. Vilt tú goyma hana, áðrenn tú letur eina aðra upp?','Goym hana').then(function(y){if(y)mtCreate(mtDefName(),false);});}
 function mtLists(a,b){var out=(a||[]).slice(),n=out.map(function(x){return x.n});(b||[]).forEach(function(x){if(n.indexOf(x.n)<0){out.push(x);n.push(x.n);}});return out;}
-function mtOpen(id){if(id===MT.cur){closePanels();mtStartHide();return;}var e=mtE(id);if(!e)return;
-  mtKeepUnsaved().then(mtFlush).then(function(){return mtGet(id);}).then(function(s){
+/* noKeep: talvan á skíggjanum er júst strikað – spyr ikki um at goyma hana */
+function mtOpen(id,noKeep){if(id===MT.cur){closePanels();mtStartHide();return;}var e=mtE(id);if(!e)return;
+  (noKeep?Promise.resolve():mtKeepUnsaved().then(mtFlush)).then(function(){return mtGet(id);}).then(function(s){
     if(s&&!e.remote&&!e.stale)return s;if(!MT.u)return s;
     return mtApi('heinta',{id:id}).then(function(r){if(!r.ok)return s;var n=JSON.parse(r.data);if(s&&s.mynd&&!n.mynd)n.mynd=s.mynd;
       e.ver=r.ver;e.heiti=r.heiti;e.broytt=r.broytt;e.remote=0;e.stale=0;e.dirty=0;e.h=mtSrvH(n);return n;},function(){return s;});})
@@ -3782,7 +3783,11 @@ function mtCopy(){var e=mtE(MT.cur);mtFlush().then(function(){mtCreate((e?e.heit
 function mtDelete(e){ask('Strika „'+e.heiti+'“? '+(MT.u&&e.srv?'Talvan verður strikað bæði á hesi teldu og hjá Snar.':'Talvan verður strikað á hesi teldu.'),'Strika',function(){
   ((MT.u&&e.srv)?mtApi('strika',{id:e.id}).then(function(r){if(!r.ok)throw new Error(r.villa);}):Promise.resolve()).then(function(){
     MT.list=MT.list.filter(function(x){return x!==e});mtDelLocal(e.id);
-    if(MT.cur===e.id){MT.cur=null;mtReload({vis:{klokka:1},bg:'strik',lists:S.lists||[],imgs:S.imgs||[],pdfs:S.pdfs||[]});return;}
+    if(MT.cur===e.id){MT.cur=null;mtSave();
+      /* Hopp til ta talvuna, sum seinast varð broytt. Er eingin eftir, verður talvan tóm */
+      var nx=MT.list.slice().sort(function(a,b){return (b.broytt||0)-(a.broytt||0)})[0];
+      if(nx){mtOpen(nx.id,true);return;}
+      mtReload({vis:{klokka:1},bg:'strik',lists:S.lists||[],imgs:S.imgs||[],pdfs:S.pdfs||[]});return;}
     mtSave();mtUI();},function(){note('Tað bar ikki til at strika talvuna hjá Snar. Kanna sambandið og royn aftur.');});});}
 function mtRename(v){var e=mtE(MT.cur);v=String(v||'').replace(/\s+/g,' ').trim().slice(0,60);if(!e||!v||v===e.heiti)return;e.heiti=mtName(v,e);e.fresh=0;e.dirty=1;e.broytt=Date.now();mtSave();mtSchedule(800);mtUI();}
 /* Legg upp úr fílu og Strika alt: talvan á skíggjanum verður ikki longur knýtt at eini talvu í Mínum talvum */
