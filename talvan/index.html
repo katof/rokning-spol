@@ -387,6 +387,7 @@ body.dark .top-logo{background:#fff;padding:0 14px}
 .al-bar b{font-size:.85rem;padding:0 10px 0 6px;white-space:nowrap}
 .al-bar .ic{width:40px;height:40px;border-radius:10px;color:#202124}.al-bar .ic:hover{background:#f1f3f4}.al-bar .ic svg{width:22px;height:22px}
 .al-sep{width:1px;height:24px;background:#dadce0;margin:0 4px}
+.cp-tip{position:fixed;z-index:58;left:50%;bottom:110px;transform:translateX(-50%);background:#202124;color:#fff;font-weight:600;border-radius:12px;padding:10px 16px;box-shadow:0 14px 40px -14px rgba(0,0,0,.5);pointer-events:none}
 .w.moving{cursor:grabbing}
 .w-ttl{font-weight:800;font-size:1.05rem;letter-spacing:-.01em;text-align:center;flex:none}
 /* Bjálkin omanfyri: stillingar, fyll skíggjan, tak burtur */
@@ -2341,6 +2342,47 @@ document.addEventListener('keydown',function(e){if(e.key!=='Delete'&&e.key!=='Ba
   if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;
   if(MSEL.length>1){e.preventDefault();var L=MSEL.slice();mselSet([]);L.forEach(function(k){var x=$('#w-'+k),c=x&&x.querySelector('.close-btn');if(c)c.click();});return;}
   var w=$('#w-'+SEL),b=w&&w.querySelector('.close-btn');if(!b)return;e.preventDefault();b.click();});
+/* ---------- Ctrl+C / Ctrl+V: kopiera amboð við somu stillingum (eisini til onnur dias og aðrar talvur) ---------- */
+var CPKEY='snar-talvan-klipp',CPFAM={snar:['snar','snar2','snar3'],mynd:['mynd','mynd2','mynd3'],yt:['yt','yt2']};
+function cpFam(k){for(var f in CPFAM)if(CPFAM[f].indexOf(k)>=0)return f;return null;}
+function cpName(k){if(S.stk[k]&&STK[S.stk[k].t])return STK[S.stk[k].t].n;var b=$('[data-tool="'+(cpFam(k)||k)+'"] span');return b?b.textContent.trim():'Amboðið';}
+function cpTip(msg){var t=$('#cpTip');if(!t){t=el('div','cp-tip');t.id='cpTip';t.setAttribute('role','status');document.body.appendChild(t);}t.textContent=msg;t.hidden=false;clearTimeout(cpTip.t);cpTip.t=setTimeout(function(){t.hidden=true;},1600);}
+function cpOne(k){var o={k:k,pos:pos(k).slice()};
+  if(S.stk[k]){o.stk=JSON.parse(JSON.stringify(S.stk[k]));return o;}
+  var f=cpFam(k);if(f==='snar'&&S[k])o.snar=JSON.parse(JSON.stringify(S[k]));if(f==='mynd')o.mynd=S.myndOf[k];if(f==='yt'&&S.ytOf[k])o.yt=JSON.parse(JSON.stringify(S.ytOf[k]));
+  if(k==='tema'&&S.tema)o.tema=JSON.parse(JSON.stringify(S.tema));
+  if(k==='poll')o.poll=JSON.parse(JSON.stringify(S.poll));if(k==='skra'){o.skra=JSON.parse(JSON.stringify(S.skra));o.plan=JSON.parse(JSON.stringify(S.planItems||[]));}if(k==='tid')o.secs=S.secs;
+  return o;}
+function cpCopy(){var L=(MSEL.length>1?MSEL:SEL?[SEL]:[]).filter(function(k){return S.vis[k]&&$('#w-'+k);});if(!L.length)return false;
+  try{localStorage.setItem(CPKEY,JSON.stringify(L.map(cpOne)));}catch(e){return false;}
+  cpTip(L.length>1?L.length+' amboð kopierað':cpName(L[0])+' er kopierað');return true;}
+function cpPaste(){if(S.lock)return false;var L;try{L=JSON.parse(localStorage.getItem(CPKEY)||'null');}catch(e){L=null;}if(!L||!L.length)return false;
+  var made=[],skip=[];
+  L.forEach(function(o){var p=o.pos.slice(),k=o.k,same=S.vis[k]&&$('#w-'+k);
+    /* Er tað upprunaliga á hesum diasinum, verður tað nýggja skeiklað eitt sindur */
+    if(o.stk||same||cpFam(k)){p[0]=Math.min(BW-p[2],p[0]+40);p[1]=Math.min(BH-p[3],p[1]+40);}
+    if(o.stk){var x=JSON.parse(JSON.stringify(o.stk)),t=x.t;delete x.t;if(!STK[t])return;var id=addStk(t,p,true,x);S.z[id]=++zTop;made.push(id);return;}
+    var f=cpFam(k);
+    if(f){var slot=CPFAM[f].filter(function(x){return !S.vis[x];})[0];if(!slot){skip.push(cpName(k));return;}
+      S.pos[slot]=p;S.vis[slot]=1;S.z[slot]=++zTop;
+      if(f==='snar'&&o.snar){S[slot]=o.snar;}if(f==='mynd'&&o.mynd)S.myndOf[slot]=o.mynd;if(f==='yt'&&o.yt)S.ytOf[slot]=o.yt;
+      made.push(slot);return;}
+    if(same){skip.push(cpName(k));return;}
+    S.pos[k]=p;S.vis[k]=1;S.z[k]=++zTop;
+    if(o.tema)S.tema=o.tema;if(o.poll)S.poll=o.poll;if(o.skra){S.skra=o.skra;S.planItems=o.plan||[];}if(o.secs)S.secs=o.secs;
+    made.push(k);});
+  if(made.length){applySz();applyVis();
+    made.forEach(function(k){if(SW[k]&&S[k])SW[k].show();if(MP[k])drawMynd(k);if(YP[k])drawYt(k);});
+    if(made.some(function(k){return k==='poll'||k==='skra'||k==='tid'||k==='tema';}))pgDrawD();
+    if(made.length>1){mselSet(made);select(made[made.length-1]);}else{mselSet([]);front(made[0]);select(made[0]);}save();}
+  if(skip.length)note((skip.length>1?skip.join(' og ')+' eru':skip[0]+' er')+' longu á hesum diasinum. Hvørt amboð kann bara vera eina ferð á hvørjum diasi, so set '+(skip.length>1?'tey':'tað')+' inn á eitt annað dias.');
+  else if(made.length)cpTip(made.length>1?made.length+' amboð sett inn':'Sett inn');
+  return true;}
+document.addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey)||e.altKey||e.shiftKey)return;var k=(e.key||'').toLowerCase();if(k!=='c'&&k!=='v')return;
+  if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;
+  if(k==='c'){if(String(window.getSelection()||'').trim())return;if(cpCopy())e.preventDefault();}
+  else if(cpPaste())e.preventDefault();});
+
 function inkPt(e){var r=ink.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
 function eraseAt(pt){var n=strokes.length;strokes=strokes.filter(function(st){var lim=st.w*(st.hl?3:1)/2+14;return !st.p.some(function(q){return Math.abs(q[0]-pt[0])<lim&&Math.abs(q[1]-pt[1])<lim;});});if(strokes.length!==n)redrawInk();}
 ink.addEventListener('pointerdown',function(e){if(!document.body.classList.contains('pen'))return;e.preventDefault();ink.setPointerCapture(e.pointerId);
