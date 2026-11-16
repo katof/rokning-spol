@@ -1119,7 +1119,7 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
 #mtBtn[data-st=bid] .mt-dot{display:block;background:#f59e0b}
 #mtBtn[data-st=off] .mt-dot{display:block;background:#9ca3af}
 .mt-f{display:grid;gap:6px;font-weight:600;font-size:.95rem;margin:0 0 12px}
-.mt-pin{letter-spacing:.35em;font-size:1.2rem;max-width:170px}
+.mt-pin{letter-spacing:.35em;font-size:1.2rem;max-width:170px;-webkit-text-security:disc}
 .mt-login .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .mt-msg{margin:0 0 12px;color:#9a3412;font-size:.92rem;line-height:1.45}
 .mt-msg:empty{display:none}
@@ -4063,12 +4063,14 @@ function mtDelAccount(){if(!MT.u)return;askP('Strika innritanina „'+MT.u.navn+
   function(){note('Tað bar ikki til at strika innritanina. Kanna sambandið og royn aftur.');});});}
 $('#mtDelBtn').addEventListener('click',mtDelAccount);
 function mtLoginForm(box,after){
-  box.innerHTML='<form class="mt-login" novalidate><label class="mt-f">Navn<input class="set-in" name="n" autocomplete="username" maxlength="40" spellcheck="false" placeholder="til dømis Anna Hoyvík"></label>'
-   +'<label class="mt-f">Fýra tøl<input class="set-in mt-pin" name="p" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="• • • •"></label>'
-   +'<label class="mt-f mt-p2" hidden>Skriva tey fýra tølini aftur<input class="set-in mt-pin" name="p2" type="password" inputmode="numeric" autocomplete="new-password" maxlength="4" placeholder="• • • •"></label>'
+  box.innerHTML='<form class="mt-login" novalidate autocomplete="off"><label class="mt-f">Navn<input class="set-in" name="n" autocomplete="off" data-lpignore="true" maxlength="40" spellcheck="false" placeholder="til dømis Anna Hoyvík"></label>'
+   +'<label class="mt-f">Fýra tøl<input class="set-in mt-pin" name="p" type="text" inputmode="numeric" autocomplete="off" data-lpignore="true" maxlength="4" placeholder="• • • •"></label>'
+   +'<label class="mt-f mt-p2" hidden>Skriva tey fýra tølini aftur<input class="set-in mt-pin" name="p2" type="text" inputmode="numeric" autocomplete="off" data-lpignore="true" maxlength="4" placeholder="• • • •"></label>'
    +'<p class="mt-msg" role="status"></p><div class="row"><button class="btn red" type="submit">Rita inn</button><button class="btn sm mt-back" type="button" hidden>Aftur</button></div></form>';
   var f=$('form',box),n=f.elements.n,p=f.elements.p,p2=f.elements.p2,msg=$('.mt-msg',box),go=$('button[type=submit]',box),back=$('.mt-back',box),step=1;
-  $$('.mt-pin',box).forEach(function(i){i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').slice(0,4);});});
+  /* Tølini sæst sum prikkar uttan at vera eitt loyniorðsfelt, so kagin ikki bjóðar at goyma tey. Kann kagin ikki tað, verður tað eitt vanligt loyniorðsfelt */
+  var mask=window.CSS&&CSS.supports&&CSS.supports('-webkit-text-security','disc');
+  $$('.mt-pin',box).forEach(function(i){if(!mask)i.type='password';i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').slice(0,4);});});
   function mode(s){step=s;$('.mt-p2',box).hidden=s!==2;back.hidden=s!==2;n.readOnly=s===2;go.textContent=s===2?'Stovna innritan':'Rita inn';if(s===1){p2.value='';}}
   back.addEventListener('click',function(){mode(1);msg.textContent='';p.focus();});
   f.addEventListener('submit',function(ev){ev.preventDefault();var nv=n.value.replace(/\s+/g,' ').trim(),pv=p.value;

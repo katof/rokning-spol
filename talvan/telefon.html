@@ -37,7 +37,7 @@ p{margin:0 0 12px}
 .in{width:100%;min-height:48px;border:1px solid var(--field);border-radius:12px;padding:10px 12px;font-size:1rem;background:#fff;font-weight:400}
 textarea.in{min-height:110px;resize:vertical;line-height:1.4}
 .in:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
-.pin{letter-spacing:.4em;font-size:1.25rem;max-width:180px}
+.pin{letter-spacing:.4em;font-size:1.25rem;max-width:180px;-webkit-text-security:disc}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border:1px solid #77787b;border-radius:12px;background:#fff;font-weight:700}
 .btn.red{background:var(--red);border-color:var(--red);color:#fff}
 .btn.red:disabled{background:#f3a59f;border-color:#f3a59f}
@@ -84,10 +84,10 @@ dialog .row{justify-content:flex-end}
     <h1>Talvan á telefonini</h1>
     <p class="lead">Sjálv Talvan riggar bara á teldu og best á stórum skíggja. Men ritar tú inn, kanst tú rætta tínar talvur her: tekstir, ætlanir, listar, spurnarkanningar og stoppur.</p>
     <div class="card">
-      <form id="login" novalidate>
-        <label class="f">Navn<input class="in" name="n" autocomplete="username" maxlength="40" spellcheck="false" placeholder="til dømis Anna Hoyvík"></label>
-        <label class="f">Fýra tøl<input class="in pin" name="p" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="• • • •"></label>
-        <label class="f" id="p2w" hidden>Skriva tey fýra tølini aftur<input class="in pin" name="p2" type="password" inputmode="numeric" autocomplete="new-password" maxlength="4" placeholder="• • • •"></label>
+      <form id="login" novalidate autocomplete="off">
+        <label class="f">Navn<input class="in" name="n" autocomplete="off" data-lpignore="true" maxlength="40" spellcheck="false" placeholder="til dømis Anna Hoyvík"></label>
+        <label class="f">Fýra tøl<input class="in pin" name="p" type="text" inputmode="numeric" autocomplete="off" data-lpignore="true" maxlength="4" placeholder="• • • •"></label>
+        <label class="f" id="p2w" hidden>Skriva tey fýra tølini aftur<input class="in pin" name="p2" type="text" inputmode="numeric" autocomplete="off" data-lpignore="true" maxlength="4" placeholder="• • • •"></label>
         <p class="msg" id="lmsg" role="status"></p>
         <div class="row"><button class="btn red" type="submit" id="lgo">Rita inn</button><button class="btn sm" type="button" id="lback" hidden>Aftur</button></div>
       </form>
@@ -146,7 +146,8 @@ function show(v){['in','list','board'].forEach(function(x){$('#v'+x.charAt(0).to
 
 /* ---------- Innritan ---------- */
 (function(){var f=$('#login'),n=f.elements.n,p=f.elements.p,p2i=f.elements.p2,msg=$('#lmsg'),go=$('#lgo'),back=$('#lback'),step=1;
-  $$('.pin',f).forEach(function(i){i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').slice(0,4);});});
+  var mask=window.CSS&&CSS.supports&&CSS.supports('-webkit-text-security','disc');
+  $$('.pin',f).forEach(function(i){if(!mask)i.type='password';i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').slice(0,4);});});
   function mode(s){step=s;$('#p2w').hidden=s!==2;back.hidden=s!==2;n.readOnly=s===2;go.textContent=s===2?'Stovna innritan':'Rita inn';if(s===1)p2i.value='';}
   back.addEventListener('click',function(){mode(1);msg.textContent='';p.focus();});
   f.addEventListener('submit',function(ev){ev.preventDefault();var nv=n.value.replace(/\s+/g,' ').trim(),pv=p.value;
