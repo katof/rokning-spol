@@ -1616,7 +1616,7 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
   <h3><span id="layH">Uppsetingar</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
   <div class="set-tabs" role="tablist"><button type="button" role="tab" data-layt="snar" aria-selected="true">Frá Snar</button><button type="button" role="tab" data-layt="mine" aria-selected="false">Mínar talvur</button></div>
   <div id="layPaneSnar"><div class="lay-grid" id="layGrid"></div>
-  <p class="note" id="layNote">Tá ið tú velur eina uppseting, verða amboðini og bakgrundin skift út. Nøvn, ætlanir, myndir og PDF-fílur verða verandi.</p></div>
+  <p class="note" id="layNote">Uppsetingin verður løgd inn sum eitt nýtt dias aftan á tað, sum tú ert á. Er diasið tómt, verður hon løgd á tað.</p></div>
   <div id="layPaneMine" hidden></div>
 </div>
 
@@ -3756,7 +3756,11 @@ function mtNew(L){var i=LAYOUTS.indexOf(L),n=i===0?'Nýggj talva':L.n,e=MT.cur&&
   mtKeepUnsaved().then(mtFlush).then(function(){var s=JSON.parse(JSON.stringify(S));delete s.pages;delete s.pg;
     var ne={id:mtId(),heiti:mtName(n),ver:0,srv:0,dirty:1,fresh:1,broytt:Date.now()};MT.list.unshift(ne);MT.cur=ne.id;
     try{sessionStorage.setItem('mt-lay',String(i));}catch(x){}mtReload(s);});}
-function layPick(L){if(mtMine())mtNew(L);else{applyLayout(L);mtStartHide();}}
+/* Uppsetingar: uppsetingin verður løgd inn sum eitt nýtt dias aftan á tað, tú ert á – ella á hetta diasið, um tað er tómt (ella bert klokkan er á tí) */
+function pgEmpty(){var v=Object.keys(S.vis||{}).filter(function(k){return S.vis[k];});return v.every(function(k){return k==='klokka';})&&!Object.keys(S.stk||{}).some(function(id){return S.vis[id];});}
+function layPick(L){mtStartHide();closePanels();if(!pgEmpty())pgNew();applyLayout(L);S.pages[S.pg]=pgSnap();pgUI();save();}
+/* Byrjanarskíggin: innritað ger ein uppseting eina nýggja talvu í Mínum talvum */
+function startPick(L){if(MT.u)mtNew(L);else{applyLayout(L);mtStartHide();}}
 function mtCopy(){var e=mtE(MT.cur);mtFlush().then(function(){mtCreate((e?e.heiti:mtDefName())+' (avrit)',false);});}
 function mtDelete(e){ask('Strika „'+e.heiti+'“? '+(MT.u&&e.srv?'Talvan verður strikað bæði á hesi teldu og hjá Snar.':'Talvan verður strikað á hesi teldu.'),'Strika',function(){
   ((MT.u&&e.srv)?mtApi('strika',{id:e.id}).then(function(r){if(!r.ok)throw new Error(r.villa);}):Promise.resolve()).then(function(){
@@ -3860,8 +3864,7 @@ function mtDraw(){var box=$('#layPaneMine');if(!box||box.hidden)return;var e=mtE
   var cp=$('#mtCopyB');if(cp)cp.addEventListener('click',mtCopy);
   var n=mtRowList($('#mtList'),function(x){mtOpen(x.id);});$('#mtNone').hidden=n>0;}
 function mtUI(){var da=$('#mtDelAcct');if(da)da.hidden=!MT.u;var b=$('#mtBtn');if(b){var t=MT.u?'Mínar talvur · '+MT.u.navn:'Mínar talvur · Rita inn';b.title=t;b.setAttribute('aria-label',t);b.classList.toggle('in',!!MT.u);b.dataset.st=MT.u?(mtState||'ok'):'';}
-  $('#layNote').textContent=mtMine()?'Tá ið tú velur eina uppseting, verður ein nýggj talva gjørd í Mínum talvum. Talvan, sum er á skíggjanum nú, verður verandi, sum hon er.'
-    :'Tá ið tú velur eina uppseting, verða amboðini og bakgrundin skift út. Nøvn, ætlanir, myndir og PDF-fílur verða verandi.';
+  $('#layNote').textContent='Uppsetingin verður løgd inn sum eitt nýtt dias aftan á tað, sum tú ert á. Er diasið tómt, verður hon løgd á tað. Vilt tú byrja eina heilt nýggja talvu, finnur tú „+ Nýggj talva“ undir Mínar talvur.';
   var cn=$('#mtCurName');if(document.activeElement!==cn)mtDraw();if(!$('#mtStart').hidden)mtStartDraw();}
 
 /* ---------- Byrjanarskíggin: bert tá ið einki er goymt á telduni ---------- */
@@ -3871,7 +3874,7 @@ function mtStartDraw(){var L=$('#mtStartIn');if(!L)return;
     if(any)mtRowList($('#mtStartList'),function(x){mtOpen(x.id);});return;}
   L.innerHTML='<h3>Hevur tú talvur hjá Snar?</h3><p class="note">Rita inn við tínum navni og fýra tølum. Tú kanst eisini nýta Talvuna uttan at rita inn.</p><div id="mtStartLogin"></div>';
   mtLoginForm($('#mtStartLogin'),function(){mtStartDraw();});}
-function mtStartShow(){var s=$('#mtStart');s.hidden=false;document.body.classList.add('mtstart');mtStartDraw();var g=$('#mtStartGrid');if(!g.children.length)LAYOUTS.forEach(function(L){g.appendChild(layCard(L,function(){layPick(L);}));});}
+function mtStartShow(){var s=$('#mtStart');s.hidden=false;document.body.classList.add('mtstart');mtStartDraw();var g=$('#mtStartGrid');if(!g.children.length)LAYOUTS.forEach(function(L){g.appendChild(layCard(L,function(){startPick(L);}));});}
 function mtStartHide(){var s=$('#mtStart');if(s&&!s.hidden){s.hidden=true;document.body.classList.remove('mtstart');}}
 $('#mtStartX').addEventListener('click',mtStartHide);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#mtStart').hidden){e.stopImmediatePropagation();e.preventDefault();mtStartHide();}},true);
