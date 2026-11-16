@@ -1671,8 +1671,8 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
   <p>Ritar tú inn, verða talvurnar eisini goymdar hjá Snar, so tú hevur atgongd til teirra á øllum teldum. Tá verða navnið, sum tú ritar inn við, og talvurnar goymdar: amboðini, tekstirnir, listarnir og bakgrundin. PDF-skjøl og myndir verða ikki send.</p>
   <p>Ljóðmátarin brúkar bert mikrofonina, meðan síðan er opin. Einki ljóð verður tikið upp ella goymt.</p>
   <h4>Trygdarrit av talvuni</h4>
-  <p>Tú kanst eisini taka talvuna niður sum eina fílu og leggja hana upp aftur seinni, til dømis á eini teldu, har tú ikki vilt rita inn. Myndir og PDF-ar koma við, um tú vilt.</p>
-  <label class="chk" style="margin:0 0 10px;display:flex;gap:8px;align-items:center"><input type="checkbox" id="expFiles" checked> Tak myndir og PDF-ar við</label>
+  <p>Tú kanst eisini taka talvuna niður sum eina fílu og leggja hana upp aftur seinni, til dømis á eini teldu, har tú ikki vilt rita inn. Myndir og PDF-skjøl koma við, um tú vilt.</p>
+  <label class="chk" style="margin:0 0 10px;display:flex;gap:8px;align-items:center"><input type="checkbox" id="expFiles" checked> Tak myndir og PDF-skjøl við</label>
   <div class="row"><button class="btn sm" type="button" id="expBtn">Tak niður</button><button class="btn sm" type="button" id="impBtn">Legg upp</button></div>
   <input type="file" id="impFile" accept=".json,application/json" hidden>
   <p class="note" id="expMsg" style="margin-top:8px"></p>
@@ -2605,7 +2605,7 @@ $('#impFile').addEventListener('change',function(e){var f=e.target.files[0];e.ta
         tx.oncomplete=function(){res();};tx.onerror=function(){res();};};rq.onerror=function(){res();};})
     .then(function(){mtDetach();try{localStorage.setItem(KEY,JSON.stringify(d.S));}catch(err){note('Talvan er ov stór at goyma í kaganum.');return;}location.reload();});});})
   .catch(function(){msg.textContent='Hendan fílan er ikki ein talva, sum er tikin niður úr Talvuni.';});});
-$('#wipe').addEventListener('click',function(){ask('Strika alt, sum er goymt? Nøvnini, ætlanin, smileyglasið, dias, myndir og PDF-ar hvørva úr hesum kaganum.','Strika alt',function(){if(MT.u)mtApi('ut').catch(function(){});mtLeaving=true;clearTimeout(saveT);try{localStorage.removeItem(KEY);localStorage.removeItem(MKEY);}catch(e){}idb('readwrite',function(st){return st.clear();}).then(function(){location.reload();});});});
+$('#wipe').addEventListener('click',function(){ask('Strika alt, sum er goymt? Nøvnini, ætlanin, smileyglasið, dias, myndir og PDF-skjøl hvørva úr hesum kaganum.','Strika alt',function(){if(MT.u)mtApi('ut').catch(function(){});mtLeaving=true;clearTimeout(saveT);try{localStorage.removeItem(KEY);localStorage.removeItem(MKEY);}catch(e){}idb('readwrite',function(st){return st.clear();}).then(function(){location.reload();});});});
 window.addEventListener('resize',function(){Object.keys(FL).forEach(placeFl);});
 
 var LOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
@@ -3674,7 +3674,7 @@ pgUI();
 
 /* ---------- Mínar talvur og innritan ----------
    Talvan (S) verður goymd hjá Snar (Apps Script á Snar-kontuni), tá ið lærarin er innritaður.
-   PDF-ar og myndir verða ALDRI sendar – tær verða verandi í IndexedDB á telduni. Egna bakgrundsmyndin (S.mynd) verður heldur ikki send.
+   PDF-skjøl og myndir verða ALDRI send – tær verða verandi í IndexedDB á telduni. Egna bakgrundsmyndin (S.mynd) verður heldur ikki send.
    Á telduni: MKEY = {u:{navn,tok}|null, cur:id|null, list:[{id,heiti,ver,srv,dirty,remote,stale,fresh,broytt,h}]}, og hvør talva sum 'talva:<id>' í IndexedDB. */
 var MT_API='https://script.google.com/macros/s/AKfycbzCXg4lWitSjUbpf8rYoEWBbdE3VRoJURthXZYP_OZlpE5U33ovlfk8Iw-L_hLilsB8eA/exec';
 var MTU='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>';
