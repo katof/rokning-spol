@@ -2569,12 +2569,13 @@ $('#bgFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f
 applyBg();
 
 /* Spjøld */
-function closePanels(){closeMore();var lb=$('#layBtn');if(lb)lb.setAttribute('aria-expanded','false');['bgPanel','infoPanel','setPanel','libPanel','layPanel','stkPanel','mtPanel'].forEach(function(id){$('#'+id).hidden=true});var mb=$('#mtBtn');if(mb)mb.setAttribute('aria-expanded','false');$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
+/* keepMt: Mínar talvur verður standandi, til lærarin sjálvur letur tað aftur (× ella persónsknappurin) */
+function closePanels(keepMt){closeMore();var lb=$('#layBtn');if(lb)lb.setAttribute('aria-expanded','false');['bgPanel','infoPanel','setPanel','libPanel','layPanel','stkPanel','mtPanel'].forEach(function(id){if(keepMt===true&&id==='mtPanel')return;$('#'+id).hidden=true});var mb=$('#mtBtn');if(mb&&keepMt!==true)mb.setAttribute('aria-expanded','false');$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
 function tog(btn,id){var p=$('#'+id),open=p.hidden;closePanels();p.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');}
 $('#bgBtn').addEventListener('click',function(){tog(this,'bgPanel')});
 $('#infoBtn').addEventListener('click',function(){tog(this,'infoPanel')});
 $$('.close-p').forEach(function(b){b.addEventListener('click',closePanels)});
-document.addEventListener('pointerdown',function(e){if(!e.target.closest('.panel,#bgBtn,#infoBtn,#ambBtn,#layBtn,#mtBtn,.more-pop,.w,.mt-start'))closePanels();});
+document.addEventListener('pointerdown',function(e){if(!e.target.closest('.panel,#bgBtn,#infoBtn,#ambBtn,#layBtn,#mtBtn,.more-pop,.w,.mt-start'))closePanels(true);});
 $('#resetPos').addEventListener('click',function(){S.pos={};S.z={};zTop=0;unfocus();applySz();save();closePanels();});
 /* Tak niður / Legg upp: alt í kaganum í eini JSON-fílu */
 function ab64(buf){var b=new Uint8Array(buf),s='',n=0x8000;for(var i=0;i<b.length;i+=n)s+=String.fromCharCode.apply(null,b.subarray(i,i+n));return btoa(s);}
@@ -3646,7 +3647,7 @@ function pgLoad(p){var oldPdf=S.pdfCur;PGK.forEach(function(k){S[k]=p[k]!==undef
   if(S.pdfCur!==oldPdf){pdfDoc=null;$('#pdfPages').innerHTML='';}
   $$('.w.stk').forEach(function(w){w.remove();});Object.keys(S.stk).forEach(mkStk);
   zTop=0;for(var k in S.z)zTop=Math.max(zTop,S.z[k]||0);
-  unfocus();closePanels();select(null);applyBg();applySz();applyVis();applyFl();
+  unfocus();closePanels(true);select(null);applyBg();applySz();applyVis();applyFl();
   Object.keys(MP).forEach(drawMynd);Object.keys(YP).forEach(drawYt);['snar','snar2','snar3','tema'].forEach(function(k){if(SW[k])SW[k].show();});
   pdfShow();pgDrawD();}
 /* Tekna spurnarkanningina, ætlanina og stopprið hjá diasinum av nýggjum */
