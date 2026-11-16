@@ -3195,11 +3195,19 @@ STK.egin={n:'Tín egna glansmynd',sz:[440,240],set:1,lib:false,pal:1,r:function(
     t+='<text x="'+x.toFixed(0)+'" y="'+y.toFixed(0)+'" font-family="Fredoka,Inter,Arial,sans-serif" font-weight="700" font-size="'+FS+'">';
     r.g.forEach(function(ch){if(ch===' '){t+='<tspan> </tspan>';return;}t+='<tspan fill="'+(egIsEmo(ch)?'#000':PAL[ci++%PAL.length])+'">'+esc(ch)+'</tspan>';});t+='</text>';});
   return '<svg viewBox="0 0 '+W.toFixed(0)+' '+H.toFixed(0)+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs>'+f+'</defs><g filter="url(#eg'+U+')">'+t+'</g></svg>';},
+  /* Eftir teknan: viewBox verður sett tætt rundan um bókstavirnar (við plássi til kantin og skuggan) */
+  after:function(id,b){var svg=b.querySelector('svg'),g=svg&&svg.querySelector('g');if(!g)return;try{var bb=g.getBBox();if(!bb.width)return;var m=18;
+    svg.setAttribute('viewBox',(bb.x-m).toFixed(0)+' '+(bb.y-m).toFixed(0)+' '+(bb.width+2*m).toFixed(0)+' '+(bb.height+2*m+6).toFixed(0));}catch(e){}},
   settings:function(id,d,sec){sec.insertAdjacentHTML('afterbegin','<div class="set-row"><h4>Tín tekstur</h4><textarea class="set-in" id="egTx" rows="2" maxlength="60" placeholder="Skriva bókstavir, orð ella emojis"></textarea>'
       +'<p class="note">Í mesta lagi tríggjar linjur. Trýst á ein emoji fyri at leggja hann afturat.</p><div class="eg-emo">'+EGEMO.map(function(e){return '<button type="button" data-eg="'+e+'">'+e+'</button>';}).join('')+'</div></div>');
-    var tx=$('#egTx',sec);tx.value=d.tx||'';tx.addEventListener('input',function(){d.tx=tx.value;drawStk(id);save();});
-    $$('[data-eg]',sec).forEach(function(b){b.addEventListener('click',function(){var a=tx.selectionStart!=null?tx.selectionStart:tx.value.length;tx.value=tx.value.slice(0,a)+b.dataset.eg+tx.value.slice(tx.selectionEnd!=null?tx.selectionEnd:a);d.tx=tx.value;drawStk(id);save();tx.focus();});});
+    var tx=$('#egTx',sec);tx.value=d.tx||'';tx.addEventListener('input',function(){d.tx=tx.value;drawStk(id);egFit(id);save();});
+    $$('[data-eg]',sec).forEach(function(b){b.addEventListener('click',function(){var a=tx.selectionStart!=null?tx.selectionStart:tx.value.length;tx.value=tx.value.slice(0,a)+b.dataset.eg+tx.value.slice(tx.selectionEnd!=null?tx.selectionEnd:a);d.tx=tx.value;drawStk(id);egFit(id);save();tx.focus();});});
     if(!d.tx)setTimeout(function(){tx.focus();},60);}};
+/* Kassin lagar hæddina eftir tekstinum, so einki tómt pláss verður omanfyri og niðanfyri */
+function egFit(id){var w=$('#w-'+id),svg=w&&w.querySelector('.stk-b svg');if(!svg)return;var v=(svg.getAttribute('viewBox')||'').split(' ').map(Number);if(!(v[2]>0&&v[3]>0))return;
+  var p=pos(id),h=Math.round(p[2]*v[3]/v[2]);h=Math.max(70,Math.min(BH-p[1],h));if(Math.abs(h-p[3])>2){p[3]=h;place(w);}}
+/* Tá ið Fredoka-skriftin er komin, verða egnu glansmyndirnar mátaðar av nýggjum */
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){Object.keys(S.stk||{}).forEach(function(id){if(S.stk[id].t==='egin'&&$('#w-'+id))drawStk(id);});});
 $('#stkOwn').addEventListener('click',function(){closePanels();var id=addStk('egin',null,false,S.stkPal&&S.stkPal!=='litrikt'?{pal:S.stkPal}:null);openStkSet(id);});
 function openStkPanel(){if(S.lock)return;closeMore();['bgPanel','infoPanel','setPanel','layPanel','libPanel'].forEach(function(x){$('#'+x).hidden=true});$('#stkPanel').hidden=false;drawStkGrid();}
 document.addEventListener('click',function(e){if(e.target.closest('[data-open-stk]')){openStkPanel();}if(e.target.closest('[data-files]')){closeMore();openLib(null);libTab(S.fileTab||'img');}var a=e.target.closest('[data-add-stk]');if(a){closeMore();var t=a.dataset.addStk,id=addStk(t,null,false,t==='tilv'?{ti:'Hvør eigur at gera?',th:'reytt',items:(S.lists[0]||{}).items||''}:t==='rokil'&&S.lists&&S.lists[0]?{items:S.lists[0].items}:null);setTimeout(function(){var h=$('#w-'+id+' .tx-h');if(h)h.focus();if(t==='tilv'&&!tvItems(S.stk[id]).length)openStkSet(id);if(t==='qr'||t==='tidl')openStkSet(id);if(t==='rokil'&&!(S.stk[id].items))openStkSet(id);},60);}});
