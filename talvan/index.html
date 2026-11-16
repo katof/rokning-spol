@@ -1796,7 +1796,11 @@ function setupW(w){
   cl.addEventListener('click',function(){if(w.dataset.stk){removeStk(k);return;}S.vis[k]=0;if(SETK===k)closePanels();select(null);applyVis();save();});
   /* Tað, tú nertir við, verður valt og kemur fremst */
   w.addEventListener('pointerdown',function(e){if(!$('#bgPanel').hidden||!$('#infoPanel').hidden)closePanels();
-    if(e.shiftKey||e.ctrlKey||e.metaKey){var base=MSEL.length?MSEL.slice():(SEL&&SEL!==k&&S.vis[SEL]?[SEL]:[]),i=base.indexOf(k);if(i>=0)base.splice(i,1);else base.push(k);mselSet(base);}
+    /* Shift/Ctrl-trýst velur fleiri – men fyrst, tá ið músin verður slept uttan at hava drigið (Shift + drag flytur beint) */
+    if(e.shiftKey||e.ctrlKey||e.metaKey){var sx0=e.clientX,sy0=e.clientY,base=MSEL.length?MSEL.slice():(SEL&&SEL!==k&&S.vis[SEL]?[SEL]:[]);
+      var tog=function(ev){window.removeEventListener('pointerup',tog);if(Math.abs(ev.clientX-sx0)+Math.abs(ev.clientY-sy0)>4)return;
+        var i=base.indexOf(k);if(i>=0)base.splice(i,1);else base.push(k);mselSet(base);};
+      window.addEventListener('pointerup',tog);}
     else if(MSEL.indexOf(k)<0)mselSet([]);
     front(k);select(k);},true);
   /* Flyt: drag hvar sum helst á amboðinum, har einki annað hendir */
@@ -1805,6 +1809,8 @@ function setupW(w){
     e.preventDefault();var p=pos(k),sx=e.clientX,sy=e.clientY,ox=p[0],oy=p[1],on=false;
     var grp=MSEL.length>1&&MSEL.indexOf(k)>=0?MSEL.filter(function(x){return x!==k;}).map(function(x){return [x,pos(x).slice()];}):[];
     function mv(ev){var dx=(ev.clientX-sx)/SC,dy=(ev.clientY-sy)/SC;if(!on&&Math.abs(dx)+Math.abs(dy)<4)return;
+      /* Shift: bert ein veg – vatnrætt ella loddrætt */
+      if(ev.shiftKey){if(Math.abs(dx)>=Math.abs(dy))dy=0;else dx=0;}
       if(!on){on=true;w.classList.add('moving');}
       p[0]=Math.round(Math.max(80-p[2],Math.min(BW-80,ox+dx)));p[1]=Math.round(Math.max(0,Math.min(BH-60,oy+dy)));place(w);
       var ddx=p[0]-ox,ddy=p[1]-oy;grp.forEach(function(g){var q=pos(g[0]);q[0]=Math.round(Math.max(80-q[2],Math.min(BW-80,g[1][0]+ddx)));q[1]=Math.round(Math.max(0,Math.min(BH-60,g[1][1]+ddy)));var gw=$('#w-'+g[0]);if(gw)place(gw);});}
