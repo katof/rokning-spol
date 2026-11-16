@@ -3346,7 +3346,7 @@ STK.mark={n:'Morgunark',sz:[520,440],set:1,lib:false,tool:1,r:function(d){var u=
   var nn=mkNum();return '<div class="mk"><div class="mk-h"><b>Morgunark</b><span>'+MKD[d.dl||'m']+'</span></div><div class="mk-k">Í dag: <b>'+MKK[(nn-1)%MKK.length]+'</b> · ark '+nn+' av 200</div>'
     +'<div class="mk-body">'+(qr?'<div class="mk-qr">'+(window.qrcode?qrSvg(u):'<span class="qr-wait">…</span>')+'</div>':'')
     +'<div class="mk-txt">'+(qr?'<p><b>iPad:</b> Skanna kotuna og arbeið á skíggjanum.</p>':'')+'<p><b>Pappír:</b> Tak eitt ark og set teg at arbeiða.</p></div></div>'
-    +'<div class="mk-b"><button type="button" data-mk="open">Vís arkið</button><button type="button" data-mk="v5">Prenta 5 ørk</button><button type="button" data-mk="print">Prenta ørk</button></div></div>';},
+    +'<div class="mk-b"><button type="button" data-mk="open">Vís arkið</button><button type="button" data-mk="print">Prenta ørk</button></div></div>';},
   after:function(id,b){var d=S.stk[id];$$('[data-mk]',b).forEach(function(x){x.addEventListener('click',function(){var k=x.dataset.mk;window.open(mkUrl(S.stk[id],k!=='open',k==='v5'?5:0),'_blank');});});
     if(d&&!d.noQr&&!window.qrcode)qrLoad(function(){if(window.qrcode)drawStk(id);});}};
 STK.mark.settings=function(id,d,sec){
