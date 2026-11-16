@@ -196,22 +196,19 @@ function field(lbl,val,ml,onIn,area){var w=document.createElement('label');w.cla
   i.addEventListener('input',function(){onIn(i.value);setDirty(true);});w.appendChild(i);return w;}
 function card(title,sub){var c=document.createElement('div');c.className='card';c.innerHTML='<h3>'+esc(title)+(sub?' <small>'+esc(sub)+'</small>':'')+'</h3>';return c;}
 
-function drawBoard(){var s=cur.s,B=$('#bBody');B.innerHTML='';var any=false;
-  /* Fyri alla talvuna */
-  var g=document.createElement('div');
-  if(visAny(s,'skra')&&s.skra){g.appendChild(cardSkra(s));any=true;}
-  if(visAny(s,'poll')&&s.poll){g.appendChild(cardPoll(s));any=true;}
-  if(visAny(s,'tid')){g.appendChild(cardTid(s));any=true;}
-  if(g.children.length){var h=document.createElement('h2');h.textContent='Fyri alla talvuna';B.appendChild(h);B.appendChild(g);}
-  /* Hvørt dias */
+/* Spurnarkanning, stoppur og ætlan hoyra hvørjum diasi til. Eldri talvur hava tey bert í s – tá verða tey nýtt sum hjá øllum diasunum */
+function dOf(s,pg){return pg.skra!==undefined||pg.poll!==undefined||pg.secs!==undefined?pg:s;}
+function drawBoard(){var s=cur.s,B=$('#bBody');B.innerHTML='';
   var P=pages(s);
   P.forEach(function(pg,pi){var h=document.createElement('h2');h.innerHTML=P.length>1?'Dias '+(pi+1)+(pi===(s.pg||0)?' <span class="dias">á skíggjanum</span>':''):'Á talvuni';B.appendChild(h);
-    var cnt=0,other=[];
+    var cnt=0,other=[],D=dOf(s,pg);
+    if(pg.vis&&pg.vis.skra&&D.skra){B.appendChild(cardSkra(D));cnt++;}
+    if(pg.vis&&pg.vis.poll&&D.poll){B.appendChild(cardPoll(D));cnt++;}
+    if(pg.vis&&pg.vis.tid){B.appendChild(cardTid(D));cnt++;}
     Object.keys(pg.stk||{}).forEach(function(id){if(!pg.vis||!pg.vis[id])return;var d=pg.stk[id],c=null;
       if(d.t==='tekst')c=cardTekst(s,pi,id,d);else if(d.t==='tilv')c=cardTilv(s,pi,id,d);else if(d.t==='parker')c=cardParker(s,pi,id,d);else if(d.t==='star')c=cardStar(s,pi,id,d);
       if(c){B.appendChild(c);cnt++;}else other.push(SN[d.t]||'Glansmynd');});
-    Object.keys(pg.vis||{}).forEach(function(k){if(pg.vis[k]&&WN[k]&&!(pg.stk&&pg.stk[k]))other.push(WN[k]);});
-    if(cnt)any=true;
+    Object.keys(pg.vis||{}).forEach(function(k){if(pg.vis[k]&&WN[k]&&!(pg.stk&&pg.stk[k])&&k!=='skra'&&k!=='poll'&&k!=='tid')other.push(WN[k]);});
     var o=document.createElement('p');o.className='note';
     if(other.length){o.innerHTML=(cnt?'Eisini á diasinum: ':'Á diasinum: ')+'<span class="chips">'+other.filter(function(x,i,a){return a.indexOf(x)===i}).map(function(x){return '<span class="chip">'+esc(x)+'</span>'}).join('')+'</span>';B.appendChild(o);}
     else if(!cnt){o.textContent='Einki á hesum diasinum.';B.appendChild(o);}});
@@ -289,6 +286,7 @@ function cardLists(s){var c=document.createElement('div');s.lists=s.lists||[];
 /* ---------- Goym ---------- */
 $('#bSave').addEventListener('click',function(){if(!cur||!dirty)return;var b=$('#bSave');b.disabled=true;$('#bst').textContent='Goymir …';
   var heiti=($('#bName').value||'').replace(/\s+/g,' ').trim()||cur.heiti||'Talva';
+  var s0=cur.s,cp=s0.pages&&s0.pages[s0.pg||0];if(cp)['poll','skra','secs','planItems'].forEach(function(k){if(s0[k]!==undefined)cp[k]=JSON.parse(JSON.stringify(s0[k]));});
   api('goym',{id:cur.id,heiti:heiti,ver:cur.ver,data:JSON.stringify(cur.s)}).then(function(r){
     if(r.ok){cur.ver=r.ver;cur.heiti=heiti;setDirty(false);$('#bst').textContent='Goymt. Talvan á telduni dagførir seg innan eina løtu.';return;}
     if(r.villa==='konflikt'){b.disabled=false;$('#bst').textContent='Ikki goymt.';

@@ -1614,10 +1614,13 @@ body.locked .am-nav,body.locked .sg-btns{visibility:hidden}
 
 <div class="panel" id="layPanel" hidden role="dialog" aria-labelledby="layH">
   <h3><span id="layH">Uppsetingar</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
-  <div class="set-tabs" role="tablist"><button type="button" role="tab" data-layt="snar" aria-selected="true">Frá Snar</button><button type="button" role="tab" data-layt="mine" aria-selected="false">Mínar talvur</button></div>
   <div id="layPaneSnar"><div class="lay-grid" id="layGrid"></div>
   <p class="note" id="layNote">Uppsetingin verður løgd inn sum eitt nýtt dias aftan á tað, sum tú ert á. Er diasið tómt, verður hon løgd á tað.</p></div>
-  <div id="layPaneMine" hidden></div>
+</div>
+
+<div class="panel" id="mtPanel" hidden role="dialog" aria-labelledby="mtH">
+  <h3><span id="mtH">Mínar talvur</span><button class="ic close-p" type="button" title="Lat aftur"></button></h3>
+  <div id="layPaneMine"></div>
 </div>
 
 <div class="mt-start" id="mtStart" hidden role="dialog" aria-modal="true" aria-labelledby="mtStartH">
@@ -2566,7 +2569,7 @@ $('#bgFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f
 applyBg();
 
 /* Spjøld */
-function closePanels(){closeMore();var lb=$('#layBtn');if(lb)lb.setAttribute('aria-expanded','false');['bgPanel','infoPanel','setPanel','libPanel','layPanel','stkPanel'].forEach(function(id){$('#'+id).hidden=true});$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
+function closePanels(){closeMore();var lb=$('#layBtn');if(lb)lb.setAttribute('aria-expanded','false');['bgPanel','infoPanel','setPanel','libPanel','layPanel','stkPanel','mtPanel'].forEach(function(id){$('#'+id).hidden=true});var mb=$('#mtBtn');if(mb)mb.setAttribute('aria-expanded','false');$('#bgBtn').setAttribute('aria-expanded','false');$('#infoBtn').setAttribute('aria-expanded','false');}
 function tog(btn,id){var p=$('#'+id),open=p.hidden;closePanels();p.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');}
 $('#bgBtn').addEventListener('click',function(){tog(this,'bgPanel')});
 $('#infoBtn').addEventListener('click',function(){tog(this,'infoPanel')});
@@ -2668,7 +2671,7 @@ function pollReset(){S.poll.v=[];pollFix();save();drawPoll();}
    +'<label class="pradio"><input type="radio" name="pollC" value="hringur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5"/></svg>Kransur</label></div>'
    +'<div class="set-row"><h4>Úrslitini</h4><button type="button" class="btn sm danger" id="pollReset">Strika úrslitini</button></div>'
    +'<div class="set-row" id="pollThRow"><h4>Litir</h4><div class="pths">'+T+'</div></div></div>';
-  var tab='still';
+  var tab='still';PSYNC=function(){sync();};
   function sync(){var P=S.poll;
     $$('[data-ptab]',ps).forEach(function(b){b.setAttribute('aria-selected',b.dataset.ptab===tab?'true':'false')});
     $$('[data-ppane]',ps).forEach(function(p){p.hidden=p.dataset.ppane!==tab});
@@ -2703,7 +2706,7 @@ var SKIC=['📖','✏️','🔢','🧮','📐','🔬','🌍','🎨','🎵','⚽'
 if(!S.skra)S.skra={t:'Í dag',m:'tid',st:'08:10',it:[{ic:'📖',n:'Føroyskt',d:45,k:0},{ic:'🔢',n:'Rokning',d:45,k:0},{ic:'🍎',n:'Steðgur',d:20,k:0},{ic:'🎨',n:'Myndlist',d:45,k:0}]};
 /* Dagsins ætlan er nú „Frí ætlan“ í Ætlan: stóð hon á talvuni, verður hon til Ætlan á sama plássi */
 if(S.vis.aetlan!==undefined){if(S.vis.aetlan&&!S.vis.skra){S.vis.skra=1;S.skra.m='frii';if(S.pos.aetlan)S.pos.skra=S.pos.aetlan.slice();if(S.z.aetlan)S.z.skra=S.z.aetlan;}delete S.vis.aetlan;}
-var SKSYNC=null;
+var SKSYNC=null,PSYNC;
 function skMin(t){var m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?(+m[1])*60+(+m[2]):480;}
 function skFmt(x){x=((Math.round(x)%1440)+1440)%1440;return Math.floor(x/60)+':'+p2(x%60);}
 function drawSkra(){var K=S.skra,ul=$('#skL'),fr=K.m==='frii';$('#skT').textContent=K.t||'';ul.innerHTML='';ul.hidden=fr;$('#plan').hidden=!fr;if(fr)return;
@@ -2871,7 +2874,7 @@ function applyLayout(L){unfocus();Object.keys(S.stk).forEach(function(id){var w=
   if(L.pq){S.poll.q=L.pq;S.poll.t='s';S.poll.v=[];if(typeof drawPoll==='function')drawPoll();}
   (L.stk||[]).forEach(function(x){var ex=x[2];if(ex&&ex.items==='@flokkur'){ex=JSON.parse(JSON.stringify(ex));ex.items=(S.lists[0]||{}).items||'';}var id=addStk(x[0],x[1],true,ex);S.z[id]=++zTop;});
   if(L.yt)Object.keys(L.yt).forEach(function(k){S.ytOf[k]=L.yt[k];drawYt(k);});
-  if(L.tsec)setT(L.tsec);
+  if(L.tsec){S.secs=L.tsec;$('#tmrDefM').value=Math.floor(L.tsec/60);$('#tmrDefS').value=L.tsec%60;setT(L.tsec);}
   S.bg=L.bg;applyBg();select(null);applySz();applyVis();applyFl();pdfShow();drawSkra();save();closePanels();}
 function layCard(L,fn){var b=el('button','lay-it');b.type='button';
   var pv=el('span','lay-pv');var bgx=BG.filter(function(x){return x[0]===L.bg})[0];pv.style.background=(bgx&&bgx[2])||'#fff';
@@ -2879,7 +2882,7 @@ function layCard(L,fn){var b=el('button','lay-it');b.type='button';
   Object.keys(L.w).forEach(function(k){var r=L.w[k],s=el('i');s.style.cssText='left:'+(r[0]/16)+'%;top:'+(r[1]/9)+'%;width:'+(r[2]/16)+'%;height:'+(r[3]/9)+'%';pv.appendChild(s);});
   b.appendChild(pv);b.appendChild(el('b',null,L.n));b.appendChild(el('small',null,L.d));b.addEventListener('click',fn);return b;}
 (function(){var g=$('#layGrid');LAYOUTS.forEach(function(L){g.appendChild(layCard(L,function(){layPick(L);}));});})();
-$('#layBtn').addEventListener('click',function(){var p=$('#layPanel'),open=p.hidden;closePanels();if(open){p.hidden=false;this.setAttribute('aria-expanded','true');layTab(MT.tab||'snar');}});
+$('#layBtn').addEventListener('click',function(){var p=$('#layPanel'),open=p.hidden;closePanels();if(open){p.hidden=false;this.setAttribute('aria-expanded','true');}});
 
 /* ---------- Klistrimerki: tekstir, stjørna við navni og Finn orð-talva, frítt á talvuni ---------- */
 if(!S.stk)S.stk={};
@@ -3625,19 +3628,31 @@ Object.keys(S.stk).forEach(function(id){if(S.stk[id].t==='tilv'&&!$('#w-'+id))mk
 
 /* ---------- Dias: fleiri talvur, hvør við sínum amboðum, plásum, klistrimerkjum og bakgrund ---------- */
 var PGK=['vis','pos','z','bg','stk','ytOf','myndOf','snar','snar2','snar3','tema','fl','pdfBack','pdfCur','pdfPage'];
-function pgSnap(){var o={};PGK.forEach(function(k){if(S[k]!==undefined&&S[k]!==null)o[k]=JSON.parse(JSON.stringify(S[k]));});return o;}
+/* Spurnarkanning, stopptíð og ætlan hoyra hvørjum diasi til (frá 16.11.2026) */
+var PGD=['poll','skra','secs','planItems'];
+function pgDef(k){return k==='poll'?{q:'Hvussu dámdi tær tíman í dag?',t:'s',n:4,o:['Svar 1','Svar 2','Svar 3'],c:'kaka',th:0,v:[]}
+  :k==='skra'?{t:'Í dag',m:'tid',st:'08:10',it:[{ic:'📖',n:'Føroyskt',d:45,k:0},{ic:'🔢',n:'Rokning',d:45,k:0},{ic:'🍎',n:'Steðgur',d:20,k:0},{ic:'🎨',n:'Myndlist',d:45,k:0}]}
+  :k==='secs'?300:[];}
+function pgSnap(){var o={};PGK.concat(PGD).forEach(function(k){if(S[k]!==undefined&&S[k]!==null)o[k]=JSON.parse(JSON.stringify(S[k]));});return o;}
 var pgInk={};
 if(S.bg==='dias')S.bg=S.diasBefore||'strik';
 if(!S.pages||!S.pages.length){S.pages=[pgSnap()];S.pg=0;}
 if(!(S.pg>=0&&S.pg<S.pages.length))S.pg=0;
+/* Eldri talvur: hini diasini fáa somu spurnarkanning, stoppur og ætlan, sum vóru felags fyrr, so einki hvørvur */
+S.pages.forEach(function(p,i){if(i!==S.pg)PGD.forEach(function(k){if(p[k]===undefined&&S[k]!==undefined)p[k]=JSON.parse(JSON.stringify(S[k]));});});
 function pgLoad(p){var oldPdf=S.pdfCur;PGK.forEach(function(k){S[k]=p[k]!==undefined?JSON.parse(JSON.stringify(p[k])):null;});
+  PGD.forEach(function(k){S[k]=p[k]!==undefined?JSON.parse(JSON.stringify(p[k])):pgDef(k);});
   ['vis','pos','z','stk','ytOf','myndOf','fl'].forEach(function(k){if(!S[k])S[k]={};});if(!S.bg)S.bg='strik';S.vis.navn=0;
   if(S.pdfCur!==oldPdf){pdfDoc=null;$('#pdfPages').innerHTML='';}
   $$('.w.stk').forEach(function(w){w.remove();});Object.keys(S.stk).forEach(mkStk);
   zTop=0;for(var k in S.z)zTop=Math.max(zTop,S.z[k]||0);
   unfocus();closePanels();select(null);applyBg();applySz();applyVis();applyFl();
   Object.keys(MP).forEach(drawMynd);Object.keys(YP).forEach(drawYt);['snar','snar2','snar3','tema'].forEach(function(k){if(SW[k])SW[k].show();});
-  pdfShow();}
+  pdfShow();pgDrawD();}
+/* Tekna spurnarkanningina, ætlanina og stopprið hjá diasinum av nýggjum */
+function pgDrawD(){drawPoll();if(PSYNC)PSYNC();drawSkra();if(SKSYNC)SKSYNC();
+  var pl=$('#planList');pl.innerHTML='';(S.planItems&&S.planItems.length?S.planItems:[{t:'',d:0}]).forEach(function(it){mkItem(it);});
+  $('#tmrDefM').value=Math.floor(S.secs/60);$('#tmrDefS').value=S.secs%60;if(!running)setT(S.secs);}
 function pgKeepInk(){pgInk[S.pg]=strokes;}
 function pgShowInk(){strokes=pgInk[S.pg]||[];inkHist=[];redrawInk();}
 function pgGo(i){if(i<0||i>=S.pages.length||i===S.pg)return;S.pages[S.pg]=pgSnap();pgKeepInk();S.pg=i;pgLoad(S.pages[i]);pgShowInk();save();pgUI();}
@@ -3832,11 +3847,8 @@ function mtLoginForm(box,after){
   return f;}
 
 /* ---------- Mínar talvur í Uppsetingar ---------- */
-function layTab(t){MT.tab=t;mtSave();$$('[data-layt]').forEach(function(b){b.setAttribute('aria-selected',b.dataset.layt===t?'true':'false');});
-  $('#layPaneSnar').hidden=t!=='snar';$('#layPaneMine').hidden=t!=='mine';$('#layH').textContent=t==='mine'?'Mínar talvur':'Uppsetingar';if(t==='mine')mtDraw();}
-$$('[data-layt]').forEach(function(b){b.addEventListener('click',function(){layTab(b.dataset.layt);});});
-function mtOpenPanel(t){var p=$('#layPanel');closePanels();p.hidden=false;$('#layBtn').setAttribute('aria-expanded','true');layTab(t||(MT.tab||(mtMine()?'mine':'snar')));}
-$('#mtBtn').addEventListener('click',function(){var p=$('#layPanel');if(!p.hidden&&MT.tab==='mine'){closePanels();return;}mtOpenPanel('mine');});
+function mtOpenPanel(){var p=$('#mtPanel');closePanels();p.hidden=false;$('#mtBtn').setAttribute('aria-expanded','true');mtDraw();}
+$('#mtBtn').addEventListener('click',function(){if(!$('#mtPanel').hidden){closePanels();return;}mtOpenPanel();});
 function mtRowList(ul,click){var L=MT.list.slice().sort(function(a,b){return (b.broytt||0)-(a.broytt||0)});ul.innerHTML='';
   L.forEach(function(e){var li=el('li'),b=el('button','mt-it');b.type='button';if(e.id===MT.cur)b.setAttribute('aria-current','true');
     b.innerHTML='<b>'+mtEsc(e.heiti)+'</b><small>'+(e.id===MT.cur?'Á skíggjanum · ':'')+mtEsc(mtWhen(e.broytt))+'</small>';
@@ -3844,7 +3856,7 @@ function mtRowList(ul,click){var L=MT.list.slice().sort(function(a,b){return (b.
     if(ul.dataset.del){var x=el('button','ic mt-del',I.x);x.type='button';x.title='Strika „'+e.heiti+'“';x.setAttribute('aria-label',x.title);x.addEventListener('click',function(){mtDelete(e);});li.appendChild(x);}
     ul.appendChild(li);});
   return L.length;}
-function mtDraw(){var box=$('#layPaneMine');if(!box||box.hidden)return;var e=mtE(MT.cur),h='';
+function mtDraw(){var box=$('#layPaneMine');if(!box||$('#mtPanel').hidden)return;var e=mtE(MT.cur),h='';
   h+='<div class="mt-acct" id="mtAcct"></div>';
   h+='<div class="mt-cur">'+(e?'<label class="mt-f">Talvan á skíggjanum<input class="set-in" id="mtCurName" maxlength="60" value="'+mtEsc(e.heiti)+'"></label>'
      :'<p>Talvan á skíggjanum er ikki goymd í Mínum talvum.</p><button class="btn red sm" type="button" id="mtSaveCur">Goym hana</button>')+'</div>';
@@ -3864,7 +3876,7 @@ function mtDraw(){var box=$('#layPaneMine');if(!box||box.hidden)return;var e=mtE
   var cp=$('#mtCopyB');if(cp)cp.addEventListener('click',mtCopy);
   var n=mtRowList($('#mtList'),function(x){mtOpen(x.id);});$('#mtNone').hidden=n>0;}
 function mtUI(){var da=$('#mtDelAcct');if(da)da.hidden=!MT.u;var b=$('#mtBtn');if(b){var t=MT.u?'Mínar talvur · '+MT.u.navn:'Mínar talvur · Rita inn';b.title=t;b.setAttribute('aria-label',t);b.classList.toggle('in',!!MT.u);b.dataset.st=MT.u?(mtState||'ok'):'';}
-  $('#layNote').textContent='Uppsetingin verður løgd inn sum eitt nýtt dias aftan á tað, sum tú ert á. Er diasið tómt, verður hon løgd á tað. Vilt tú byrja eina heilt nýggja talvu, finnur tú „+ Nýggj talva“ undir Mínar talvur.';
+  $('#layNote').textContent='Uppsetingin verður løgd inn sum eitt nýtt dias aftan á tað, sum tú ert á. Er diasið tómt, verður hon løgd á tað. Vilt tú byrja eina heilt nýggja talvu, finnur tú „+ Nýggj talva“ undir Mínar talvur (knappurin við persóninum ovast í høgra horni).';
   var cn=$('#mtCurName');if(document.activeElement!==cn)mtDraw();if(!$('#mtStart').hidden)mtStartDraw();}
 
 /* ---------- Byrjanarskíggin: bert tá ið einki er goymt á telduni ---------- */
