@@ -2384,6 +2384,13 @@ document.addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey)||e.al
   if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;
   if(k==='c'){if(String(window.getSelection()||'').trim())return;if(cpCopy())e.preventDefault();}
   else if(cpPaste())e.preventDefault();});
+/* Pílarnir flyta valda amboðið (ella øll tey valdu): eitt lítið stig, við Shift eitt stórt stig */
+document.addEventListener('keydown',function(e){var D={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(!D||e.ctrlKey||e.metaKey||e.altKey||S.lock||S.bg==='dias')return;
+  if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable],.pdf-view'))return;
+  var L=(MSEL.length>1?MSEL:SEL?[SEL]:[]).filter(function(k){var w=$('#w-'+k);return S.vis[k]&&w&&!w.classList.contains('big');});if(!L.length)return;
+  e.preventDefault();var st=e.shiftKey?20:4;
+  L.forEach(function(k){var p=pos(k);p[0]=Math.round(Math.max(80-p[2],Math.min(BW-80,p[0]+D[0]*st)));p[1]=Math.round(Math.max(0,Math.min(BH-60,p[1]+D[1]*st)));place($('#w-'+k));});
+  save();});
 
 function inkPt(e){var r=ink.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
 function eraseAt(pt){var n=strokes.length;strokes=strokes.filter(function(st){var lim=st.w*(st.hl?3:1)/2+14;return !st.p.some(function(q){return Math.abs(q[0]-pt[0])<lim&&Math.abs(q[1]-pt[1])<lim;});});if(strokes.length!==n)redrawInk();}
@@ -4110,6 +4117,8 @@ function pdfMissUI(){var it=!pdfDoc&&S.pdfCur&&PMISS[S.pdfCur]&&(S.pdfs||[]).fil
 
 mkAllStk();
 applySz();fit();applyVis();applyFl();applyLock();
+/* Angrisøgan byrjar við talvuni, sum hon er, tá ið síðan er latin upp */
+setTimeout(function(){if(undoLast===null&&!undoBusy)undoLast=JSON.stringify(pgSnap());},300);
 document.documentElement.classList.add('ready');
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layoutJar);
 })();
