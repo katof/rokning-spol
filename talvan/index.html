@@ -3780,7 +3780,7 @@ function layPick(L){mtStartHide();closePanels();if(!pgEmpty())pgNew();applyLayou
 /* Byrjanarskíggin: innritað ger ein uppseting eina nýggja talvu í Mínum talvum */
 function startPick(L){if(MT.u)mtNew(L);else{applyLayout(L);mtStartHide();}}
 function mtCopy(){var e=mtE(MT.cur);mtFlush().then(function(){mtCreate((e?e.heiti:mtDefName())+' (avrit)',false);});}
-function mtDelete(e){ask('Strika „'+e.heiti+'“? '+(MT.u&&e.srv?'Talvan verður strikað bæði á hesi teldu og hjá Snar.':'Talvan verður strikað á hesi teldu.'),'Strika',function(){
+function mtDelete(e){ask('Strika „'+e.heiti+'“? Talvan verður tikin av kaganum og av tínari teldu.','Strika',function(){
   ((MT.u&&e.srv)?mtApi('strika',{id:e.id}).then(function(r){if(!r.ok)throw new Error(r.villa);}):Promise.resolve()).then(function(){
     MT.list=MT.list.filter(function(x){return x!==e});mtDelLocal(e.id);
     if(MT.cur===e.id){MT.cur=null;mtSave();
