@@ -2431,24 +2431,28 @@ function lkSwatches(cur){var h='<div class="lk-grid">';[0,1,2,3].forEach(functio
    +'<button type="button" class="lk-c" data-lbg="x" title="Gjøgnumskygt" aria-label="Gjøgnumskygt" aria-pressed="'+(cur==='x')+'"></button>'
    +'<label class="lk-own" title="Tín egni litur"><input type="color" value="'+(/^#[0-9a-f]{6}$/i.test(cur||'')?cur:'#3b82f6')+'"><span>Egin litur</span></label></div>';return h;}
 function lookOf(k){return (S.look||{})[k]||{};}
-function lookApply(w){var L=lookOf(w.dataset.w),bg=LKOLD[L.bg]||L.bg||'';
+function lookApply(w){var L=lookOf(w.dataset.w),bg=lookColOk(w.dataset.w)?(LKOLD[L.bg]||L.bg||''):'';
   if(bg==='x'){w.dataset.lbg='x';delete w.dataset.lk;w.style.removeProperty('--lk');w.classList.remove('lk-dk');}
   else if(bg){delete w.dataset.lbg;w.dataset.lk='1';w.style.setProperty('--lk',bg);w.classList.toggle('lk-dk',lkLum(bg)<.36);}
   else{delete w.dataset.lbg;delete w.dataset.lk;w.style.removeProperty('--lk');w.classList.remove('lk-dk');}
   w.classList.toggle('lk-sq',L.rd==='s');w.classList.toggle('lk-nosh',L.sh===0);}
-function lookOk(k){if(S.stk[k]){var t=S.stk[k].t;return !!(STK[t]&&(STK[t].tool||t==='tekst'||t==='tilv'));}return Array.isArray(SETS[k])||k==='skra'||k==='poll';}
+function lookOk(k){if(k==='glas')return false;if(S.stk[k]){var t=S.stk[k].t;return !!(STK[t]&&(STK[t].tool||t==='tekst'||t==='tilv'));}return Array.isArray(SETS[k])||k==='skra'||k==='poll';}
+/* Amboð, sum hava sínar egnu litir í stillingunum (ella sum merkini hjá Arbeiðsmerkinum), fáa bert horn og skugga – ikki Útsjónd-litin */
+var LK_OWN={dagur:1,rokil:1,anding:1,pakka:1,tilv:1,tekst:1,amerki:1};
+function lookColOk(k){return !LK_OWN[S.stk[k]?S.stk[k].t:k];}
 var lkBox=el('div','lk-set');lkBox.id='lookSet';lkBox.hidden=true;$('#setPanel').appendChild(lkBox);
 function lookShow(k){if(!k||!lookOk(k)||S.lock){lkBox.hidden=true;return;}var L=lookOf(k);
-  lkBox.innerHTML='<div class="set-row"><h4>Útsjónd</h4>'+lkSwatches(LKOLD[L.bg]||L.bg||'')
+  var col=lookColOk(k);
+  lkBox.innerHTML='<div class="set-row"><h4>Útsjónd</h4>'+(col?lkSwatches(LKOLD[L.bg]||L.bg||''):'<p class="note" style="margin:0 0 8px">Liturin á hesum amboðinum verður valdur í stillingunum omanfyri.</p>')
     +'<div class="row lk-row"><div class="seg"><button type="button" data-lrd="r" aria-pressed="'+(L.rd!=='s')+'">Avrundað horn</button><button type="button" data-lrd="s" aria-pressed="'+(L.rd==='s')+'">Bein horn</button></div></div>'
     +'<div class="row lk-row"><div class="seg"><button type="button" data-lsh="1" aria-pressed="'+(L.sh!==0)+'">Við skugga</button><button type="button" data-lsh="0" aria-pressed="'+(L.sh===0)+'">Uttan skugga</button></div></div>'
     +'<button type="button" class="btn sm" id="lkAll">Set somu útsjónd á øll amboðini á diasinum</button></div>';
   function set(f){var o=S.look[k]||{};f(o);if(!o.bg)delete o.bg;if(o.rd!=='s')delete o.rd;if(o.sh!==0)delete o.sh;if(Object.keys(o).length)S.look[k]=o;else delete S.look[k];var w=$('#w-'+k);if(w)lookApply(w);save();lookShow(k);}
   $$('[data-lbg]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.bg=b.dataset.lbg;});});});
-  var own=$('.lk-own input',lkBox);own.addEventListener('input',function(){var o=S.look[k]||{};o.bg=own.value;S.look[k]=o;var w=$('#w-'+k);if(w)lookApply(w);save();});own.addEventListener('change',function(){lookShow(k);});
+  var own=$('.lk-own input',lkBox);if(own)own.addEventListener('input',function(){var o=S.look[k]||{};o.bg=own.value;S.look[k]=o;var w=$('#w-'+k);if(w)lookApply(w);save();});if(own)own.addEventListener('change',function(){lookShow(k);});
   $$('[data-lrd]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.rd=b.dataset.lrd;});});});
   $$('[data-lsh]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.sh=+b.dataset.lsh;});});});
-  $('#lkAll',lkBox).addEventListener('click',function(){var src=JSON.stringify(S.look[k]||{});$$('.w').forEach(function(w){var x=w.dataset.w;if(!S.vis[x]||!lookOk(x))return;var o=JSON.parse(src);if(Object.keys(o).length)S.look[x]=o;else delete S.look[x];lookApply(w);});save();});
+  $('#lkAll',lkBox).addEventListener('click',function(){var src=JSON.stringify(S.look[k]||{});$$('.w').forEach(function(w){var x=w.dataset.w;if(!S.vis[x]||!lookOk(x))return;var o=JSON.parse(src);if(!lookColOk(x))delete o.bg;if(Object.keys(o).length)S.look[x]=o;else delete S.look[x];lookApply(w);});save();});
   lkBox.hidden=false;}
 /* ---------- Høgraklikk (ella halda fingrinum): valmynd við tí, sum kann gerast við amboðinum ella talvuni ---------- */
 var CTX=el('div','ctx');CTX.id='ctxMenu';CTX.hidden=true;CTX.setAttribute('role','menu');document.body.appendChild(CTX);
@@ -2469,7 +2473,7 @@ function ctxTool(k,x,y){CTX.innerHTML='';var multi=MSEL.length>1&&MSEL.indexOf(k
   ctxSep();
   ctxItem('Fremst','',function(){L.forEach(function(x){S.z[x]=++zTop;});applySz();save();});
   ctxItem('Aftast','',function(){zBack(L);});
-  if(L.every(lookOk)){ctxSep();var row=el('div','ctx-look');row.innerHTML='<small>Útsjónd</small><div class="ctx-cols">'+LKBG.map(function(c){return '<button type="button" data-cbg="'+c[0]+'" title="'+c[1]+'" aria-label="'+c[1]+'" style="background:'+c[2]+'"></button>';}).join('')+'</div>'
+  if(L.every(lookOk)){ctxSep();var cOk=L.every(lookColOk),row=el('div','ctx-look');row.innerHTML='<small>Útsjónd</small>'+(cOk?'':'<!--')+'<div class="ctx-cols">'+LKBG.map(function(c){return '<button type="button" data-cbg="'+c[0]+'" title="'+c[1]+'" aria-label="'+c[1]+'" style="background:'+c[2]+'"></button>';}).join('')+'</div>'+(cOk?'':'-->')
       +'<div class="ctx-tg"><button type="button" data-crd>'+(lookOf(k).rd==='s'?'Avrundað horn':'Bein horn')+'</button><button type="button" data-csh>'+(lookOf(k).sh===0?'Við skugga':'Uttan skugga')+'</button></div>';CTX.appendChild(row);
     function setL(f){L.forEach(function(x){var o=S.look[x]||{};f(o);if(!o.bg)delete o.bg;if(o.rd!=='s')delete o.rd;if(o.sh!==0)delete o.sh;if(Object.keys(o).length)S.look[x]=o;else delete S.look[x];var w=$('#w-'+x);if(w)lookApply(w);});save();if(!$('#lookSet').hidden)lookShow(SETK);ctxHide();}
     $$('[data-cbg]',row).forEach(function(b){b.addEventListener('click',function(){setL(function(o){o.bg=b.dataset.cbg;});});});
