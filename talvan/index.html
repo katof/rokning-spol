@@ -646,6 +646,14 @@ body.locked .dk[data-m],body.locked #layBtn{display:none!important}
 .lk-set{padding:0 0 10px}.lk-cols{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .lk-c{width:38px;height:38px;border-radius:10px;border:2px solid #d1d5db;cursor:pointer}.lk-c[data-lbg="x"]{background-image:linear-gradient(45deg,#e5e7eb 25%,transparent 25%,transparent 75%,#e5e7eb 75%),linear-gradient(45deg,#e5e7eb 25%,#fff 25%,#fff 75%,#e5e7eb 75%)!important;background-size:12px 12px;background-position:0 0,6px 6px}
 .lk-c[aria-pressed=true]{outline:3px solid #1d4ed8;outline-offset:2px}.lk-row{margin-bottom:8px}
+.ctx{position:fixed;z-index:70;min-width:230px;max-width:300px;background:#fff;border-radius:14px;padding:6px;box-shadow:0 18px 50px -14px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.05);font-size:.95rem}
+.ctx-i{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;border:0;background:none;border-radius:9px;padding:9px 12px;text-align:left;font:inherit;font-weight:600;color:#202124;cursor:pointer}
+.ctx-i:hover:not(:disabled){background:#f1f3f4}.ctx-i:disabled{color:#b0b4b9;cursor:default}.ctx-i kbd{font:500 .78rem Inter,Arial,sans-serif;color:#80868b}
+.ctx-del{color:#b91c1c}.ctx-sep{height:1px;background:#e8eaed;margin:5px 6px}
+.ctx-look{padding:4px 10px 6px}.ctx-look small{display:block;color:#5f6368;font-weight:700;margin-bottom:6px}
+.ctx-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px}.ctx-cols button{height:28px;border-radius:8px;border:2px solid #d1d5db;cursor:pointer}
+.ctx-tg{display:flex;gap:6px}.ctx-tg button{flex:1;border:1px solid #dadce0;background:#fff;border-radius:8px;padding:6px;font:600 .8rem Inter,Arial,sans-serif;cursor:pointer}.ctx-tg button:hover{background:#f1f3f4}
+.ctx-al{display:flex;flex-wrap:wrap;gap:2px;padding:2px 6px}.ctx-al .ic{width:34px;height:34px;border-radius:8px;color:#202124}.ctx-al .ic:hover{background:#f1f3f4}
 .w.stk.sel{box-shadow:0 0 0 calc(3px * var(--isc)) var(--blue)}
 .stk-b{padding:0!important;overflow:visible!important;display:block}
 .stk-b>svg{width:100%;height:100%;display:block;overflow:visible}
@@ -2420,6 +2428,59 @@ function lookShow(k){if(!k||!lookOk(k)||S.lock){lkBox.hidden=true;return;}var L=
   $$('[data-lsh]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.sh=+b.dataset.lsh;});});});
   $('#lkAll',lkBox).addEventListener('click',function(){var src=JSON.stringify(S.look[k]||{});$$('.w').forEach(function(w){var x=w.dataset.w;if(!S.vis[x]||!lookOk(x))return;var o=JSON.parse(src);if(Object.keys(o).length)S.look[x]=o;else delete S.look[x];lookApply(w);});save();});
   lkBox.hidden=false;}
+/* ---------- Høgraklikk (ella halda fingrinum): valmynd við tí, sum kann gerast við amboðinum ella talvuni ---------- */
+var CTX=el('div','ctx');CTX.id='ctxMenu';CTX.hidden=true;CTX.setAttribute('role','menu');document.body.appendChild(CTX);
+function ctxHide(){CTX.hidden=true;}
+function ctxClip(){try{var L=JSON.parse(localStorage.getItem(CPKEY)||'null');return !!(L&&L.length);}catch(e){return false;}}
+function ctxItem(lbl,key,fn,dis,cls){var b=el('button','ctx-i'+(cls?' '+cls:''));b.type='button';b.setAttribute('role','menuitem');b.innerHTML='<span>'+esc(lbl)+'</span>'+(key?'<kbd>'+key+'</kbd>':'');
+  if(dis)b.disabled=true;b.addEventListener('click',function(){ctxHide();fn();});CTX.appendChild(b);return b;}
+function ctxSep(){CTX.appendChild(el('div','ctx-sep'));}
+function ctxShow(x,y){CTX.hidden=false;var r=CTX.getBoundingClientRect();CTX.style.left=Math.max(8,Math.min(innerWidth-r.width-8,x))+'px';CTX.style.top=Math.max(8,Math.min(innerHeight-r.height-8,y))+'px';}
+function zBack(L){var rest=Object.keys(S.vis).filter(function(k){return S.vis[k]&&L.indexOf(k)<0;}).sort(function(a,b){return (S.z[a]||0)-(S.z[b]||0);});var n=1;
+  L.forEach(function(k){S.z[k]=n++;});rest.forEach(function(k){S.z[k]=n++;});zTop=n;applySz();save();}
+function ctxTool(k,x,y){CTX.innerHTML='';var multi=MSEL.length>1&&MSEL.indexOf(k)>=0,L=multi?MSEL.slice():[k];
+  if(!multi&&(SETS[k]||S.stk[k]))ctxItem('Stillingar','',function(){if(S.stk[k])openStkSet(k);else openSet(k);});
+  if(!multi&&(SETS[k]||S.stk[k]))ctxSep();
+  ctxItem(multi?'Kopiera '+L.length+' amboð':'Kopiera','Ctrl+C',function(){cpCopy();});
+  ctxItem('Set inn','Ctrl+V',function(){cpPaste();},!ctxClip());
+  ctxItem('Avrita','',function(){cpCopy();cpPaste();});
+  ctxSep();
+  ctxItem('Fram fremst','',function(){L.forEach(function(x){S.z[x]=++zTop;});applySz();save();});
+  ctxItem('Aftast','',function(){zBack(L);});
+  if(L.every(lookOk)){ctxSep();var row=el('div','ctx-look');row.innerHTML='<small>Útsjónd</small><div class="ctx-cols">'+LKBG.map(function(c){return '<button type="button" data-cbg="'+c[0]+'" title="'+c[1]+'" aria-label="'+c[1]+'" style="background:'+c[2]+'"></button>';}).join('')+'</div>'
+      +'<div class="ctx-tg"><button type="button" data-crd>'+(lookOf(k).rd==='s'?'Avrundað horn':'Bein horn')+'</button><button type="button" data-csh>'+(lookOf(k).sh===0?'Við skugga':'Uttan skugga')+'</button></div>';CTX.appendChild(row);
+    function setL(f){L.forEach(function(x){var o=S.look[x]||{};f(o);if(!o.bg)delete o.bg;if(o.rd!=='s')delete o.rd;if(o.sh!==0)delete o.sh;if(Object.keys(o).length)S.look[x]=o;else delete S.look[x];var w=$('#w-'+x);if(w)lookApply(w);});save();if(!$('#lookSet').hidden)lookShow(SETK);ctxHide();}
+    $$('[data-cbg]',row).forEach(function(b){b.addEventListener('click',function(){setL(function(o){o.bg=b.dataset.cbg;});});});
+    var rs=lookOf(k).rd==='s',sh0=lookOf(k).sh===0;
+    $('[data-crd]',row).addEventListener('click',function(){setL(function(o){o.rd=rs?'r':'s';});});
+    $('[data-csh]',row).addEventListener('click',function(){setL(function(o){o.sh=sh0?1:0;});});}
+  if(multi){ctxSep();var al=el('div','ctx-al');al.innerHTML=$('#alBar').innerHTML.replace(/<b[^>]*>.*?<\/b>/,'').replace(/<button[^>]*id="alX"[\s\S]*?<\/button>/,'').replace(/<span class="al-sep"><\/span>/g,'');CTX.appendChild(al);
+    $$('[data-al]',al).forEach(function(b){b.addEventListener('click',function(){ctxHide();alDo(b.dataset.al);});});}
+  ctxSep();
+  ctxItem(multi?'Tak tey burtur av talvuni':'Tak burtur av talvuni','Delete',function(){var K=L.slice();mselSet([]);K.forEach(function(x){var w=$('#w-'+x),c=w&&w.querySelector('.close-btn');if(c)c.click();});},false,'ctx-del');
+  ctxShow(x,y);}
+function ctxBoard(x,y){CTX.innerHTML='';
+  ctxItem('Set inn','Ctrl+V',function(){cpPaste();},!ctxClip());
+  ctxItem('Vel øll amboðini','',function(){var L=$$('.w').filter(function(w){return S.vis[w.dataset.w]&&!w.hidden&&getComputedStyle(w).display!=='none';}).map(function(w){return w.dataset.w;});if(L.length>1){mselSet(L);select(L[L.length-1]);}else if(L.length){front(L[0]);select(L[0]);}});
+  ctxSep();
+  ctxItem('Nýtt dias','',function(){pgNew();});
+  ctxItem('Bakgrund','',function(){$('#bgBtn').click();});
+  ctxShow(x,y);}
+function ctxOpen(e,x,y){if(S.lock||document.body.classList.contains('pen'))return false;var t=e.target;
+  if(t.closest&&t.closest('input,textarea,select,[contenteditable],.panel,.dock,.top,.ctx,.al-bar'))return false;
+  var w=t.closest&&t.closest('.w');
+  if(w){var k=w.dataset.w;if(MSEL.indexOf(k)<0){mselSet([]);}front(k);select(k);ctxTool(k,x,y);return true;}
+  if(t.closest&&t.closest('#board,#bg'))return ctxBoard(x,y),true;return false;}
+document.addEventListener('contextmenu',function(e){if(ctxOpen(e,e.clientX,e.clientY))e.preventDefault();});
+/* Touch: halda fingrinum eina løtu */
+(function(){var tm=null,sx=0,sy=0;
+  document.addEventListener('pointerdown',function(e){if(e.pointerType!=='touch')return;clearTimeout(tm);sx=e.clientX;sy=e.clientY;var ev=e;
+    tm=setTimeout(function(){tm=null;if(ctxOpen(ev,sx,sy)){var w=ev.target.closest&&ev.target.closest('.w');if(w)w.classList.remove('moving');}},600);},true);
+  ['pointerup','pointercancel'].forEach(function(t){document.addEventListener(t,function(){clearTimeout(tm);},true);});
+  document.addEventListener('pointermove',function(e){if(tm&&Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>10){clearTimeout(tm);tm=null;}},true);})();
+document.addEventListener('pointerdown',function(e){if(!CTX.hidden&&!e.target.closest('.ctx'))ctxHide();},true);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!CTX.hidden){e.stopImmediatePropagation();ctxHide();}},true);
+window.addEventListener('resize',ctxHide);window.addEventListener('blur',ctxHide);
 /* Pílarnir flyta valda amboðið (ella øll tey valdu): eitt lítið stig, við Shift eitt stórt stig */
 document.addEventListener('keydown',function(e){var D={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(!D||e.ctrlKey||e.metaKey||e.altKey||S.lock||S.bg==='dias')return;
   if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable],.pdf-view'))return;
