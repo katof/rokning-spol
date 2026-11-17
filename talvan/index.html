@@ -388,6 +388,11 @@ body.dark .top-logo{background:#fff;padding:0 14px}
 .al-bar .ic{width:40px;height:40px;border-radius:10px;color:#202124}.al-bar .ic:hover{background:#f1f3f4}.al-bar .ic svg{width:22px;height:22px}
 .al-sep{width:1px;height:24px;background:#dadce0;margin:0 4px}
 .eg-emo{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.eg-emo button{width:42px;height:42px;border:1px solid #dadce0;border-radius:10px;background:#fff;font-size:1.35rem;cursor:pointer}.eg-emo button:hover{background:#f1f3f4}
+#w-poll .w-body{position:relative}.pl-on .poll-q{margin-right:min(46cqi,330px)}
+.poll-live{position:absolute;right:12px;top:12px;z-index:3;display:flex;gap:10px;align-items:center;background:#fff;border-radius:16px;padding:8px 12px 8px 8px;box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
+.pl-qr svg{display:block;width:clamp(70px,22cqi,170px);height:auto}.pl-t{display:grid;gap:2px;text-align:center}.pl-t b{font-size:clamp(1.2rem,6cqi,2.6rem);letter-spacing:.14em;color:#111827}.pl-t small{color:#5f6368;font-weight:600;font-size:clamp(.65rem,2.4cqi,.95rem)}
+.mt-share,.mt-get{margin:0 0 16px}.mt-get .row{display:flex;gap:8px}.mt-get .set-in{text-transform:uppercase;letter-spacing:.18em;font-weight:700}
+.mt-code{margin-top:10px;padding:14px;border-radius:14px;background:#eff6ff}.mt-code b{display:block;font-size:2rem;letter-spacing:.2em;color:#1d4ed8}.mt-code p{margin:6px 0 0;font-size:.88rem;line-height:1.45}
 .cp-tip{position:fixed;z-index:58;left:50%;bottom:110px;transform:translateX(-50%);background:#202124;color:#fff;font-weight:600;border-radius:12px;padding:10px 16px;box-shadow:0 14px 40px -14px rgba(0,0,0,.5);pointer-events:none}
 .w.moving{cursor:grabbing}
 .w-ttl{font-weight:800;font-size:1.05rem;letter-spacing:-.01em;text-align:center;flex:none}
@@ -1756,6 +1761,8 @@ function boardUndo(){if(S.lock||!UNDO.length)return false;clearTimeout(undoT);va
   pgLoad(p);S.pages[S.pg]=pgSnap();UNDO=keep;undoLast=JSON.stringify(pgSnap());save();setTimeout(function(){undoBusy=false;},700);return true;}
 function $(s,r){return (r||document).querySelector(s)}
 function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+/* Ein adressa úr eini talvu (sum kann koma frá øðrum) má vera ein vanlig http- ella https-adressa – ikki t.d. javascript: */
+function okUrl(u){return typeof u==='string'&&/^https?:\/\/[^\s"'<>]+$/i.test(u);}
 function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
 
 /* Ikon */
@@ -2278,7 +2285,7 @@ function snarW(o){var k=o.k,p=o.p;function q(id){return $('#'+p+id);}
     var m=q('Msg');if(!hits&&nq){m.hidden=false;m.textContent=o.none;}else m.hidden=true;
     q('X').hidden=!qs;}
   function open(url,title,page){S[k]={u:url,t:title,p:page||url};save();show();}
-  function show(){var v=S[k];q('Pick').hidden=!!v;q('View').hidden=!v;
+  function show(){var v=S[k];if(v&&!(okUrl(v.u)&&okUrl(v.p)))v=S[k]=null;q('Pick').hidden=!!v;q('View').hidden=!v;
     var f=q('Frame');if(v){if(f.getAttribute('src')!==v.u){q('View').classList.add('loading');f.setAttribute('src',v.u);}q('Title').textContent=v.t;q('Link').href=v.p;$('#h-'+k).textContent=v.t;}
     else{f.removeAttribute('src');$('#h-'+k).textContent=o.head;drawList(q('Q').value);}
     q('Back').hidden=!v;}
@@ -2384,7 +2391,7 @@ function cpOne(k){var o={k:k,pos:pos(k).slice()};if(S.look&&S.look[k])o.look=JSO
   if(S.stk[k]){o.stk=JSON.parse(JSON.stringify(S.stk[k]));return o;}
   var f=cpFam(k);if(f==='snar'&&S[k])o.snar=JSON.parse(JSON.stringify(S[k]));if(f==='mynd')o.mynd=S.myndOf[k];if(f==='yt'&&S.ytOf[k])o.yt=JSON.parse(JSON.stringify(S.ytOf[k]));
   if(k==='tema'&&S.tema)o.tema=JSON.parse(JSON.stringify(S.tema));
-  if(k==='poll')o.poll=JSON.parse(JSON.stringify(S.poll));if(k==='skra'){o.skra=JSON.parse(JSON.stringify(S.skra));o.plan=JSON.parse(JSON.stringify(S.planItems||[]));}if(k==='tid')o.secs=S.secs;
+  if(k==='poll'){o.poll=JSON.parse(JSON.stringify(S.poll));delete o.poll.live;}if(k==='skra'){o.skra=JSON.parse(JSON.stringify(S.skra));o.plan=JSON.parse(JSON.stringify(S.planItems||[]));}if(k==='tid')o.secs=S.secs;
   return o;}
 function cpCopy(){var L=(MSEL.length>1?MSEL:SEL?[SEL]:[]).filter(function(k){return S.vis[k]&&$('#w-'+k);});if(!L.length)return false;
   try{localStorage.setItem(CPKEY,JSON.stringify(L.map(cpOne)));}catch(e){return false;}
@@ -2697,7 +2704,7 @@ function pdfUI(){var has=!!pdfDoc;$('#pdfEmpty').hidden=has;$('#pdfWrap').hidden
   $$('[data-pp]').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.pp===S.pdfTwo?'true':'false')});
   $('#pdfFit').textContent=Math.round(S.pdfZoom*100)+' %';$('#pdfOut').disabled=S.pdfZoom<=.41;$('#pdfIn').disabled=S.pdfZoom>=4.9;pdfMissUI();}
 function openPdf(buf,keep){$('#pdfEmpty').hidden=true;
-  return pdfLib().then(function(lib){return lib.getDocument({data:new Uint8Array(buf)}).promise;}).then(function(doc){pdfDoc=doc;
+  return pdfLib().then(function(lib){return lib.getDocument({data:new Uint8Array(buf),isEvalSupported:false}).promise;}).then(function(doc){pdfDoc=doc;
     if(!keep){S.pdfPage=1;S.pdfZoom=1;}S.pdfPage=Math.max(1,Math.min(S.pdfPage||1,doc.numPages));save();pdfUI();setTimeout(renderPdf,0);})
   .catch(function(){pdfDoc=null;pdfUI();note('Tað bar ikki til at lesa PDF-fíluna.');});}
 function renderPdf(){if(!pdfDoc||!S.vis.pdf||$('#w-pdf').hidden)return;if(S.pdfTwo===3){renderScroll();return;}if(pdfIO){pdfIO.disconnect();pdfIO=null;}$('#pdfPages').classList.remove('scroll');
@@ -2938,6 +2945,33 @@ function pollReset(){S.poll.v=[];pollFix();save();drawPoll();}
   $('.set-btn',$('#w-poll'))&&$('#w-poll .set-btn').addEventListener('click',sync);
   sync();})();
 drawPoll();
+/* ---------- Livandi spurnarkanning: næmingarnir skanna eina QR-kotu og svara á sínum egna tóli ---------- */
+var SVAR_URL='https://katof.github.io/rokning-spol/talvan/svar.html#',plT=null;
+(function(){var ps=$('#setBody .set[data-for=poll]');ps.insertAdjacentHTML('beforeend','<div class="set-row" id="pollLiveRow"><h4>Næmingarnir svara á sínum egna tóli</h4><div id="pollLiveBox"></div></div>');})();
+function plOpts(){var P=S.poll;return P.t==='s'?FSET[P.n].slice():P.t==='j'?['Ja','Nei']:P.o.slice(0,6);}
+function plUI(){var b=$('#pollLiveBox');if(!b)return;var L=S.poll.live;
+  if(L){b.innerHTML='<p class="note" style="margin:0 0 8px">Kotan er <b>'+esc(L.k)+'</b>. Næmingarnir skanna QR-kotuna á talvuni og svara.</p><button class="btn sm" type="button" id="plEnd">Enda kanningina</button>';$('#plEnd').addEventListener('click',plEnd);}
+  else{b.innerHTML='<p class="note" style="margin:0 0 8px">Næmingarnir skanna eina QR-kotu og svara á sínum iPadi ella telefon. Svarini koma beinanvegin á talvuna.</p><button class="btn red sm" type="button" id="plStart">Byrja</button>';$('#plStart').addEventListener('click',plStart);}
+  plCard();}
+function plStart(){if(!MT.u){note('Rita inn fyrst við knappinum við persónsmyndini ovast í høgra horni. So kunnu næmingarnir svara á sínum egna tóli.');return;}
+  var P=S.poll,b=$('#plStart');if(b)b.disabled=true;
+  mtApi('kanning',{q:P.q,t:P.t,o:plOpts()}).then(function(r){if(!r.ok){note('Tað bar ikki til at byrja kanningina. Royn aftur.');plUI();return;}
+    P.v=[];P.live={k:r.kota,n:0};save();drawPoll();plUI();plPoll();},function(){note('Einki samband við Snar. Royn aftur, tá ið teldan hevur samband.');plUI();});}
+function plEnd(){var L=S.poll.live;if(!L)return;clearTimeout(plT);
+  mtApi('kanningenda',{kota:L.k}).then(function(r){if(r.ok&&r.v)S.poll.v=r.v.slice(0,pollItems().length);},function(){}).then(function(){delete S.poll.live;save();drawPoll();plUI();});}
+function plPoll(){clearTimeout(plT);var L=S.poll.live;if(!L||!MT.u)return;
+  if(!S.vis.poll||document.visibilityState!=='visible'){plT=setTimeout(plPoll,4000);return;}
+  mtApi('kanningurslit',{kota:L.k}).then(function(r){var L2=S.poll.live;if(!L2||L2.k!==L.k)return;
+    if(r.ok){var v=r.v.slice(0,pollItems().length);if(JSON.stringify(v)!==JSON.stringify(S.poll.v)||L2.n!==r.n){S.poll.v=v;L2.n=r.n;save();drawPoll();plCard();}
+      if(!r.opin){delete S.poll.live;save();plUI();return;}}
+    else if(r.villa==='kota'){delete S.poll.live;save();plUI();return;}
+    plT=setTimeout(plPoll,3000);},function(){plT=setTimeout(plPoll,6000);});}
+function plCard(){var w=$('#w-poll .w-body');if(!w)return;var c=$('#pollLive'),L=S.poll&&S.poll.live;
+  w.classList.toggle('pl-on',!!L);if(!L){if(c)c.remove();return;}
+  if(!c){c=el('div','poll-live');c.id='pollLive';w.appendChild(c);}
+  c.innerHTML='<div class="pl-qr">'+(window.qrcode?qrSvg(SVAR_URL+L.k):'')+'</div><div class="pl-t"><small>Skanna og svara</small><b>'+esc(L.k)+'</b><small>'+(L.n||0)+' svar</small></div>';
+  if(!window.qrcode)qrLoad(function(){if(window.qrcode)plCard();});}
+setTimeout(function(){plUI();if(S.poll.live)plPoll();},1200);
 /* Nøvnini eru nú í feltinum høgrumegin */
 $('#namesBox').hidden=true;$('.jar-goal').hidden=true;
 
@@ -2952,7 +2986,7 @@ function skFmt(x){x=((Math.round(x)%1440)+1440)%1440;return Math.floor(x/60)+':'
 function drawSkra(){var K=S.skra,ul=$('#skL'),fr=K.m==='frii';$('#skT').textContent=K.t||'';ul.innerHTML='';ul.hidden=fr;$('#plan').hidden=!fr;if(fr)return;
   var d=new Date(),now=d.getHours()*60+d.getMinutes()+d.getSeconds()/60,t0=skMin(K.st);
   K.it.forEach(function(a,i){var li=el('li','sk-it');var s=t0,e;for(var j=0;j<i;j++)s+=(+K.it[j].d||0);e=s+(+a.d||0);
-    var ic=el('span','sk-ic',a.ic?a.ic:'+');if(!a.ic)ic.classList.add('none');li.appendChild(ic);
+    var ic=el('span','sk-ic',a.ic?esc(a.ic):'+');if(!a.ic)ic.classList.add('none');li.appendChild(ic);
     var m=el('div','sk-m');m.appendChild(el('b',null,''));m.firstChild.textContent=a.n||'Virksemi';
     if(K.m==='tid'){var f=Math.max(0,Math.min(1,(now-s)/Math.max(1,e-s)));var bar=el('div','sk-bar','<small>'+skFmt(s)+'</small><i><s style="width:'+(f*100).toFixed(1)+'%"></s></i><small>'+skFmt(e)+'</small>');m.appendChild(bar);
       if(now>=s&&now<e)li.classList.add('now');if(now>=e)li.classList.add('done');}
@@ -2980,7 +3014,7 @@ setInterval(function(){if(S.vis.skra&&S.skra.m==='tid')drawSkra();},20000);
     var h=el('span','sk-h','<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>');h.title='Drag fyri at flyta virksemið';c.appendChild(h);
     var bx=el('div','sk-cb');c.appendChild(bx);
     var top=el('div','sk-top');bx.appendChild(top);
-    var ib=el('button','sk-icb',a.ic||'+');ib.type='button';ib.title='Vel eitt ikon';top.appendChild(ib);
+    var ib=el('button','sk-icb',a.ic?esc(a.ic):'+');ib.type='button';ib.title='Vel eitt ikon';top.appendChild(ib);
     var nm=el('input','set-in sk-name');nm.value=a.n||'';nm.placeholder='Skriva navnið á virkseminum her …';nm.maxLength=40;top.appendChild(nm);
     var del=el('button','ic sk-del',I.trash);del.type='button';del.title='Tak virksemið burtur';top.appendChild(del);
     nm.addEventListener('input',function(){a.n=nm.value;save();drawSkra();});
@@ -3074,7 +3108,7 @@ var PTH={},pthQ=Promise.resolve();
 function pdfThumb(id){if(PTH[id])return Promise.resolve(PTH[id]);
   return idb('readonly',function(st){return st.get('pth:'+id);}).then(function(t){if(t){PTH[id]=t;return t;}
     return idb('readonly',function(st){return st.get('pdf:'+id);}).then(function(buf){if(!buf)return null;
-      return pdfLib().then(function(lib){return lib.getDocument({data:new Uint8Array(buf.slice(0))}).promise;}).then(function(doc){return doc.getPage(1).then(function(pg){
+      return pdfLib().then(function(lib){return lib.getDocument({data:new Uint8Array(buf.slice(0)),isEvalSupported:false}).promise;}).then(function(doc){return doc.getPage(1).then(function(pg){
         var v=pg.getViewport({scale:1}),vp=pg.getViewport({scale:300/v.width}),c=document.createElement('canvas');c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);
         var cx=c.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,c.width,c.height);
         return pg.render({canvasContext:cx,viewport:vp,intent:'print'}).promise.then(function(){var u=c.toDataURL('image/jpeg',.8);try{doc.destroy();}catch(e){}PTH[id]=u;idb('readwrite',function(st){return st.put(u,'pth:'+id);});return u;});});});});}).catch(function(){return null;});}
@@ -3162,7 +3196,7 @@ function finnSvg(d){var U=(SVGN=(SVGN||0)+1);var n=d.n||4,L=d.l&&d.l.length===n*
   var s='<svg viewBox="0 0 '+W+' '+W+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="fd'+U+'"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity=".2"/></filter></defs>'
    +'<rect x="0" y="0" width="'+W+'" height="'+W+'" rx="40" fill="#a8dde3"/><rect x="'+(o-8)+'" y="'+(o-8)+'" width="'+(n*c+16)+'" height="'+(n*c+16)+'" fill="#0e9a9a"/>';
   for(var i=0;i<n*n;i++){var x=o+(i%n)*c,y=o+Math.floor(i/n)*c;s+='<rect x="'+(x+4)+'" y="'+(y+4)+'" width="'+(c-8)+'" height="'+(c-8)+'" fill="#a8dde3"/><rect x="'+(x+12)+'" y="'+(y+12)+'" width="'+(c-24)+'" height="'+(c-24)+'" rx="16" fill="#fbfbfb" filter="url(#fd'+U+')"/>'
-    +'<text x="'+(x+c/2)+'" y="'+(y+c/2+27)+'" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="600" font-size="76" fill="#111">'+L[i]+'</text>';}
+    +'<text x="'+(x+c/2)+'" y="'+(y+c/2+27)+'" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="600" font-size="76" fill="#111">'+esc(L[i])+'</text>';}
   return s+'</svg>';}
 var STK={
   spurn:{n:'Dagsins spurningur',sz:[620,250],r:function(){return bub([{t:'Dagsins',s:60,c:'#1f2937',fw:600},{t:'spurningur',s:104,m:1}]);}},
@@ -3842,7 +3876,7 @@ STK.mark.settings=function(id,d,sec){
   var q=$('#mkQr',sec);q.checked=!d.noQr;q.addEventListener('change',function(){if(q.checked)delete d.noQr;else d.noQr=1;save();drawStk(id);});};
 /* ---------- QR-kota: næmingarnir skanna eitt leinki ---------- */
 var QRW=[];
-function qrLoad(cb){if(window.qrcode)return cb();QRW.push(cb);if(QRW.length>1)return;var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+function qrLoad(cb){if(window.qrcode)return cb();QRW.push(cb);if(QRW.length>1)return;var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';sc.integrity='sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==';sc.crossOrigin='anonymous';
   sc.onload=function(){try{qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];}catch(e){}var w=QRW;QRW=[];w.forEach(function(f){f();});};sc.onerror=function(){QRW=[];};document.head.appendChild(sc);}
 function qrSvg(u){var q=qrcode(0,'M');q.addData(u);q.make();var n=q.getModuleCount(),p='';for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(q.isDark(r,c))p+='M'+c+' '+r+'h1v1h-1z';
   return '<svg viewBox="-2 -2 '+(n+4)+' '+(n+4)+'" shape-rendering="crispEdges" aria-hidden="true"><rect x="-2" y="-2" width="'+(n+4)+'" height="'+(n+4)+'" fill="#fff"/><path d="'+p+'" fill="#111827"/></svg>';}
@@ -4001,7 +4035,8 @@ function pgLoad(p){var oldPdf=S.pdfCur;PGK.forEach(function(k){S[k]=p[k]!==undef
 /* Tekna spurnarkanningina, ætlanina og stopprið hjá diasinum av nýggjum */
 function pgDrawD(){drawPoll();if(PSYNC)PSYNC();drawSkra();if(SKSYNC)SKSYNC();
   var pl=$('#planList');pl.innerHTML='';(S.planItems&&S.planItems.length?S.planItems:[{t:'',d:0}]).forEach(function(it){mkItem(it);});
-  $('#tmrDefM').value=Math.floor(S.secs/60);$('#tmrDefS').value=S.secs%60;if(!running)setT(S.secs);}
+  $('#tmrDefM').value=Math.floor(S.secs/60);$('#tmrDefS').value=S.secs%60;if(!running)setT(S.secs);
+  if(typeof plUI==='function'){clearTimeout(plT);plUI();if(S.poll&&S.poll.live)plPoll();}}
 function pgKeepInk(){pgInk[S.pg]=strokes;}
 function pgShowInk(){strokes=pgInk[S.pg]||[];inkHist=[];redrawInk();}
 function pgGo(i){if(i<0||i>=S.pages.length||i===S.pg)return;S.pages[S.pg]=pgSnap();pgKeepInk();S.pg=i;pgLoad(S.pages[i]);pgShowInk();save();pgUI();}
@@ -4165,6 +4200,18 @@ function mtDelete(e){ask('Strika „'+e.heiti+'“? Talvan verður tikin av kaga
       mtReload({vis:{klokka:1},bg:'strik',lists:S.lists||[],imgs:S.imgs||[],pdfs:S.pdfs||[]});return;}
     mtSave();mtUI();},function(){note('Tað bar ikki til at strika talvuna hjá Snar. Kanna sambandið og royn aftur.');});});}
 function mtRename(v){var e=mtE(MT.cur);v=String(v||'').replace(/\s+/g,' ').trim().slice(0,60);if(!e||!v||v===e.heiti)return;e.heiti=mtName(v,e);e.fresh=0;e.dirty=1;e.broytt=Date.now();mtSave();mtSchedule(800);mtUI();}
+/* Deil: talvan á skíggjanum fær eina kotu. Ein starvsfelagi heintar eitt avrit við kotuni (tann nýggjasta útgávan) */
+function mtShare(){var e=mtE(MT.cur),o=$('#mtShareOut');if(!e||!MT.u)return;o.innerHTML='<p class="note">Bíða eina løtu …</p>';
+  mtFlush().then(function(){return mtApi('deil',{id:e.id});}).then(function(r){if(!r.ok){o.innerHTML='<p class="mt-msg">Tað bar ikki til at deila talvuna. Royn aftur um eina løtu.</p>';return;}
+    o.innerHTML='<div class="mt-code"><b>'+esc(r.kota)+'</b><p>Starvsfelagin letur Talvuna upp, trýstir á knappin við persónsmyndini og skrivar hesa kotuna undir „Fá eina talvu frá einum starvsfelaga“. Hann fær eitt avrit av talvuni, og tínar broytingar nerta ikki hansara avrit.</p></div>';},
+  function(){o.innerHTML='<p class="mt-msg">Einki samband við Snar. Royn aftur, tá ið teldan hevur samband.</p>';});}
+function mtGetShared(k){var m=$('#mtGetMsg');k=String(k||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(k.length!==6){m.textContent='Kotan hevur seks tekn.';return;}m.textContent='Bíða eina løtu …';
+  mtApi('deilt',{kota:k}).then(function(r){if(!r.ok){m.textContent=r.villa==='burtur'?'Talvan, sum kotan vísir til, er strikað.':'Eingin talva hevur hesa kotuna. Kanna, at hon er rætt skrivað.';return;}
+    var s;try{s=JSON.parse(r.data);}catch(x){m.textContent='Tað bar ikki til at lesa talvuna.';return;}
+    m.textContent='';mtKeepUnsaved().then(mtFlush).then(function(){var ne={id:mtId(),heiti:mtName(r.heiti+(r.fra?' (frá '+r.fra+')':'')),ver:0,srv:0,dirty:1,broytt:Date.now()};
+      if(s.poll)delete s.poll.live;(s.pages||[]).forEach(function(pg){if(pg.poll)delete pg.poll.live;});
+      s.lists=mtLists(S.lists,s.lists);MT.list.unshift(ne);MT.cur=ne.id;mtSave();mtPut(ne.id,s).then(function(){mtReload(s,'„'+ne.heiti+'“ er nú í Mínum talvum.');});});},
+  function(){m.textContent='Einki samband við Snar. Royn aftur, tá ið teldan hevur samband.';});}
 /* Legg upp úr fílu og Strika alt: talvan á skíggjanum verður ikki longur knýtt at eini talvu í Mínum talvum */
 function mtDetach(){MT.cur=null;mtSave();}
 
@@ -4226,6 +4273,7 @@ function mtLoginForm(box,after){
       if(v==='skeivt'){p.value='';p.focus();msg.textContent='Navnið og tølini samsvara ikki. Tú hevur '+r.eftir+(r.eftir===1?' roynd':' royndir')+' eftir. Er hetta ikki títt navn, so vel eitt annað, til dømis við skúlanavninum afturat.';return;}
       if(v==='stongt'){msg.textContent='Ov nógvar skeivar royndir. Royn aftur um '+r.min+(r.min===1?' minutt.':' minuttir.');return;}
       if(v==='tikid'){mode(1);msg.textContent='Hetta navnið er júst tikið. Vel eitt annað navn.';n.focus();return;}
+      if(v==='ovmangar'){msg.textContent='Júst nú verða nógvar nýggjar kontur stovnaðar. Royn aftur um ein tíma.';return;}
       msg.textContent='Tað bar ikki til at rita inn. Royn aftur um eina løtu.';},
     function(){go.disabled=false;msg.textContent=MT_API||window.MT_MOCK?'Tað bar ikki til at fáa samband við Snar. Kanna, um teldan hevur samband við netið, og royn aftur.':'Innritanin er ikki tøk enn.';});});
   return f;}
@@ -4245,6 +4293,8 @@ function mtDraw(){var box=$('#layPaneMine');if(!box||$('#mtPanel').hidden)return
   h+='<div class="mt-cur">'+(e?'<label class="mt-f">Talvan á skíggjanum<input class="set-in" id="mtCurName" maxlength="60" value="'+mtEsc(e.heiti)+'"></label>'
      :'<p>Talvan á skíggjanum er ikki goymd undir Mínum talvum.</p><button class="btn red sm" type="button" id="mtSaveCur">Goym hana</button>')+'</div>';
   h+='<div class="row mt-row"><button class="btn sm" type="button" id="mtNewB">+ Nýggj talva</button>'+(e?'<button class="btn sm" type="button" id="mtCopyB">Avrita hesa talvuna</button>':'')+'</div>';
+  h+=(e&&MT.u?'<div class="mt-share"><button class="btn sm" type="button" id="mtShareB">Deil hesa talvuna við ein starvsfelaga</button><div id="mtShareOut"></div></div>':'');
+  h+='<div class="mt-get"><label class="mt-f">Fá eina talvu frá einum starvsfelaga<span class="row"><input class="set-in" id="mtGetK" maxlength="6" autocomplete="off" spellcheck="false" placeholder="Kota við seks teknum"><button class="btn sm" type="button" id="mtGetB">Heinta</button></span></label><p class="mt-msg" id="mtGetMsg"></p></div>';
   h+='<h4>Mínar talvur</h4><ul class="mt-list" id="mtList" data-del="1"></ul><p class="note" id="mtNone" hidden>Tú hevur ongar talvur enn.</p>';
   box.innerHTML=h;
   var a=$('#mtAcct');
@@ -4257,6 +4307,9 @@ function mtDraw(){var box=$('#layPaneMine');if(!box||$('#mtPanel').hidden)return
   var sc=$('#mtSaveCur');if(sc)sc.addEventListener('click',function(){mtCreate(mtDefName(),false);mtDraw();var i=$('#mtCurName');if(i){i.focus();i.select();}});
   $('#mtNewB').addEventListener('click',function(){mtNew(LAYOUTS[0]);});
   var cp=$('#mtCopyB');if(cp)cp.addEventListener('click',mtCopy);
+  var sb=$('#mtShareB');if(sb)sb.addEventListener('click',mtShare);
+  var gk=$('#mtGetK');gk.addEventListener('input',function(){gk.value=gk.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);});
+  gk.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();mtGetShared(gk.value);}});$('#mtGetB').addEventListener('click',function(){mtGetShared(gk.value);});
   var n=mtRowList($('#mtList'),function(x){mtOpen(x.id);});$('#mtNone').hidden=n>0;}
 function mtUI(){var da=$('#mtDelAcct');if(da)da.hidden=!MT.u;var b=$('#mtBtn');if(b){var t=MT.u?'Mínar talvur · '+MT.u.navn:'Mínar talvur · Rita inn';b.title=t;b.setAttribute('aria-label',t);b.classList.toggle('in',!!MT.u);b.dataset.st=MT.u?(mtState||'ok'):'';}
   $('#layNote').textContent='Uppsetingin verður løgd inn sum eitt nýtt dias aftan á tað, sum tú ert á. Er diasið tómt, verður hon løgd á tað. Vilt tú byrja eina heilt nýggja talvu, finnur tú „+ Nýggj talva“ undir Mínar talvur (knappurin við persónsmyndini ovast í høgra horni).';

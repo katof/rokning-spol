@@ -162,6 +162,7 @@ function show(v){['in','list','board'].forEach(function(x){$('#v'+x.charAt(0).to
       if(v==='skeivt'){p.value='';p.focus();msg.textContent='Navnið og tølini samsvara ikki. Tú hevur '+r.eftir+(r.eftir===1?' roynd':' royndir')+' eftir. Er hetta ikki títt navn, so vel eitt annað, til dømis við skúlanavninum afturat.';return;}
       if(v==='stongt'){msg.textContent='Ov nógvar skeivar royndir. Royn aftur um '+r.min+(r.min===1?' minutt.':' minuttir.');return;}
       if(v==='tikid'){mode(1);msg.textContent='Hetta navnið er júst tikið. Vel eitt annað navn.';n.focus();return;}
+      if(v==='ovmangar'){msg.textContent='Júst nú verða nógvar nýggjar kontur stovnaðar. Royn aftur um ein tíma.';return;}
       msg.textContent='Tað bar ikki til at rita inn. Royn aftur um eina løtu.';},
     function(){go.disabled=false;msg.textContent='Tað bar ikki til at fáa samband við Snar. Kanna, um telefonin hevur samband við netið, og royn aftur.';});});})();
 
