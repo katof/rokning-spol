@@ -8,7 +8,7 @@
    <plaintext> steðgar restini av síðuni, so einki av Talvuni verður koyrt, meðan telefonin skiftir síðu. */
 (function(){var p=/iPhone|iPod|Android.*Mobile|Windows Phone/i.test(navigator.userAgent)||(matchMedia("(pointer: coarse)").matches&&Math.min(screen.width,screen.height)>0&&Math.min(screen.width,screen.height)<600);if(!p)return;location.replace("telefon.html");document.write('<plaintext style="display:none">');})();</script>
 <title>Talvan – Snar</title>
-<meta name="description" content="Amboð til stóra skíggjan í flokkinum: klokka, stoppur, nøvn, ferðsluljós, smileyglas, terningar, ljóðmátari, pennar, PDF, myndir, klistrimerki, YouTube, ætlan, linjal og vinkulmátari. Einki verður sent nakran stað.">
+<meta name="description" content="Amboð til stóra skíggjan í flokkinum: klokka, stoppur, nøvn, ferðsluljós, smileyglas, terningar, ljóðmátari, pennar, PDF, myndir, klistrimerki, YouTube, ætlan, linjal og vinkulmátari. Uttan innritan verður talvan bert goymd í kaganum; ritar tú inn, verða talvurnar eisini goymdar hjá Snar.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@500;600;700&family=DM+Serif+Display&family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap">
 <style>
@@ -2870,7 +2870,7 @@ function pollItems(){var P=S.poll;if(P.t==='s')return FSET[P.n].map(function(f){
   var th=(PTHEME[P.th]||PTHEME[0])[1],L=P.t==='j'?['Ja','Nei']:P.o;return L.map(function(t,i){return {t:t,c:th[i%th.length]}});}
 function pollFix(){var n=pollItems().length,v=S.poll.v||[];if(v.length!==n){v=[];for(var i=0;i<n;i++)v.push(0);S.poll.v=v;}}
 function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
-function drawPoll(bump){pollFix();var P=S.poll,it=pollItems(),v=P.v,T=v.reduce(function(a,b){return a+b},0),mx=Math.max.apply(null,v.concat([1]));
+function drawPoll(bump){pollFix();if(Array.isArray(S.poll.v))S.poll.v=S.poll.v.map(function(x){return +x||0;});var P=S.poll,it=pollItems(),v=P.v,T=v.reduce(function(a,b){return a+b},0),mx=Math.max.apply(null,v.concat([1]));
   $('#pollQ').textContent=P.q||'';var ch=$('#pollChart'),h='';
   if(P.c==='sulur'){h='<div class="poll-bars" style="--n:'+it.length+'">'+it.map(function(x,i){return '<div class="pb"><span class="pb-n">'+(v[i]||'')+'</span><i style="height:'+(v[i]?Math.max(3,v[i]/mx*100):0)+'%;background:'+x.c+'"></i></div>';}).join('')+'</div>';}
   else{var ring=P.c==='hringur',r=ring?37:25,sw=ring?22:50,C=2*Math.PI*r,off=0;
@@ -3284,7 +3284,12 @@ STK.gbtdog={n:'Snar-hundurin',sz:[300,220],set:1,gb:1,jtek:1,r:function(){return
 /* Gomul „Soleiðis spælir tú“-klistrimerki verða til tekstkassar */
 Object.keys(S.stk).forEach(function(id){var d=S.stk[id];if(d.t==='hjalp'){d.t='tekst';d.h='Soleiðis spælir tú';d.b='Finn so nógv orð, sum tú kanst, í talvuni.\n\nBókstavirnir í orðinum skulu liggja saman í talvuni, og hvør bókstavur kann bert brúkast eina ferð í hvørjum orði.';}});
 ['spurn','lukku','lesa','vael','gott','stedg','lurta','bolk','glas','finnt'].forEach(function(k){if(STK[k]){STK[k].set=1;STK[k].pal=1;}});
-function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d&&b&&STK[d.t]){CURPAL=d.pal||null;CURST=d.ol||null;b.innerHTML=STK[d.t].r(d);CURPAL=null;CURST=null;b.style.setProperty('--srot',(d.t==='tilv'?0:(d.tilt||0))+'deg');b.style.setProperty('--shue',(d.hue||0)+'deg');b.dataset.fx=d.fx||'';if(STK[d.t].after)STK[d.t].after(id,b);}}
+/* Virði, sum verða sett beint inn í HTML/CSS, mugu vera tað, tey sýnast at vera (talvur kunnu koma frá øðrum ella úr eini fílu) */
+function stkSafe(d){['fs','hs','rot','tilt','hue','gn','per','off','n'].forEach(function(k){if(d[k]!=null&&typeof d[k]!=='number'){var v=parseFloat(d[k]);if(isFinite(v))d[k]=v;else delete d[k];}});
+  ['tc','bc'].forEach(function(k){if(d[k]!=null&&!/^#[0-9a-f]{3,8}$/i.test(String(d[k])))delete d[k];});
+  ['bg','th','al','ff','bf','des','mode','lay','fx','ol','pal','dl','k','c'].forEach(function(k){if(d[k]!=null&&typeof d[k]==='string'&&!/^[\w-]{0,24}$/.test(d[k]))delete d[k];});
+  if(Array.isArray(d.teams))d.teams.forEach(function(t){t.p=+t.p||0;t.c=+t.c||0;});return d;}
+function drawStk(id){var d=S.stk[id],b=$('#w-'+id+' .stk-b');if(d)stkSafe(d);if(d&&b&&STK[d.t]){CURPAL=d.pal||null;CURST=d.ol||null;b.innerHTML=STK[d.t].r(d);CURPAL=null;CURST=null;b.style.setProperty('--srot',(d.t==='tilv'?0:(d.tilt||0))+'deg');b.style.setProperty('--shue',(d.hue||0)+'deg');b.dataset.fx=d.fx||'';if(STK[d.t].after)STK[d.t].after(id,b);}}
 function mkStk(id){var d=S.stk[id];if(!d||!STK[d.t])return null;var w=el('section','w stk');w.id='w-'+id;w.dataset.w=id;w.dataset.stk=d.t;w.setAttribute('aria-labelledby','h-'+id);
   w.innerHTML='<div class="w-head"><h2 id="h-'+id+'"></h2></div><div class="w-body stk-b"></div>';w.querySelector('h2').textContent=STK[d.t].n;
   $('#grid').appendChild(w);SETS[id]='stk';setupW(w);drawStk(id);return w;}
