@@ -2467,7 +2467,7 @@ function ctxTool(k,x,y){CTX.innerHTML='';var multi=MSEL.length>1&&MSEL.indexOf(k
   ctxItem('Set inn','Ctrl+V',function(){cpPaste();},!ctxClip());
   ctxItem('Avrita','',function(){cpCopy();cpPaste();});
   ctxSep();
-  ctxItem('Flyt fram','',function(){L.forEach(function(x){S.z[x]=++zTop;});applySz();save();});
+  ctxItem('Fremst','',function(){L.forEach(function(x){S.z[x]=++zTop;});applySz();save();});
   ctxItem('Aftast','',function(){zBack(L);});
   if(L.every(lookOk)){ctxSep();var row=el('div','ctx-look');row.innerHTML='<small>Útsjónd</small><div class="ctx-cols">'+LKBG.map(function(c){return '<button type="button" data-cbg="'+c[0]+'" title="'+c[1]+'" aria-label="'+c[1]+'" style="background:'+c[2]+'"></button>';}).join('')+'</div>'
       +'<div class="ctx-tg"><button type="button" data-crd>'+(lookOf(k).rd==='s'?'Avrundað horn':'Bein horn')+'</button><button type="button" data-csh>'+(lookOf(k).sh===0?'Við skugga':'Uttan skugga')+'</button></div>';CTX.appendChild(row);
