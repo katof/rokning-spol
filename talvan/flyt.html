@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Talvan – flyting</title>
+<!-- Liggur á GAMLA staðnum (katof.github.io/rokning-spol/talvan/flyt.html). Rammin á snar.fo/talvan letur hesa síðuna upp
+     ósjónliga (?send=1), tá ið nýggja Talvan spyr. Síðan sendir hon talvurnar, sum eru goymdar í kaganum her, til snar.fo
+     – og bert til snar.fo – sum sendir tær víðari til nýggju Talvuna. -->
+<script src="flyt.js"></script>
+</head>
+<body>
+<script>
+(function () {
+  if (window.parent === window || !/[?&]send=1(&|$)/.test(location.search)) return;
+  var LOC = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var TIL = LOC ? ['http://localhost:8828'] : ['https://snar.fo', 'https://www.snar.fo', 'https://snardev.ctrl.fo'];
+  window.SnarFlyt().then(function (d) {
+    var m = { snar: 'talvan-flyt-data', d: d.n ? d : null };
+    /* Boðini koma bert fram, um síðan uttanum er ein av hesum; aðrar síður fáa einki */
+    TIL.forEach(function (o) { try { window.parent.postMessage(m, o); } catch (e) {} });
+  });
+})();
+</script>
+</body>
+</html>
