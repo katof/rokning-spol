@@ -639,8 +639,12 @@ body.locked .dk[data-m],body.locked #layBtn{display:none!important}
 /* Klistrimerki */
 .w.stk{background:transparent;box-shadow:none;border-radius:12px}
 /* Útsjónd (S.look) */
-.w[data-lbg="y"]{background:#fef9c3}.w[data-lbg="o"]{background:#ffedd5}.w[data-lbg="p"]{background:#fce7f3}.w[data-lbg="l"]{background:#ede9fe}.w[data-lbg="b"]{background:#dbeafe}
-.w[data-lbg="t"]{background:#ccfbf1}.w[data-lbg="g"]{background:#dcfce7}.w[data-lbg="k"]{background:#f1f5f9}.w[data-lbg="x"]{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.w[data-lk]{background:var(--lk)!important}.w[data-lk] .stk-b>*{background:var(--lk)!important}
+.w.lk-dk .w-body :where(p,h1,h2,h3,h4,b,strong,span,div,small,li,label,em){color:#f8fafc!important}.w.lk-dk .am-ic{stroke:#fff}
+.lk-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;margin-bottom:8px}.lk-grid .lk-c{width:auto;height:30px;border-radius:7px}
+.lk-g2{grid-template-columns:repeat(6,1fr) 1fr 2.4fr}.lk-own{display:flex;align-items:center;gap:6px;border:1px solid #dadce0;border-radius:8px;padding:2px 6px;font-size:.78rem;font-weight:600;cursor:pointer}
+.lk-own input{width:26px;height:24px;border:0;padding:0;background:none;cursor:pointer}
+.w[data-lbg="x"]{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .w.lk-sq,.w.lk-sq .w-body,.w.lk-sq .stk-b>*{border-radius:3px!important}
 .w.lk-nosh:not(.sel):not(.msel){box-shadow:0 0 0 1px rgba(0,0,0,.06)!important}.w.lk-nosh .stk-b>*{box-shadow:none!important}
 .lk-set{padding:0 0 10px}.lk-cols{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
@@ -651,7 +655,7 @@ body.locked .dk[data-m],body.locked #layBtn{display:none!important}
 .ctx-i:hover:not(:disabled){background:#f1f3f4}.ctx-i:disabled{color:#b0b4b9;cursor:default}.ctx-i kbd{font:500 .78rem Inter,Arial,sans-serif;color:#80868b}
 .ctx-del{color:#b91c1c}.ctx-sep{height:1px;background:#e8eaed;margin:5px 6px}
 .ctx-look{padding:4px 10px 6px}.ctx-look small{display:block;color:#5f6368;font-weight:700;margin-bottom:6px}
-.ctx-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px}.ctx-cols button{height:28px;border-radius:8px;border:2px solid #d1d5db;cursor:pointer}
+.ctx-cols{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:8px}.ctx-cols button{height:28px;border-radius:8px;border:2px solid #d1d5db;cursor:pointer}
 .ctx-tg{display:flex;gap:6px}.ctx-tg button{flex:1;border:1px solid #dadce0;background:#fff;border-radius:8px;padding:6px;font:600 .8rem Inter,Arial,sans-serif;cursor:pointer}.ctx-tg button:hover{background:#f1f3f4}
 .ctx-al{display:flex;flex-wrap:wrap;gap:2px;padding:2px 6px}.ctx-al .ic{width:34px;height:34px;border-radius:8px;color:#202124}.ctx-al .ic:hover{background:#f1f3f4}
 .w.stk.sel{box-shadow:0 0 0 calc(3px * var(--isc)) var(--blue)}
@@ -1068,7 +1072,7 @@ body.locked .mk-b{visibility:hidden}
 .qr{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;gap:2.5cqi;padding:5cqi;border-radius:20px;background:#fff;box-shadow:0 10px 30px -14px rgba(0,0,0,.4);text-align:center}
 .qr-ti{font-weight:900;font-size:clamp(1rem,8cqi,3rem);line-height:1.1;color:#1f2937;max-width:100%;overflow-wrap:anywhere}
 .qr-c{flex:1;min-height:0;width:100%;display:grid;place-items:center}
-.qr-c svg{width:auto;height:100%;max-width:100%;aspect-ratio:1}
+.qr-c svg{width:auto;height:100%;max-width:100%;aspect-ratio:1;background:#fff;border-radius:10px;padding:3%;box-sizing:border-box}
 .qr-u{font-size:clamp(.65rem,3.4cqi,1.1rem);color:#64748b;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qr-empty{border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:14px 18px;font-weight:700;color:#334155;cursor:pointer}
 .qr-wait{color:#64748b;font-weight:600}
@@ -2413,18 +2417,35 @@ document.addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey)||e.al
   else if(cpPaste())e.preventDefault();});
 /* ---------- Útsjónd á amboðunum: bakgrundslitur, skuggi og horn – somu stillingar á øllum amboðum (S.look, hvørt dias sær) ---------- */
 if(!S.look)S.look={};
-var LKBG=[['','Hvítt','#ffffff'],['y','Gult','#fef9c3'],['o','Reyðgult','#ffedd5'],['p','Bleikt','#fce7f3'],['l','Lilla','#ede9fe'],['b','Blátt','#dbeafe'],['t','Turkis','#ccfbf1'],['g','Grønt','#dcfce7'],['k','Grátt','#f1f5f9'],['x','Gjøgnumskygt','rgba(255,255,255,.55)']];
+/* Litaborð: hvør litur í fýra stigum (ljósur, miðal, sterkur, myrkur) + grátt/svart, gjøgnumskygt og egin litur */
+var LKHUE=[['Reytt',['#fee2e2','#fca5a5','#ef4444','#b91c1c']],['Reyðgult',['#ffedd5','#fdba74','#f97316','#c2410c']],['Gult',['#fef9c3','#fde047','#eab308','#a16207']],
+  ['Grønt',['#dcfce7','#86efac','#22c55e','#15803d']],['Turkis',['#ccfbf1','#5eead4','#14b8a6','#0f766e']],['Blátt',['#dbeafe','#93c5fd','#3b82f6','#1d4ed8']],
+  ['Indigo',['#e0e7ff','#a5b4fc','#6366f1','#4338ca']],['Lilla',['#f3e8ff','#d8b4fe','#a855f7','#7e22ce']],['Bleikt',['#fce7f3','#f9a8d4','#ec4899','#be185d']]];
+var LKGREY=[['Hvítt','#ffffff'],['Ljósagrátt','#f1f5f9'],['Grátt','#cbd5e1'],['Myrkagrátt','#64748b'],['Skiffur','#334155'],['Svart','#111827']];
+var LKOLD={y:'#fef9c3',o:'#ffedd5',p:'#fce7f3',l:'#ede9fe',b:'#dbeafe',t:'#ccfbf1',g:'#dcfce7',k:'#f1f5f9'};
+var LKBG=[['','Hvítt','#ffffff']].concat(LKHUE.map(function(h){return [h[1][1],h[0],h[1][1]];}),[['#334155','Myrkt','#334155'],['x','Gjøgnumskygt','rgba(255,255,255,.55)']]);
+function lkLum(c){var m=/^#?([0-9a-f]{6})$/i.exec(c||'');if(!m)return 1;var n=parseInt(m[1],16),f=function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);};
+  return .2126*f(n>>16&255)+.7152*f(n>>8&255)+.0722*f(n&255);}
+function lkSwatches(cur){var h='<div class="lk-grid">';[0,1,2,3].forEach(function(r){LKHUE.forEach(function(x){var c=x[1][r];h+='<button type="button" class="lk-c" data-lbg="'+c+'" title="'+x[0]+'" aria-label="'+x[0]+'" aria-pressed="'+(cur===c)+'" style="background:'+c+'"></button>';});});
+  h+='</div><div class="lk-grid lk-g2">'+LKGREY.map(function(x){var c=x[1]==='#ffffff'?'':x[1];return '<button type="button" class="lk-c" data-lbg="'+c+'" title="'+x[0]+'" aria-label="'+x[0]+'" aria-pressed="'+((cur||'')===c)+'" style="background:'+x[1]+'"></button>';}).join('')
+   +'<button type="button" class="lk-c" data-lbg="x" title="Gjøgnumskygt" aria-label="Gjøgnumskygt" aria-pressed="'+(cur==='x')+'"></button>'
+   +'<label class="lk-own" title="Tín egni litur"><input type="color" value="'+(/^#[0-9a-f]{6}$/i.test(cur||'')?cur:'#3b82f6')+'"><span>Egin litur</span></label></div>';return h;}
 function lookOf(k){return (S.look||{})[k]||{};}
-function lookApply(w){var L=lookOf(w.dataset.w);if(L.bg)w.dataset.lbg=L.bg;else delete w.dataset.lbg;w.classList.toggle('lk-sq',L.rd==='s');w.classList.toggle('lk-nosh',L.sh===0);}
+function lookApply(w){var L=lookOf(w.dataset.w),bg=LKOLD[L.bg]||L.bg||'';
+  if(bg==='x'){w.dataset.lbg='x';delete w.dataset.lk;w.style.removeProperty('--lk');w.classList.remove('lk-dk');}
+  else if(bg){delete w.dataset.lbg;w.dataset.lk='1';w.style.setProperty('--lk',bg);w.classList.toggle('lk-dk',lkLum(bg)<.36);}
+  else{delete w.dataset.lbg;delete w.dataset.lk;w.style.removeProperty('--lk');w.classList.remove('lk-dk');}
+  w.classList.toggle('lk-sq',L.rd==='s');w.classList.toggle('lk-nosh',L.sh===0);}
 function lookOk(k){if(S.stk[k]){var t=S.stk[k].t;return !!(STK[t]&&(STK[t].tool||t==='tekst'||t==='tilv'));}return Array.isArray(SETS[k])||k==='skra'||k==='poll';}
 var lkBox=el('div','lk-set');lkBox.id='lookSet';lkBox.hidden=true;$('#setPanel').appendChild(lkBox);
 function lookShow(k){if(!k||!lookOk(k)||S.lock){lkBox.hidden=true;return;}var L=lookOf(k);
-  lkBox.innerHTML='<div class="set-row"><h4>Útsjónd</h4><div class="lk-cols">'+LKBG.map(function(c){return '<button type="button" class="lk-c" data-lbg="'+c[0]+'" title="'+c[1]+'" aria-label="'+c[1]+'" aria-pressed="'+((L.bg||'')===c[0])+'" style="background:'+c[2]+'"></button>';}).join('')+'</div>'
+  lkBox.innerHTML='<div class="set-row"><h4>Útsjónd</h4>'+lkSwatches(LKOLD[L.bg]||L.bg||'')
     +'<div class="row lk-row"><div class="seg"><button type="button" data-lrd="r" aria-pressed="'+(L.rd!=='s')+'">Avrundað horn</button><button type="button" data-lrd="s" aria-pressed="'+(L.rd==='s')+'">Bein horn</button></div></div>'
     +'<div class="row lk-row"><div class="seg"><button type="button" data-lsh="1" aria-pressed="'+(L.sh!==0)+'">Við skugga</button><button type="button" data-lsh="0" aria-pressed="'+(L.sh===0)+'">Uttan skugga</button></div></div>'
     +'<button type="button" class="btn sm" id="lkAll">Set somu útsjónd á øll amboðini á diasinum</button></div>';
   function set(f){var o=S.look[k]||{};f(o);if(!o.bg)delete o.bg;if(o.rd!=='s')delete o.rd;if(o.sh!==0)delete o.sh;if(Object.keys(o).length)S.look[k]=o;else delete S.look[k];var w=$('#w-'+k);if(w)lookApply(w);save();lookShow(k);}
   $$('[data-lbg]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.bg=b.dataset.lbg;});});});
+  var own=$('.lk-own input',lkBox);own.addEventListener('input',function(){var o=S.look[k]||{};o.bg=own.value;S.look[k]=o;var w=$('#w-'+k);if(w)lookApply(w);save();});own.addEventListener('change',function(){lookShow(k);});
   $$('[data-lrd]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.rd=b.dataset.lrd;});});});
   $$('[data-lsh]',lkBox).forEach(function(b){b.addEventListener('click',function(){set(function(o){o.sh=+b.dataset.lsh;});});});
   $('#lkAll',lkBox).addEventListener('click',function(){var src=JSON.stringify(S.look[k]||{});$$('.w').forEach(function(w){var x=w.dataset.w;if(!S.vis[x]||!lookOk(x))return;var o=JSON.parse(src);if(Object.keys(o).length)S.look[x]=o;else delete S.look[x];lookApply(w);});save();});
