@@ -133,28 +133,28 @@
   {
     "nr": 6,
     "d": "2026-12-07",
-    "heiti": "Teachable Machine",
-    "undir": "Lær eina teldu at kenna myndir aftur",
-    "url": "https://teachablemachine.withgoogle.com/",
-    "hvor": "Google",
-    "c": "lilla",
-    "ikon": "vit",
-    "stutt": "Við Teachable Machine venja næmingarnir sítt egna vitlíki. Tey taka myndir við myndatólinum í telduni, síðan lærir teldan at síggja mun á ymsum myndum. Soleiðis síggja tey, hvussu vitlíki lærir av dømum.",
-    "royn": "Ven vitlíki skilja, um tað sær ein blýant ella eitt viskileður. Royn so við øðrum lutum. Hvat hendir, tá ið teldan sær nakað, sum hon ikki hevur sæð áður? Tosið um, hví vitlíki kann taka feil.",
+    "heiti": "Teldutala",
+    "undir": "Føroyskur tekstur lisin upp – eisini við barnarøddum",
+    "url": "https://teldutala.fo/",
+    "hvor": "Talutøkni og Acapela",
+    "c": "bla",
+    "ikon": "ord",
+    "stutt": "Teldutala lesur føroyskan tekst upp. Tú skrivar ella límar ein tekst inn, velur eina rødd og hoyrir hann lisnan. Har eru átta føroyskar raddir, tvær vaksnar og seks barnaraddir.",
+    "royn": "Lat næmingarnar skriva ein stuttan tekst og lurta eftir honum við einari barnarødd. Hoyra tey, hvar ein stavifeilur ella eitt manglandi komma ger tekstin løgnan? Tit kunnu eisini lata Teldutalu lesa eina jólasøgu upp.",
     "deild": [
+      "Grunddeild",
       "Miðdeild",
       "Hádeild"
     ],
     "grein": [
-      "Náttúra og tøkni",
-      "Tvørfakligt"
+      "Føroyskt",
+      "Føroyskt sum annaðmál"
     ],
     "vita": [
-      "Á enskum",
-      "Eingin innritan",
-      "Nýtir myndatólið í telduni – tey skulu helst ikki taka myndir av fólki"
+      "Á føroyskum",
+      "Tú mást stovna ein ókeypis brúkara – við teldupostinum, Google ella Facebook"
     ],
-    "kannad": "2026-11-14"
+    "kannad": "2026-11-21"
   },
   {
     "nr": 7,
