@@ -404,7 +404,7 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-progv]'),function(
 /* Orðaleiting á skíggja: trýst á bókstavirnar */
 if(SCREEN)Array.prototype.forEach.call(document.querySelectorAll('.ws span'),function(s){s.addEventListener('click',function(){s.classList.toggle('on');});});
 /* Knøttar ovast */
-function go(o){Object.keys(o).forEach(function(k){if(o[k]==null)Q.delete(k);else Q.set(k,o[k]);});location.search=Q.toString();}
+function go(o){if(!('print' in o))Q.delete('print');Object.keys(o).forEach(function(k){if(o[k]==null)Q.delete(k);else Q.set(k,o[k]);});location.search=Q.toString();}
 Array.prototype.forEach.call(document.querySelectorAll('[data-dl]'),function(b){b.setAttribute('aria-pressed',b.dataset.dl===DL?'true':'false');b.addEventListener('click',function(){go({dl:b.dataset.dl,progv:null});});});
 document.getElementById('nr').textContent=MODE==='ark'?'Ark '+N+' av '+MAX:MODE==='yv'?'Yvirlit':MODE==='flyt'?'Flyt':'Prógv';
 document.getElementById('prev').disabled=N<=1;document.getElementById('next').disabled=N>=MAX;
